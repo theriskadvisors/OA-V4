@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TeacherDashboardLayout.cshtml";
+}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pageHeading">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h1 class="float-left">Subjects List</h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+
+                    <div class="p-5">
+
+                        <div class="row" id="Subjectlist">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#BreadCrumbs").append(' <li> <a href="/Teacher_Dashboard/Dashboard"> Home </a> <span>&gt;</span></li>');
+
+        $("#BreadCrumbs").append(' <li class="active"> <a href="#"> Subjects </a> <span></span></li>');
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "/TeacherCommentsOnCourses/AllSubjectsOfTeacher",
+            data: {},
+            success: function (data) {
+
+                $.each(data, function (key, value1) {
+
+                    $("#Subjectlist").append(' <div class="col-md-6 col-lg-3"> <a href="/TeacherCommentsOnCourses/SubjectTopics/' + value1.Id + '" class="subject-list-box"> ' + value1.SubjectName + ' <br />  </a></div>');
+
+                })
+
+            }
+        })
+    })
+
+</script>

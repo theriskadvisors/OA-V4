@@ -1,0 +1,194 @@
+﻿@model SEA_Application.Models.AspNetSession
+@{
+    ViewBag.Title = "Create";
+
+
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = "Active",
+        Value = "Active"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "InActive",
+        Value = "InActive",
+    });
+
+}
+
+<head>
+    @*<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>*@
+</head>
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#PageHeader").html("Add Session");
+
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/AspNetSession/Index">Session </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
+
+
+
+        $("#SessionName").prop('required', true);
+        $("#Status").prop('required', true);
+        $("#SessionStartDate").prop('required', true);
+        $("#SessionStartDate").prop('type', 'date');
+        $("#SessionEndDate").prop('required', true);
+        $("#SessionEndDate").prop('type', 'date');
+
+        $("form").submit(function () {
+
+            $("#submit").attr("disabled", true);
+
+
+
+
+        });
+
+        //$('#Status').click(function () {
+        //    debugger;
+        //    var Status = $(this).val();
+        //    $.post(
+        //          "/AspNetSession/CheckStatus", { status: Status },
+        //          function (value) {
+        //              debugger;
+        //              if (value != 'error') {
+        //               //   swal("Error! User Already Exist", "This username is already owned by someone else.", "error");
+        //                  //   $('#UserName').val('');
+        //                  //$.Toast("Toast title", "Toast message here");
+        //                  $.toaster({ priority: 'info', title: 'Notice', message: 'Your message here' });
+        //                  $("#submit").attr("disabled", false);
+        //              }
+        //          },
+        //          "text"
+        //      );
+        //});
+
+
+        //$("#SessionStartDate").datepicker({
+        //    dateFormat: 'dd/mm/yy',
+        //    changeMonth: true,
+        //    changeYear: true,
+        //    duration: "slow",
+        //    yearRange: '1960:2030'
+        //});
+
+        //$("#SessionEndDate").datepicker({
+        //    dateFormat: 'dd/mm/yy',
+        //    changeMonth: true,
+        //    changeYear: true,
+        //    duration: "slow",
+        //    yearRange: '1960:2030'
+        //});
+
+        $('#cancel').click(function () {
+            window.location.href = 'Index';
+        });
+    });
+
+    function isempty(item) {
+        var start = $("#SessionStartDate").val();
+        var end = $("#SessionEndDate").val();
+
+        if (start == "" && end == "") {
+            $(item).prop('placeholder', "Please add the date");
+            $('#submit').prop('disabled', true);
+        } else {
+            $('#submit').prop('disabled', false);
+        }
+    }
+
+
+    function onCancel() {
+        $('#cancel').click();
+    }
+    function onSave() {
+        $('#FormSubmit').click();
+    }
+
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <h2 class="column-heading mb-4">Create Session</h2>
+
+                        <div class="form-group bmd-form-group is-filled">
+
+                            <label class="bmd-label-floating" for="UserName">Session Name: <span class="red-mark">*</span></label>
+
+                            @Html.EditorFor(model => model.SessionName, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Session Start Date* </label>
+
+                                @Html.EditorFor(model => model.SessionStartDate, new { htmlAttributes = new { @class = "form-control", @onblur = "isempty(this)" } })
+                                @Html.ValidationMessageFor(model => model.SessionStartDate, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Session End Date* </label>
+
+                                @Html.EditorFor(model => model.SessionEndDate, new { htmlAttributes = new { @class = "form-control", @onblur = "isempty(this)" } })
+                                @Html.ValidationMessageFor(model => model.SessionEndDate, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group bmd-form-group is-filled">
+
+                            <label class="bmd-label-floating">Total Fee: <span class="red-mark">*</span></label>
+
+                            @Html.EditorFor(model => model.Total_Fee, new { htmlAttributes = new { @class = "form-control", @onblur = "isempty(this)", required = "required" } })
+                            @Html.ValidationMessageFor(model => model.Total_Fee, "", new { @class = "text-danger" })
+                        </div>
+
+
+
+                    </div><!--end of column 8-->
+                <br>
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+
+
+                    </div>
+                }
+            </div>
+           
+                </div>
+    </div>
+</div>
+
+
+

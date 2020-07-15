@@ -1,0 +1,113 @@
+﻿
+@using System.Linq;
+@using System.Net;
+@using System.Web.Mvc;
+@using SEA_Application.Models;
+@using System.IO;
+@using Microsoft.AspNet.Identity;
+@{
+    SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+    var CurrentUserId = User.Identity.GetUserId();
+
+    string name = db.AspNetUsers.Where(x => x.Id == CurrentUserId).Select(x => x.Name).FirstOrDefault();
+    var dt = DateTime.Now;
+    DateTime Firstday = dt.AddDays(-(int)dt.DayOfWeek);
+    DateTime Endaday = Firstday.AddDays(6);
+    int countLesson = db.Events.Where(x => x.UserId == CurrentUserId && x.Start <= Endaday && x.Start >= Firstday).Count();
+}
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+else if (User.IsInRole("Staff"))
+{
+    Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
+}
+<script>
+    //$(document).ready(function () {
+
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/BranchAdmin/getClasses",
+    //        success: function (data) {
+    //            $.each(data, function (i, v) {
+    //                $("#ClassesFilter").append('<a class="dropdown-item" href="#">' + v + '</a>');
+    //                console.log(v);
+    //            })
+    //        },
+    //        error: function (error) {
+    //            console.log('failed');
+    //        }
+    //    })
+    //})
+</script>
+
+
+
+<div class="pageHeading">
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+            <div class="d-flex">
+                <div id="dayPart_div" class="mr-4 flex-3 sunSide"><img id="dayPart_img" src="~/Content/assets/img/sun.png" /></div>
+                <div>
+                    <div class="afternoon mt-2">
+                        <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
+                        <p>
+                            There are <span id="upcomming_lesson">@countLesson</span> upcoming Lessons this week.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
+            <button type="button" class="btn btn-primary pull-right rounded rounded-lg createBtn coursesBtn" onclick="window.location.href = '/AspnetSubjectTopics/ViewTopicsAndLessons'">
+                View All Lessons
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-4">
+
+                <!--<div class="input-group">
+                    <label class="checkbox-inline"><input class='filter' type="checkbox" value="Pakistan Affairs" checked>Pakistan Affairs</label>
+                    <label class="checkbox-inline"><input class='filter' type="checkbox" value="Financial Accounting" checked>Financial Accounting</label>
+                    <label class="checkbox-inline"><input class='filter' type="checkbox" value="Computer Science" checked>Computer Science</label>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive-lg">
+
+                        <!--Filters Class-->
+                        <div style="/*! border-bottom: 1px solid lightblue; */" class="filterBtnCon ml-4 float-right">
+                            <button href="javascript:;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="filterBtn fc-button fc-state-default">
+                                <span>Filter</span>
+                                <img src="~/Content/assets/img/filter.png">
+                            </button>
+                            <div id="ClassesFilter" aria-labelledby="navbarDropdownProfile" x-placement="bottom-end" style="position: absolute; top: 45px; left: 1607px; will-change: top, left;" class="dropdown-menu dropdown-menu-right">
+
+
+
+                                @foreach (var c in ViewBag.AllClasses)
+                                {
+
+                                    <a class="dropdown-item" href="#">@c</a>
+
+                                }
+
+
+                            </div>
+                        </div>
+
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

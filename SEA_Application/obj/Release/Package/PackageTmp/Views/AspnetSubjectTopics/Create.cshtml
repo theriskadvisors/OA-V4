@@ -1,0 +1,295 @@
+﻿@model SEA_Application.Models.AspnetSubjectTopic
+
+@{
+    ViewBag.Title = "Create";
+
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+
+    .page-sidebar .page-sidebar-menu, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 1200px !important;
+    }
+
+    .form-horizontal {
+        background-color: #fff;
+        /* margin: 10px; */
+        margin-left: 5px;
+    }
+
+    textarea {
+        width: 557px;
+        height: 126px;
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+
+
+        $("#PageHeader").html("Add Topic");
+
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/AspnetSubjectTopics/ViewTopicsAndLessons"> Topic </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
+
+
+
+        $("#btnCancel").click(function () {
+
+            window.location.href = "/AspnetSubjectTopics/ViewTopicsAndLessons";
+        });
+
+        $("#OrderBy").change(function () {
+
+
+            OrderBy();
+
+
+        })
+
+        $("#SubjectId").change(function () {
+
+            OrderBy();
+        })
+
+
+
+
+
+
+
+        var course = 'CSS';
+        var Class;
+        $('#CTId').change(function () {
+
+
+            var crse = $(this).val();
+
+            if (crse != "") {
+
+                console.log(crse);
+                course = crse;
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/AspNetProject/GetSubjectsByClass?CT=" + course,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var sch = JSON.parse(data);
+                        console.log(sch);
+                        var $el = $(".SubIdDDL");
+                        $el.empty();
+                        if (sch.length > 0) {
+                            $el.append($("<option></option>")
+                                .attr("value", "").text('Select Subject'));
+                            for (i = 0; i < sch.length; i++) {
+
+                                $el.append($("<option></option>")
+                                    .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                            }
+                        }
+                        else {
+                            $el.append($("<option></option>")
+                                .attr("value", '').text('Select'));
+                        }
+                    }
+                });
+
+            }
+            else {
+                var $el = $(".SubIdDDL");
+                $el.empty();
+            }
+
+        });
+
+
+        $('#ClassID').change(function () {
+
+            var UserName = $(this).val();
+            Class = UserName;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "/AspNetProject/GetSubjectsByClass?ClassID=" + UserName + "&&CT=" + course,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    var sch = JSON.parse(data);
+                    console.log(sch);
+                    var $el = $(".SubIdDDL");
+                    $el.empty();
+                    if (sch.length > 0) {
+                        $el.append($("<option></option>")
+                            .attr("value", "").text('Select Subject'));
+                        for (i = 0; i < sch.length; i++) {
+
+                            $el.append($("<option></option>")
+                                .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                        }
+                    }
+                    else {
+                        $el.append($("<option></option>")
+                            .attr("value", '').text('Select'));
+                    }
+                }
+            });
+
+        });
+    })
+
+
+    function OrderBy() {
+
+        var SubjectId = $("#SubjectId").val();
+        var OrderBy = $("#OrderBy").val();
+
+
+
+        if (SubjectId != null && SubjectId != "" && OrderBy != "" && OrderBy != null) {
+
+
+
+            $.ajax({
+
+                type: "POST",
+                url: '/AspnetSubjectTopics/CheckTopicOrderBy',
+                data: { "SubjectId": SubjectId, "OrderBy": OrderBy },
+                success: function (data) {
+
+                    if (data == "Yes") {
+
+
+                    //    $("#SaveButton").attr("disabled", true);
+                      // $("#ErrorOrderBy").html("Selected order is already assigned to a topic of same subject.");
+                    }
+                    else {
+
+                        $("#SaveButton").attr("disabled", false);
+                        $("#ErrorOrderBy").html("");
+
+                    }
+
+
+
+
+
+                }
+            })
+
+        }
+        else {
+                 $("#SaveButton").attr("disabled", false);
+                        $("#ErrorOrderBy").html("");
+
+        }
+
+
+    }
+
+</script>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+
+
+                        <h2 class="column-heading mb-4"> Topic Info</h2>
+                        <div class="form-group bmd-form-group is-filled">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "bmd-label-floating" })
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group bmd-form-group is-filled">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "bmd-label-floating" })
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Course Type*</label>
+
+                                <select class="form-control CTIdDDL" id="CTId" name="CTId">
+                                    <option value="">Select One</option>
+                                    <option value="CSS">CSS</option>
+                                    <option value="PMS">PMS</option>
+                                    <option value="One Paper MCQs">One Paper MCQs</option>
+                                </select>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Subject*</label>
+
+                                <select class="form-control SubIdDDL" id="SubjectId" name="SubjectId" required></select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Order By </label>
+
+                                <select class="form-control" id="OrderBy" name="OrderBy" required>
+
+                                    <option value="">Select One</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+
+                                </select>
+                                <br />
+                                <span id="ErrorOrderBy" style="color:red"></span>
+
+                            </div>
+                        </div>
+
+
+                    </div> <!-- End Column -->
+
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <button type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

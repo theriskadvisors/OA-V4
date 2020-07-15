@@ -1,0 +1,484 @@
+﻿@model SEA_Application.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Add Teacher:";
+}
+
+<script src="~/AdminLTE/selectone.js"></script>
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+else if (User.IsInRole("Staff"))
+{
+    Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#UploadImg").change(function () {
+            readURL(this);
+        });
+
+        $('#GrossSalary').blur(function () {
+            Basic_Salary();
+            Medical_Allowance();
+            Accomodationn();
+            debugger
+         
+        
+        });
+
+            $("#PageHeader").html("Add Teacher");
+
+            $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+            $("#BreadCrumbs").append(' <li> <a href="/AspNetUser/TeachersIndex"> Teacher </a> <span>&gt;</span></li>');
+            $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
+
+        var date = new Date();
+        var dd = date.toISOString()
+        dd = dd.split("T");
+        
+        $("#JoiningDate").val(dd[0]);
+        $("#dateAvailable").val(dd[0]);
+
+        $('#cancel').click(function () {
+            redirect();
+        });
+
+        $("#UserName").bind('blur', function () {
+            var userName = $("#UserName").val();
+            //alert("username");
+
+            debugger
+            $.ajax({
+                type: "POST",
+                url: "/AspNetUser/GetUserName",
+                data: { "userName": userName },
+                success: function (data) {
+                    
+                    console.log(data);
+                    if (data.count == 0) {
+                        $('#FormSubmit').removeAttr('disabled');
+                        $('#UserName-Error').html("");
+                    }
+                    else {
+                        $('#UserName-Error').html("UserName Already taken by "+ data.by);
+                        $('#FormSubmit').prop('disabled', true);
+                    }
+         }
+            });
+
+        });
+
+        $("#Password").bind('blur', function () {
+            var password = $("#Password").val();
+
+            var patt = new RegExp("^(?=.{6,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@@#$%^&+=]).*$");
+            var test = patt.test(password);
+
+            if (test == false) {
+                $('#Password-Error').html("There should be one uppercase, one lowercase, one special chracter('@@#$%^&+=') and one number in password");
+                $('#FormSubmit').prop('disabled', true);
+            } else {
+                $('#FormSubmit').prop('disabled', false);
+                $('#Password-Error').html("");
+            }
+        });
+
+        $("#ConfirmPassword").bind('blur', function () {
+            var password = $("#Password").val();
+            var ConfirmPassword = $("#ConfirmPassword").val();
+            var check = password.localeCompare(ConfirmPassword);
+
+            if (check) {
+                $("#ConfirmPassword-Error").html("Password Dosen't match");
+                $('#FormSubmit').prop('disabled', true);
+            } else {
+                $("#ConfirmPassword-Error").html("");
+                $('#FormSubmit').prop('disabled', false);
+            }
+        });
+
+
+        $("#Email").bind('blur', function () {
+            var email = $("#Email").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/AspNetUser/Email",
+                data: { "Email": email },
+                success: function (data) {
+                    console.log(data);
+                    if (data == 0) {
+                        $('#FormSubmit').prop('disabled', false);
+                        $('#Email-Error').html("");
+                    }
+                    else {
+                        $('#Email-Error').html("Email Already taken");
+                        $('#FormSubmit').prop('disabled', true);
+                    }
+
+                }
+            });
+
+        });
+
+        $("#birthDate").bind('blur', function () {
+            var dob = $("#birthDate").val();
+            var dob = dob.split("-");
+            var date = new Date();
+
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (dob[0] <= year) {
+                $('#FormSubmit').prop('disabled', false);
+                $('#DOB-Error').html(" ");
+                if (dob[0] == year) {
+                    if (dob[1] <= month) {
+                        $('#FormSubmit').prop('disabled', false);
+                        $('#DOB-Error').html(" ");
+                        if (dob[1] == month) {
+                            if (dob[2] < day) {
+                                $('#FormSubmit').prop('disabled', false); 
+                                $('#DOB-Error').html(" ");
+                            } else {
+                                $('#FormSubmit').prop('disabled', true);
+                                $('#DOB-Error').html("Enter a date less than today");
+                            }
+                        } else if (dob[1] > month) {
+                            $('#FormSubmit').prop('disabled', true);
+                            $('#DOB-Error').html("Enter a date less than today");
+                        }
+                    } else {
+                        $('#FormSubmit').prop('disabled', true);
+                        $('#DOB-Error').html("Enter a date less than today");
+                    }
+                } 
+            } else {
+                $('#FormSubmit').prop('disabled', true);
+                $('#DOB-Error').html("Enter a date less than today")
+            }
+
+        });
+
+        $("#dateAvailable").bind('blur', function () {
+            var dob = $("#dateAvailable").val();
+            var dob = dob.split("-");
+
+            var date = new Date();
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            
+            if (dob[0] >= year) {
+                $('#FormSubmit').prop('disabled', false);
+                $('#Avail-Error').html(" ");
+                if (dob[0] == year) {
+                    if (dob[1] >= month) {
+                        $('#FormSubmit').prop('disabled', false);
+                        $('#Avail-Error').html(" ");
+                        if (dob[1] == month) {
+                            if (dob[2] >= day) {
+                                $('#FormSubmit').prop('disabled', false); // ok
+                                $('#Avail-Error').html(" ");
+                            } else {
+                                $('#FormSubmit').prop('disabled', true);
+                                $('#Avail-Error').html("Enter a date greater than today");
+                            }
+                        } else if(dob[1] < month){
+                            $('#FormSubmit').prop('disabled', true);
+                            $('#Avail-Error').html("Enter a date greater than today");
+                        }
+                    } else {
+                        $('#FormSubmit').prop('disabled', true);
+                        $('#Avail-Error').html("Enter a date greater than today");
+                    }
+                } 
+            } else {
+                $('#FormSubmit').prop('disabled', true);
+                $('#Avail-Error').html("Enter a date greater than today");
+            }
+
+        });
+
+        $("#JoiningDate").bind('blur', function () {
+            var dob = $("#JoiningDate").val();
+            var dob = dob.split("-");
+
+            var date = new Date();
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (dob[0] >= year) {
+                $('#FormSubmit').prop('disabled', false);
+                $('#join-Error').html(" ");
+                if (dob[0] == year) {
+                    if (dob[1] >= month) {
+                        $('#FormSubmit').prop('disabled', false);
+                        $('#join-Error').html(" ");
+                        if (dob[1] == month) {
+                            if (dob[2] >= day) {
+                                $('#FormSubmit').prop('disabled', false); // ok
+                                $('#join-Error').html(" ");
+                            } else {
+                                $('#FormSubmit').prop('disabled', true);
+                                $('#join-Error').html("Enter a date greater than today");
+                            }
+                        } else if (dob[1] < month) {
+                            $('#FormSubmit').prop('disabled', true);
+                            $('#join-Error').html("Enter a date greater than today");
+                        }
+                    } else {
+                        $('#FormSubmit').prop('disabled', true);
+                        $('#join-Error').html("Enter a date greater than today");
+                    }
+                }
+            } else {
+                $('#FormSubmit').prop('disabled', true);
+                $('#join-Error').html("Enter a date greater than today");
+            }
+        });
+    });
+
+    function Basic_Salary() {
+        var gross = $("#GrossSalary").val();
+        var bs = (2 / 3) * gross;
+        bs = parseInt(bs);
+        document.getElementById("BasicSalary").value = gross;
+    }
+
+    function Medical_Allowance() {
+        var basic = $("#BasicSalary").val();
+        var ma = (10 / 100) * basic;
+        ma = parseInt(ma);
+        document.getElementById("MedicalAllowance").value = 0;
+    }
+    function Accomodationn() {
+        var basic = $("#BasicSalary").val();
+        var acc = (basic / 100) * 40;
+        acc = parseInt(acc);
+        document.getElementById("Accomodation").value = 0;
+
+    }
+
+
+
+    function redirect() {
+        var url = '@Url.Action("TeachersIndex", "AspNetUser")';
+        window.location.href = url;
+    }
+
+    //function SaveForm() {
+    //    $("#FormSubmit").click();
+    //}
+
+     function checkPhone(phone) {
+         var length = phone.value.length;
+
+         if (length == 11) {
+             var patt = new RegExp("^[0]+[0-9]{10,}$");
+             var test = patt.test(phone.value);
+             console.log(test);
+             if (test == false) {
+                 $('#Phone-Error').html("Phone number is not in correct formate");
+                 $('#FormSubmit').prop('disabled', true);
+             } else {
+                 $('#FormSubmit').prop('disabled', false);
+                 $('#Phone-Error').html(" ");
+             }
+         } else {
+             $('#Phone-Error').html("Phone number is not in correct formate");
+             $('#FormSubmit').prop('disabled', true);
+         }
+    }
+
+
+     function onCancel() {
+         $('#cancel').click();
+     }
+     function onSave() {
+         $('#FormSubmit').click();
+     }
+
+     function readURL(input) {
+         $("#UploadPhotoDiv").hide();
+         $("#imgPreview").height("150");
+         $("#imgPreview").width("150");
+
+         if (input.files && input.files[0]) {
+             var reader = new FileReader();
+             reader.onload = function (e) {
+                 $('#imgPreview').attr('src', e.target.result);
+             }
+             reader.readAsDataURL(input.files[0]);
+         }
+     }
+</script>
+
+@*<div class="row" style="padding-bottom: 10px; padding-top: 10px; padding-left: 20px; padding-right: 20px;">
+    <button class="btn btn-default pull-left btn-sm" onclick="onCancel()">
+        Cancel
+    </button>
+    <button class="pull-right" style="background-color: transparent; border: none; outline: none; font-size: 20px; color: rgb(89, 89, 89) !important" onclick="onSave()">
+        <i class="fa fa-floppy-o"></i>
+    </button>
+</div>*@
+@*<h2 class="orange">Add Teacher &nbsp; <i class="fa fa-file" aria-hidden="true"></i></h2>*@
+
+<div class="nav-tabs-custom">
+    @*<ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">Add Teacher</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Upload Excel File</a></li>
+    </ul>*@
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body p-5">
+
+                    <div class="tab-content" style="">
+
+                        <div class="tab-pane active" id="tab_1"> 
+
+                            @using (Html.BeginForm("TeacherRegister", "Admin_Dashboard", FormMethod.Post, new { enctype = "multipart/form-data", @class = "forms form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="row">
+                                    <div class="col-md-2 pl-3 pr-5">
+                                        <div style="height: 120px;" class="upload-photo border rounded d-flex align-items-center justify-content-center flex-column mb-4">
+                                            <a href="#">
+                                                <img id="imgPreview" src="~/Content/Images/Upload.png" onclick="$('#UploadImg').click();" />
+                                            </a>
+                                            <input style="display:none;" id="UploadImg" type="file" name="image" />
+                                            <div id="UploadPhotoDiv" class="mt-3">Upload Photo</div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-5 pl-5 pr-5 border-right border-color-sea">
+                                        <h2 class="column-heading mb-4">User Information</h2>
+
+                                        <div class="form-group bmd-form-group is-filled">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Name <span class="red-mark">*</span></label>
+                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control round-border Floating_text" })
+                                        </div>
+
+                                        @*<div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating">User Name *</label>
+                                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control round-border" })
+                                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger", @id = "UserName-Error" })
+                                        </div>*@
+                                        <div class="form-group bmd-form-group my-3 is-filled">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">User ID <span class="red-mark">*</span></label>
+                                            <input type="text" id="UserName" class="form-control round-border Floating_text" value="@ViewBag.UserName" name="UserName" readonly />
+                                        </div>
+
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Password *</label>
+                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control round-border Floating_text" })
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger", @id = "Password-Error" })
+                                        </div>
+
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Confirm Password *</label>
+                                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control round-border Floating_text" })
+                                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger", @id = "ConfirmPassword-Error" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-5 pl-5 pr-5 ">
+                                        @*<h2 class="column-heading mb-4">Personal Information</h2>
+
+                                        <div class="form-row mt-4">
+                                            <div class="form-group col-md-12 bmd-form-group">
+                                                <label for="" class="bmd-label-static pl-2">Section *</label>
+                                                @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control text_box_style", name = "ClassID", @required = true })
+                                            </div>
+                                        </div>*@
+
+                                        <h2 class="column-heading mb-4">Contact Details</h2>
+
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Mailing Address </label>
+                                            <input type="text" class="form-control round-border Floating_text" id="inputEmail3" name="mailingAddress">
+                                        </div>
+
+                                        <div class="form-group bmd-form-group is-filled">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Email <span class="red-mark">*</span></label>
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control round-border Floating_text" })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger", @id = "Email-Error", @required = true })
+                                        </div>
+                                     
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Cell No <span class="red-mark">*</span> </label>
+                                            <input type="text" class="form-control round-border Floating_text" id="inputEmail3" name="cellNo" onblur="checkPhone(this)" required>
+                                            <span class="text-danger" id="Phone-Error"></span>
+                                        </div>
+
+
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating" style="background: white;margin-left: 0.5rem;border-left: 4px solid white;border-right: 4px solid white;transform: translateY(-1.75rem);top: 1.3rem;color: black;">Land Line No </label>
+                                            <input type="text" class="form-control round-border Floating_text" id="inputEmail3" name="landLine">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="mt-5 mb-4">
+
+                                <button type="submit" id="FormSubmit" class="btn btn-primary pull-right rounded rounded-lg"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Save &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </button>
+                                <button type="button" class="btn btn-primary pull-right rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                                    <i class="material-icons mr-2">cached</i>  Reset &nbsp; &nbsp;
+                                </button>
+                                <div class="clearfix"></div>
+                            }
+                            </div><!--end of tab 1-->
+
+                        <div class="tab-pane" style="visibility:hidden" id="tab_2">
+
+                            <div class="box box-primary">
+
+                                <div class="box-header with-border"><h3 class="orange">Upload Excel File &nbsp; <i class="fa fa-file-excel-o" aria-hidden="true"></i></h3></div>
+                                <div class="form-three widget-shadow">
+                                    @using (Html.BeginForm("TeacherfromFile", "Admin_Dashboard", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group">
+                                            <div class="control-label col-md-3"><b>Excel File</b></div>
+                                            <div class="col-md-4">
+                                                <input id="teachers" required="required" name="teachers" type="file" />
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <br />
+                                        <div class="box-footer">
+                                            <div class="form-group">
+                                                <div class="col-md-10">
+                                                    <input type="submit" value="Submit" class="btn btn-primary" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+
+                        </div> <!--end of tab 2-->
+
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+        </div>
+

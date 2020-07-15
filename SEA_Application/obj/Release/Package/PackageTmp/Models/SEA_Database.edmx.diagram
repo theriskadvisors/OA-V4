@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="84f76e8ab3954add99069df34d326c70" Name="Diagram1">
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Aspnet_Employee_Session" Width="1.5" PointX="21.5" PointY="120.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAbsent_Student" Width="1.5" PointX="5.25" PointY="95.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAnnouncement" Width="1.5" PointX="6" PointY="105" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAnnouncement_Subject" Width="1.5" PointX="21.75" PointY="105.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAssessment" Width="1.5" PointX="24" PointY="97.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAssessment_Question" Width="1.5" PointX="24.75" PointY="108.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAssessment_Questions_Category" Width="1.5" PointX="22.5" PointY="94.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAssessment_Topic" Width="1.5" PointX="26.25" PointY="100.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetAttendance" Width="1.5" PointX="18.75" PointY="105.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetCatalog" Width="1.5" PointX="19.5" PointY="91.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetChapter" Width="1.5" PointX="18.75" PointY="100.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetClass" Width="1.5" PointX="5.25" PointY="116.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetClass_FeeType" Width="1.5" PointX="13.5" PointY="121.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetComment_Head" Width="1.5" PointX="8.25" PointY="117" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetComment" Width="1.5" PointX="19.5" PointY="112" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetCurriculum" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetDurationType" Width="1.5" PointX="11.25" PointY="106.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetEmp_Auto_Absent" Width="1.5" PointX="5.25" PointY="98.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetEmp_Auto_Attendance" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetEmployee" Width="1.5" PointX="11.25" PointY="112.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetEmployee_Attendance" Width="1.5" PointX="21.5" PointY="124" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetEmployeeAttendance" Width="1.5" PointX="19.25" PointY="139.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFeeChallan" Width="1.5" PointX="13.5" PointY="108.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFeedBackForm" Width="1.5" PointX="30.75" PointY="96.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFeeType" Width="1.5" PointX="29" PointY="141.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFinanceLedger" Width="1.5" PointX="26.75" PointY="139.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFinanceLedgerType" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFinanceMonth" Width="1.5" PointX="8" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetFinancePeriod" Width="1.5" PointX="5.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetHoliday_Calendar_Notification" Width="1.5" PointX="5.25" PointY="101.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetHomework" Width="1.5" PointX="7.5" PointY="128.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetLesson" Width="1.5" PointX="12" PointY="97.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetLessonPlan" Width="1.5" PointX="18.75" PointY="97.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetLessonPlan_Topic" Width="1.5" PointX="26.25" PointY="97.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetLessonPlanBreakdown" Width="1.5" PointX="21" PointY="97.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetLessonPlanBreakdownHeading" Width="1.5" PointX="18.75" PointY="94.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetLog" Width="1.5" PointX="5.25" PointY="124" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetLoginTime" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetMessage_Receiver" Width="1.5" PointX="5.25" PointY="113.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetMessage" Width="1.5" PointX="8.25" PointY="112.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetNote" Width="1.5" PointX="18.75" PointY="129.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetNotesOrder" Width="1.5" PointX="24" PointY="122.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetNotification" Width="1.5" PointX="8.25" PointY="121" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetNotification_User" Width="1.5" PointX="10.5" PointY="128.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetOption" Width="1.5" PointX="25.25" PointY="149.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetOrder" Width="1.5" PointX="21.75" PointY="132" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetParent" Width="1.5" PointX="5.25" PointY="137.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetParent_Child" Width="1.5" PointX="5.25" PointY="141.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetParent_Notification" Width="1.5" PointX="5.25" PointY="144.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetParent_Session" Width="1.5" PointX="5.25" PointY="92.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetParentTeacherMeeting" Width="1.5" PointX="24.5" PointY="131.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetProject" Width="1.5" PointX="18.75" PointY="135.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetPTM_ParentFeedback" Width="1.5" PointX="33" PointY="112.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetPTM_TeacherFeedback" Width="1.5" PointX="35" PointY="115.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetPTMAttendance" Width="1.5" PointX="26.75" PointY="115.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetPTMFormRole" Width="1.5" PointX="28.5" PointY="97.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetPushNotification" Width="1.5" PointX="5.25" PointY="109" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetQuestion" Width="1.5" PointX="27.5" PointY="148.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetQuiz" Width="1.5" PointX="27.5" PointY="153.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetRole" Width="1.5" PointX="0.75" PointY="117.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetRoom" Width="1.5" PointX="27.5" PointY="133.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetSalary" Width="1.5" PointX="20.25" PointY="88" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetSalaryDetail" Width="1.5" PointX="22.5" PointY="108.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetSession" Width="1.5" PointX="3" PointY="101.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent" Width="1.5" PointX="16.5" PointY="114.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Announcement" Width="1.5" PointX="8.25" PointY="109.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Assessment" Width="1.5" PointX="33.25" PointY="102.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Attendance" Width="1.5" PointX="25" PointY="112.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_AutoAttendance" Width="1.5" PointX="5.25" PointY="88.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Fine" Width="1.5" PointX="8.25" PointY="125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_HomeWork" Width="1.5" PointX="15.75" PointY="121.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Notification" Width="1.5" PointX="14.25" PointY="116.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Payment" Width="1.5" PointX="26.75" PointY="126.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_PaymentDetail" Width="1.5" PointX="29" PointY="129.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Project" Width="1.5" PointX="24" PointY="127.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Session_class" Width="1.5" PointX="18.75" PointY="116.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Subject" Width="1.5" PointX="26.75" PointY="120" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Term_Assessment" Width="1.5" PointX="27.75" PointY="109.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudent_Term_Assessments_Answers" Width="1.5" PointX="30" PointY="100.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetStudentAssignment" Width="1.5" PointX="14.25" PointY="94.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetStudentAssignmentSubmission" Width="1.5" PointX="21.75" PointY="115.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetStudentAttachment" Width="1.5" PointX="14.25" PointY="98" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetStudentLink" Width="1.5" PointX="14.25" PointY="101" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetStudentPerformanceReport" Width="1.5" PointX="27.75" PointY="103.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetSubject_Catalog" Width="1.5" PointX="21.75" PointY="102.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetSubject_Homework" Width="1.5" PointX="18.75" PointY="143.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetSubject" Width="1.5" PointX="16.5" PointY="106.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspnetSubjectTopic" Width="1.5" PointX="9.75" PointY="98.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTeacher" Width="1.5" PointX="5.25" PointY="162.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTeacher_Session" Width="1.5" PointX="7.5" PointY="163.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTeacherSubject" Width="1.5" PointX="26.75" PointY="123.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTerm" Width="1.5" PointX="25.5" PointY="93.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTime_Setting" Width="1.5" PointX="4.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTimeslot" Width="1.5" PointX="27.5" PointY="136.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTimeTable" Width="1.5" PointX="29.75" PointY="115.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetTopic" Width="1.5" PointX="24" PointY="102.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="168.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="171" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetUser" Width="1.5" PointX="3" PointY="111.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetUsers_Session" Width="1.5" PointX="11.25" PointY="109.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AspNetVirtualRole" Width="1.5" PointX="9" PointY="106.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Comment_Head" Width="1.5" PointX="14.25" PointY="90.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Comment" Width="1.5" PointX="16.5" PointY="91" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Employee" Width="1.5" PointX="6.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Employee_SalaryIncrement" Width="1.5" PointX="15.75" PointY="126.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Employee_SalaryRecord" Width="1.5" PointX="13.5" PointY="126.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.EmployeeAdvanceSalary" Width="1.5" PointX="13.5" PointY="129.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.EmployeePenalty" Width="1.5" PointX="18.5" PointY="126.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.EmployeePenaltyType" Width="1.5" PointX="16.25" PointY="130.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.EmployeeSalary" Width="1.5" PointX="13.5" PointY="136.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Event" Width="1.5" PointX="35" PointY="119.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.FeeDateSetting" Width="1.5" PointX="8.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.FeeDiscount" Width="1.5" PointX="28.5" PointY="94.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.GenericSubject" Width="1.5" PointX="7.5" PointY="99.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Ledger" Width="1.5" PointX="35.75" PointY="136.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.LedgerGroup" Width="1.5" PointX="33.5" PointY="137.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.LedgerHead" Width="1.5" PointX="31.25" PointY="137.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Lesson_Session" Width="1.5" PointX="14.25" PointY="104.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Month_Multiplier" Width="1.5" PointX="33" PointY="106.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.NonRecurringCharge" Width="1.5" PointX="27.5" PointY="145.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.NonRecurringFeeMultiplier" Width="1.5" PointX="29.75" PointY="120.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.PenaltyFee" Width="1.5" PointX="30.5" PointY="133.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Quiz_Topic_Questions" Width="1.5" PointX="32.75" PointY="129.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.ruffdata" Width="1.5" PointX="5.25" PointY="127" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Student_ChallanForm" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Student_GenericSubjects" Width="1.5" PointX="11.25" PointY="125.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Student_Quiz_Scoring" Width="1.5" PointX="29.75" PointY="126.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentChallanForm" Width="1.5" PointX="21.75" PointY="128.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentDiscount" Width="1.5" PointX="30.75" PointY="111.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentFeeMonth" Width="1.5" PointX="30.75" PointY="104.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentLessonTracking" Width="1.5" PointX="14.25" PointY="113.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentPenalty" Width="1.5" PointX="32.75" PointY="116.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentPenaltyType" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.StudentRecurringFee" Width="1.5" PointX="18.5" PointY="121.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Teacher_GenericSubjects" Width="1.5" PointX="19.5" PointY="108.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.TeacherPenaltyRecord" Width="1.5" PointX="24.5" PointY="115.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.ToDoList" Width="1.5" PointX="5.25" PointY="182.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.TokenAuthentication" Width="1.5" PointX="5.25" PointY="185.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Voucher" Width="1.5" PointX="32.75" PointY="119.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.VoucherRecord" Width="1.5" PointX="38" PointY="120" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.AggregatedCounter" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Counter" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Hash" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Job" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.JobParameter" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.JobQueue" Width="1.5" PointX="10.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.List" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Schema" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Server" Width="1.5" PointX="11.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.Set" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SEA_DatabaseModel.State" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Aspnet_Employee_Session_EMP" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Aspnet_Employee_Session_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAbsent_Student_AspNetSession" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Announcement_Subject_ToAnnouncement" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAnnouncement_AspNetAnnouncement" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAnnouncement_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Announcement_ToAnnouncement" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Announcement_Subject_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_Topic_ToAssessment" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_ToSubjectCatalog" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Assessment_ToAssessment" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_Question_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_Question_ToQuestionCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_Question_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAssessment_Topic_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetAttendance_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Attendance_ToAttendance" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSubject_Catalog_ToCatalog" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetChapter_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTopic_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetClass_FeeType_ToClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetClass_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetClass_ToAspNetClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetClass_ToAspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFeeChallan_ToClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetHomework_AspNetClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Session_class_CLASS" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentAssignmentSubmission_AspNetClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_RecurringFeeClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_ToAspNetClass" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetClass_FeeType_ToFeeType" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetComment_Head_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetComment_Head_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetComments_AspnetComment_Head" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetComments_AspnetComments" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetComments_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFeeChallan_ToDurationType" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetEmp_Auto_Absent_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__2C88998B" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__2D7CBDC4" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__2E70E1FD" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__2F650636" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__30592A6F" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__314D4EA8" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__324172E1" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__3335971A" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__3429BB53" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__351DDF8C" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__361203C5" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__TeacherPe__Emplo__370627FE" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AdvanceSalaryUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetEmployee_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetEmployee_Attendance_TO_AspNetEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetEmployee_VirtualRole" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSalaryDetail_AspNetEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTeacherSubject_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_EmployeePenalty_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_SalaryRecord_EmployeeId" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_SalaryUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Teacher_GenericSubjects_AspNetEmployee" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetEmployee_Attendance_To_AspNetEmployeeAttendance" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Payment_ToFeeChallan" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFeedBackForm_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFeedBackForm_ToRole" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTM_ParentFeedback_ToForm" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTM_TeacherFeedback_ToForm" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFeeType_ToLedger" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFinanceLedgers_AspNetFinanceLedgers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFinanceLedgers_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_PaymentDetail_ToLedger" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetFinanceMonth_AspNetFinancePeriod" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetHoliday_Calendar_Notification_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_HomeWork_AspNetHomework" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetLesson_AspnetSubjectTopic" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetQuestion_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentAssignment_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentAssignmentSubmission_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentAttachment_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentLink_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Comment_Head_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Event_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Lesson_Session_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentLessonTracking_AspnetLesson" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetLessonPlan_Topic_ToLessonPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetLessonPlan_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_LessonPlanBreakdown_ToLessonPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetLessonPlan_Topic_ToTopic" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_LessonPlanBreakdown_ToLessonPlanBreakDownHeading" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetLog_ToUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_MessageReceiver_Messages" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_MessageReceiver_User" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetMessages_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_MessagesSender_ToAspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotes_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotesOrders_Notes" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotesOrders_AspNetOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotesOrders_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotification_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotification_ToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotification_User_ToNotification" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetNotification_User_ToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetQuestion_AspnetOption1" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParent_ToParent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParent_Child_ChildToUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParent_Child_ParentToUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParent_Notification_ParentToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParent_Notification_SenderToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParent_Session_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetParentTeacherMeeting_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTMAttendance_ToMeeting" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetProject_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Project_ToProject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTM_ParentFeedback_ToPTM" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTM_TeacherFeedback_ToPTM" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTMAttendance_ToParent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPTMAttendance_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetPushNotifications_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Notifications_ToAspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Quiz_Topic_Questions_AspnetQuestion" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Quiz_Scoring_AspnetQuestion" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Quiz_Topic_Questions_AspnetQuiz" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Quiz_Scoring_AspnetQuiz" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTimeTable_Room" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSalary_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSalary_VirtualID" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSalaryDetail_SalaryTable" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_AutoAttendance_AspNetStudent_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Fine_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Notification_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Session_class_SESSION" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Term_Assessment_ToSession" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTeacher_Session_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTerm_ToSession" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetUsers_Session_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Event_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Ledger_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Lesson_Session_AspNetSession" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_NonRecurringFeeMultiplier_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_RecurringFeeClass_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_ruffdata_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentFeeMonth_AspNetSession" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_TeacherPenaltyRecord_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Voucher_Session" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Session_class_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentAssignmentSubmission_AspNetStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_NonRecurring_student" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Quiz_Scoring_AspNetStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_ToAspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Voucher" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentChallan_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_studentdiscount_student" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentFeeMonth_student" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentPenalty_Stuedent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Announcement_ToStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Assessment_ToStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Attendance_ToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Fine_ToStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_HomeWork_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Notification_SenderToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Notification_StudentToUser" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Payment_ToStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_PaymentDetail_ToStudentPayment" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_PaymentDetail_ToStudentPaymentPrevious" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Project_ToStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Subject_ToStudent" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_Subject_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Term_Assessment_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Term_Assessment_ToTerm" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Term_Assessment_ToUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudent_Term_Assessments_Answers_ToStudent_Term_Assessment" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetStudentAssignmentSubmission_AspnetSubjectTopic" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudentPerformanceReport_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetStudentPerformanceReport_ToUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSubject_Catalog_ToSubject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetSubject_Homework_AspNetSubjects" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetClass_ToAspNetUsersTeacher" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTeacherSubject_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTimeTable_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTopic_Subject" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspnetSubjectTopic_AspNetSubjects" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Quiz_Topic_Questions_AspnetSubjectTopic" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTeacher_Session_Teacher" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Teacher_ToAspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTimeTable_Slot" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetTimeTable_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Event_AspNetTimeTable" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__Event__UserId__39AD8A7F" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK__Event__UserId__3AA1AEB8" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetUsers_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetUsers_Session_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_GenericSubjects_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentLessonTracking_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_ToDoList_ToAspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_TokenAuthentication_TokenAuthentication" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_AspNetVirtualRole_AspNetVirtualRole" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Comments_Comment_Head" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_SalaryIncrement_SalaryRecord" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_EmployeePenalty_Penalty" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_studentdiscount_Feedisocunt" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Student_GenericSubjects_GenericSubjects" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Teacher_GenericSubjects_GenericSubjects" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Ledger_LedgerGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_Ledger_LedgerHead" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_VoucherRecord_Voucher" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_LedgerGroup_LedgerHead" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_FeeMonth" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_NonRecurring_Description" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentPenalty_Penalty" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_StudentChallan_StudentFeeMonth" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_VoucherRecord_LedgerId" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_HangFire_JobParameter_Job" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.FK_HangFire_State_Job" ManuallyRouted="false" />
+        <AssociationConnector Association="SEA_DatabaseModel.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,390 @@
+﻿@model SEA_Application.Models.QuestionAnswerViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+<style>
+
+    input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+        position: absolute;
+        margin-top: 4px\9;
+        margin-left: 0px;
+    }
+
+    .page-sidebar .page-sidebar-menu, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 1500px !important;
+    }
+</style>
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+@*<script src="~/Content/Toggle.js"></script>*@
+<script src="~/Content/Toggle.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#PageHeader").html("Edit Schedule Lesson");
+
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/AspnetLessons/LessonSessionView"> Lesson Session </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Edit</a></li>');
+
+           $("#btnCancel").click(function () {
+
+                 window.location.href = "/AspnetLessons/LessonSessionView";
+           })
+           $("form").submit(function () {
+
+            event.stopPropagation();
+
+            var StartDate = document.getElementById('StartDate').value;
+            var EndDate = document.getElementById('DueDate').value;
+            var eDate = new Date(EndDate);
+            var sDate = new Date(StartDate);
+
+
+            if (StartDate != '' && EndDate != '' && sDate < eDate  ) {
+
+                $("#ErrorMsg").html("");
+
+                return true;
+            }
+          
+            if(StartDate != '' && EndDate != '' && sDate > eDate) {
+
+                $("#ErrorMsg").html("Start Date Should be lesser than Due Date");
+
+                return false;
+            }
+
+             });
+
+
+        //$.ajax({
+        //    type: "POST",
+        //    cache: false,
+        //    url: "/AspnetLessons/LoadSectionIdDDL",
+        //    processData: false,
+        //    contentType: false,
+        //    success: function (data) {
+        //        var sch = JSON.parse(data);
+        //        $('#SessionId').html("");
+        //        debugger
+        //        //  $('#Sessions').append('<option value= "">Select </option>');
+        //        $('#SessionId').append('<option value="">Select Section</option>');
+        //        $.each(sch, function (i, item) {
+
+        //            debugger
+        //            $('#SessionId').append('<option value=' + item.Id + '>' + item.SessionName + '</option>');
+        //        });
+
+        //    }
+        //});
+
+
+        var course = 'CSS';
+        var Class;
+        $('#CTId').change(function () {
+
+            var crse = $(this).val();
+
+            console.log(crse);
+            course = crse;
+            if (crse != "") {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/AspNetProject/GetSubjectsByClass?CT=" + course,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var sch = JSON.parse(data);
+                        console.log(sch);
+                        var $el = $("#SubId");
+                        $el.empty();
+                        var $e2 = $("#TopicId");
+                        $e2.empty();
+                        var $e3 = $("#LessonId");
+                        $e3.empty();
+                        if (sch.length > 0) {
+                            $el.append($("<option></option>")
+                                .attr("value", "").text('Select Subject'));
+                            for (i = 0; i < sch.length; i++) {
+
+                                $el.append($("<option></option>")
+                                    .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                            }
+                        }
+                        else {
+                            $el.append($("<option></option>")
+                                .attr("value", '').text('Select'));
+                        }
+                    }
+                });
+
+            }
+            else {
+
+                var $el = $("#SubId");
+                $el.empty();
+                var $e2 = $("#TopicId");
+                $e2.empty();
+                var $e3 = $("#LessonId");
+                $e3.empty();
+            }
+        });
+
+
+        $('#SecId').change(function () {
+
+            var UserName = $(this).val();
+            console.log(UserName);
+            Class = UserName;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "/AspNetProject/GetSubjectsByClass?ClassID=" + UserName + "&&CT=" + course,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    var sch = JSON.parse(data);
+                    console.log(sch);
+                    var $el = $("#SubIdDDL");
+                    $el.empty();
+                    var $e2 = $("#TopIdDDL");
+                    $e2.empty();
+                    var $e3 = $("#LessIdDDL");
+                    $e3.empty();
+                    if (sch.length > 0) {
+                        $el.append($("<option></option>")
+                            .attr("value", "").text('Select Subject'));
+                        for (i = 0; i < sch.length; i++) {
+
+                            $el.append($("<option></option>")
+                                .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                        }
+                    }
+                    else {
+                        $el.append($("<option></option>")
+                            .attr("value", '').text('Select'));
+                    }
+                }
+            });
+
+        });
+
+        $('#TopicId').change(function () {
+
+            var topid = $(this).val();
+
+          //  alert(topid);
+            console.log(topid);
+            if (topid != "") {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/AspNetProject/GetLession?TopID=" + topid,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var sch = JSON.parse(data);
+                        console.log(sch);
+
+                        var $el = $("#LessonId");
+                        $el.empty();
+                        if (sch.length > 0) {
+                            $el.append($("<option></option>")
+                                .attr("value", "").text('Select Lesson'));
+                            for (i = 0; i < sch.length; i++) {
+
+                                $el.append($("<option></option>")
+                                    .attr("value", sch[i].Id).text(sch[i].Name));
+                            }
+                        }
+                        else {
+                            $el.append($("<option></option>")
+                                .attr("value", '').text('Select'));
+                        }
+                    }
+                });
+            }
+            else {
+                      var $el = $("#LessonId");
+                        $el.empty();
+
+            }
+        });
+
+
+        $('#SubId').change(function () {
+
+            var subid = $(this).val();
+            console.log(subid);
+            if (subid != "") {
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/AspNetProject/GetTopic?SubID=" + subid,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var sch = JSON.parse(data);
+                        console.log(sch);
+                        var $el = $("#TopicId");
+                        $el.empty();
+                        var $e1 = $("#LessonId");
+                        $e1.empty();
+
+                        if (sch.length > 0) {
+                            $el.append($("<option></option>")
+                                .attr("value", "").text('Select Topic'));
+                            for (i = 0; i < sch.length; i++) {
+
+                                $el.append($("<option></option>")
+                                    .attr("value", sch[i].Id).text(sch[i].Name));
+                            }
+                        }
+                        else {
+                            $el.append($("<option></option>")
+                                .attr("value", '').text('Select'));
+                        }
+                    }
+                });
+            } else {
+                  var $el = $("#TopicId");
+                        $el.empty();
+                        var $e1 = $("#LessonId");
+                        $e1.empty();
+
+            }
+        });
+
+    })
+</script>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
+
+                @using (Html.BeginForm("EditLessonSession", "AspnetLessons", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="LessonSessionId" value="@ViewBag.Id" />
+
+                    <div class="row">
+                        <div class="col-md-6 pl-5 pr-5 ">
+
+
+
+                            <div class="form-group">
+                                <label for="" class="control-label">Course Type* </label>
+
+                                @Html.DropDownList("CTId", new List<SelectListItem>
+                                      {
+
+                                    new SelectListItem{ Text="Select One", Value = "" },
+                                    new SelectListItem{ Text="CSS", Value = "CSS" },
+                                    new SelectListItem{ Text="PMS", Value = "PMS" },
+
+                                       }, htmlAttributes: new { @class = "form-control", @required = true })
+
+
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label for="" class="control-label">Subject* </label>
+
+                                @Html.DropDownList("SubId", null, htmlAttributes: new { @class = "form-control" ,@required = true})
+                            </div>
+
+                            <div class="form-group  ">
+                                <label for="" class="control-label">Topic* </label>
+
+                                @Html.DropDownList("TopicId", null, htmlAttributes: new { @class = "form-control",@required = true })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="control-label">Lesson* </label>
+
+                                @Html.DropDownList("LessonId", null, htmlAttributes: new { @class = "form-control",@required = true })
+                            </div>
+
+
+                            <div class="form-row mt-3">
+                                <div class="form-group col-md-12 bmd-form-group">
+                                    <label for="" class="bmd-label-static pl-2">Select Section*</label>
+                                    @*<select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>*@
+
+                                    @Html.DropDownList("SessionId", null, htmlAttributes: new { @class = "form-control",  @required = true })
+                                </div>
+                            </div>
+                            <span style="padding:10px"></span>
+
+                            <div class="form-group">
+                                Start Date
+
+
+                                <input   type="date" name="StartDate" id="StartDate" value="@ViewBag.LessonStartDate" class="form-control" required />
+
+
+                            </div>
+
+                            <span style="padding:10px"></span>
+                            <div class="form-group">
+                                <label>Due Date</label>
+
+
+                                <input type="date" name="DueDate" id="DueDate" value="@ViewBag.LessonDueDate" class="form-control" required />
+                                <span style="color:red;" id="ErrorMsg"></span>
+
+
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div><!--row end-->
+
+
+
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+
+                        <br />
+                        <button type="submit" class="btn btn-primary rounded rounded-lg"> Update </button>
+
+
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+
+
+
+                }
+
+
+            </div>
+        </div>
+    </div>
+</div>

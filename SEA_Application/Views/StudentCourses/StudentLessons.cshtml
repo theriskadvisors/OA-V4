@@ -1,0 +1,760 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    if (User.IsInRole("Teacher"))
+    {
+        ViewBag.Title = "TeacherLessons";
+        Layout = "~/Views/Shared/_TeacherDashboardLayout.cshtml";
+    }
+    else
+    {
+        ViewBag.Title = "StudentLessons";
+        Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+    }
+
+}
+
+<style>
+    #TotalQuestions {
+        all: unset;
+    }
+</style>
+
+<style>
+    body {
+        font-family: 'Lato', sans-serif;
+    }
+
+    transition, #container a.view-slide {
+        transition: all 0.25s ease-in-out;
+    }
+
+    #overlay {
+        position: fixed;
+        background: rgba(48, 69, 92, 0.5);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        text-align: center;
+        z-index: 9999;
+        display: none;
+    }
+
+        #overlay iframe {
+            margin-top: 10%;
+        }
+
+    #container {
+        background: rgba(255, 104, 115, 1);
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100vh;
+        text-transform: uppercase;
+    }
+
+        #container header {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: rgba(254, 255, 250, 1);
+            line-height: 1;
+            padding: 0.5em 2em;
+            border-bottom: 0.5em solid rgba(220, 231, 235, 0.25);
+        }
+
+    .QuestionHeader:hover {
+        text-decoration: underline;
+    }
+   #Assignment a{
+       
+       text-decoration:underline;
+    }
+    /*#container a.view-slide {
+         font-size: 0.9em;
+         font-family: 'Ubuntu', sans-serif;
+         font-weight: 400;
+         text-decoration: none;
+         color: rgba(34, 190, 198, 1);
+         background: rgba(254, 255, 250, 1);
+         margin-top: 2em;
+         padding: 1.2em;
+         border-radius: 0.25em;
+    }
+     #container a.view-slide:hover {
+         color: rgba(48, 69, 92, 0.5);
+         background: rgba(48, 69, 92, 0.15);
+    }*/
+
+    /*.overlay {
+      height: 100%;
+      width: 100%;
+      display: none;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0, 0.9);
+    }
+
+    .overlay-content {
+      position: relative;
+      top: 25%;
+      width: 100%;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .overlay a {
+      padding: 8px;
+      text-decoration: none;
+      font-size: 36px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+      z-index: 99999;
+    }
+
+    .overlay a:hover, .overlay a:focus {
+      color: #f1f1f1;
+    }
+
+    .overlay .closebtn {
+      position: absolute;
+      top: 20px;
+      right: 45px;
+      font-size: 60px;
+    }*/
+
+    /*media screen and (max-height: 450px) {
+      .overlay a {font-size: 20px}
+      .overlay .closebtn {
+      font-size: 40px;
+      top: 15px;
+      right: 35px;
+      }
+    }*/
+
+
+
+
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Lessons");
+        var src = "";
+
+        $("#BreadCrumbs").append(' <li> <a href="/Student_Dashboard/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/StudentCourses/Index"> Courses </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Lessons</a></li>');
+
+        $("#GenericDiv").show();
+
+        var LessonId = $("#LessonID").val();
+        var sub = $("#SubjectId").val();
+
+        $("#iframeBtn").click(function () {
+            window.open(src);
+        });
+
+        // Ring Functionality JS
+        var circle = document.querySelector('circle');
+        var radius = circle.r.baseVal.value;
+        var circumference = radius * 2 * Math.PI;
+
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = `${circumference}`;
+
+        function setProgress(percent) {
+            const offset = circumference - percent / 100 * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        const input = document.querySelector('input.progressVal');
+        setProgress(input.value);
+
+        input.addEventListener('change', function (e) {
+            if (input.value < 101 && input.value > -1) {
+                setProgress(input.value);
+            }
+        });
+        // #End Ring Functionality JS
+
+        $.ajax({
+            type: "POST",
+            url: "/StudentCourses/GetLessonVideo",
+            data: { "LessonID": LessonId },
+            success: function (data) {
+
+                console.log(data);
+
+                //$("iframe").attr('src', data.LessonVideo);
+                src = data.LessonVideo;
+                $("#LessonName").text(data.LessonName);
+                $("#LessonDescription").text("");
+                $("#LessonDescription").text(data.LessonDescription);
+            }
+        });
+
+        var Count = 0;
+        var heading = "headingOne";
+        var collapse = "collapseOne";
+        var index = 0;
+        var trueCount = 0;
+        var percent = 0;
+        var total = 0;
+
+        $.ajax({
+            type: "POST",
+            url: "/StudentCourses/GetSubjectTopicsAndLessons",
+            data: { "SubjectId": sub },
+            success: function (data) {
+                console.log(data);
+                //console.log("Working");
+                $.each(data, function (key, value1) {
+                    Count = Count + 1
+                    var lessonlist = value1.LessonList;
+                    var heading = "headingOne";
+                    index = index + 1;
+                    var headingIndex = heading + index;
+                    var collapseindex = collapse + index;
+
+                    var Topic;
+                    var Lesson = "";
+
+                    Topic = '<div class="card"><div class="card-header" role="tab" id="' + headingIndex + '"><a data-toggle="collapse" data-parent="#accordionEx" href="#' + collapseindex + '" aria-expanded="true" aria-controls="' + collapseindex + '" class=""><h5 class="mb-0">' + value1.TopicName + '</br><span class="completedAndTime">  (' + value1.TotalLessons1 + '-' + value1.TopicDuration + ' min) </span><i class="fas fa-angle-down rotate-icon"></i></h5></a></div><div id="' + collapseindex + '" class="collapse show" role="tabpanel" aria-labelledby="' + headingIndex + '" data-parent="#accordionEx" style=""><div class="card-body"><div class="row">';
+
+                    $.each(lessonlist, function (key, lesson) {
+                        debugger
+
+                        if (lesson.LessonExistInTrackingTable == "Yes") {
+                            trueCount = trueCount + 1;
+                            Lesson = Lesson + '<div class="col-md-12"><div class="form-check  my-2"><label class="form-check-label"><input class="form-check-input" type="checkbox" checked="" disabled><span class="form-check-sign"><span class="check"></span></span><a name = "' + lesson.LessonId + '"  onclick=" UpdateLessonTrackingTable(' + lesson.LessonId + ')"  href = "/StudentCourses/StudentLessons/' + lesson.EncryptedID + '" target="_blank">' + lesson.LessonName + ' (' + lesson.time + ')' + '</a><div class="lengthCheckbox">' + lesson.LessonDuration + 'min</div></label></div></div>';
+                        }
+                        else {
+                            Lesson = Lesson + '<div class="col-md-12"><div class="form-check  my-2"><label class="form-check-label"><input class="form-check-input" type="checkbox" disabled><span class="form-check-sign"><span class="check"></span></span><a name = "' + lesson.LessonId + '"  onclick=" UpdateLessonTrackingTable(' + lesson.LessonId + ')" href = "/StudentCourses/StudentLessons/' + lesson.EncryptedID + '" target="_blank">' + lesson.LessonName + ' (' + lesson.time + ')' + '</a><div class="lengthCheckbox">' + lesson.LessonDuration + 'min</div></label></div></div>';
+                        }
+                    })
+                    $("#accordionEx").append(Topic + Lesson + '</div></div></div></div>');
+                    $("#TotalTopics").html(Count);
+                    percent = (trueCount / value1.TotalLessons) * 100;
+                    total = value1.TotalLessons;
+
+                    $("#topicCompleted").html(trueCount);
+                    $("#Totaltopic").html(total);
+
+                    setProgress(percent);
+
+                    //$('i').click(function () {
+                    //    var className = $(this).attr("class");
+                    //    if (~className.indexOf("fa-angle-down")) {
+                    //        $(this).removeClass("fa-angle-down");
+                    //        $(this).addClass("fa-angle-up");
+                    //        //console.log("up");
+                    //    } else {
+                    //        $(this).removeClass("fa-angle-up");
+                    //        $(this).addClass("fa-angle-down");
+                    //        //console.log("down");
+                    //    }
+                    //});
+
+                })
+
+            }
+        })
+
+        var TotalQuestions = 0;
+
+        $.ajax({
+            type: "POST",
+            url: "/StudentCourses/AllCommentsHead",
+            data: { "LessonID": LessonId },
+            success: function (data) {
+                console.log(data);
+                TotalQuestions = data.length;
+
+                $.each(data, function (index) {
+                    var value = new Date(parseInt(data[index].Date.replace(/(^.*\()|([+-].*$)/g, '')));
+                    var dat = value.getMonth() +
+                        1 +
+                        "/" +
+                        value.getDate() +
+                        "/" +
+                        value.getFullYear();
+                    var ff = data[index].EncryptedID;
+                    var id = parseInt(data[index].CommentHeadId);
+
+                    var initials = data[index].UserName.match(/\b\w/g) || [];
+                    initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+
+                    $("#AllComments").append('<div class="d-flex py-3"><div class="mr-3 tabHeading"><span class="initialCircle">' + initials + '</span></div><div class=""> <a href = "/StudentCourses/CommentsPage1/' + data[index].EncryptedID + '"><h3  class="tabMainHeading mt-0 mb-2 QuestionHeader">' + data[index].Title + '</h3></a><p>' + data[index].Body + '</p><div class="metaInfoQues">' + data[index].UserName + ' <strong class="ml-2">' + dat + '</strong></div></div></div><hr>');
+
+
+
+                    //$("#AllCommentsHead").append('<a href = "/StudentCourses/CommentsPage1/' + data[index].EncryptedID + '"><div id="QADiv"  name ="' + data[index].CommentHeadId + '"   class ="CommentDivs" ><p id="TitleParagraph" class="titleParagraphs" style="padding:10px;" ><b>' + data[index].Title + '</b> </p> <div style="padding:10px;"> <p>' + data[index].Body + '</p> <p><b>' + dat + ' &nbsp;&nbsp;&nbsp; ' + data[index].UserName + '</b></p><p><b></p> </b></div> </div></a>');
+                });
+                $("#TotalQuestions").html(TotalQuestions);
+            }
+        })
+
+
+        $.ajax({
+
+
+            type: "POST",
+            url: "/StudentCourses/ReadingMaterials",
+            data: { "LessonID": LessonId },
+            success: function (data) {
+
+                var Attachment = data.StuAttachment;
+                var Links = data.StuLinks;
+                $.each(Attachment, function (key, value1) {
+
+                    var file = value1.AttachmentName.split('.').slice(0, -1).join('.');
+                    //  $("#Attachment").append('<tr><td>Attachment Name </td>  <td>' + file + '</td></tr>');
+                    //  $("#Attachment").append('<tr><td> Download Attach File  </td>  <td><a href ="/StudentCourses/DownloadFile/' + value1.AttachmentId + '">' + value1.AttachmentPath + '</a></td></tr>');
+
+                    $("#AttachmentAndLinkTable").append('<div class="col-md-12"> <span class="col-md-2">Attachment Name:</span >  <span class="col-md-6">' + file + '</span></div>');
+                    $("#AttachmentAndLinkTable").append('<div class="col-md-12"> <span class="col-md-2">Download Attach File:</span > <span class="col-md-6"><a href ="/StudentCourses/DownloadFile/' + value1.AttachmentId + '">' + value1.AttachmentPath + '</span></div>');
+                    $("#AttachmentAndLinkTable").append('<hr>');
+                })
+
+                $.each(Links, function (key, value2) {
+                    // $("#LinksTable").append('<tr><td>Link URL  </td>  <td><a href =' + value2.LinkUrl + ' target="_blank">' + value2.LinkUrl + '</a></td></tr>');
+                    $("#AttachmentAndLinkTable").append('<div class="col-md-12"><span class="col-md-2">Link URL:</span ><span class="col-md-6"><a href =' + value2.LinkUrl + ' target="_blank"> ' + value2.LinkUrl + '</a></span><hr>');
+                })
+            }
+        })//End of Reading Material
+
+
+           $.ajax({
+
+
+            type: "POST",
+            url: "/StudentCourses/StudentAssignment",
+            data: { "LessonID": LessonId },
+            success: function (data) {
+
+                debugger
+                //var value = new Date(parseInt(data.StudentAssignmentDueDate.replace(/(^.*\()|([+-].*$)/g, '')));
+                //var dat = value.getMonth() +
+                //    1 +
+                //    "/" +
+                //    value.getDate() +
+                //    "/" +
+                //    value.getFullYear();
+
+
+
+                if (data.FileName == "") {
+
+                    $("#AssignmentSubmitButton").addClass('submitAssignmentBtn');
+
+                }
+
+                if (data.AssignmentExist == "Yes") {
+
+                    $("#AssignmentBlock").css('display', 'block');
+                }
+                else {
+                    $("#AssignmentBlock").css('display', 'none');
+
+                }
+
+                if (data.SubmittedAssignmentFileName == "Empty") {
+
+                    $("#AssignmentSubmitButton").css('display', 'block');
+
+                    $("#AssingmentFileToShow").html("");
+                 
+
+                }
+                else {
+
+                    $("#AssignmentSubmitButton").css('display', 'none');
+                    $("#FilePath").val(data.SubmittedAssignmentFileName);
+                }
+
+
+
+                $("#Assignment").append('<br><div class="form-group"><div ><span class="col-md-2">Assignment Name</span ><span class="col-md-8">' + data.StudentAssigmentName + ' </span></div>');
+
+                $("#Assignment").append('<div class="form-group"><span class="col-md-2">Download Attach File</span ><span class="col-md-10"><a href ="/StudentCourses/DownloadFileOfAssignment/' + data.StudentAssignmentId + '">' + data.FileName + '</a></span> </div> ');
+
+
+                $("#Assignment").append('<div class="form-group"><span class="col-md-2">Assignment DueDate</span><span class="col-md-10">' + data.StudentAssignmentDueDate + ' </span></div>');
+
+                //  $("#Assignment").append('<tr><td>Assignment Name </td>  <td>' + data.StudentAssigmentName + '</td></tr>');
+                //  $("#Assignment").append('<tr><td> Download Attach File  </td>  <td><a href ="/StudentCourses/DownloadFileOfAssignment/' + data.StudentAssignmentId + '">' + data.StudentAssigmentName + '</a></td></tr>');
+                // $("#Assignment").append('<tr><td>Assignment DueDate </td>  <td>' + data.StudentAssignmentDueDate + '</td></tr>');
+                $("#TeacherComments").text(data.TeacherComments);
+
+
+                
+
+            }
+
+           })// End of Student Assignment 
+
+
+
+              $("#AssignmentSubmitButton").click(function (evt) {
+
+
+                  debugger
+                var fileUpload = $("#SubmitAssignment").get(0).files;
+
+                    var data = new FormData();
+                    data.append('LessonID', LessonId);
+
+                  if (fileUpload.length > 0) {
+
+                     
+                      data.append("file", fileUpload[0]);
+                      $.ajax({
+                          type: "POST",
+                          url: "/StudentCourses/StudentAssignmentSubmission",
+                          contentType: false,
+                          processData: false,
+                          data: data,
+                          success: function (message) {
+
+                              $("#AssignmentMessage").html(message);
+
+                              //  window.location.href = "/StudentCourses/Index";
+
+                                $("#AssignmentSubmitButton").css('display', 'none');
+
+                          },
+                          error: function () {
+                              alert("There was error uploading files!");
+                          }
+                      });
+                  }
+                  else {
+                      $("#AssignmentMessage").css('color', 'red');
+
+
+                      $("#AssignmentMessage").html("Please Select Assignment");
+
+
+                  }
+        });// Assignment Submission
+
+              $("#MarkAs").click(function () {
+                  //debugger;	
+                  var id = $("#LessonID").val();
+                  $.ajax({
+                      type: "POST",
+                      url: "/StudentCourses/UpdateStudentLessonTracking",
+                      data: { "LessonId": id },
+                      success: function (data) {
+                          if (data == "True") {
+
+                              $("#MarkAs").prop("disabled", true);
+                              $("#MarkAs").html("Lesson Completed");
+                              toastr.success('Lesson completed');
+                          }
+                          else {
+                              toastr.error('Error ! Lesson is already completed');
+                          }
+                      }
+                  })
+              })
+              var id = $("#LessonID").val();
+              $.ajax({
+                  type: "POST",
+                  url: "/StudentCourses/MarkChecker",
+                  data: { "LessonId": id },
+                  success: function (data) {
+                      if (data == "True") {
+                          // toastr.success('Assignment has been marked as completed');	
+                      }
+                      else {
+                          $("#MarkAs").prop("disabled", true);
+                          $("#MarkAs").html("Lesson is Already Completed");
+                      }
+                  }
+              })
+
+        $("#AddButton").click(function () {
+            //debugger
+            var ThreadTitle = $("#ThreadTitle").val();
+            var ThreadBody = $("#commentbox").val();
+
+            ThreadTitle = "Question";
+            if (ThreadBody != "" && ThreadBody != "<br>") {
+                //alert(ThreadBody);
+                $.ajax({
+
+                    type: "POST",
+                    url: "/StudentCourses/SaveCommentHead",
+                    data: { "LessonID": LessonId, "Title": ThreadTitle, "Body": ThreadBody },
+                    success: function (data) {
+                        location.reload();
+                    }
+                })
+            }
+        })
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 pr-5">
+                        <div class="row column-heading accordion-heading mt-0 mb-2">
+                            <div class="col-md" id="LessonName"></div>
+                            <input type="hidden" id="LessonID" name="name" value="@ViewBag.LessonID" />
+                            <input type="hidden" id="SubjectId" name="name" value="@ViewBag.SubjectId" />
+                            <button id="MarkAs" value="MarkAs" class="btn btn-primary pull-right rounded rounded-lg shadow-none mr-3" type="button">
+                                Mark as Complete
+                            </button>
+                        </div>
+
+                        <div style="/*! height: 120px; */" class="upload-photo videoBox border rounded d-flex align-items-center justify-content-center flex-column mb-4">
+                            <button class="btn btn-lg btn-white btn-round btn-just-icon m-0" id="iframeBtn">
+                                <img src="~/Content/assets/assets/icons/play.png" style="vertical-align: -4px;margin-left: 5px;">
+                            </button>
+                        </div>
+
+                        <!--<div id="myNav" class="overlay">
+                            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                            <iframe src="" frameborder="0" border="0" scrolling="auto" allowtransparency="true" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="1" style="border: none; background-color: transparent; width: 70%; height: 60%; position: absolute" ></iframe>
+                        </div>-->
+                        <!--<div style="/*! height: 120px; */" class="upload-photo videoBox border rounded d-flex align-items-center justify-content-center flex-column mb-4">
+                            <iframe src="" frameborder="0" border="0" scrolling="auto" allowtransparency="true" allowfullscreen="1" style="border: none; background-color: transparent; width: 100%; height: 100%;"></iframe>
+                        </div>-->
+
+                        <div class="tabsCon">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" id="myTabAttr" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="overview-tab-attr" data-toggle="tab" href="#overview-attr" role="tab" aria-controls="overview-attr"
+                                       aria-selected="true">Overview</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="Material-tab-attr" data-toggle="tab" href="#Material-attr" role="tab" aria-controls="Material-attr"
+                                       aria-selected="false">Reading Material</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="Assignment-tab-attr" data-toggle="tab" href="#Assignment-attr" role="tab" aria-controls="Assignments-attr"
+                                       aria-selected="false"> Assignment </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" id="qa-tab-attr" data-toggle="tab" href="#qa-attr" role="tab" aria-controls="qa-attr"
+                                       aria-selected="false">Discussion Forum</a>
+                                </li>
+                                <!--<li class="nav-item">
+                                    <a class="nav-link" id="settings-tab-attr" data-toggle="tab" href="#settings-attr" role="tab" aria-controls="settings-attr"
+                                       aria-selected="false">Settings</a>
+                                </li>-->
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="overview-attr" role="tabpanel" aria-labelledby="overview-tab-attr">
+
+                                    <h3 class="tabMainHeading">About this course</h3>
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-4" id="LessonDescription"></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" id="Material-attr" role="tabpanel" aria-labelledby="Material-tab-attr">
+
+
+                                    <!--Activity Tab Content-->
+                                    <h3 class="tabMainHeading mb-3">Reading Material</h3>
+                                    <div class="row" id="AttachmentAndLinkTable">
+                                    </div>
+                                    <!--Activity Tab Content-->
+                                </div>
+
+                                <div class="tab-pane" id="Assignment-attr" role="tabpanel" aria-labelledby="Assignment-tab-attr">
+
+                                    @*<h3>Assignment View</h3>*@
+
+                                    <div id="AssignmentBlock" style="display:none">
+
+                                        <div class="box" style="border:0">
+                                            <div class="box-title" style="border:0"></div>
+
+
+                                            <div class="box-body">
+                                                <div id="Assignment">
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group" id="">
+
+                                            <span class="col-md-2"> Teacher Comments  </span>
+
+                                            <div id="" class="col-md-10">
+
+                                                <textarea readonly class="form-control" rows="5" id="TeacherComments"></textarea>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-12">
+
+                                            <div class="form-group">
+                                               
+                                                <hr />
+                                                <span class="" style="font-weight:bold">Submit your Assignment </span>
+
+                                                @*<i class="fa fa-paperclip" style="padding-left:80px"></i> Choose File
+                        <input type="file" style="padding-left:80px" id="SubmitAssignment" name="SubmitAssignment">
+                    </div>
+                    <div class="col-md-offset-2 col-lg-offset-2" style="padding-left:80px">
+                        <p class="help-block">Max. 32MB</p>
+                    </div>*@
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 bmd-form-group">
+                                                        <div class="file-field d-flex">
+                                                            <div class="btn btn-primary btn-md mb-0">
+                                                                <span style="color:white" onclick='event.stopPropagation(); document.getElementById("SubmitAssignment").click();'>Choose file</span>
+                                                                <input id="SubmitAssignment" name="SubmitAssignment" type="file">
+                                                            </div>
+                                                            <div class="file-path-wrapper d-flex align-items-end ml-3 w-100">
+                                                                <input id="FilePath" class="file-path validate form-control" type="text" readonly disabled placeholder="No file Chosen">
+                                                            </div>
+                                                        </div>
+                                                        <div style="color: #afbccc;font-size: 14px;font-weight: 500;" class="my-3">Max: 32 MB (Filename should be unique)</div>
+                                                    </div>
+                                                </div>
+                                                <span id="AssingmentFileToShow"></span>
+                                                <span style="color:blue" id="AssignmentMessage"></span>
+
+
+                                                <div @*class="col-md-10"*@>
+
+
+                                                    @*<input type="file" class="btn btn-default" id="SubmitAssignment" name="SubmitAssignment" />
+
+
+                        <span style="color:blue" id="AssignmentMessage"></span>*@
+
+                                                    <br />
+
+                                                    <input style="display:none" class="btn btn-default" type="button" id="AssignmentSubmitButton" name="" value="Submit" />
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div><!--Assignment-->
+
+
+                                <div class="tab-pane" id="qa-attr" role="tabpanel" aria-labelledby="qa-tab-attr">
+
+
+                                    <!--QA CONTENT-->
+                                    <h3 class="tabMainHeading">
+                                        <span id="TotalQuestions"></span> questions in this course
+                                        <span class="askQues">
+                                            <a href="#" class="btn btn-link btn-sm">
+                                                Ask a question
+                                                <div class="ripple-container"></div><div class="ripple-container"></div>
+                                            </a>
+                                        </span>
+                                    </h3>
+
+                                    <hr class="mt-2">
+
+                                    <div id="AllComments">
+
+                                    </div>
+
+                                    <div class="d-flex py-3">
+                                        <div class="mr-3 tabHeading">
+                                            <span class="initialCircle">MS</span>
+                                        </div>
+                                        <div class="w-100">
+
+                                            @*<div class="w-100" name="summernote CommentBody" id="summernote"></div>*@
+
+                                            <div class="form-group">
+                                                <label for="comment">Write a Comment:</label>
+                                                <br />
+                                                <textarea class="form-control" rows="5" id="commentbox"></textarea>
+                                            </div>
+
+                                            <button type="button" class="btn btn-primary pull-right mt-3 addCommentBtn" id="AddButton">Add<div class="ripple-container"></div><div class="ripple-container"></div></button>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!--QA CONTENT-->
+
+
+                                </div>
+                                <!--<div class="tab-pane" id="settings-attr" role="tabpanel" aria-labelledby="settings-tab-attr">...</div>-->
+
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="col-lg-4 col-md-12">
+                        <div class="row column-heading accordion-heading mt-0 mb-2">
+                            <div class="col-md">
+                                Course Content
+                            </div>
+                            <div class="col-md text-right">
+                                <span class="topicsCount">
+                                    Topics &nbsp;
+                                    <span id="TotalTopics"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="accordionIn">
+
+                            <!--Accordion Wrapper-->
+                            <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+                            </div>
+                            <!--Accordion Wrapper-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

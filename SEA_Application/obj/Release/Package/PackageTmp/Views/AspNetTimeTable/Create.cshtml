@@ -1,0 +1,54 @@
+﻿@model SEA_Application.Models.AspNetTimeTable
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Create TimeTable");
+
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/AspNetTimeTable/Index"> TimeTable </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
+                @using (Html.BeginForm("TimeTableFromFile", "AspNetTimeTable", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="box-body">
+                        <h2 class="column-heading wizard-heading mb-4">Upload Excel File</h2>
+                        <div class="btn btn-primary btn-md mb-0">
+                            <input id="subjects" name="subjects" type="file">
+                            <span style="color:red">
+                                @TempData["ErrorMsg"]
+                            </span>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+

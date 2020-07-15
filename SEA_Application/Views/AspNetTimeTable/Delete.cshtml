@@ -1,0 +1,70 @@
+﻿@model SEA_Application.Models.AspNetTimeTable
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+<script>
+
+    $(document).ready(function () {
+        $("#PageHeader").html("Time Table");
+
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="/AspNetTimeTable/Index">TimeTable </a><span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Delete </a></li>');
+    });
+    
+</script>
+<div class="row">
+    <div class="card">
+        <div class="card-body p-4">
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.AspNetRoom.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AspNetRoom.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Day)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Day)
+                </dd>
+
+                
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.AspNetSubject.SubjectName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AspNetSubject.SubjectName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.AspNetTimeslot.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AspNetTimeslot.Name)
+                </dd>
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-default" /> |
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            }
+        </div>
+    </div>
+</div>

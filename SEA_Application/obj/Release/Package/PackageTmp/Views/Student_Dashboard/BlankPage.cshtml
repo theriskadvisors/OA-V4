@@ -1,0 +1,120 @@
+﻿
+@using System.Linq;
+@using System.Net;
+@using System.Web.Mvc;
+@using SEA_Application.Models;
+@using System.IO;
+@using Microsoft.AspNet.Identity;
+@{
+    SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+    var CurrentUserId = User.Identity.GetUserId();
+
+    string name = db.AspNetUsers.Where(x => x.Id == CurrentUserId).Select(x => x.Name).FirstOrDefault();
+    var dt = DateTime.Now;
+    DateTime Firstday = dt.AddDays(-(int)dt.DayOfWeek);
+    DateTime Endaday = Firstday.AddDays(6);
+    int countLesson = db.Events.Where(x => x.UserId == CurrentUserId && x.Start <= Endaday && x.Start >= Firstday).Count();
+}
+
+<div class="pageHeading">
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+            <div class="d-flex">
+                <div id="dayPart_div" class="mr-4 flex-3 sunSide"><img id="dayPart_img" src="~/Content/assets/img/sun.png" /></div>
+                <div>
+                    <div class="afternoon mt-2">
+                        <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
+                        <p>
+                            There are <span id="upcomming_lesson">@countLesson</span> upcoming Lessons this week.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
+            <button type="button" class="btn btn-primary pull-right rounded rounded-lg createBtn coursesBtn" onclick="window.location.href = '/StudentCourses/Index'">
+                View All Lessons
+            </button>
+        </div>
+    </div>
+</div>
+<div class="tabsCon">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTabAttr" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="Welcome-tab-attr" data-toggle="tab" href="#Welcome-attr" role="tab" aria-controls="Welcome-attr"
+               aria-selected="true">Welcome</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="TimeTable-tab-attr" data-toggle="tab" href="#TimeTable-attr" role="tab" aria-controls="TimeTable-attr"
+               aria-selected="false" onclick="navClicked()">TimeTable</a>
+        </li>
+    </ul>
+
+    <div class="card">
+        <div class="card-body p-4">
+            <div class="tab-content" style="padding: 10px 0px 0px 0px;">
+                <div class="tab-pane active show" id="Welcome-attr" role="tabpanel" aria-labelledby="Welcome-tab-attr">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="row">
+                                <iframe id="ifm" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+20)+'px';" src="https://pro.ispringcloud.com/acc/0dBmDbE0ODAyMA/view/48020-UEC9i-DTQZ7-jrBtN/embedded?from=embed&amp;fit=1" frameborder="0" border="0" allowtransparency="true" allowfullscreen="1" style="border: none; background-color: transparent; width: 100%; height:600px; overflow:auto"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="TimeTable-attr" role="tabpanel" aria-labelledby="TimeTable-tab-attr">
+                    <div class="col-md-12 table-responsive-lg">
+
+                        <!--Filters Class-->
+                        <div style="/*! border-bottom: 1px solid lightblue; */" class="filterBtnCon ml-4 float-right">
+                            <button href="javascript:;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="filterBtn fc-button fc-state-default">
+                                <span>Filter</span>
+                                <img src="~/Content/assets/img/filter.png">
+                            </button>
+                            <div id="ClassesFilter" aria-labelledby="navbarDropdownProfile" x-placement="bottom-end" style="position: absolute; top: 45px; left: 1607px; will-change: top, left;" class="dropdown-menu dropdown-menu-right">
+
+
+
+                                @foreach (var c in ViewBag.AllClasses)
+                                        {
+
+                                    <a class="dropdown-item" href="#">@c</a>
+
+                                        }
+
+
+                            </div>
+                        </div>
+
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<script>
+    function navClicked() {
+        $(function () {
+            function show_popup() {
+                $(".fc-button-group").children("button").click();
+                //alert("2 sec wait");
+            };
+            window.setTimeout(show_popup, 2000); // 5 seconds
+        });
+        navClickedtwice();
+    }
+
+    function navClickedtwice() {
+        $(function () {
+            function show_popup() {
+                $(".fc-button-group").children("button").click();
+                //alert("2 sec wait");
+            };
+            window.setTimeout(show_popup, 2000); // 5 seconds
+        });
+    }
+</script>*@
