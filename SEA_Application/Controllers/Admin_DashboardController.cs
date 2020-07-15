@@ -456,21 +456,21 @@ namespace SEA_Application.Controllers
             }
             ViewBag.Messages = messages;
 
-            var ty = (from classid in db.AspNetHomeworks
-                      join classname in db.AspNetClasses
-                      on classid.ClassId equals classname.Id
-                      where classid.PrincipalApproved_status == "Created" || classid.PrincipalApproved_status == "Edited"
-                      select new { classname.ClassName, classid.Date, classid.Id }).ToList().OrderByDescending(a => a.Date);
-            ViewBag.TotalStudents = (from uid in db.AspNetUsers
-                                     join sid in db.AspNetStudents
-                                     on uid.Id equals sid.StudentID
-                                     where uid.Status != "False"
-                                     select sid.StudentID).Count();
+            //var ty = (from classid in db.AspNetHomeworks
+            //          join classname in db.AspNetClasses
+            //          on classid.ClassId equals classname.Id
+            //          where classid.PrincipalApproved_status == "Created" || classid.PrincipalApproved_status == "Edited"
+            //          select new { classname.ClassName, classid.Date, classid.Id }).ToList().OrderByDescending(a => a.Date);
+            //ViewBag.TotalStudents = (from uid in db.AspNetUsers
+            //                         join sid in db.AspNetStudents
+            //                         on uid.Id equals sid.StudentID
+            //                         where uid.Status != "False"
+            //                         select sid.StudentID).Count();
 
 
-            ViewBag.TotalSubjects = db.AspNetSubjects.Count();
-            ViewBag.TotalSessions = db.AspNetSessions.Count();
-            ViewBag.TotalTeachers = db.AspNetEmployees.Where(x => x.PositionAppliedFor == "TEACHER" && x.PositionAppliedFor == "Teacher").Count();
+            //ViewBag.TotalSubjects = db.AspNetSubjects.Count();
+            //ViewBag.TotalSessions = db.AspNetSessions.Count();
+            //ViewBag.TotalTeachers = db.AspNetEmployees.Where(x => x.PositionAppliedFor == "TEACHER" && x.PositionAppliedFor == "Teacher").Count();
 
 
 
@@ -2256,8 +2256,15 @@ namespace SEA_Application.Controllers
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        SendMail44(model.Email, "Admission Confirmed", "" + EmailDesign.SignupEmailTemplate(model.Name, model.UserName, model.Password));
-                        
+                        //SendMail44(model.Email, "Admission Confirmed", "" + EmailDesign.SignupEmailTemplate(model.Name, model.UserName, model.Password));
+
+                        var roleStore = new RoleStore<IdentityRole>(context);
+                        var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                        var userStore = new UserStore<ApplicationUser>(context);
+                        var userManager = new UserManager<ApplicationUser>(userStore);
+                        userManager.AddToRole(user.Id, "Student");
+
                         ruffdata rd = new ruffdata();
                         rd.SessionID = SessionIdOfSelectedStudent;
                         rd.StudentName = model.Name;
@@ -2372,13 +2379,6 @@ namespace SEA_Application.Controllers
                                 }
                             }
                         }
-
-                        var roleStore = new RoleStore<IdentityRole>(context);
-                        var roleManager = new RoleManager<IdentityRole>(roleStore);
-
-                        var userStore = new UserStore<ApplicationUser>(context);
-                        var userManager = new UserManager<ApplicationUser>(userStore);
-                        userManager.AddToRole(user.Id, "Student");
 
                         if (image != null)
                         {
