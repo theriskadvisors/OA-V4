@@ -416,8 +416,8 @@ namespace SEA_Application.Controllers
 
             foreach (var item in events)
             {
-                item.Start = ls.StartDate.Value.AddHours(10);
-                item.End = ls.StartDate.Value.AddHours(13);
+                item.Start = ls.StartDate.Value.AddHours(18);
+                item.End = ls.StartDate.Value.AddHours(21);
                 db.SaveChanges();
             }
 
@@ -458,8 +458,8 @@ namespace SEA_Application.Controllers
             var lesson = db.AspnetLessons.Where(x => x.Id == ls.LessonId).FirstOrDefault();
             var Users = (from std in db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id)
                         join session in db.AspNetStudent_Session_class on std.StudentId equals session.AspNetStudent.StudentID
-                        where session.SessionID == ls.SessionId
-                        select std.StudentId).ToList();
+                        where session.SessionID == ls.SessionId && session.AspNetStudent.StudentID == std.StudentId && std.AspNetUser.Status != "False"
+                        select std.StudentId).Distinct().ToList();
             //var Users = db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id).Select(x=> x.StudentId).ToList();
             string[] color = { "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Aqua" };
 
@@ -482,8 +482,8 @@ namespace SEA_Application.Controllers
                 newEvent.Description = lesson.Description;
                 newEvent.SessionID = db.AspNetUsers_Session.Where(x => x.UserID == items).Select(x => x.SessionID).FirstOrDefault();
                 newEvent.ThemeColor = color[colorcode];
-                newEvent.Start = ls.StartDate.Value.AddHours(10); //Convert.ToDateTime(day[0] + " " + starttime);
-                newEvent.End = ls.StartDate.Value.AddHours(13);  //Convert.ToDateTime(day[0] + " " + Endtime);
+                newEvent.Start = ls.StartDate.Value.AddHours(18); //Convert.ToDateTime(day[0] + " " + starttime);
+                newEvent.End = ls.StartDate.Value.AddHours(21);  //Convert.ToDateTime(day[0] + " " + Endtime);
                 newEvent.TimeTableId = null; // item.Id;
                 newEvent.LessonID = lesson.Id;
                 newEvent.SessionID = ls.SessionId;
