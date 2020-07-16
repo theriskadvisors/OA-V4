@@ -1,0 +1,119 @@
+﻿@model SEA_Application.Models.AspNetAdvertise
+
+@{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<style>
+    .page-sidebar .page-sidebar-menu, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 1200px !important;
+    }
+
+    .form-horizontal {
+        background-color: #fff;
+        /* margin: 10px; */
+        margin-left: 5px;
+    }
+
+    textarea {
+        width: 557px;
+        height: 126px;
+    }
+</style>
+<script>
+
+    $(document).ready(function () {
+
+
+        $("#PageHeader").html("Add Video Link");
+
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/AspnetSubjectTopics/ViewTopicsAndLessons"> Topic </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
+
+     
+        $("#SaveButton").click(function () {
+            debugger;
+            var link = $("#Link").val();
+            if (link != "") {
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/Admin_Dashboard/SaveAdvertise?link=" + link,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data  == "success") {
+                            alert("Link Updated");
+                        }
+                        else
+                        {
+                            alert("Error");
+                        }
+                        
+                    }
+                });
+
+            }
+
+
+        });
+
+
+
+    })
+
+</script>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+
+
+                        <h2 class="column-heading mb-4"> Video Link</h2>
+                    
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Embeded Code</label>
+
+                                <input   type ="text" class="form-control Link" id="Link" name="Link" required></input>
+
+                            </div>
+                        </div>
+
+                       
+
+
+                    </div> <!-- End Column -->
+
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <button type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+                    <br>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

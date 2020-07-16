@@ -36,7 +36,28 @@ namespace SEA_Application.Controllers
             return View();
 
         }
+        public ActionResult Advertise()
+        {
 
+            return View();
+        }
+        public ActionResult SaveAdvertise(string link)
+        {
+            string status = "error";
+
+            AspNetAdvertise Ad = db.AspNetAdvertises.FirstOrDefault();
+            Ad.VideoURL = link;
+            if(db.SaveChanges()>0)
+            {
+                status = "success";
+            }
+            return Content(status);
+        }
+        public ActionResult GetLink()
+        {
+            string Ad = db.AspNetAdvertises.FirstOrDefault().VideoURL;
+            return Content(Ad);
+        }
 
         public JsonResult GetEvents()
         {
@@ -47,6 +68,8 @@ namespace SEA_Application.Controllers
                 return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }
         }
+
+        
 
         [HttpPost]
         public JsonResult SaveEvent(Event e)

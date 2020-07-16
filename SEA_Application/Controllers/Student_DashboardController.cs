@@ -53,6 +53,8 @@ namespace SEA_Application.Controllers
 
             //classes.Add("Not Published");
             ViewBag.AllClasses = classes;
+            AspNetAdvertise Ad = db.AspNetAdvertises.FirstOrDefault();
+            ViewBag.AdLink = Ad.VideoURL;
             //return RedirectToAction("Index", "StudentCourses");
             return View("BlankPage");
         }
