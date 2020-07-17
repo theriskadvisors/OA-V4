@@ -185,7 +185,9 @@ namespace SEA_Application.Controllers
             db.AspnetLessons.Add(Lesson);
             db.SaveChanges();
 
-
+            var LessonEncryption = db.AspnetLessons.Where(x => x.Id == Lesson.Id).FirstOrDefault();
+            LessonEncryption.EncryptedID = LessonEncryption.EncryptedID + LessonEncryption.Id.ToString();
+            db.SaveChanges();
 
             //Lesson_Session lessonSession = new Lesson_Session();
             //lessonSession.LessonId = Lesson.Id;
