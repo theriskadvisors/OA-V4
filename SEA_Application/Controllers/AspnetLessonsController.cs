@@ -11,6 +11,7 @@ using System.Collections;
 using SEA_Application.Models;
 using Microsoft.AspNet.Identity;
 using System.Text.RegularExpressions;
+using System.Linq.Dynamic;
 
 namespace SEA_Application.Controllers
 {
@@ -152,6 +153,18 @@ namespace SEA_Application.Controllers
             //return View();
         }
 
+        public ActionResult GetSubjectsList(string CT)
+        {
+
+
+
+            //    Getall  db.GetSubjectsByType.
+
+            var df = db.GetGenericSubjectsByType(CT).ToList();
+             //  var df = db.GenericSubjects.Where(z=>z.SubjectType == CT).ToList();
+               string status = Newtonsoft.Json.JsonConvert.SerializeObject(df);
+            return Content(status);
+        }
         // POST: AspnetLessons/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.

@@ -16,6 +16,41 @@
     int countLesson = db.Events.Where(x => x.UserId == CurrentUserId && x.Start <= Endaday && x.Start >= Firstday).Count();
 }
 
+<style>
+    .list-group-item {
+        position: relative;
+        display: block;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: inherit;
+        border: 0 solid rgba(0, 0, 0, 0.125);
+        border: 1px solid #009ECB;
+        width: 300px;
+        border-radius: 2px;
+    }
+
+        .list-group-item:hover {
+            cursor: pointer;
+            background-color: inherit;
+            color: #28BAE3;
+        }
+
+    #BlogsItems h2 {
+        width: 300px;
+        border: 1px solid #009ECB;
+        border-radius: 2px;
+        display: block;
+        padding-top: 0.75rem;
+        padding-right: 1.25rem;
+        padding-bottom: 0.75rem;
+        padding-left: 1.25rem;
+        margin: 0;
+        text-align: center;
+        font-size: 18px;
+        background: #28BAE3;
+        color: white;
+    }
+</style>
 <div class="pageHeading">
     <div class="row">
         <div class="col-sm-12 col-md-9 col-lg-9">
@@ -49,6 +84,12 @@
             <a class="nav-link" id="TimeTable-tab-attr" data-toggle="tab" href="#TimeTable-attr" role="tab" aria-controls="TimeTable-attr"
                aria-selected="false" onclick="navClicked()">TimeTable</a>
         </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link" id="Blogs-tab-attr" data-toggle="tab" href="#Blogs-attr" role="tab" aria-controls="Blogs-attr"
+               aria-selected="false" onclick="navClicked()">Blogs</a>
+        </li>
     </ul>
 
     <div class="card">
@@ -78,11 +119,11 @@
 
 
                                 @foreach (var c in ViewBag.AllClasses)
-                                        {
+                                {
 
                                     <a class="dropdown-item" href="#">@c</a>
 
-                                        }
+                                }
 
 
                             </div>
@@ -91,30 +132,101 @@
                         <div id="calendar"></div>
                     </div>
                 </div>
+
+
+
+                <div class="tab-pane" id="Blogs-attr" role="tabpanel" aria-labelledby="Blogs-tab-attr">
+
+                    <div class="row" id="list">
+
+
+                        @*<div class="col-md-6 ">
+
+                                <div id="BlogsItems">
+                                    <h2 id="SubjectName">Basic List Group</h2>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">First item</li>
+                                        <li class="list-group-item">Second item</li>
+                                        <li class="list-group-item">Third item</li>
+                                    </ul>
+                                </div>
+
+
+                            </div>*@
+
+
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@*<script>
-    function navClicked() {
-        $(function () {
-            function show_popup() {
-                $(".fc-button-group").children("button").click();
-                //alert("2 sec wait");
-            };
-            window.setTimeout(show_popup, 2000); // 5 seconds
-        });
-        navClickedtwice();
-    }
+    <script>
 
-    function navClickedtwice() {
-        $(function () {
-            function show_popup() {
-                $(".fc-button-group").children("button").click();
-                //alert("2 sec wait");
-            };
-            window.setTimeout(show_popup, 2000); // 5 seconds
-        });
-    }
-</script>*@
+        $(document).ready(function () {
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Student_Dashboard/SubjectsBlogs",
+                data: {},
+
+                success: function (result) {
+                    debugger
+
+                    for (i = 0; i < result.length; i++) {
+
+                        var html = "";
+
+                        html += '<div class="col-md-6 " style="margin-bottom:50px">     <div id="BlogsItems"><h2 id="SubjectName">' + result[i].SubjectName + '</h2><ul class="list-group">'
+
+                        for (j = 0; j < result[i].SubjectBlogs.length; j++) {
+
+                            // alert(result[i].SubjectBlogs[j].BlogName);
+
+
+                            html += (' <li class="list-group-item"><a href = "' + result[i].SubjectBlogs[j].BlogLink + '" target="_blank">' + result[i].SubjectBlogs[j].BlogName + '</a></li>  ')
+
+                        }
+
+                        html += "</ul> </div></div><br>";
+                        $("#list").append(html);
+
+
+                    }
+
+                }
+
+
+            })
+
+        })
+        function navClicked() {
+
+
+        }
+
+    </script>
+    @*<script>
+            function navClicked() {
+                $(function () {
+                    function show_popup() {
+                        $(".fc-button-group").children("button").click();
+                        //alert("2 sec wait");
+                    };
+                    window.setTimeout(show_popup, 2000); // 5 seconds
+                });
+                navClickedtwice();
+            }
+
+            function navClickedtwice() {
+                $(function () {
+                    function show_popup() {
+                        $(".fc-button-group").children("button").click();
+                        //alert("2 sec wait");
+                    };
+                    window.setTimeout(show_popup, 2000); // 5 seconds
+                });
+            }
+        </script>*@

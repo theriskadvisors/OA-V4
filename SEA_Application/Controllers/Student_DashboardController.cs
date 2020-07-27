@@ -59,6 +59,73 @@ namespace SEA_Application.Controllers
             return View("BlankPage");
         }
 
+        public ActionResult SubjectsBlogs()
+        {
+
+            var userID = User.Identity.GetUserId();
+
+            var AllSubjectsOfStudent = from Subject in db.GenericSubjects
+                                       join StudentSubject in db.Student_GenericSubjects on Subject.Id equals StudentSubject.GenericSubjectId
+                                       where StudentSubject.StudentId == userID
+                                       select new
+                                       {
+                                           Subject.Id,
+                                           Subject.SubjectName,
+
+                                       };
+
+
+
+            List<Subject> StudentSubjectList = new List<Subject>();
+
+
+            foreach (var item in AllSubjectsOfStudent)
+            {
+
+                Subject subject1 = new Subject();
+                subject1.SubjectId = item.Id;
+                subject1.SubjectName = item.SubjectName;
+
+                foreach (var item2 in db.AspNetBlogs.ToList())
+                {
+                    SubjectBlog subjectBlog = new SubjectBlog();
+
+                    if (item.Id == item2.SubjectID)
+                    {
+                        subjectBlog.BlogName = item2.Name;
+                        subjectBlog.BlogLink = item2.Link;
+                        subject1.SubjectBlogs.Add(subjectBlog);
+                    }
+                }
+
+                StudentSubjectList.Add(subject1);
+
+            }
+
+
+
+            return Json(StudentSubjectList, JsonRequestBehavior.AllowGet);
+        }
+
+        public class Subject
+        {
+
+            public int SubjectId { get; set; }
+            public string SubjectName { get; set; }
+
+            public List<SubjectBlog> SubjectBlogs = new List<SubjectBlog>();
+
+        }
+
+        public class SubjectBlog
+        {
+
+            public int BlogId { get; set; }
+            public string BlogName { get; set; }
+            public string BlogLink { get; set; }
+
+        }
+
 
         public ViewResult View_Project()
         {

@@ -23,7 +23,7 @@ using System.Web.Mvc;
 
 namespace SEA_Application.Controllers
 {
-    [Authorize(Roles = "Accountant,Admin,Principal,Staff")]
+    [Authorize(Roles = "Accountant,Student,Admin,Principal,Staff")]
     public class Admin_DashboardController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -41,6 +41,7 @@ namespace SEA_Application.Controllers
 
             return View();
         }
+    
         public ActionResult SaveAdvertise(string link)
         {
             string status = "error";
@@ -58,8 +59,43 @@ namespace SEA_Application.Controllers
             string Ad = db.AspNetAdvertises.FirstOrDefault().VideoURL;
             return Content(Ad);
         }
+        public ActionResult Blogs()
+        {
+             var BlogList = db.AspNetBlogs.ToList();
+            return View(BlogList.ToList());
+        }
+        public ActionResult CreateBlog()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateBlog([Bind(Include = "Id,Name,Description,Link")] AspNetBlog Blogs)
+        {
 
-        public JsonResult GetEvents()
+            var TransactionObj = db.Database.BeginTransaction();
+
+            if (ModelState.IsValid)
+            {
+                var SubIdDDL = Request.Form["SubIdDDL"];
+                Blogs.SubjectID =  Int32.Parse(SubIdDDL);
+                Blogs.Name = Blogs.Name;
+                Blogs.Description = Blogs.Description;
+                Blogs.Link = Blogs.Link;
+                Blogs.CreationDate = DateTime.Now;
+                db.AspNetBlogs.Add(Blogs);
+               db.SaveChanges();
+            
+            }
+
+
+            TransactionObj.Commit();
+           // return View("Blogs");
+            return RedirectToAction("Blogs", "Admin_Dashboard");
+            
+        }
+
+
+            public JsonResult GetEvents()
         {
             using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
             {
@@ -214,14 +250,7 @@ namespace SEA_Application.Controllers
             return Content(status);
         }
 
-        public ActionResult GetSubjectsList(int id)
-        {
-
-            List<GetAllSubjects_Result> list = new List<GetAllSubjects_Result>();
-            list = db.GetAllSubjects().Where(x => x.Emp_ID == id).ToList();
-            string status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-            return Content(status);
-        }
+      
         public ActionResult GetChaptersList(int id)
         {
 
@@ -3251,6 +3280,14 @@ namespace SEA_Application.Controllers
             return Content(classid.ToString());
         }
 
+
+        public ActionResult GetAllSubjects(string id)
+        {
+
+
+            return View();
+        }
+
         [HttpGet]
         public JsonResult SubjectsByClass(int id, string coursetype)
         {
@@ -3336,6 +3373,7 @@ namespace SEA_Application.Controllers
 
 
         }
+      
 
         [HttpGet]
         public JsonResult StudentsByClass(string[] bdoIds)

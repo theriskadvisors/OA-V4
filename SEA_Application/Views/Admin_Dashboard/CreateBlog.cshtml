@@ -1,0 +1,158 @@
+﻿@model SEA_Application.Models.AspNetBlog
+
+@{
+
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Blog</title>
+
+    <script>
+        $(document).ready(function () {
+
+
+            $("#PageHeader").html("Add Blog Info");
+
+            $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+            $("#BreadCrumbs").append(' <li> <a href="/AspNetSession/Index">Blog </a> <span>&gt;</span></li>');
+            $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
+
+
+
+
+            $('#CT').change(function () {
+
+                var crse = $(this).val();
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/AspnetLessons/GetSubjectsList?CT=" + crse,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        debugger;
+                        var sch = JSON.parse(data);
+                        console.log(sch);
+                        var $el = $(".SubIdDDL");
+                        $el.empty();
+                        if (sch.length > 0) {
+                            $el.append($("<option></option>")
+                                .attr("value", "").text('Select Subject'));
+                            for (i = 0; i < sch.length; i++) {
+
+                                $el.append($("<option></option>")
+                                    .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                            }
+                        }
+                        else {
+                            $el.append($("<option></option>")
+                                .attr("value", '').text('Select'));
+                        }
+
+
+                    }
+                });
+
+
+            });
+        });
+    </script>
+</head>
+
+
+<body>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body p-5">
+                    @using (Html.BeginForm())
+                    {
+                    <div class="col-md-8 pl-5 pr-5 ">
+
+                        <h2 class="column-heading mb-4">Create Blogs</h2>
+                        <br>
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Blog Name </label>
+
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Blog Description </label>
+
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="bmd-label-static pl-2">Blog Link </label>
+
+                                @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Link, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group bmd-form-group my-3 is-filled">
+                            <label class="bmd-label-floating">Course Type <span class="red-mark">*</span> </label>
+                           
+                            <select name="CT" id="CT" class="form-control" style="color: #b9cbe1;" required>
+                                <option value="CSS">CSS</option>
+                                <option value="PMS">PMS</option>
+                                <option value="One Paper MCQs">One Paper MCQs</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group bmd-form-group my-3 is-filled">
+                            <label class="bmd-label-floating">Subjects <span class="red-mark">*</span> </label>
+                            <select name="SubIdDDL" id="SubIdDDL" class="form-control SubIdDDL" style="color: #b9cbe1;" required>
+                        
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                     
+
+                        <div class="col-md-8 pl-5 pr-5 ">
+                            <br>
+                            <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                            <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                                <i class="material-icons mr-2">cached</i>  Cancel
+                            </button>
+
+
+
+                        </div>
+
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+</body>
+</html>
