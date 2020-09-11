@@ -54,16 +54,20 @@
         height: 100vh;
         text-transform: uppercase;
     }
+    .imageButton
+    {
+        cursor:pointer;
+    }
 
-        #container header {
-            font-family: 'Source Sans Pro', sans-serif;
-            font-weight: 700;
-            font-size: 1.5em;
-            color: rgba(254, 255, 250, 1);
-            line-height: 1;
-            padding: 0.5em 2em;
-            border-bottom: 0.5em solid rgba(220, 231, 235, 0.25);
-        }
+    #container header {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: 700;
+        font-size: 1.5em;
+        color: rgba(254, 255, 250, 1);
+        line-height: 1;
+        padding: 0.5em 2em;
+        border-bottom: 0.5em solid rgba(220, 231, 235, 0.25);
+    }
 
     .QuestionHeader:hover {
         text-decoration: underline;
@@ -398,7 +402,7 @@
 
                 $("#Assignment").append('<br><div class="form-group"><div ><span class="col-md-2">Assignment Name</span ><span class="col-md-8">' + data.StudentAssigmentName + ' </span></div>');
 
-                $("#Assignment").append('<div class="form-group"><span class="col-md-2">Download Attach File</span ><span class="col-md-10"><a href ="/StudentCourses/DownloadFileOfAssignment/' + data.StudentAssignmentId + '">' + data.FileName + '</a></span> </div> ');
+                $("#Assignment").append('<div class="form-group"><span class="col-md-2">Download Attach File</span ><span class="col-md-10"><a href ="/StudentCourses/DownloadFileOfAssignment/' + data.StudentAssignmentId + '"><img height="30" class="imageButton" src="/Content/Images/down.jpg" /></a></span> </div> ');
 
 
                 $("#Assignment").append('<div class="form-group"><span class="col-md-2">Assignment DueDate</span><span class="col-md-10">' + data.StudentAssignmentDueDate + ' </span></div>');

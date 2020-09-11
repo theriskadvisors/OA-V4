@@ -92,8 +92,7 @@
                         $el.empty();
                         var $e2 = $(".TopIdDDL");
                         $e2.empty();
-                        var $e3 = $(".LessIdDDL");
-                        $e3.empty();
+
                         if (sch.length > 0) {
                             $el.append($("<option></option>")
                                 .attr("value", "").text('Select Subject'));
@@ -117,8 +116,7 @@
                 $el.empty();
                 var $e2 = $(".TopIdDDL");
                 $e2.empty();
-                var $e3 = $(".LessIdDDL");
-                $e3.empty();
+
             }
         });
 
@@ -141,8 +139,7 @@
                     $el.empty();
                     var $e2 = $(".TopIdDDL");
                     $e2.empty();
-                    var $e3 = $(".LessIdDDL");
-                    $e3.empty();
+
                     if (sch.length > 0) {
                         $el.append($("<option></option>")
                             .attr("value", "").text('Select Subject'));
@@ -161,47 +158,47 @@
 
         });
 
-        $('#TopId').change(function () {
+        //$('#TopId').change(function () {
 
-            var topid = $(this).val();
-            console.log(topid);
+        //    var topid = $(this).val();
+        //    console.log(topid);
 
-            if (topid != "") {
+        //    if (topid != "") {
 
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/AspNetProject/GetLession?TopID=" + topid,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        var sch = JSON.parse(data);
-                        console.log(sch);
+        //        $.ajax({
+        //            type: "POST",
+        //            cache: false,
+        //            url: "/AspNetProject/GetLession?TopID=" + topid,
+        //            processData: false,
+        //            contentType: false,
+        //            success: function (data) {
+        //                var sch = JSON.parse(data);
+        //                console.log(sch);
 
-                        var $el = $("#LessonId");
-                        $el.empty();
-                        if (sch.length > 0) {
-                            $el.append($("<option></option>")
-                                .attr("value", "").text('Select Lesson'));
-                            for (i = 0; i < sch.length; i++) {
+        //                var $el = $("#LessonId");
+        //                $el.empty();
+        //                if (sch.length > 0) {
+        //                    $el.append($("<option></option>")
+        //                        .attr("value", "").text('Select Lesson'));
+        //                    for (i = 0; i < sch.length; i++) {
 
-                                $el.append($("<option></option>")
-                                    .attr("value", sch[i].Id).text(sch[i].Name));
-                            }
-                        }
-                        else {
-                            $el.append($("<option></option>")
-                                .attr("value", '').text('Select'));
-                        }
-                    }
-                });
-            }
-            else {
-                var $el = $("#LessonId");
-                $el.empty();
-            }
+        //                        $el.append($("<option></option>")
+        //                            .attr("value", sch[i].Id).text(sch[i].Name));
+        //                    }
+        //                }
+        //                else {
+        //                    $el.append($("<option></option>")
+        //                        .attr("value", '').text('Select'));
+        //                }
+        //            }
+        //        });
+        //    }
+        //    else {
+        //        var $el = $("#LessonId");
+        //        $el.empty();
+        //    }
 
-        });
+        //});
 
 
         $('#SubId').change(function () {
@@ -221,8 +218,7 @@
                         console.log(sch);
                         var $el = $("#TopId");
                         $el.empty();
-                        var $e1 = $("#LessonId");
-                        $e1.empty();
+
 
                         if (sch.length > 0) {
                             $el.append($("<option></option>")
@@ -243,15 +239,29 @@
             else {
                 var $el = $("#TopId");
                 $el.empty();
-                var $e1 = $("#LessonId");
-                $e1.empty();
+
             }
         });
+
+
+
+
+        $("#TopId").change(function () {
+
+            CheckLessonAlreadyScheduled();
+        })
+
+        $("#SessionId").change(function () {
+
+            CheckLessonAlreadyScheduled();
+        })
+
+
 
         $("form").submit(function () {
 
             event.stopPropagation();
-            
+
             $("#submit").prop('disabled', true);
 
             var StartDate = document.getElementById('StartDate').value;
@@ -260,33 +270,33 @@
             var sDate = new Date(StartDate);
 
 
-            if (StartDate != '' && EndDate != '' && sDate < eDate  ) {
+            if (StartDate != '' && EndDate != '' && sDate < eDate) {
 
                 $("#ErrorMsg").html("");
                 $("#submit").prop('disabled', false);
                 return true;
             }
-          
-            if(StartDate != '' && EndDate != '' && sDate > eDate) {
+
+            if (StartDate != '' && EndDate != '' && sDate > eDate) {
 
                 $("#ErrorMsg").html("Start Date Should be lesser than Due Date");
                 $("#submit").prop('disabled', false);
                 return false;
             }
 
-             });
-      
+        });
+
         $("#DueDate").change(function () {
 
-           $("#ErrorMsg").html("");
-           
+            $("#ErrorMsg").html("");
+
         })
 
-        
+
         $("#StartDate").change(function () {
 
-        $("#ErrorMsg").html("");
-           
+            $("#ErrorMsg").html("");
+
         })
 
         //               function DateCheck()
@@ -295,7 +305,63 @@
         //            }
 
         //})
-              });
+    });//End of Document Ready
+
+    function CheckLessonAlreadyScheduled() {
+
+        var TopicId = $("#TopId").val();
+        var SessionId = $("#SessionId").val();
+
+        if (TopicId != "" && SessionId != "") {
+
+            $("#submit").attr('disabled', false);
+              $("#submit").html("Save");
+            $.ajax({
+
+                type: "POST",
+
+                url: "/AspnetLessons/CheckLessonAlreadyScheduled?TopicId=" + TopicId + "&&SessionId=" + SessionId,
+                success: function (data) {
+
+                    var ErrorMsg = "";
+                    if (data.LessonExist == "No") {
+
+                        $("#submit").attr('disabled', true);
+
+                        var ErrorMsg = "There is no Lesson in Selected Topic"
+                    }
+                    else {
+
+                        if (data.Button == "Disabled") {
+
+                            $("#submit").attr('disabled', true);
+
+                        }
+                        else {
+
+                            
+                            $("#submit").attr('disabled', false);
+
+                            if (data.ErrorMsg == "New lesson found in selected topic and section") {
+                                $("#submit").html("Update");
+                            }
+
+                        }
+
+                        var ErrorMsg = data.ErrorMsg;
+                    }
+
+                    $("#ErrorMsg").html(ErrorMsg);
+
+
+                }
+
+            })
+
+        }
+
+    }
+
 </script>
 
 
@@ -342,19 +408,26 @@
                                 <select class="form-control TopIdDDL" id="TopId" name="TopId" required></select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="" class="control-label">Lesson* </label>
+                            @*<div class="form-group">
+                                    <label for="" class="control-label">Lesson* </label>
 
-                                <select class="form-control LessIdDDL" id="LessonId" name="LessonId" required></select>
-                            </div>
+                                    <select class="form-control LessIdDDL" id="LessonId" name="LessonId" required></select>
+                                </div>*@
 
 
                             <div class="form-row mt-3">
                                 <div class="form-group col-md-12 bmd-form-group">
                                     <label for="" class="bmd-label-static pl-2">Select Section*</label>
                                     <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
+
                                 </div>
                             </div>
+
+                            <div>
+                                <Span id="ErrorMsg" style="color:red"></Span>
+                            </div>
+
+
                             <span style="padding:10px"></span>
 
                             <div class="form-group">
