@@ -32,6 +32,9 @@
                                         <th>
                                             End Date
                                         </th>
+                                        <th>
+                                           Action
+                                        </th>
 
 
                                     </tr>
@@ -130,7 +133,7 @@
 
 
 
-                                        table.fnAddData([data[index].SubjectName+"<input  type=hidden value="+data[index].Id+">",data[index].Name, data[index].SessionName,dat,dat1]);
+                                        table.fnAddData([data[index].SubjectName+"<input  type=hidden value="+data[index].Id+">",data[index].Name, data[index].SessionName,dat,dat1,"<button id ='DeleteButton' onclick='DeleteLessonSession("+data[index].Id+")'  name ='"+data[index].Id+"' style='cursor:pointer;color:white' class='btn btn-danger deleteButton' >Delete</button>"]);
 
                                     })
 
@@ -149,15 +152,26 @@
 
              //alert(Id);
             //userName = userName.trim();
-            window.location.href = "/AspnetLessons/EditLessonSession?id=" + Id;
+           // window.location.href = "/AspnetLessons/EditLessonSession?id=" + Id;
         });
 
+                            $(".deleteButton").click(function () {
+
+                                alert("clicked");
+                            })
 
 
 
 
                         })
 
+                        function DeleteLessonSession(id) {
 
+
+                         window.location.href = "/AspnetLessons/DeleteLessonSession?id=" + id;
+
+
+
+                        }
              
                     </script>

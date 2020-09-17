@@ -39,7 +39,7 @@
         })
 
 
-        $("#PageHeader").html("Schedule By Lesson");
+        $("#PageHeader").html("Schedule By Topic");
 
         $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
         $("#BreadCrumbs").append(' <li> <a href="/AspnetLessons/LessonSessionView">Lesson Session </a> <span>&gt;</span></li>');
@@ -92,8 +92,7 @@
                         $el.empty();
                         var $e2 = $(".TopIdDDL");
                         $e2.empty();
-                        var $e3 = $(".LessIdDDL");
-                        $e3.empty();
+
                         if (sch.length > 0) {
                             $el.append($("<option></option>")
                                 .attr("value", "").text('Select Subject'));
@@ -117,8 +116,7 @@
                 $el.empty();
                 var $e2 = $(".TopIdDDL");
                 $e2.empty();
-                var $e3 = $(".LessIdDDL");
-                $e3.empty();
+
             }
         });
 
@@ -141,8 +139,7 @@
                     $el.empty();
                     var $e2 = $(".TopIdDDL");
                     $e2.empty();
-                    var $e3 = $(".LessIdDDL");
-                    $e3.empty();
+
                     if (sch.length > 0) {
                         $el.append($("<option></option>")
                             .attr("value", "").text('Select Subject'));
@@ -161,47 +158,47 @@
 
         });
 
-        $('#TopId').change(function () {
+        //$('#TopId').change(function () {
 
-            var topid = $(this).val();
-            console.log(topid);
+        //    var topid = $(this).val();
+        //    console.log(topid);
 
-            if (topid != "") {
+        //    if (topid != "") {
 
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/AspNetProject/GetLession?TopID=" + topid,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        var sch = JSON.parse(data);
-                        console.log(sch);
+        //        $.ajax({
+        //            type: "POST",
+        //            cache: false,
+        //            url: "/AspNetProject/GetLession?TopID=" + topid,
+        //            processData: false,
+        //            contentType: false,
+        //            success: function (data) {
+        //                var sch = JSON.parse(data);
+        //                console.log(sch);
 
-                        var $el = $("#LessonId");
-                        $el.empty();
-                        if (sch.length > 0) {
-                            $el.append($("<option></option>")
-                                .attr("value", "").text('Select Lesson'));
-                            for (i = 0; i < sch.length; i++) {
+        //                var $el = $("#LessonId");
+        //                $el.empty();
+        //                if (sch.length > 0) {
+        //                    $el.append($("<option></option>")
+        //                        .attr("value", "").text('Select Lesson'));
+        //                    for (i = 0; i < sch.length; i++) {
 
-                                $el.append($("<option></option>")
-                                    .attr("value", sch[i].Id).text(sch[i].Name));
-                            }
-                        }
-                        else {
-                            $el.append($("<option></option>")
-                                .attr("value", '').text('Select'));
-                        }
-                    }
-                });
-            }
-            else {
-                var $el = $("#LessonId");
-                $el.empty();
-            }
+        //                        $el.append($("<option></option>")
+        //                            .attr("value", sch[i].Id).text(sch[i].Name));
+        //                    }
+        //                }
+        //                else {
+        //                    $el.append($("<option></option>")
+        //                        .attr("value", '').text('Select'));
+        //                }
+        //            }
+        //        });
+        //    }
+        //    else {
+        //        var $el = $("#LessonId");
+        //        $el.empty();
+        //    }
 
-        });
+        //});
 
 
         $('#SubId').change(function () {
@@ -221,8 +218,7 @@
                         console.log(sch);
                         var $el = $("#TopId");
                         $el.empty();
-                        var $e1 = $("#LessonId");
-                        $e1.empty();
+
 
                         if (sch.length > 0) {
                             $el.append($("<option></option>")
@@ -243,10 +239,24 @@
             else {
                 var $el = $("#TopId");
                 $el.empty();
-                var $e1 = $("#LessonId");
-                $e1.empty();
+
             }
         });
+
+
+
+
+        $("#TopId").change(function () {
+
+            CheckLessonAlreadyScheduled();
+        })
+
+        $("#SessionId").change(function () {
+
+            CheckLessonAlreadyScheduled();
+        })
+
+
 
         $("form").submit(function () {
 
@@ -281,15 +291,7 @@
             $("#ErrorMsg").html("");
 
         })
-        $("#LessonId").change(function () {
 
-            CheckLessonAlreadyScheduled();
-        })
-
-        $("#SessionId").change(function () {
-
-            CheckLessonAlreadyScheduled();
-        })
 
         $("#StartDate").change(function () {
 
@@ -303,36 +305,53 @@
         //            }
 
         //})
-    });
+    });//End of Document Ready
 
     function CheckLessonAlreadyScheduled() {
 
-        var LessonId = $("#LessonId").val();
+        var TopicId = $("#TopId").val();
         var SessionId = $("#SessionId").val();
 
-        $("#ErrorMsg").html("");
-        $("#submit").attr('disabled', false);
+        if (TopicId != "" && SessionId != "") {
 
-        if (LessonId != "" && SessionId != "") {
-
-
+            $("#submit").attr('disabled', false);
+            $("#submit").html("Save");
             $.ajax({
 
                 type: "POST",
 
-                url: "/AspnetLessons/CheckLessonAlreadyScheduled1?LessonId=" + LessonId + "&&SessionId=" + SessionId,
+                url: "/AspnetLessons/CheckLessonAlreadyScheduled?TopicId=" + TopicId + "&&SessionId=" + SessionId,
                 success: function (data) {
-                    debugger
+
                     var ErrorMsg = "";
+                    if (data.LessonExist == "No") {
 
-
-                    if (data.Error != "") {
-
-
-                        $("#ErrorMsg").html(data.Error);
                         $("#submit").attr('disabled', true);
+
+                        var ErrorMsg = "There are no Lesson in Selected Topic"
+                    }
+                    else {
+
+                        if (data.Button == "Disabled") {
+
+                            $("#submit").attr('disabled', true);
+
+                        }
+                        else {
+
+
+                            $("#submit").attr('disabled', false);
+
+                            if (data.ErrorMsg == "New lesson found in selected topic and section") {
+                                $("#submit").html("Update");
+                            }
+
+                        }
+
+                        var ErrorMsg = data.ErrorMsg;
                     }
 
+                    $("#ErrorMsg").html(ErrorMsg);
 
 
                 }
@@ -352,7 +371,7 @@
         <div class="card">
             <div class="card-body p-5">
 
-                @using (Html.BeginForm("CreateLessonSession", "AspnetLessons", FormMethod.Post, new { role = "form" }))
+                @using (Html.BeginForm("ScheduleTopic", "AspnetLessons", FormMethod.Post, new { role = "form" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -389,19 +408,26 @@
                                 <select class="form-control TopIdDDL" id="TopId" name="TopId" required></select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="" class="control-label">Lesson* </label>
+                            @*<div class="form-group">
+                                    <label for="" class="control-label">Lesson* </label>
 
-                                <select class="form-control LessIdDDL" id="LessonId" name="LessonId" required></select>
-                            </div>
+                                    <select class="form-control LessIdDDL" id="LessonId" name="LessonId" required></select>
+                                </div>*@
 
 
                             <div class="form-row mt-3">
                                 <div class="form-group col-md-12 bmd-form-group">
                                     <label for="" class="bmd-label-static pl-2">Select Section*</label>
                                     <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
+
                                 </div>
                             </div>
+
+                            <div>
+                                <Span id="ErrorMsg" style="color:red"></Span>
+                            </div>
+
+
                             <span style="padding:10px"></span>
 
                             <div class="form-group">
@@ -454,46 +480,4 @@
         </div>
     </div>
 </div>
-<script>
 
-    $(document).ready(function () {
-
-
-        //    $("#QuestionType").change(function () {
-
-
-        var QuestionType = "MCQ";
-
-        if (QuestionType == "MCQ" || QuestionType == "TF") {
-
-            $("#OptionsBlock").css('display', 'block');
-            $("#FillAnswerBlock").css('display', 'none');
-
-            $("#OptionsBlock input,select").prop('required', true);
-            $("#FillAnswer").prop('required', false);
-            $("#FillAnswer").val("");
-
-        }
-        else {
-
-            $("#OptionsBlock input").val("");
-
-
-            $("#OptionsBlock").css('display', 'none');
-            $("#FillAnswerBlock").css('display', 'block');
-
-            $("#OptionsBlock input,select").prop('required', false);
-            $("#FillAnswer").prop('required', true);
-
-
-        }
-
-
-
-        //  })
-
-
-
-    })
-
-</script>

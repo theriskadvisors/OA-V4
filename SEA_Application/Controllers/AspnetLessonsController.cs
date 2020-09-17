@@ -451,6 +451,100 @@ namespace SEA_Application.Controllers
             return View();
 
         }
+        public ActionResult ScheduleTopic()
+        {
+            ViewBag.TopicId = new SelectList(db.AspnetSubjectTopics, "Id", "Name");
+
+            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+
+            ViewBag.LessonId = new SelectList(db.AspnetLessons, "Id", "Name");
+
+
+            return View();
+        }
+    
+        [HttpPost]
+        public ActionResult ScheduleTopic(int SessionId)
+        {
+
+            var SessionId1 = Request.Form["SessionId"];
+            var LessonId = Request.Form["LessonId"];
+            var StartDate = Request.Form["StartDate"];
+            var DueDate = Request.Form["DueDate"];
+            var TopId = Request.Form["TopId"];
+
+            var TopicIdInt = Convert.ToInt32(TopId);
+
+            var AllLessonIds = db.AspnetLessons.Where(x => x.TopicId == TopicIdInt).Select(x => x.Id).ToList();
+
+            List<int> LessonIds = new List<int>();
+
+            foreach (var id in AllLessonIds)
+            {
+                var LessonSession = db.Lesson_Session.Where(x => x.LessonId == id && x.SessionId == SessionId).FirstOrDefault();
+                if (LessonSession == null)
+                {
+                    LessonIds.Add(id);
+                }
+            }
+
+            foreach (var lessonId in LessonIds)
+            {
+                Lesson_Session ls = new Lesson_Session();
+                ls.LessonId = Convert.ToInt32(lessonId);
+                ls.SessionId = Convert.ToInt32(SessionId1);
+
+                ls.StartDate = Convert.ToDateTime(StartDate);
+                ls.DueDate = Convert.ToDateTime(DueDate);
+
+                db.Lesson_Session.Add(ls);
+                db.SaveChanges();
+
+                var lesson = db.AspnetLessons.Where(x => x.Id == ls.LessonId).FirstOrDefault();
+                var Users = (from std in db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id)
+                             join session in db.AspNetStudent_Session_class on std.StudentId equals session.AspNetStudent.StudentID
+                             where session.SessionID == ls.SessionId && session.AspNetStudent.StudentID == std.StudentId && std.AspNetUser.Status != "False"
+                             select std.StudentId).Distinct().ToList();
+                //var Users = db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id).Select(x=> x.StudentId).ToList();
+                string[] color = { "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Aqua" };
+
+                var AdminsAndStaff = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Admin") || x.AspNetRoles.Select(y => y.Name).Contains("Staff")).Select(x => x.Id).ToList();
+
+                foreach (var item in AdminsAndStaff)
+                {
+                    Users.Add(item);
+                }
+
+                foreach (var items in Users)
+                {
+                    Random random = new Random();
+                    int colorcode = random.Next(1, 5);
+                    var newEvent = new Event();
+                    newEvent.UserId = items;
+                    newEvent.IsFullDay = false;
+                    newEvent.IsPublic = false;
+                    newEvent.Subject = lesson.AspnetSubjectTopic.GenericSubject.SubjectName + "-" + lesson.AspnetSubjectTopic.GenericSubject.SubjectType;
+                    newEvent.Description = lesson.Description;
+                    newEvent.SessionID = db.AspNetUsers_Session.Where(x => x.UserID == items).Select(x => x.SessionID).FirstOrDefault();
+                    newEvent.ThemeColor = color[colorcode];
+                    newEvent.Start = ls.StartDate.Value; //Convert.ToDateTime(day[0] + " " + starttime);
+                    newEvent.End = ls.StartDate.Value.AddDays(5);  //Convert.ToDateTime(day[0] + " " + Endtime);
+
+                    newEvent.Start = ls.StartDate.Value; //.Value.AddDays(5); //Convert.ToDateTime(day[0] + " " + starttime);
+                    newEvent.End = ls.StartDate.Value.AddDays(5);  //Convert.ToDateTime(day[0] + " " + Endtime);
+
+                    newEvent.TimeTableId = null; // item.Id;
+                    newEvent.LessonID = lesson.Id;
+                    newEvent.SessionID = ls.SessionId;
+                    db.Events.Add(newEvent);
+                }
+            }//added by me
+            db.SaveChanges();
+            return RedirectToAction("LessonSessionView");
+        }
+
+
+
         [HttpPost]
         public ActionResult CreateLessonSession(int SessionId)
         {
@@ -505,64 +599,89 @@ namespace SEA_Application.Controllers
             db.SaveChanges();
             return RedirectToAction("LessonSessionView");
         }
+        public ActionResult DeleteLessonSession(int id )
+        {
+          var LessonSessionToDelete =   db.Lesson_Session.Where(x => x.Id == id).FirstOrDefault();
 
-        //public ActionResult CheckLessonAlreadyScheduled(int TopicId, int SessionId)
-        //{
-        //    var LessonExist = "";
-        //    var ErrorMsg = "";
-        //    var Button = "Disabled";
+            db.Lesson_Session.Remove(LessonSessionToDelete);
+            db.SaveChanges();
 
-        //    List<int> LessonIds = db.AspnetLessons.Where(x => x.TopicId == TopicId).Select(x => x.Id).ToList();
-        //    var LessonIdsCount = LessonIds.Count();
+            return RedirectToAction("LessonSessionView");
 
-        //    if (LessonIdsCount != 0)
-        //    {
-        //        LessonExist = "Yes";
+        }
 
-        //        Button = "Enabled";
-        //        //var LessonSession = db.Lesson_Session.Where(x => x.LessonId == Lesson.Id && x.SessionId == SessionId).FirstOrDefault();
+        public ActionResult CheckLessonAlreadyScheduled(int TopicId, int SessionId)
+        {
+            var LessonExist = "";
+            var ErrorMsg = "";
+            var Button = "Disabled";
 
-        //        var AllLessonSessionCount  = (from lessonSession in db.Lesson_Session
-        //                                      where lessonSession.SessionId == SessionId && LessonIds.Contains(lessonSession.LessonId.Value)
-        //                                      select lessonSession).Count();
+            List<int> LessonIds = db.AspnetLessons.Where(x => x.TopicId == TopicId).Select(x => x.Id).ToList();
+            var LessonIdsCount = LessonIds.Count();
 
-        //        if(LessonIdsCount!=0 && LessonIdsCount > AllLessonSessionCount)
-        //        {
-        //            Button = "Enabled";
+            if (LessonIdsCount != 0)
+            {
+                LessonExist = "Yes";
 
-        //            var count = LessonIdsCount - AllLessonSessionCount;
+                Button = "Enabled";
+                //var LessonSession = db.Lesson_Session.Where(x => x.LessonId == Lesson.Id && x.SessionId == SessionId).FirstOrDefault();
 
-        //            if(LessonIdsCount != count)
-        //            {
-        //                 ErrorMsg = "New lesson found in selected topic and section";
+                var AllLessonSessionCount = (from lessonSession in db.Lesson_Session
+                                             where lessonSession.SessionId == SessionId && LessonIds.Contains(lessonSession.LessonId.Value)
+                                             select lessonSession).Count();
 
-        //            }
+                if (LessonIdsCount != 0 && LessonIdsCount > AllLessonSessionCount)
+                {
+                    Button = "Enabled";
 
-        //            // ErrorMsg = "New lesson found in selected topic and section";
-        //        }
+                    var count = LessonIdsCount - AllLessonSessionCount;
 
-        //        else if   (LessonIdsCount != 0 && LessonIdsCount == AllLessonSessionCount)
-        //        {
-        //            Button = "Disabled";
-        //            ErrorMsg = "Lessons are already Scheduled in selected Topic And Section";
-        //        }
-        //        else
-        //        {
-        //            ErrorMsg = "";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Button = "Disabled";
+                    if (LessonIdsCount != count)
+                    {
+                        ErrorMsg = "New lesson found in selected topic and section";
 
-        //        LessonExist = "No";
-        //    }
+                    }
 
-        //    return Json(new { LessonExist = LessonExist, ErrorMsg = ErrorMsg, Button = Button }, JsonRequestBehavior.AllowGet);
-        //}
+                    // ErrorMsg = "New lesson found in selected topic and section";
+                }
+
+                else if (LessonIdsCount != 0 && LessonIdsCount == AllLessonSessionCount)
+                {
+                    Button = "Disabled";
+                    ErrorMsg = "Lessons are already Scheduled in selected Topic And Section";
+                }
+                else
+                {
+                    ErrorMsg = "";
+                }
+            }
+            else
+            {
+                Button = "Disabled";
+
+                LessonExist = "No";
+            }
+
+            return Json(new { LessonExist = LessonExist, ErrorMsg = ErrorMsg, Button = Button }, JsonRequestBehavior.AllowGet);
+        }
 
 
-        // GET: AspnetLessons/Edit/5
+        public ActionResult CheckLessonAlreadyScheduled1(int LessonId, int SessionId)
+        {
+            var Error = "";
+
+           var LessonSession =   db.Lesson_Session.Where(x => x.LessonId == LessonId && x.SessionId == SessionId).FirstOrDefault();
+            
+            if(LessonSession != null)
+            {
+                Error = "Lesson is already scheduled in selected section";
+            }
+
+
+            return Json(new { Error, JsonRequestBehavior.AllowGet });
+        }
+
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
