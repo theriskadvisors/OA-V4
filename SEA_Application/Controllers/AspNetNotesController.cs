@@ -303,9 +303,8 @@ namespace SEA_Application.Controllers
                 if (ModelState.IsValid)
                 {
                     string EncrID = aspNetNote.Id + aspNetNote.SubjectID + aspNetNote.Price.ToString();
-                    aspNetNote.EncryptedID = Encrpt.Encrypt(EncrID, true);
+                    aspNetNote.EncryptedID = Encrpt.Encrypt(EncrID, true) + aspNetNote.Id;
                     aspNetNote.EncryptedID.Replace('/', 's').Replace('-', 's').Replace('+', 's').Replace('%', 's').Replace('&', 's');
-              
                     db.AspNetNotes.Add(aspNetNote);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -360,13 +359,13 @@ namespace SEA_Application.Controllers
         }
           
         // GET: AspNetNotes/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AspNetNote aspNetNote = db.AspNetNotes.Where(x => x.EncryptedID == id).FirstOrDefault();
+            AspNetNote aspNetNote = db.AspNetNotes.Where(x => x.Id == id).FirstOrDefault();
             if (aspNetNote == null)
             {
                 return HttpNotFound();
