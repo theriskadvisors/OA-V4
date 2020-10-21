@@ -73,7 +73,7 @@
         var course = 'CSS';
         var Class;
         $('#CTId').change(function () {
-
+             $("#ErrorMsg1").html("");
             var crse = $(this).val();
 
             console.log(crse);
@@ -124,7 +124,7 @@
 
 
         $('#SecId').change(function () {
-
+             $("#ErrorMsg1").html("");
             var UserName = $(this).val();
             console.log(UserName);
             Class = UserName;
@@ -162,7 +162,7 @@
         });
 
         $('#TopId').change(function () {
-
+             $("#ErrorMsg1").html("");
             var topid = $(this).val();
             console.log(topid);
 
@@ -205,7 +205,7 @@
 
 
         $('#SubId').change(function () {
-
+             $("#ErrorMsg1").html("");
             var subid = $(this).val();
             console.log(subid);
             if (subid != "") {
@@ -282,12 +282,12 @@
 
         })
         $("#LessonId").change(function () {
-
+             $("#ErrorMsg1").html("");
             CheckLessonAlreadyScheduled();
         })
 
         $("#SessionId").change(function () {
-
+               $("#ErrorMsg1").html("");
             CheckLessonAlreadyScheduled();
         })
 
@@ -297,12 +297,6 @@
 
         })
 
-        //               function DateCheck()
-        //            {
-
-        //            }
-
-        //})
     });
 
     function CheckLessonAlreadyScheduled() {
@@ -310,8 +304,8 @@
         var LessonId = $("#LessonId").val();
         var SessionId = $("#SessionId").val();
 
-        $("#ErrorMsg").html("");
-        $("#submit").attr('disabled', false);
+        $("#ErrorMsg1").html("");
+       // $("#submit").attr('disabled', false);
 
         if (LessonId != "" && SessionId != "") {
 
@@ -324,13 +318,12 @@
                 success: function (data) {
                     debugger
                     var ErrorMsg = "";
-
-
+                    
                     if (data.Error != "") {
 
 
-                        $("#ErrorMsg").html(data.Error);
-                        $("#submit").attr('disabled', true);
+                        $("#ErrorMsg1").html(data.Error);
+                       // $("#submit").attr('disabled', true);
                     }
 
 
@@ -421,6 +414,8 @@
                                 <input type="date" name="DueDate" id="DueDate" value="" class="form-control" required />
                                 <br />
                                 <span style="color:red;" id="ErrorMsg"></span>
+                                <br />
+                                <span style="color:red;" id="ErrorMsg1"></span>
 
                             </div>
 

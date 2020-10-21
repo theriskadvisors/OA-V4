@@ -462,7 +462,7 @@ namespace SEA_Application.Controllers
 
             return View();
         }
-    
+
         [HttpPost]
         public ActionResult ScheduleTopic(int SessionId)
         {
@@ -553,6 +553,17 @@ namespace SEA_Application.Controllers
             var StartDate = Request.Form["StartDate"];
             var DueDate = Request.Form["DueDate"];
 
+            var sessionId = Convert.ToInt32(SessionId1);
+            var lessonId = Convert.ToInt32(LessonId);
+
+            var LessonSession = db.Lesson_Session.Where(x => x.LessonId == lessonId && x.SessionId == sessionId).FirstOrDefault();
+
+            if(LessonSession != null)
+            {
+                db.Lesson_Session.Remove(LessonSession);
+                db.SaveChanges();
+            }
+
             Lesson_Session ls = new Lesson_Session();
             ls.LessonId = Convert.ToInt32(LessonId);
             ls.SessionId = Convert.ToInt32(SessionId1);
@@ -596,12 +607,17 @@ namespace SEA_Application.Controllers
                 newEvent.SessionID = ls.SessionId;
                 db.Events.Add(newEvent);
             }
+
+
             db.SaveChanges();
+
+
+
             return RedirectToAction("LessonSessionView");
         }
-        public ActionResult DeleteLessonSession(int id )
+        public ActionResult DeleteLessonSession(int id)
         {
-          var LessonSessionToDelete =   db.Lesson_Session.Where(x => x.Id == id).FirstOrDefault();
+            var LessonSessionToDelete = db.Lesson_Session.Where(x => x.Id == id).FirstOrDefault();
 
             db.Lesson_Session.Remove(LessonSessionToDelete);
             db.SaveChanges();
@@ -670,11 +686,16 @@ namespace SEA_Application.Controllers
         {
             var Error = "";
 
-           var LessonSession =   db.Lesson_Session.Where(x => x.LessonId == LessonId && x.SessionId == SessionId).FirstOrDefault();
-            
-            if(LessonSession != null)
+            var LessonSession = db.Lesson_Session.Where(x => x.LessonId == LessonId && x.SessionId == SessionId).FirstOrDefault();
+
+            if (LessonSession != null)
             {
-                Error = "Lesson is already scheduled in selected section";
+                var FromDate = LessonSession.StartDate.Value.ToString("MM/dd/yyyy");
+                var ToDate = LessonSession.DueDate.Value.ToString("MM/dd/yyyy");
+                //  Error = "Lesson is already scheduled in selected section";
+                Error = "The selected lesson in already scheduled from " + FromDate + " to " + ToDate + " in selected session. On Creation," +
+                    " the pervious schedule will automatically delete.";
+
             }
 
 
