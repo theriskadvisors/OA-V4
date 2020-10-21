@@ -130,8 +130,7 @@
                     </td>
                     <td>
 
-
-                        <a href="/AspNetOrderNotes/Details/@item.EncryptedID">  <button type="button" class="btn btn-success" id="@item.Id">Add to Cart</button> </a>
+                        <a href="/AspNetOrderNotes/Details/@item.EncryptedID">  <button style="color:white !important" type="button" class="btn btn-success" id="@item.Id">Add to Cart</button> </a>
 
                     </td>
                 </tr>
@@ -381,19 +380,19 @@
                 data: {},
                 success: function (data) {
 
-                    table1.fnClearTable();
+                    table2.fnClearTable();
                     $.each(data, function (index) {
 
                         //    var TableRow = "<tr><td>" + data[index].Title + "</td> <td>" + data[index].Discription + "</td>  <td>" + data[index].CourseType + "</td> <td>" + data[index].Price + "</td>  <td>" + data[index].Quantity + "</td><td>" + data[index].Status + "</td> <td id='btnid'><button data-toggle='modal' data-target='#myModal' style='display:none'  class='CancelOrderBtn btn btn-danger' id='" + data[index].Id + "' >Cancel Order</button></td>    </tr> "
 
                         //                    table1.fnAddData(["<input class='checkboxes' id=" + data[index].Id + " type='checkbox' value=" + data[index].Total + "  >", data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Total, data[index].Status]);
-                        table1.fnAddData([data[index].OrderId, data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Status]);
+                        table2.fnAddData([data[index].OrderId, data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Status]);
 
                         //$('#RecentOrderTableBody').append(TableRow);
                     });
 
 
-                    table1.fnDraw();
+                    table2.fnDraw();
                     $('.eeniart0017').css("display", "none");
 
                 }
@@ -410,13 +409,13 @@
                 success: function (data) {
 
 
-                    table.fnClearTable();
+                    table1.fnClearTable();
                     $.each(data, function (index) {
 
                         if (data[index].Status == "Draft") {
 
                             // var TableRow = "<tr>  <td> <input class='checkboxes' id=" + data[index].Id + "  type='checkbox' value=" + data[index].Total + "> </td>  <td>" + data[index].Title + "</td> <td>" + data[index].Discription + "</td>  <td>" + data[index].CourseType + "</td> <td>" + data[index].Price + "</td>  <td>" + data[index].Quantity + "</td> <td class='TotalPrice'>" + data[index].Total + "</td>  <td>" + data[index].Status + "</td>    </tr> "
-                            table.fnAddData([data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Total, data[index].Status, "<input class='checkboxes' id=" + data[index].Id + " type='checkbox' value=" + data[index].Total + "  >"]);
+                            table1.fnAddData([data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Total, data[index].Status, "<input class='checkboxes' id=" + data[index].Id + " type='checkbox' value=" + data[index].Total + "  >"]);
 
 
                         }
@@ -425,7 +424,7 @@
                         //alert(data[index].Discription);
                         // $('#CartOrders').append(TableRow);
                     });
-                    table.fnDraw();
+                    table1.fnDraw();
                     $('.eeniart0017').css("display", "none");
                 }
             })//end of ajax card orders
@@ -575,8 +574,6 @@
                     url: "/AspNetOrderNotes/CancelOrder",
                     data: { "OrderId": OdrId },
                     success: function (data) {
-
-
 
                         // $('button[id="'+OdrId+'"]').prop('disabled', true);
 

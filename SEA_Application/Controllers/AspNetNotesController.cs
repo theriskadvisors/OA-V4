@@ -303,10 +303,20 @@ namespace SEA_Application.Controllers
                 if (ModelState.IsValid)
                 {
                     string EncrID = aspNetNote.Id + aspNetNote.SubjectID + aspNetNote.Price.ToString();
-                    aspNetNote.EncryptedID = Encrpt.Encrypt(EncrID, true) + aspNetNote.Id;
-                    aspNetNote.EncryptedID.Replace('/', 's').Replace('-', 's').Replace('+', 's').Replace('%', 's').Replace('&', 's');
+                    aspNetNote.EncryptedID = Encrpt.Encrypt(EncrID, true);
+
+                    //aspNetNote.EncryptedID.Replace('/', 's').Replace('-', 's').Replace('+', 's').Replace('%', 's').Replace('&', 's');
+
+                    var newString = Regex.Replace(aspNetNote.EncryptedID, @"[^0-9a-zA-Z]+", "s");
+
+                    aspNetNote.EncryptedID = newString;
                     db.AspNetNotes.Add(aspNetNote);
                     db.SaveChanges();
+
+                    var NotesEncryption = db.AspNetNotes.Where(x => x.Id == aspNetNote.Id).FirstOrDefault();
+                    NotesEncryption.EncryptedID = NotesEncryption.EncryptedID + aspNetNote.Id.ToString();
+                    db.SaveChanges();
+                    
                     return RedirectToAction("Index");
                 }
             }

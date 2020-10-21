@@ -66,19 +66,30 @@ namespace SEA_Application.Controllers
 
         public ActionResult PrepaidOrderToCart(int Id )
         {
+
             var CurrentUserId = User.Identity.GetUserId();
             int StudentId = db.AspNetStudents.Where(x => x.StudentID == CurrentUserId).FirstOrDefault().Id;
-            AspNetNotesOrder NotesOrder = new AspNetNotesOrder();
-            NotesOrder.NotesID = Id;
-            NotesOrder.StudentID = StudentId;
-            NotesOrder.CreationDate = DateTime.Now;
-            NotesOrder.Quantity = 1;
-            NotesOrder.Status = "Draft";
-            NotesOrder.OrderType = "Prepaid";
-            db.AspNetNotesOrders.Add(NotesOrder);
 
+            AspNetNotesOrder OrderNote =  db.AspNetNotesOrders.Where(x => x.NotesID == Id && x.StudentID == StudentId).FirstOrDefault();
 
-            db.SaveChanges();
+            if(OrderNote != null)
+            {
+               // return Json("");
+            }
+            else
+            {
+                AspNetNotesOrder NotesOrder = new AspNetNotesOrder();
+                NotesOrder.NotesID = Id;
+                NotesOrder.StudentID = StudentId;
+                NotesOrder.CreationDate = DateTime.Now;
+                NotesOrder.Quantity = 1;
+                NotesOrder.Status = "Draft";
+                NotesOrder.OrderType = "Prepaid";
+                db.AspNetNotesOrders.Add(NotesOrder);
+                db.SaveChanges();
+
+            }
+
 
             return RedirectToAction("PrepaidNotesIndex");
 
