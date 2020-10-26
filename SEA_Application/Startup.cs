@@ -191,7 +191,30 @@ namespace SEA_Application
                 roleManager.Create(role);
 
             }
-            
+            if (!roleManager.RoleExists("PhotoCopier"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "PhotoCopier";
+                roleManager.Create(role);
+
+                var user = new ApplicationUser();
+                user.UserName = "PhotoCopier";
+                user.Name = "PhotoCopier";
+                user.Email = "azeemazeem187@gmail.com";
+
+                string userPWD = "Pakistan@1234";
+
+                var chkUser = UserManager.Create(user, userPWD);
+
+                //Add default User to Role Admin   
+                if (chkUser.Succeeded)
+                {
+                    var result1 = UserManager.AddToRole(user.Id, "PhotoCopier");
+
+                }
+
+            }
+
         }
     }
 }

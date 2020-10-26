@@ -159,6 +159,12 @@ namespace SEA_Application.Controllers
                         System.Web.HttpContext.Current.Session["SupervisorID"] = userID;
                         return RedirectToAction("Dashboard", "Supervisor_Dashboard");
                     }
+                    else if (UserManager.IsInRole(userID, "PhotoCopier"))
+                    {
+                        System.Web.HttpContext.Current.Session["PhotoCopierID"] = userID;
+                        return RedirectToAction("Dashboard", "PhotoCopier_Dashboard");
+                    }
+                   
                     else if (UserManager.IsInRole(userID, "Admin"))
                     {
                         System.Web.HttpContext.Current.Session["AdminID"] = userID;
@@ -239,6 +245,11 @@ namespace SEA_Application.Controllers
             {
                 System.Web.HttpContext.Current.Session["AdminID"] = userID;
                 return RedirectToAction("Dashboard", "Admin_Dashboard");
+            }
+            else if (UserManager.IsInRole(userID, "PhotoCopier"))
+            {
+                System.Web.HttpContext.Current.Session["PhotoCopierID"] = userID;
+                return RedirectToAction("Dashboard", "PhotoCopier_Dashboard");
             }
             else if (UserManager.IsInRole(userID, "Supervisor"))
             {
@@ -330,6 +341,12 @@ namespace SEA_Application.Controllers
                         System.Web.HttpContext.Current.Session["PrincipalID"] = userID;
                         return RedirectToAction("Dashboard", "Principal_Dashboard");
                     }
+                    else if (UserManager.IsInRole(userID, "PhotoCopier"))
+                    {
+                        System.Web.HttpContext.Current.Session["PhotoCopierID"] = userID;
+                        return RedirectToAction("Dashboard", "PhotoCopier_Dashboard");
+                    }
+
                     else if (UserManager.IsInRole(userID, "Admin"))
                     {
                         System.Web.HttpContext.Current.Session["AdminID"] = userID;
@@ -604,6 +621,12 @@ namespace SEA_Application.Controllers
                         System.Web.HttpContext.Current.Session["PrincipalID"] = userID;
                         return RedirectToAction("Dashboard", "Principal_Dashboard");
                     }
+                    else if (UserManager.IsInRole(userID, "PhotoCopier"))
+                    {
+                        System.Web.HttpContext.Current.Session["PhotoCopierID"] = userID;
+                        return RedirectToAction("Dashboard", "PhotoCopier_Dashboard");
+                    }
+
                     else if (UserManager.IsInRole(userID, "Admin"))
                     {
                         System.Web.HttpContext.Current.Session["AdminID"] = userID;
