@@ -35,6 +35,10 @@ else if (User.IsInRole("Staff"))
         outline: 0;
     }
 
+    .white {
+        color: white !important;
+    }
+
     /*input[type=search] {
         border: 1px solid rgb(221, 221, 221);
         border-radius: 40px;
@@ -68,9 +72,6 @@ else if (User.IsInRole("Staff"))
 </div>
 
 
-
-
-
 <div class="tabsCon">
 
     <ul class="nav nav-tabs" id="myTabAttr" role="tablist">
@@ -80,7 +81,12 @@ else if (User.IsInRole("Staff"))
         </li>
         <li class="nav-item">
             <a class="nav-link" id="Lessons-tab-attr" data-toggle="tab" href="#Lessons-attr" role="tab" aria-controls="Lessons-attr"
-               aria-selected="false">Orders</a>
+               aria-selected="false">Pending Orders</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" id="ApprovedOrders-tab-attr" data-toggle="tab" href="#ApprovedOrders-attr" role="tab" aria-controls="ApprovedOrders-attr"
+               aria-selected="false">Approved Orders</a>
         </li>
     </ul>
 
@@ -95,110 +101,110 @@ else if (User.IsInRole("Staff"))
                         <div class="box-title"></div>
                         <div class="box-body">
                             @*<p>
-                        @Html.ActionLink("Create New", "Create")
-                    </p>*@<div class="table-responsive">
-                              <table class="table hover table-striped table-bordered" id="datatable">
-                                  <thead>
+                                    @Html.ActionLink("Create New", "Create")
+                                </p>*@<div class="table-responsive">
+                                <table class="table hover table-striped table-bordered" id="datatable">
+                                    <thead>
 
-                                      <tr>
-                                          <th>
-                                              @Html.DisplayNameFor(model => model.Title)
-                                          </th>
-                                          <th>
-                                              @Html.DisplayNameFor(model => model.Description)
-                                          </th>
-                                          <th>
-                                              Course Type
-                                          </th>
-                                          <th>
-                                              Subject Name
-                                          </th>
-                                          <th>
-                                              @Html.DisplayNameFor(model => model.NotesType)
-                                          </th>
-                                          <th>
-                                              @Html.DisplayNameFor(model => model.GrandTotal)
-                                          </th>
-                                          <th>
-                                              @Html.DisplayNameFor(model => model.OAPrice)
-                                          </th>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Title)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Description)
+                                            </th>
+                                            <th>
+                                                Course Type
+                                            </th>
+                                            <th>
+                                                Subject Name
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.NotesType)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.GrandTotal)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OAPrice)
+                                            </th>
 
-                                          <th>
-                                              Creation Date
-                                          </th>
-                                          <th></th>
-                                      </tr>
-                                  </thead>
+                                            <th>
+                                                Creation Date
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
 
-                                  <tbody>
+                                    <tbody>
 
-                                      @foreach (var item in Model)
-                                      {
-                                          <tr id="@item.Id">
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.Title)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.Description)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.CourseType)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.NotesType)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.GrandTotal)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.OAPrice)
-                                              </td>
-                                              <td>
-                                                  @Html.DisplayFor(modelItem => item.CreationDate)
-                                              </td>
-                                              <td>
-                                                  @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                                                  @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id })*@
-                                              </td>
-                                          </tr>
-                                      }
-                                  </tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr id="@item.Id">
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Title)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Description)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CourseType)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.NotesType)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.GrandTotal)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.OAPrice)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CreationDate)
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                                        @Html.ActionLink("Details", "Details", new { id = item.Id })*@
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
 
-                                  <tfoot>
-                                      <tr>
-                                          <th>
-                                              Title
-                                          </th>
-                                          <th>
-                                              Description
-                                          </th>
-                                          <th>
-                                              Course Type
-                                          </th>
-                                          <th>
-                                              Subject Name
-                                          </th>
-                                          <th>
-                                              Notes Type
-                                          </th>
-                                          <th>
-                                              Grand Total
-                                          </th>
-                                          <th>
-                                              OA Price
-                                          </th>
-                                          <th>
-                                              Creation Date
-                                          </th>
-                                          <th></th>
-                                      </tr>
-                                  </tfoot>
+                                    <tfoot>
+                                        <tr>
+                                            <th>
+                                                Title
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Course Type
+                                            </th>
+                                            <th>
+                                                Subject Name
+                                            </th>
+                                            <th>
+                                                Notes Type
+                                            </th>
+                                            <th>
+                                                Grand Total
+                                            </th>
+                                            <th>
+                                                OA Price
+                                            </th>
+                                            <th>
+                                                Creation Date
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
 
-                              </table>
+                                </table>
                             </div>
                         </div><!--End of Tab 1-->
 
@@ -243,7 +249,7 @@ else if (User.IsInRole("Staff"))
                             </div>
 
 
-                            <div id="bill" style="margin-left:30px">
+                            <div id="bill" style="margin-left:30px;display:none">
 
                                 <div class="ticket" id="ticket">
                                     <br>
@@ -259,8 +265,10 @@ else if (User.IsInRole("Staff"))
                                         <br><span id="DateTime"></span>
                                     </p>
 
-
-                                    <br><b>Cashier:</b> SeaAdmin
+                                    <br><b>Cashier:</b> SeaAdmin <span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Admin Copy</b>
+                                    </span>
 
                                     <table>
                                         <thead>
@@ -284,6 +292,53 @@ else if (User.IsInRole("Staff"))
                                 </div>
 
                             </div>
+                            <br />
+
+                            <div id="bill1" style="margin-left:30px;display:none">
+
+                                <div class="ticket" id="ticket">
+                                    <br>
+                                    <center>
+
+                                        <img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />
+                                    </center>
+
+
+                                    <p class="centered">
+                                        Officer's Academy
+                                        <br><span id="OrderNo1"></span>
+                                        <br><span id="DateTime1"></span>
+                                    </p>
+
+
+                                    <br><b>Cashier:</b> SeaAdmin <span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Student Copy</b>
+                                    </span>
+
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="description">Title</th>
+
+                                                <th class="quantity">Qty</th>
+                                                <th class="price">Price</th>
+                                                <th class="Amount">Total</th>
+
+                                            </tr>
+
+
+                                        </thead>
+                                        <tbody id="billbody1" style="border: 1px solid black"></tbody>
+                                    </table>
+                                    <p class="centered">
+                                        Thanks for your purchase!
+                                        <br>Developed by : TheRiskAdvisors
+                                    </p>
+                                </div>
+
+                            </div>
+
                             <input type="hidden" id="OrderType" />
                             <button id="btnPrint" style="display:none;margin-left:30px;" class="hidden-print">Print</button>
                         </div>
@@ -292,352 +347,505 @@ else if (User.IsInRole("Staff"))
 
 
                 </div>
-            </div>
+
+                <div class="tab-pane" id="ApprovedOrders-attr" role="tabpanel" aria-labelledby="ApprovedOrders-tab-attr">
+
+                    <div class="box box-primary">
+                        <div class="box-title"></div>
+                        <div class="box-body">
+
+
+
+                            <div class="table-responsive">
+                                <table class="table hover table-bordered table-striped" id="datatable2">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Id
+                                            </th>
+                                            <th>
+                                                Student Name
+                                            </th>
+                                            <th>
+                                                Session Name
+                                            </th>
+                                            <th>
+                                                Total Amount
+                                            </th>
+                                            <th>
+                                                Status
+                                            </th>
+
+                                            <th>
+                                                OrderType
+                                            </th>
+                                            <th>
+                                                Details
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ApprovedOrdersTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 </div>
 
-    <script>
+<script>
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            // $('a[href="#tab_2"]').trigger('click');
-            // var OrderType;
+        // $('a[href="#tab_2"]').trigger('click');
+        // var OrderType;
 
 
-            $('#datatable tfoot th').each(function () {
-                var title = $(this).text();
-                $(this).html('<input type="text" class="round-border" style="border-color:#053f89; border-radius:5px; width:100%" placeholder="Search" />');
-            });
+        $('#datatable tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="round-border" style="border-color:#053f89; border-radius:5px; width:100%" placeholder="Search" />');
+        });
 
-            var table;
-            table = $('#datatable').dataTable({
+        var table;
+        table = $('#datatable').dataTable({
 
-                initComplete: function () {
-                    // Apply the search
-                    this.api().columns().every(function () {
-                        var that = this;
+            initComplete: function () {
+                // Apply the search
+                this.api().columns().every(function () {
+                    var that = this;
 
-                        $('input', this.footer()).on('keyup change clear', function () {
-                            if (that.search() !== this.value) {
-                                that
-                                    .search(this.value)
-                                    .draw();
-                            }
-                        });
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        if (that.search() !== this.value) {
+                            that
+                                .search(this.value)
+                                .draw();
+                        }
                     });
+                });
+            },
+            buttons: [
+                {
+                    text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
                 },
-                buttons: [
-                    {
-                        text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
-                    },
-                    {
-                        text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
-                        action: function (e, dt, button, config) {
-                            window.location.href = '/AspnetNotes/Create';
-                        }
-                    },
-                    {
-                        text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
-                    }
-                ],
-                "language": {
-                    "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
-                        "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
-                        "  </div>\n" +
-                        "  </div>",
-                    "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
-                    "paginate": {
-                        "first": "Firstt",
-                        "last": "Lastt",
-                        "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
-                        "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '/AspnetNotes/Create';
                     }
                 },
-                "searching": true,
-                // dom: '<"class">Blfrtip',
-                dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
-                    "<'row'<'col-sm-12 datatablesData'tr>>" +
-                    "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
-            });
+                {
+                    text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
+                }
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
 
-            table = $('#datatable1').dataTable({
-                buttons: [
-                    {
-                        text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
-                    },
-                    {
-                        text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
-                        action: function (e, dt, button, config) {
-                            window.location.href = '';
-                        }
-                    },
-                    {
-                        text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
-                    }
-                ],
-                "language": {
-                    "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
-                        "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
-                        "  </div>\n" +
-                        "  </div>",
-                    "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
-                    "paginate": {
-                        "first": "Firstt",
-                        "last": "Lastt",
-                        "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
-                        "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+        table = $('#datatable1').dataTable({
+            buttons: [
+                {
+                    text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
+                },
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '';
                     }
                 },
-                "searching": true,
-                // dom: '<"class">Blfrtip',
-                dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
-                    "<'row'<'col-sm-12 datatablesData'tr>>" +
-                    "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
-            });
-            //   $("#ClassID").prepend('<option value="0" >All</option>');
+                {
+                    text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
+                }
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
+
+        var table2 = $('#datatable2').dataTable({
+            buttons: [
+                {
+                    text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
+                },
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '';
+                    }
+                },
+                {
+                    text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
+                }
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
+        //   $("#ClassID").prepend('<option value="0" >All</option>');
 
 
-            $("#datatable_filter").hide();
+        $("#datatable_filter").hide();
 
 
-            $("#PageHeader").html("Notes");
+        $("#PageHeader").html("Notes");
 
-            $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
-            $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Notes </a></li>');
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Notes </a></li>');
 
 
 
-            //var table;
-            //table = $('#datatable').dataTable({
-            //  //  aaSorting: [[0, 'desc']]
+        //var table;
+        //table = $('#datatable').dataTable({
+        //  //  aaSorting: [[0, 'desc']]
 
-            //});
+        //});
 
-            var clickedOrderId;
+        var clickedOrderId;
+        $.ajax({
+            type: "POST",
+            url: "/AspNetNotes/RecentOrders",
+            data: {},
+            success: function (data) {
+                table.fnClearTable();
+                $.each(data, function (index) {
+                    //var tablerow = '<tr>'
+                    //    +'<td>' + data[index].Title + '</td> ' +
+                    //    +'<td>' + data[index].Discription + '</td> ' +
+                    //    +'<td>' + data[index].CourseType + '</td> ' +
+                    //    +'<td>' + data[index].Price + '</td> ' +
+                    //    +'<td>' + data[index].Quantity + '</td> '+
+                    //    +'<td>' + data[index].Status + '</td> '+
+
+                    //'</tr > ';
+                    if (data[index].OrderStatus == "Paid") {
+
+                        table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "' name ='" + data[index].OrderType + "'   class='btn btn-success btn-sm white approveBtn' disabled>Approve</button>  <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <input class='btn btn-danger btn-sm white' onclick='deleteOrder(this)' type='button' id = '" + data[index].OrderID + "' value ='Delete'></center>"]);
+                        // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn' disabled>Approve</button></td></tr> "
+                    }
+                    else {
+                        table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "'  name ='" + data[index].OrderType + "' class='btn btn-success btn-sm white approveBtn' >Approve</button> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <input class='btn btn-danger btn-sm white' onclick='deleteOrder(this)' type='button' id = '" + data[index].OrderID + "' value ='Delete'> </center>"]);
+
+                        // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn'>Approve</button></td></tr> "
+                    }
+
+                    //alert(data[index].Discription);
+                    // $('#RecentOrderTableBody').append(TableRow);
+                });
+                table.fnDraw();
+
+            }
+        });
+
+
+        $.ajax({
+            type: "POST",
+            url: "/AspNetNotes/ApprovedOrders",
+            data: {},
+            success: function (data) {
+                table2.fnClearTable();
+                $.each(data, function (index) {
+                    //var tablerow = '<tr>'
+                    //    +'<td>' + data[index].Title + '</td> ' +
+                    //    +'<td>' + data[index].Discription + '</td> ' +
+                    //    +'<td>' + data[index].CourseType + '</td> ' +
+                    //    +'<td>' + data[index].Price + '</td> ' +
+                    //    +'<td>' + data[index].Quantity + '</td> '+
+                    //    +'<td>' + data[index].Status + '</td> '+
+
+                    //'</tr > ';
+                    if (data[index].OrderStatus == "Paid") {
+
+                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "' name ='" + data[index].OrderType + "'   class='btn btn-success white btn-sm approveBtn' disabled>Approve</button> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' ></center>"]);
+                        // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn' disabled>Approve</button></td></tr> "
+                    }
+                    else {
+                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "'  name ='" + data[index].OrderType + "' class='btn btn-success white btn-sm approveBtn' >Approve</button> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > </center>"]);
+
+                        // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn'>Approve</button></td></tr> "
+                    }
+
+                    //alert(data[index].Discription);
+                    // $('#RecentOrderTableBody').append(TableRow);
+                });
+                table2.fnDraw();
+
+            }
+        });
+
+
+        $("#RecentOrderTableBody").on("click", "input[type='button']", function () {
+
+            var OrderId = $(this).attr('id');
+            // alert(OrderId);
+
             $.ajax({
                 type: "POST",
-                url: "/AspNetNotes/RecentOrders",
-                data: {},
+                url: "/AspNetNotes/RecentOrdersDetails",
+                data: { "OrderId": OrderId },
+
                 success: function (data) {
-                    table.fnClearTable();
+
+                    $('#modal0').html("");
+
                     $.each(data, function (index) {
-                        //var tablerow = '<tr>'
-                        //    +'<td>' + data[index].Title + '</td> ' +
-                        //    +'<td>' + data[index].Discription + '</td> ' +
-                        //    +'<td>' + data[index].CourseType + '</td> ' +
-                        //    +'<td>' + data[index].Price + '</td> ' +
-                        //    +'<td>' + data[index].Quantity + '</td> '+
-                        //    +'<td>' + data[index].Status + '</td> '+
-
-                        //'</tr > ';
-                        if (data[index].OrderStatus == "Paid") {
-
-                            table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "' name ='" + data[index].OrderType + "'   class='btn btn-success btn-sm approveBtn' disabled>Approve</button> <input type='button' class='btn btn-primary btn-sm ' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' ></center>"]);
-                            // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn' disabled>Approve</button></td></tr> "
-                        }
-                        else {
-                            table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "'  name ='" + data[index].OrderType + "' class='btn btn-success btn-sm approveBtn' >Approve</button> <input type='button' class='btn btn-primary btn-sm' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > </center>"]);
-
-                            // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn'>Approve</button></td></tr> "
-                        }
-
-                        //alert(data[index].Discription);
-                        // $('#RecentOrderTableBody').append(TableRow);
+                        $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
                     });
-                    table.fnDraw();
-
                 }
-            });
-
-            $("#RecentOrderTableBody").on("click", "input[type='button']", function () {
-
-                var OrderId = $(this).attr('id');
-                // alert(OrderId);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/AspNetNotes/RecentOrdersDetails",
-                    data: { "OrderId": OrderId },
-
-                    success: function (data) {
-
-                        $('#modal0').html("");
-
-                        $.each(data, function (index) {
-                            $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
-                        });
-                    }
-                })
-
-            });
-
-            $("#RecentOrderTableBody").on("click", ".approveBtn", function () {
-
-
-
-                event.stopPropagation();
-                var Total = 0.0;
-                var OrderId = $(this).attr('id');
-                //clickedOrderId = OrderId;
-
-                $('#btnPrint').attr('name', OrderId);
-
-
-                var OrderType = $(this).attr('name');
-
-                $("#OrderType").val(OrderType);
-
-
-                //alert(OrderType);
-                $("#btnPrint").attr('class', OrderId);
-
-                $.ajax({
-                    type: "POST",
-                    url: "/AspNetNotes/RecentOrdersDetails",
-                    data: { "OrderId": OrderId },
-
-                    success: function (data) {
-                        $('#billbody').html("");
-
-
-                        $.each(data, function (index) {
-                            var TableRow = "<tr>  <td class='description'>" + data[index].Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + data[index].Quantity + "</td> <td  class='price'>" + data[index].Price + "</td>  <td class='Amount' >&nbsp; " + data[index].Total + "</td>"
-                            $('#billbody').append(TableRow);
-
-                            Total = Total + data[index].Total;
-                        });
-                        var d = new Date($.now());
-
-                        $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-                        $("#OrderNo").html('Order#' + OrderId);
-                        $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
-                        $("#bill").css('display', 'block');
-                        $("#btnPrint").css('display', 'block');
-
-                    }//end of success function
-                })
-
             })
 
-            $('#datatable tfoot tr').appendTo('#datatable thead');
-        })
+        });
 
-        $("#btnPrint").click(function () {
 
-            $("#btnPrint").css('display', 'none');
 
-            var OrderId = $('#btnPrint').attr('name');
-            var OrderType = $("#OrderType").val();
-            // alert(OrderType);
+        $("#RecentOrderTableBody").on("click", ".approveBtn", function () {
 
-            var mywindow = window.open('', '', '');
-            mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
-            mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
-            mywindow.document.write('</head><body >');
-            // mywindow.document.write('<h1>' + document.title + '</h1>');
-            mywindow.document.write(document.getElementById('bill').innerHTML);
-            mywindow.document.write('</body></html>');
-            mywindow.document.close(); // necessary for IE >= 10
-            mywindow.focus(); // necessary for IE >= 10*/
+            event.stopPropagation();
+            var Total = 0.0;
+            var OrderId = $(this).attr('id');
+            //clickedOrderId = OrderId;
 
-            mywindow.print();
-            mywindow.close();
+            $('#btnPrint').attr('name', OrderId);
 
+
+            var OrderType = $(this).attr('name');
+
+            $("#OrderType").val(OrderType);
+
+
+            //alert(OrderType);
+            $("#btnPrint").attr('class', OrderId);
 
             $.ajax({
-
                 type: "POST",
-                url: "/AspNetNotes/ApproveOrders",
-                data: { "OrderId": OrderId, "OrderType": OrderType },
+                url: "/AspNetNotes/RecentOrdersDetails",
+                data: { "OrderId": OrderId },
+
                 success: function (data) {
+                    $('#billbody').html("");
+                    $('#billbody1').html("");
 
-                    debugger
-                    window.location.href = '/AspNetNotes/Index/';
-                }
 
+                    $.each(data, function (index) {
+                        var TableRow = "<tr>  <td class='description'>" + data[index].Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + data[index].Quantity + "</td> <td  class='price'>" + data[index].Price + "</td>  <td   class='Amount' >&nbsp; " + data[index].Total + "</td>"
+                        $('#billbody').append(TableRow);
+                        $('#billbody1').append(TableRow);
+
+                        Total = Total + data[index].Total;
+                    });
+                    var d = new Date($.now());
+
+                    $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+                    $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+
+                    $("#OrderNo").html('Order#' + OrderId);
+                    $("#OrderNo1").html('Order#' + OrderId);
+                    $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
+                    $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
+
+                    $("#bill").css('display', 'block');
+                    $("#bill1").css('display', 'block');
+                    $("#btnPrint").css('display', 'block');
+
+                }//end of success function
             })
 
-            //function drawTable() {
-            //    $('#example_filter').addClass("form-group");
-            //    $('#example_filter').addClass("has-feedback");
-            //    $('#example_length').addClass("col-lg-9 col-md-8 col-sm-12 col-xs-12");
-            //    //$('#example_filter').css("col-lg-9 col-md-8 col-sm-12 col-xs-12");
+        })
 
-            //    $('#example_wrapper').css("text-align", "left");
-            //    $('#example_length').css("text-align", "left");
-            //    $('#example_length label').addClass("col-md-3 col-sm-12 col-lg-2");
-            //    $("#example_length label").css("text-align", "left");
-            //    $('#example_length label').addClass("col-md-2 col-lg-2 col-sm-12");
-            //    // // $('#example_length label select').addClass("col-md-3 col-sm-8 col-lg-3"); : auto;
-            //    $('#example_filter input').css({ "border": "1px solid #ddd", "border-radius": "40px", "height": "30px", "margin-top": "-5px", "outline": "none", "padding-left": "10px", "color": "#000000 !important" });
-            //    //$('#example_length').css({ "overflow": "auto" });
-            //    $('#example_filter input').addClass("add");
-            //    $('#example_filter').append('<span  class="glyphicon glyphicon-search  form-control-feedback" style="margin-top: -33px; color: #666;"></span>');
-            //    var list = $("#ClassID").html();
-            //    $('#example_length').append(
+        $('#datatable tfoot tr').appendTo('#datatable thead');
+    })
 
-            //        '<div class="col-md-1 col-lg-1" style="width:0%; padding-left:1px;">' +
-            //        '<div class="d-bar"></div>' +
-            //        '</div>'
-            //        +
+    $("#btnPrint").click(function () {
 
-            //        '<div class="col-md-3 col-lg-3">' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3" style="padding-left:0px"><a href=""><i class="glyphicon glyphicon-repeat" data-toggle="tooltip" title="Refresh" data-placement="bottom"></i></a></div>' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3"><a href="/Admin_Dashboard/StudentRegister"><i class="glyphicon glyphicon-edit" data-placement="bottom"></i></a></div>' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3"><a href="/AspNetUser/DisableStudentIndex"><i class="fa fa-ban" data-placement="bottom"></i>' + '</a></div>' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3"><a href=""><i onclick="download()"class="glyphicon glyphicon-download-alt" onclick="download()" data-placement="bottom"></i></a></div>' +
-            //        '<div class="col-md-1" padding-left:0px;">' +
-            //        '<div class="d-bar"></div>' +
-            //        '</div>' +
-            //        '</div>');
-            //    //$("#Class").prepend("<option value='0'>Select One</option>");
-            //}
+        $("#btnPrint").css('display', 'none');
 
-            //function DrawTable1() {
-            //    $('#example_filter').addClass("form-group");
-            //    $('#example_filter').addClass("has-feedback");
-            //    $('#example_length').addClass("col-lg-9 col-md-8 col-sm-12 col-xs-12");
-            //    //$('#example_filter').addClass("col-lg-4 col-md-4 col-sm-12 col-xs-12");
-            //    $('#example_wrapper').css("text-align", "left");
-            //    $('#example_length').css("text-align", "left");
-            //    $('#example_length label').addClass("col-md-3 col-sm-12 col-lg-2");
-            //    $("#example_length label").css("text-align", "left");
-            //    $('#example_length label').addClass("col-md-2 col-lg-2 col-sm-12");
-            //    // // $('#example_length label select').addClass("col-md-3 col-sm-8 col-lg-3"); : auto;
-            //    $('#example_filter input').css({ "border": "1px solid #ddd", "border-radius": "40px", "height": "30px", "margin-top": "-5px", "outline": "none", "padding-left": "10px", "color": "#2b2b2b !important" });
-            //    //$('#example_length').css({ "overflow": "auto" });
-            //    $('#example_filter input').addClass("add");
-            //    $('#example_filter').append('<span class="glyphicon glyphicon-search form-control-feedback" style="margin-top: -33px; color: #666;"></span>');
-            //    var list = $("#ClassID").html();
-            //    $('#example_length').append(
+        var OrderId = $('#btnPrint').attr('name');
+        var OrderType = $("#OrderType").val();
+        // alert(OrderType);
 
-            //        '<div class="col-md-1" style="width:0%; padding-left:1px;">' +
-            //        '<div class="d-bar"></div>' +
-            //        '</div>'
-            //        +
+        var mywindow = window.open('', '', '');
+        mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
+        mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
+        mywindow.document.write('</head><body >');
+        // mywindow.document.write('<h1>' + document.title + '</h1>');
+        mywindow.document.write(document.getElementById('bill').innerHTML);
+        mywindow.document.write(document.getElementById('bill1').innerHTML);
+        mywindow.document.write('</body></html>');
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
 
-            //        '<lable class="col-md-2 col-lg-2 col-sm-12 col-xs-12 control-label" style="text-align:left;margin-top:0px ;width:100px; padding-left:0px; padding-right:0px;">Select Class</lable>' +
-            //        '<div class="col-md-2 col-lg-2">' +
-            //        '<select class="form-control input-sm" id="Class" name="ClassID" style="margin-top:-4px" onclick="class_click(this)">' + list +
-            //        '</select>' +
-            //        '</div>' +
+        mywindow.print();
+        mywindow.close();
 
-            //        '<div class="col-md-1" style="width:0%; padding-left:-10px;">' +
-            //        '<div class="d-bar"></div>' +
-            //        '</div>' +
 
-            //        '<div class="col-md-4 col-lg-4" style="padding-left=0px">' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3" style="padding-left:0px"><a href=""><i class="glyphicon glyphicon-repeat" data-toggle="tooltip" title="Refresh" data-placement="bottom"></i></a></div>' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3"><span style="color:grey"><i class="glyphicon glyphicon-edit" data-placement="bottom"></i></span></a></div>' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3"><span style="color:grey"><i class="fa fa-ban"  data-placement="bottom"></i></span>' + '</a></div>' +
-            //        '<div class="col-md-1 col-sm-3 col-xs-3"><span style="color:grey"><i class="glyphicon glyphicon-download-alt" data-placement="bottom"></i></a></div>' +
-            //        ' <div class="col-md-1" style="width:0%; padding-left:10px;">' +
-            //        '<div class="d-bar"></div>' +
-            //        '</div>' +
-            //        '</div>');
-            //    //$("#Class").prepend("<option value='0'>All</option>");
-            //}
+        $.ajax({
+
+            type: "POST",
+            url: "/AspNetNotes/ApproveOrders",
+            data: { "OrderId": OrderId, "OrderType": OrderType },
+            success: function (data) {
+
+                debugger
+                window.location.href = '/AspNetNotes/Index/';
+            }
 
         })
-    </script>
+
+        //function drawTable() {
+        //    $('#example_filter').addClass("form-group");
+        //    $('#example_filter').addClass("has-feedback");
+        //    $('#example_length').addClass("col-lg-9 col-md-8 col-sm-12 col-xs-12");
+        //    //$('#example_filter').css("col-lg-9 col-md-8 col-sm-12 col-xs-12");
+
+        //    $('#example_wrapper').css("text-align", "left");
+        //    $('#example_length').css("text-align", "left");
+        //    $('#example_length label').addClass("col-md-3 col-sm-12 col-lg-2");
+        //    $("#example_length label").css("text-align", "left");
+        //    $('#example_length label').addClass("col-md-2 col-lg-2 col-sm-12");
+        //    // // $('#example_length label select').addClass("col-md-3 col-sm-8 col-lg-3"); : auto;
+        //    $('#example_filter input').css({ "border": "1px solid #ddd", "border-radius": "40px", "height": "30px", "margin-top": "-5px", "outline": "none", "padding-left": "10px", "color": "#000000 !important" });
+        //    //$('#example_length').css({ "overflow": "auto" });
+        //    $('#example_filter input').addClass("add");
+        //    $('#example_filter').append('<span  class="glyphicon glyphicon-search  form-control-feedback" style="margin-top: -33px; color: #666;"></span>');
+        //    var list = $("#ClassID").html();
+        //    $('#example_length').append(
+
+        //        '<div class="col-md-1 col-lg-1" style="width:0%; padding-left:1px;">' +
+        //        '<div class="d-bar"></div>' +
+        //        '</div>'
+        //        +
+
+        //        '<div class="col-md-3 col-lg-3">' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3" style="padding-left:0px"><a href=""><i class="glyphicon glyphicon-repeat" data-toggle="tooltip" title="Refresh" data-placement="bottom"></i></a></div>' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3"><a href="/Admin_Dashboard/StudentRegister"><i class="glyphicon glyphicon-edit" data-placement="bottom"></i></a></div>' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3"><a href="/AspNetUser/DisableStudentIndex"><i class="fa fa-ban" data-placement="bottom"></i>' + '</a></div>' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3"><a href=""><i onclick="download()"class="glyphicon glyphicon-download-alt" onclick="download()" data-placement="bottom"></i></a></div>' +
+        //        '<div class="col-md-1" padding-left:0px;">' +
+        //        '<div class="d-bar"></div>' +
+        //        '</div>' +
+        //        '</div>');
+        //    //$("#Class").prepend("<option value='0'>Select One</option>");
+        //}
+
+        //function DrawTable1() {
+        //    $('#example_filter').addClass("form-group");
+        //    $('#example_filter').addClass("has-feedback");
+        //    $('#example_length').addClass("col-lg-9 col-md-8 col-sm-12 col-xs-12");
+        //    //$('#example_filter').addClass("col-lg-4 col-md-4 col-sm-12 col-xs-12");
+        //    $('#example_wrapper').css("text-align", "left");
+        //    $('#example_length').css("text-align", "left");
+        //    $('#example_length label').addClass("col-md-3 col-sm-12 col-lg-2");
+        //    $("#example_length label").css("text-align", "left");
+        //    $('#example_length label').addClass("col-md-2 col-lg-2 col-sm-12");
+        //    // // $('#example_length label select').addClass("col-md-3 col-sm-8 col-lg-3"); : auto;
+        //    $('#example_filter input').css({ "border": "1px solid #ddd", "border-radius": "40px", "height": "30px", "margin-top": "-5px", "outline": "none", "padding-left": "10px", "color": "#2b2b2b !important" });
+        //    //$('#example_length').css({ "overflow": "auto" });
+        //    $('#example_filter input').addClass("add");
+        //    $('#example_filter').append('<span class="glyphicon glyphicon-search form-control-feedback" style="margin-top: -33px; color: #666;"></span>');
+        //    var list = $("#ClassID").html();
+        //    $('#example_length').append(
+
+        //        '<div class="col-md-1" style="width:0%; padding-left:1px;">' +
+        //        '<div class="d-bar"></div>' +
+        //        '</div>'
+        //        +
+
+        //        '<lable class="col-md-2 col-lg-2 col-sm-12 col-xs-12 control-label" style="text-align:left;margin-top:0px ;width:100px; padding-left:0px; padding-right:0px;">Select Class</lable>' +
+        //        '<div class="col-md-2 col-lg-2">' +
+        //        '<select class="form-control input-sm" id="Class" name="ClassID" style="margin-top:-4px" onclick="class_click(this)">' + list +
+        //        '</select>' +
+        //        '</div>' +
+
+        //        '<div class="col-md-1" style="width:0%; padding-left:-10px;">' +
+        //        '<div class="d-bar"></div>' +
+        //        '</div>' +
+
+        //        '<div class="col-md-4 col-lg-4" style="padding-left=0px">' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3" style="padding-left:0px"><a href=""><i class="glyphicon glyphicon-repeat" data-toggle="tooltip" title="Refresh" data-placement="bottom"></i></a></div>' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3"><span style="color:grey"><i class="glyphicon glyphicon-edit" data-placement="bottom"></i></span></a></div>' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3"><span style="color:grey"><i class="fa fa-ban"  data-placement="bottom"></i></span>' + '</a></div>' +
+        //        '<div class="col-md-1 col-sm-3 col-xs-3"><span style="color:grey"><i class="glyphicon glyphicon-download-alt" data-placement="bottom"></i></a></div>' +
+        //        ' <div class="col-md-1" style="width:0%; padding-left:10px;">' +
+        //        '<div class="d-bar"></div>' +
+        //        '</div>' +
+        //        '</div>');
+        //    //$("#Class").prepend("<option value='0'>All</option>");
+        //}
+
+    })
+
+
+
+    function deleteOrder(element) {
+
+        debugger
+
+        var OrderId = $(element).attr('id');
+      
+
+        $.ajax({
+
+            type: "POST",
+            url: "/AspNetNotes/DeleteOrder",
+            data: { "OrderId": OrderId, },
+            success: function (data) {
+
+                debugger
+                window.location.href = '/AspNetNotes/Index/';
+            }
+
+        })
+
+
+
+    }
+</script>

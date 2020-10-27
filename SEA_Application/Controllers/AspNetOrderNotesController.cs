@@ -70,7 +70,7 @@ namespace SEA_Application.Controllers
             var CurrentUserId = User.Identity.GetUserId();
             int StudentId = db.AspNetStudents.Where(x => x.StudentID == CurrentUserId).FirstOrDefault().Id;
 
-            AspNetNotesOrder OrderNote =  db.AspNetNotesOrders.Where(x => x.NotesID == Id && x.StudentID == StudentId).FirstOrDefault();
+            AspNetNotesOrder OrderNote =  db.AspNetNotesOrders.Where(x => x.NotesID == Id && x.StudentID == StudentId && x.OrderType == "Prepaid").FirstOrDefault();
 
             if(OrderNote != null)
             {
@@ -309,7 +309,6 @@ namespace SEA_Application.Controllers
                     {
                         OrdersToModify.Add(findOrder);
 
-
                     }
                 }
 
@@ -325,9 +324,6 @@ namespace SEA_Application.Controllers
                 db.Entry(OrderModify).State = EntityState.Modified;
                 db.SaveChanges();
             }
-
-
-            
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
@@ -346,11 +342,9 @@ namespace SEA_Application.Controllers
                 {
 
                     if(deleteOrderIds == order.Id)
-
                     {
                         OrdersToDelete.Add(order);
 
-                    
                     }
                 }
                
@@ -377,7 +371,7 @@ namespace SEA_Application.Controllers
             var result = from Notes in db.AspNetNotes
                          join OrderNotes in db.AspNetNotesOrders on Notes.Id equals OrderNotes.NotesID
                          where OrderNotes.StudentID == StudentId && OrderNotes.Status == "Draft" &&
-                          OrderNotes.OrderType == "Postpaid"
+                         OrderNotes.OrderType == "Postpaid"
 
                          select new
                          {

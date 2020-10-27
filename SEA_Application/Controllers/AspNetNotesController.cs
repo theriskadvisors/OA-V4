@@ -236,11 +236,18 @@ namespace SEA_Application.Controllers
 
             //             };
 
-            var result = db.StudentOrderDetails().ToList();
+            var result = db.StudentOrderDetails().Where(x=>x.OrderStatus =="Pending").ToList();
 
 
 
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
+
+        public ActionResult ApprovedOrders()
+        {
+
+            var result = db.StudentOrderDetails().Where(x => x.OrderStatus == "Paid").ToList();
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -252,7 +259,7 @@ namespace SEA_Application.Controllers
 
             var result = from Notes in db.AspNetNotes
                          join OrderNotes in db.AspNetNotesOrders on Notes.Id equals OrderNotes.NotesID
-                         where OrderNotes.OrderId == OrderId
+                         where OrderNotes.OrderId == OrderId 
                          select new
                          {
                              Id = OrderNotes.Id,
@@ -278,6 +285,21 @@ namespace SEA_Application.Controllers
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
 
             return View();
+        }
+
+        public ActionResult DeleteOrder(int OrderId)
+        {
+            var AllNotesOrderToDelete =     db.AspNetNotesOrders.Where(x => x.OrderId == OrderId).ToList();
+
+            db.AspNetNotesOrders.RemoveRange(AllNotesOrderToDelete);
+            db.SaveChanges();
+
+            AspNetOrder OrderToDelete =  db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
+
+            db.AspNetOrders.Remove(OrderToDelete);
+            db.SaveChanges();
+
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         // POST: AspNetNotes/Create
