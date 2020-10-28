@@ -554,6 +554,7 @@ else if (User.IsInRole("Staff"))
         $.ajax({
             type: "POST",
             url: "/AspNetNotes/RecentOrders",
+            //pending Orders tab
             data: {},
             success: function (data) {
                 table.fnClearTable();
@@ -644,6 +645,30 @@ else if (User.IsInRole("Staff"))
             })
 
         });
+
+            $("#ApprovedOrdersTableBody").on("click", "input[type='button']", function () {
+
+            var OrderId = $(this).attr('id');
+            // alert(OrderId);
+
+            $.ajax({
+                type: "POST",
+                url: "/AspNetNotes/RecentOrdersDetails",
+                data: { "OrderId": OrderId },
+
+                success: function (data) {
+
+                    $('#modal0').html("");
+
+                    $.each(data, function (index) {
+                        $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
+                    });
+                }
+            })
+
+        });
+
+
 
 
 

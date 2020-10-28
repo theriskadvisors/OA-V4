@@ -1,0 +1,196 @@
+﻿@{
+    Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
+}
+
+@using System.Linq;
+@using System.Net;
+@using System.Web.Mvc;
+@using SEA_Application.Models;
+@using System.IO;
+@using Microsoft.AspNet.Identity;
+@{
+    SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+    var CurrentUserId = User.Identity.GetUserId();
+
+    string name = db.AspNetUsers.Where(x => x.Id == CurrentUserId).Select(x => x.Name).FirstOrDefault();
+    var dt = DateTime.Now;
+    DateTime Firstday = dt.AddDays(-(int)dt.DayOfWeek);
+    DateTime Endaday = Firstday.AddDays(6);
+
+}
+
+<style>
+    .white {
+        color: white !important;
+    }
+</style>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Summary Details</h4>
+            </div>
+            <div class="modal-body" id="modal0">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="pageHeading">
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+            <div class="d-flex">
+                <div id="dayPart_div" class="mr-4 flex-3 sunSide"><img id="dayPart_img" src="~/Content/assets/img/sun.png" /></div>
+                <div>
+                    <div class="afternoon mt-2">
+                        <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
+                        <p>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
+            <h4>Total PhotoCopier - @ViewBag.TotalPhotoCopierPrice  </h4>   
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-4">
+
+
+                <div class="box box-primary">
+                    <div class="box-title"></div>
+                    <div class="box-body">
+
+
+
+                        <div class="table-responsive">
+                            <table class="table hover table-bordered table-striped" id="datatable2">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Order  Id
+                                        </th>
+                                        <th>
+                                            Student Name
+                                        </th>
+                                        <th>
+                                            Session Name
+                                        </th>
+                                        <th>
+                                            Total PhotoCopier Price
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+
+                                        <th>
+                                            OrderType
+                                        </th>
+
+                                        <th>
+                                            Details
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="ApprovedOrdersTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        var table2 = $('#datatable2').dataTable({
+            buttons: [
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "/PhotoCopier_Dashboard/ApprovedOrders",
+            data: {},
+            success: function (data) {
+                table2.fnClearTable();
+                $.each(data, function (index) {
+
+
+                    table2.fnAddData([data[index].OrderId, data[index].StudentName, data[index].ClassName, data[index].TotalPhotoCopierPrice, data[index].OrderStatus, data[index].OrderType, "<center><input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderId + "' data-toggle='modal' data-target='#myModal' ></center>"]);
+
+                });
+                table2.fnDraw();
+
+            }
+        });
+
+
+        $("#ApprovedOrdersTableBody").on("click", "input[type='button']", function () {
+
+            var OrderId = $(this).attr('id');
+            // alert(OrderId);
+
+            $.ajax({
+                type: "POST",
+                url: "/AspNetNotes/RecentOrdersDetails",
+                data: { "OrderId": OrderId },
+
+                success: function (data) {
+
+                    $('#modal0').html("");
+
+                    $.each(data, function (index) {
+                        $('#modal0').append('<div > Title Name : ' + data[index].Title +  ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div>  <br>  ');
+
+                    });
+                }
+            })
+
+        });
+
+
+    })
+
+</script>
