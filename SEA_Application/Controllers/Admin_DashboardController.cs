@@ -2153,7 +2153,7 @@ namespace SEA_Application.Controllers
         {
             //var data = db.AspNetClasses 
             // ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.OrderByDescending(x=>x.Id), "Id", "ClassName");
             ViewBag.SessionFee = db.AspNetSessions.Where(x => x.Id == SessionID).FirstOrDefault().Total_Fee;
             // ViewBag.ClassID2 = db.AspNetClasses.Where(x => x.SessionID == SessionID).FirstOrDefault();
             return View();

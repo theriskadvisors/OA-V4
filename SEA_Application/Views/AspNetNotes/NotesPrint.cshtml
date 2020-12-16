@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SEA_Application.Controllers.AspNetNotesController.CourseType>
+@{
+    ViewBag.Title = "NotesPrint";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div id="PrintDiv">
+
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.SubjectNotes.Count() != 0)
+                        {
+
+                            <h3 style="text-decoration:underline">@item.CourseTypeName</h3>
+
+                            foreach (var item1 in item.SubjectNotes)
+                            {
+                                <h3 style="text-decoration:underline">@item1.SubjectName</h3>
+
+
+                                @*<ol>
+                                        <li>@item2.NotesTitle</li>
+                                    </ol>*@
+
+                                <table border="1" class="table table-hover table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        @foreach (var item2 in item1.SubjectNotes)
+                                        {
+
+                                            <tr>
+                                                <td>@item2.NotesTitle</td>
+                                                <td>@item2.Description</td>
+                                                <td>@item2.NotesPrice</td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+
+                                </table>
+
+                                <br>
+
+
+                            }
+                            <br>
+
+                        }
+
+
+                    }
+
+                </div>
+
+                <input type='button' id='btn' value='Print' onclick='printDiv();'>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        
+        $("#PageHeader").html("Notes List");
+    })
+
+
+    function printDiv() {
+
+        var divToPrint = document.getElementById('PrintDiv');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+
+    }
+</script>

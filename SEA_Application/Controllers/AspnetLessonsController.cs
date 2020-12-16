@@ -45,7 +45,7 @@ namespace SEA_Application.Controllers
 
         public ActionResult LoadSectionIdDDL()
         {
-            var ClassList = db.AspNetSessions.ToList().Select(x => new { x.Id, x.SessionName });
+            var ClassList = db.AspNetSessions.OrderByDescending(x=>x.Id).ToList().Select(x => new { x.Id, x.SessionName });
 
             string status = Newtonsoft.Json.JsonConvert.SerializeObject(ClassList);
 

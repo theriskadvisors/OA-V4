@@ -23,7 +23,15 @@
     .white {
         color: white !important;
     }
+
+    .table-responsive > .table-bordered {
+        border: 1px solid silver !important;
+    }
 </style>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
@@ -59,8 +67,10 @@
             </div>
         </div>
         <div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
-            <h4>Total PhotoCopier - @ViewBag.TotalPhotoCopierPrice  </h4>   
+            <h4>Total PhotoCopier - <span id="PCGrandTotal">  </span> </h4>
         </div>
+
+
     </div>
 </div>
 
@@ -70,51 +80,85 @@
         <div class="card">
             <div class="card-body p-4">
 
-
-                <div class="box box-primary">
-                    <div class="box-title"></div>
-                    <div class="box-body">
+                <div>
 
 
+                    <div class="pull-left">
+                        <!--Date Filter Start-->
 
-                        <div class="table-responsive">
-                            <table class="table hover table-bordered table-striped" id="datatable2">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Order  Id
-                                        </th>
-                                        <th>
-                                            Student Name
-                                        </th>
-                                        <th>
-                                            Session Name
-                                        </th>
-                                        <th>
-                                            Total PhotoCopier Price
-                                        </th>
-                                        <th>
-                                            Status
-                                        </th>
+                        <h2 style="color:#00b8ec;font-size:15px;display:inline-block">Summary </h2>
 
-                                        <th>
-                                            OrderType
-                                        </th>
+                        <label>From</label>
+                        <input type="hidden" id="FromDate">
+                        <img src="~/Content/Images/calendar.png" id="FromDateTrigger" width="25">
 
-                                        <th>
-                                            Details
-                                        </th>
+                        <label>To</label>
 
-                                    </tr>
-                                </thead>
-                                <tbody id="ApprovedOrdersTableBody">
-                                </tbody>
-                            </table>
-                        </div>
+                        <input type="hidden" id="ToDate">
+                        <img src="~/Content/Images/calendar.png" id="ToDateTrigger" width="25">
 
+
+                        <br />
+                        @*<div id="DateToView">
+
+                            </div>*@
+
+
+                    </div><!--Date Filter End-->
+
+                    <div class="pull-right">
+                        <button id="PrintNotes" class="btn btn-primary btn-sm">Print Notes</button>
 
                     </div>
+
+
                 </div>
+
+
+
+
+                <div class="table-responsive" id="DivToPrint">
+
+                    <div id="DateToView">
+
+                    </div>
+
+
+                    <table style="border-collapse:collapse;width:100%;padding:10px;" class="table hover table-bordered table-striped" id="datatable2" border="1">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Notes
+                                </th>
+
+                                <th>
+                                    Unit Price
+                                    
+                                </th>
+                                <th>
+                                    Quantity
+                                </th>
+                                <th>
+                                    Total Price
+                                </th>
+
+                                @*<th>
+                                        OrderType
+                                    </th>
+
+                                    <th>
+                                        Details
+                                    </th>*@
+
+                            </tr>
+                        </thead>
+                        <tbody id="ApprovedOrdersTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+
+
             </div>
         </div>
     </div>
@@ -124,28 +168,29 @@
 
     $(document).ready(function () {
 
-        var table2 = $('#datatable2').dataTable({
-            buttons: [
-            ],
-            "language": {
-                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
-                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
-                    "  </div>\n" +
-                    "  </div>",
-                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
-                "paginate": {
-                    "first": "Firstt",
-                    "last": "Lastt",
-                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
-                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
-                }
-            },
-            "searching": true,
-            // dom: '<"class">Blfrtip',
-            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
-                "<'row'<'col-sm-12 datatablesData'tr>>" +
-                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
-        });
+        //var table2 = $('#datatable2').dataTable({
+        //    buttons: [
+
+        //    ],
+        //    "language": {
+        //        "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+        //            "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+        //            "  </div>\n" +
+        //            "  </div>",
+        //        "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+        //        "paginate": {
+        //            "first": "Firstt",
+        //            "last": "Lastt",
+        //            "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+        //            "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+        //        }
+        //    },
+        //    "searching": true,
+        //    // dom: '<"class">Blfrtip',
+        //    dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+        //        "<'row'<'col-sm-12 datatablesData'tr>>" +
+        //        "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        //});
 
 
 
@@ -154,14 +199,37 @@
             url: "/PhotoCopier_Dashboard/ApprovedOrders",
             data: {},
             success: function (data) {
-                table2.fnClearTable();
-                $.each(data, function (index) {
+                debugger
+                $("#ApprovedOrdersTableBody").html("");
+                //  table2.fnClearTable();
+
+                var list = data.photoCopierSummaryList;
+                var GrandTotal = data.GrandTotalPhotoCopier;
 
 
-                    table2.fnAddData([data[index].OrderId, data[index].StudentName, data[index].ClassName, data[index].TotalPhotoCopierPrice, data[index].OrderStatus, data[index].OrderType, "<center><input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderId + "' data-toggle='modal' data-target='#myModal' ></center>"]);
+                $.each(list, function (index) {
+
+                //  table2.fnAddData([data[index].NotesName, data[index].PhotoCopierUnitPrice, data[index].Quantity, data[index].PhotoCopierTotal]);
+
+                    $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
 
                 });
-                table2.fnDraw();
+
+
+                $("#ApprovedOrdersTableBody").append("<tr><td></td><td></td><td>Grand Total </td><td>" + GrandTotal + "</td></tr>");
+
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+
+                today = dd + '-' + mm + '-' + yyyy;
+
+                $("#DateToView").html('<h5> Date : <span > '+today+' </span></h5>');
+                  $("#PCGrandTotal").html("");
+                $("#PCGrandTotal").html(GrandTotal);
+
+                // table2.fnDraw();
 
             }
         });
@@ -182,7 +250,7 @@
                     $('#modal0').html("");
 
                     $.each(data, function (index) {
-                        $('#modal0').append('<div > Title Name : ' + data[index].Title +  ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div>  <br>  ');
+                        $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div>   <br>  ');
 
                     });
                 }
@@ -191,6 +259,169 @@
         });
 
 
-    })
+        $("#PrintNotes").click(function () {
+
+            var divToPrint = document.getElementById('DivToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
+            newWin.document.close();
+            setTimeout(function () { newWin.close(); }, 10);
+
+        })
+
+        $('#FromDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#ToDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $(function () {
+            $('#FromDate').datepicker();
+            $('#FromDateTrigger').click(function () {
+
+                $('#FromDate').datepicker('show');
+
+            });
+        });
+
+
+        $(function () {
+            $('#ToDate').datepicker();
+            $('#ToDateTrigger').click(function () {
+
+                $('#ToDate').datepicker('show');
+
+            });
+        });
+
+
+        $("#FromDate").change(function () {
+
+
+            var FromDate = $(this).val();
+            var ToDate = $("#ToDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h5>Summary From :<span id="FromDateView"> ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+
+
+                GetNotesSummary(FromDate, ToDate);
+
+                CalculateTotalPhotoCopier();
+
+            }
+
+        })
+
+        $("#ToDate").change(function () {
+            debugger
+            var ToDate = $(this).val();
+            var FromDate = $("#FromDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h5> Summary From :<span id="FromDateView"> ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+
+                GetNotesSummary(FromDate, ToDate);
+                CalculateTotalPhotoCopier();
+
+            }
+
+        })
+
+    }) //end of document ready
+
+    function GetMonthName(monthNumber) {
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[monthNumber - 1];
+    }
+
+    function GetNotesSummary(FromDate, ToDate) {
+
+        //   var table2 = $('#datatable2').dataTable();
+
+        $.ajax({
+            type: "POST",
+            url: "/PhotoCopier_Dashboard/ApprovedOrdersByDate",
+            data: { "FromDate": FromDate, "ToDate": ToDate },
+            success: function (data) {
+
+                //  table2.fnClearTable();
+                $("#ApprovedOrdersTableBody").html("");
+
+                var list = data.photoCopierSummaryList;
+                var GrandTotal = data.GrandTotalPhotoCopier;
+
+                $.each(list, function (index) {
+
+
+                    //  table2.fnAddData([data[index].NotesName, data[index].PhotoCopierUnitPrice, data[index].Quantity, data[index].PhotoCopierTotal]);
+
+                    $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
+
+                });
+
+                $("#ApprovedOrdersTableBody").append("<tr><td></td><td></td><td>Grand Total </td><td>" + GrandTotal + "</td></tr>");
+
+                $("#PCGrandTotal").html("");
+                $("#PCGrandTotal").html(GrandTotal);
+                //  table2.fnDraw();
+
+            }
+
+
+        })
+    }
+
+    function CalculateTotalPhotoCopier() {
+
+
+
+    }
 
 </script>

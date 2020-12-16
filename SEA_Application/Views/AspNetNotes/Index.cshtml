@@ -15,11 +15,21 @@ else if (User.IsInRole("Staff"))
 }
 
 <link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
 
 <style>
     .page-header.navbar.navbar-fixed-top {
         padding-right: 0px;
+    }
+
+    .ButtonStyle {
+        color: #141437 !important;
+        font-size: 14px !important;
+        line-height: 1.71 !important;
+        font-weight: normal !important;
+        font-family: 'Poppins', sans-serif !important;
     }
 
     .modal-content {
@@ -88,18 +98,33 @@ else if (User.IsInRole("Staff"))
             <a class="nav-link" id="ApprovedOrders-tab-attr" data-toggle="tab" href="#ApprovedOrders-attr" role="tab" aria-controls="ApprovedOrders-attr"
                aria-selected="false">Approved Orders</a>
         </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link" id="SaleReport-tab-attr" data-toggle="tab" href="#SaleReport-attr" role="tab" aria-controls="SaleReport-attr"
+               aria-selected="false">Sale Report </a>
+        </li>
+
+
     </ul>
 
 
     <div class="card">
         <div class="card-body p-4">
 
-
             <div class="tab-content" style="padding: 10px 0px 0px 0px;">
+
+
                 <div class="tab-pane active show" id="Topics-attr" role="tabpanel" aria-labelledby="Topics-tab-attr">
+
+
+
                     <div class="box box-primary">
                         <div class="box-title"></div>
                         <div class="box-body">
+
+
+                            @*<button id="PlaceOrder" class="btn pull-right btn-sm btn-primary">Place Order</button>*@
                             @*<p>
                                     @Html.ActionLink("Create New", "Create")
                                 </p>*@<div class="table-responsive">
@@ -350,6 +375,31 @@ else if (User.IsInRole("Staff"))
 
                 <div class="tab-pane" id="ApprovedOrders-attr" role="tabpanel" aria-labelledby="ApprovedOrders-tab-attr">
 
+
+
+                    <div id="DateFromApprovedOrderTab">
+
+
+                        <h2 style="color:#00b8ec;display:inline-block">Summary </h2>
+
+                        <label>From</label>
+                        <input type="hidden" id="FromDateApprovedOrder">
+                        <img src="~/Content/Images/calendar.png" id="FromDateApprovedOrderTrigger" width="25">
+
+                        <label>To</label>
+
+                        <input type="hidden" id="ToDateApprovedOrder">
+                        <img src="~/Content/Images/calendar.png" id="ToDateApprovedOrderTrigger" width="25">
+
+
+                        <br />
+                        <div id="DateToViewApprovedOrder">
+
+                        </div>
+
+
+                    </div>
+
                     <div class="box box-primary">
                         <div class="box-title"></div>
                         <div class="box-body">
@@ -393,6 +443,65 @@ else if (User.IsInRole("Staff"))
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane" id="SaleReport-attr" role="tabpanel" aria-labelledby="SaleReport-tab-attr">
+
+
+
+                    <div class="col-md-12">
+
+
+                        <h2 style="color:#00b8ec;display:inline-block">Summary </h2>
+
+                        <label>From</label>
+                        <input type="hidden" id="FromDate">
+                        <img src="~/Content/Images/calendar.png" id="FromDateTrigger" width="25">
+
+                        <label>To</label>
+
+                        <input type="hidden" id="ToDate">
+                        <img src="~/Content/Images/calendar.png" id="ToDateTrigger" width="25">
+
+
+                        <br />
+                        <div id="DateToView">
+
+                        </div>
+
+
+                    </div>
+
+                    <br />
+                    <div class="table-responsive">
+
+                        <table class="table  table-bordered table-striped table-hover">
+
+
+                            <thead>
+
+                                <tr>
+                                    <th style="display:none">NoteOrderId</th>
+                                    <th>Student</th>
+                                    <th>Class </th>
+                                    <th>Status </th>
+                                    <th>Total PhotoCopier</th>
+                                    <th>Total OA</th>
+                                    <th>Total</th>
+                                    <th>Discount</th>
+                                    <th>Total Discounted </th>
+                                    @*<th>Total Discounted  OA Price  </th>*@
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="SaleReport">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -404,6 +513,219 @@ else if (User.IsInRole("Staff"))
 
         // $('a[href="#tab_2"]').trigger('click');
         // var OrderType;
+
+        $('#FromDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#ToDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $(function () {
+            $('#FromDate').datepicker();
+            $('#FromDateTrigger').click(function () {
+
+                $('#FromDate').datepicker('show');
+
+            });
+        });
+
+
+        $(function () {
+            $('#ToDate').datepicker();
+            $('#ToDateTrigger').click(function () {
+
+                $('#ToDate').datepicker('show');
+
+            });
+        });
+
+
+        $("#FromDate").change(function () {
+
+
+            var FromDate = $(this).val();
+            var ToDate = $("#ToDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h5><span id="FromDateView"> ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+
+
+                GetNotesSummary(FromDate, ToDate);
+
+
+
+            }
+
+        })
+
+        $("#ToDate").change(function () {
+            debugger
+            var ToDate = $(this).val();
+            var FromDate = $("#FromDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h5><span id="FromDateView"> ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+
+                GetNotesSummary(FromDate, ToDate);
+
+
+            }
+
+        })
+
+
+
+        $('#FromDateApprovedOrder').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#ToDateApprovedOrder').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+
+        $(function () {
+            $('#FromDateApprovedOrder').datepicker();
+            $('#FromDateApprovedOrderTrigger').click(function () {
+
+                $('#FromDateApprovedOrder').datepicker('show');
+
+            });
+        });
+
+
+        $(function () {
+            $('#ToDateApprovedOrder').datepicker();
+            $('#ToDateApprovedOrderTrigger').click(function () {
+
+                $('#ToDateApprovedOrder').datepicker('show');
+
+            });
+        });
+
+
+
+        $("#FromDateApprovedOrder").change(function () {
+
+
+            var FromDateApprovedOrder = $(this).val();
+            var ToDateApprovedOrder = $("#ToDateApprovedOrder").val();
+
+            if (FromDateApprovedOrder != "" && ToDateApprovedOrder != "") {
+
+
+                var d = new Date(FromDateApprovedOrder);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateApprovedOrderFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDateApprovedOrder);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateApprovedOrderFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToViewApprovedOrder").html('<h5><span id="FromDateApprovedOrderView"> ' + FromDateApprovedOrderFormat + ' </span> to <span id="ToDateApprovedOrderView">' + ToDateApprovedOrderFormat + ' </span></h5>');
+
+
+                ApprovedOrderByFilter(FromDateApprovedOrder, ToDateApprovedOrder);
+
+
+
+            }
+
+        })
+
+        $("#ToDateApprovedOrder").change(function () {
+            debugger
+            var ToDateApprovedOrder = $(this).val();
+            var FromDateApprovedOrder = $("#FromDateApprovedOrder").val();
+
+            if (FromDateApprovedOrder != "" && ToDateApprovedOrder != "") {
+
+
+                var d = new Date(FromDateApprovedOrder);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateApprovedOrderFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDateApprovedOrder);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateApprovedOrderFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToViewApprovedOrder").html('<h5><span id="FromDateApprovedOrderView"> ' + FromDateApprovedOrderFormat + ' </span> to <span id="ToDateApprovedOrderView">' + ToDateApprovedOrderFormat + ' </span></h5>');
+
+                ApprovedOrderByFilter(FromDateApprovedOrder, ToDateApprovedOrder);
+
+
+            }
+
+        })
+
 
 
         $('#datatable tfoot th').each(function () {
@@ -429,9 +751,26 @@ else if (User.IsInRole("Staff"))
                 });
             },
             buttons: [
+
                 {
-                    text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
+                    text: '<span class="datatableButtonsEdit"> Return Order</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = "/AspNetNotes/ReturnOrder";
+                    }
                 },
+                {
+                    text: '<span class="datatableButtonsEdit"> Place Order</span>',
+                    action: function (e, dt, button, config) {
+                        window.open('/AspNetNotes/PlaceOrder');
+                    }
+                },
+                {
+                    text: '<span class="datatableButtonsEdit"> Print Notes</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = "/AspnetNotes/notesprint";
+                    }
+                },
+
                 {
                     text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
                     action: function (e, dt, button, config) {
@@ -570,12 +909,12 @@ else if (User.IsInRole("Staff"))
                     //'</tr > ';
                     if (data[index].OrderStatus == "Paid") {
 
-                        table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "' name ='" + data[index].OrderType + "'   class='btn btn-success btn-sm white approveBtn' disabled>Approve</button>  <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <input class='btn btn-danger btn-sm white' onclick='deleteOrder(this)' type='button' id = '" + data[index].OrderID + "' value ='Delete'></center>"]);
+                        table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center> <input type='button' name='DetailsButton' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "'/ > <input class='btn btn-danger btn-sm white' onclick='deleteOrder(this)' type='button' id = '" + data[index].OrderID + "' value ='Delete' /></center>"]);
                         // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn' disabled>Approve</button></td></tr> "
                     }
                     else {
-                        table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "'  name ='" + data[index].OrderType + "' class='btn btn-success btn-sm white approveBtn' >Approve</button> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <input class='btn btn-danger btn-sm white' onclick='deleteOrder(this)' type='button' id = '" + data[index].OrderID + "' value ='Delete'> </center>"]);
-
+                        table.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><input type='button' name='DetailsButton' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "'  />  <input class='btn btn-danger btn-sm white' onclick='deleteOrder(this)' type='button' id = '" + data[index].OrderID + "' value ='Delete' /> </center>"]);
+                        //<button  id='" + data[index].OrderID + "'  name ='" + data[index].OrderType + "' class='btn btn-success btn-sm white approveBtn' >Approve</button>
                         // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn'>Approve</button></td></tr> "
                     }
 
@@ -594,6 +933,7 @@ else if (User.IsInRole("Staff"))
             data: {},
             success: function (data) {
                 table2.fnClearTable();
+                //  alert("Approved Order Tab");
                 $.each(data, function (index) {
                     //var tablerow = '<tr>'
                     //    +'<td>' + data[index].Title + '</td> ' +
@@ -606,11 +946,11 @@ else if (User.IsInRole("Staff"))
                     //'</tr > ';
                     if (data[index].OrderStatus == "Paid") {
 
-                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "' name ='" + data[index].OrderType + "'   class='btn btn-success white btn-sm approveBtn' disabled>Approve</button> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' ></center>"]);
+                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' ></center>"]);
                         // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' >  <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn' disabled>Approve</button></td></tr> "
                     }
                     else {
-                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center><button  id='" + data[index].OrderID + "'  name ='" + data[index].OrderType + "' class='btn btn-success white btn-sm approveBtn' >Approve</button> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > </center>"]);
+                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' > </center>"]);
 
                         // var TableRow = "<tr id='" + data[index].OrderID + "' data-toggle='modal' data-target='#myModal' > <td>" + data[index].OrderID + "</td> <td >" + data[index].StudentName + "</td> <td >" + data[index].ClassName + "</td>  <td >" + data[index].TotalAmount + "</td>  <td >" + data[index].OrderStatus + "</td> <td><button  id='" + data[index].OrderID + "' class='btn btn-success btn-sm approveBtn'>Approve</button></td></tr> "
                     }
@@ -624,53 +964,108 @@ else if (User.IsInRole("Staff"))
         });
 
 
-        $("#RecentOrderTableBody").on("click", "input[type='button']", function () {
+        $("#RecentOrderTableBody").on("click", "input[type='button'][name = 'DetailsButton']", function () {
 
             var OrderId = $(this).attr('id');
-            // alert(OrderId);
 
-            $.ajax({
-                type: "POST",
-                url: "/AspNetNotes/RecentOrdersDetails",
-                data: { "OrderId": OrderId },
 
-                success: function (data) {
+            window.open('/AspNetNotes/PendingOrdersDetails?OrderId=' + OrderId);
+            //             alert(OrderId);
 
-                    $('#modal0').html("");
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/AspNetNotes/RecentOrdersDetails",
+            //    data: { "OrderId": OrderId },
 
-                    $.each(data, function (index) {
-                        $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
-                    });
-                }
-            })
+            //    success: function (data) {
+
+            //        $('#modal0').html("");
+
+            //        $.each(data, function (index) {
+            //            $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
+            //        });
+            //    }
+            //})
 
         });
 
-            $("#ApprovedOrdersTableBody").on("click", "input[type='button']", function () {
+        $("#ApprovedOrdersTableBody").on("click", "input[type='button']", function () {
 
             var OrderId = $(this).attr('id');
-            // alert(OrderId);
 
-            $.ajax({
-                type: "POST",
-                url: "/AspNetNotes/RecentOrdersDetails",
-                data: { "OrderId": OrderId },
 
-                success: function (data) {
+            window.open('/AspNetNotes/PendingOrdersDetails?OrderId=' + OrderId);
+            //    alert(OrderId);
 
-                    $('#modal0').html("");
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/AspNetNotes/RecentOrdersDetails",
+            //    data: { "OrderId": OrderId },
 
-                    $.each(data, function (index) {
-                        $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
-                    });
-                }
-            })
+            //    success: function (data) {
+
+            //        $('#modal0').html("");
+
+            //        $.each(data, function (index) {
+            //            $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
+            //        });
+            //    }
+            //})
 
         });
 
+        $("#SaleReport").on("click", "input[type='button']", function () {
+
+            var OrderId = $(this).attr('id');
 
 
+            window.open('/AspNetNotes/PendingOrdersDetails?OrderId=' + OrderId);
+            //    alert(OrderId);
 
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/AspNetNotes/RecentOrdersDetails",
+            //    data: { "OrderId": OrderId },
+
+            //    success: function (data) {
+
+            //        $('#modal0').html("");
+
+            //        $.each(data, function (index) {
+            //            $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
+            //        });
+            //    }
+            //})
+
+        });
+        //    $("#ApprovedOrdersTableBody").on("click", "input[type='button']", function () {
+
+        //    var OrderId = $(this).attr('id');
+        //    // alert(OrderId);
+
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/AspNetNotes/RecentOrdersDetails",
+        //        data: { "OrderId": OrderId },
+
+        //        success: function (data) {
+
+        //            $('#modal0').html("");
+
+        //            $.each(data, function (index) {
+        //                $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
+        //            });
+        //        }
+        //    })
+
+        //});
+
+        //$("#ReturnOrder").click(function () {
+
+
+        //       window.location.href = '/AspNetNotes/ReturnOrder/';
+
+        //})
 
         $("#RecentOrderTableBody").on("click", ".approveBtn", function () {
 
@@ -855,7 +1250,7 @@ else if (User.IsInRole("Staff"))
         debugger
 
         var OrderId = $(element).attr('id');
-      
+
 
         $.ajax({
 
@@ -873,4 +1268,95 @@ else if (User.IsInRole("Staff"))
 
 
     }
+
+    function PrintNotes() {
+        window.location.href = "/AspnetNotes/notesprint";
+    }
+
+    function GetMonthName(monthNumber) {
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[monthNumber - 1];
+    }
+    function PlaceOrder() {
+        window.open('/AspNetNotes/PlaceOrder');
+    }
+    function ReturnOrder() {
+        window.location.href = "/AspNetNotes/ReturnOrder";
+    }
+
+    function GetNotesSummary(FromDate, ToDate) {
+
+        $("#SaleReport").html("");
+
+        $.ajax({
+            type: "POST",
+            url: "/AspNetNotes/GetNotesSummary",
+            data: { "FromDate": FromDate, "ToDate": ToDate },
+
+
+            success: function (data) {
+
+                $("#SaleReport").html("");
+
+                var TotalDiscount = 0;
+                var GrandTotalPhotoCopier = 0;
+                var GrandTotalOA = 0;
+                var GrandTotal = 0;
+                var GrandTotalDiscounted = 0;
+                var GrandTotalDiscountedOAPrice = 0;
+                $.each(data, function (index) {
+                    debugger
+                    $("#SaleReport").append("<tr> <td style='display:none'></td><td>" + data[index].StudentName + "</td> <td>" + data[index].ClassName + "</td><td>" + data[index].Status + "</td><td>" + data[index].TotalPhotoCopier + "</td><td>" + data[index].TotalOA + "</td><td>" + data[index].Total + "</td><td> -" + data[index].Discount + "</td><td>" + data[index].TotalDiscounted + "</td><td><center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderId + "' ></center></td></tr>")
+
+                    //"<center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' ></center>"
+                    GrandTotalPhotoCopier = GrandTotalPhotoCopier + data[index].TotalPhotoCopier;
+                    GrandTotalOA = GrandTotalOA + data[index].TotalOA;
+                    GrandTotal = GrandTotal + data[index].Total;
+                    TotalDiscount = TotalDiscount + data[index].Discount;
+                    GrandTotalDiscounted = GrandTotalDiscounted + data[index].TotalDiscounted;
+                    //  GrandTotalDiscountedOAPrice = GrandTotalDiscountedOAPrice +data[index].TotalDiscountedOAPrice;
+
+                    //   Total = Total + data[index].Total;
+                })
+
+                // $("#SaleReport").append("<tr> <td style='display:none'></td><td>Grand Total</td> <td></td>  <td></td> <td>" + GrandTotalPhotoCopier + "</td><td>" + GrandTotalOA + "</td><td>" + GrandTotal + "</td><td></td><td>" + GrandTotalDiscounted + "</td><td>" + GrandTotalDiscountedOAPrice + "</td></tr>")
+                $("#SaleReport").append("<tr> <td style='display:none'></td><td>Grand Total</td> <td></td>  <td></td> <td>" + GrandTotalPhotoCopier + "</td><td>" + GrandTotalOA + "</td><td>" + GrandTotal + "</td><td>-" + TotalDiscount + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+
+            }
+        })
+    }
+
+    function ApprovedOrderByFilter(FromDate, ToDate) {
+        debugger
+
+        var table2 = $('#datatable2').dataTable();
+
+        $.ajax({
+            type: "POST",
+            url: "/AspNetNotes/ApprovedOrdersByDate",
+            data: { "FromDate": FromDate, "ToDate": ToDate },
+            success: function (data) {
+
+                table2.fnClearTable();
+
+                $.each(data, function (index) {
+
+                    if (data[index].OrderStatus == "Paid") {
+
+                        table2.fnAddData([data[index].OrderID, data[index].StudentName, data[index].ClassName, data[index].TotalAmount, data[index].OrderStatus, data[index].OrderType, "<center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' ></center>"]);
+                    }
+
+                });
+                table2.fnDraw();
+
+
+
+
+            }
+
+
+        })
+
+    }
+
 </script>

@@ -1,0 +1,511 @@
+﻿
+@{
+    ViewBag.Title = "PlaceOrder";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+
+    .color:hover {
+        background-color: #0e72af !important;
+    }
+
+    .color2:hover {
+        background-color: #dc0000 !important;
+    }
+
+    .select2-container--default .select2-selection--single {
+        background-color: #fff;
+        border-radius: 4px;
+        height: 33px;
+    }
+
+    .error {
+    }
+</style>
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <form id="myForm">
+
+                    <div class="col-md-6 pl-5 pr-5 ">
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label> Select Student</label>
+
+                                @Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID" })
+                            </div>
+                        </div>
+                    </div> <!-- end of column 6 -->
+                    <br />
+                    <div class="row" style="margin:0">
+
+                        <div class="col-md-3">
+
+                            <label class="control-label"> </label>
+                            <select class="form-control code NotesClass" id="Notes0" name="Notes" required> </select>
+
+                        </div>
+
+                        <div class="col-md-1" style="padding-left:0px">
+
+                            <label class="control-label"> </label>
+                            <input readonly placeholder="Notes Type" type="text" name="Name" id="NotesType0" class="form-control" />
+
+                        </div>
+
+                        <div class="col-md-1" style="padding-left:0px">
+
+                            <label class="control-label"> </label>
+                            <input readonly placeholder="" type="text" name="" id="Price0" class="form-control" />
+
+                        </div>
+
+
+                        <div class="col-md-2">
+
+                            <label class="control-label"> </label>
+                            <select name="Quantity" class="form-control code QuantityClass" id="Quantity0" required>
+                                <option value="">
+                                    Select Quantity
+                                </option>
+                                <option value="1"> 1</option>
+                                <option value="2"> 2</option>
+                                <option value="3"> 3</option>
+                                <option value="4"> 4</option>
+                                <option value="5"> 5</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-1" style="padding-left:0px">
+
+                            <label class="control-label"> </label>
+                            <input readonly value="0" placeholder="Total" type="text" name="" id="Total0" class="form-control TotalClass" />
+
+                        </div>
+                        <div class="col-md-1">
+                            <br />
+                            <button style="background:#32CD32" class="btn btn-sm btn-default plusbutton" onclick="NotesNewRow()"> <i class="fa fa-plus" style="font-size:12px"> </i> </button>
+                        </div>
+
+
+                    </div><!-- end of row margin 0 -->
+                    <div id="NotesNewRow">
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-7">
+
+                        </div>
+                        <!-- html col-md-offset-8 -->
+                        <div class="col-md-1  totaldiv" style="padding:0px">
+                            <input value="0" style="background-color:white;" type="text" name="GrandTotal" id="GrandTotal" class="form-control" readonly />
+                        </div>
+                        <span id="zero_Error" style="color:red;margin-top:5px !important;margin-left:20px"> </span>
+                    </div>
+                    <br />
+
+                    <div class="col-md-12">
+                        <hr />
+                        @*<button class="col-md-2 form-control color2" onclick="window.location.href = '/FinanceSummary/BankIndex'" style="border-radius:35px;border:hidden;margin-right:10px;background-color:red;color:white;font-size:11px;width:98px;height:38px;font-family:Montserrat" id="return"><i class="fa fa-arrow-left"></i> &nbsp;&nbsp; Return</button>
+                            <input class="col-md-2 form-control color" id="submit" onclick="SaveVoucher()" type="submit" value="Save" style="border-radius:35px;color:white;border:hidden;background-color:#128edb;font-size:11px;width:98px;height:38px;font-family:Montserrat" />*@
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2"> cached</i> Cancel
+                        </button>
+
+                        <button type="submit" id="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    count = 1;
+    row = [];
+    row[0] = 0;
+
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Place Order");
+
+        //$.validator.addClassRules('js-input', {
+        //    required: true,
+        //});
+        //initial
+        GetAllNotes(0);
+
+        // GetAllNotes();
+
+        $("#Notes0").change(function () {
+
+            GetNoteDetail(0);
+
+        });
+
+        $("#Quantity0").change(function () {
+
+            debugger
+            GetNotesTotal(0);
+        })
+        $("#btnCancel").click(function () {
+
+            window.location.href = "/AspnetNotes/Index";
+        })
+
+        var data1 = $('.drop').select2()
+            .on("select2:select", function (e) {
+                var selected_element = $(e.currentTarget);
+                // var select_val = selected_element.val();
+                // var id = $(this).children(".select2-hidden-accessible").context.id;
+
+            });
+
+        $('#myForm').validate({ // initialize the plugin
+            rules: {
+                Notes: {
+                    required: true,
+                },
+                Quantity: {
+                    required: true,
+                },
+                StudentID:
+                {
+                    required: true,
+                }
+
+            },
+            submitHandler: function (form) {
+                debugger
+
+                // QuantityClass
+                //NotesClass
+
+                var IsSubmit = false;
+                var IsSubmit1 = false;
+
+                $(".QuantityClass").each(function () {
+                    debugger
+                    var value = $(this).val();
+
+                    if (value != "") {
+
+                        IsSubmit = true;
+
+                    }
+                    else {
+
+                        IsSubmit = false;
+                        return true;
+                    }
+
+                })
+
+                $(".NotesClass").each(function () {
+
+                    debugger
+                    var value = $(this).val();
+
+                    if (value != "") {
+                        IsSubmit1 = true;
+
+                    }
+                    else {
+
+                        IsSubmit1 = false;
+                        return true;
+
+                    }
+
+                })
+
+                //$(".QuantityClass").each(function () {
+
+                //    var value = $(this).val();
+
+                //    if (value != "") {
+                //       // IsSubmit = true;
+                //    }
+                //    else {
+                //       // IsSubmit = false;
+                //    }
+
+                //})
+
+                if (IsSubmit == true && IsSubmit1 == true) {
+
+                    var StudentId = $("#StudentID").val();
+                    var GrandTotal = $("#GrandTotal").val();
+                    var PlaceNotes =
+                    {
+                        NotesId: '',
+                        Price: '',
+                        Quantity: '',
+                        Total: '',
+                    };
+
+                    PlaceNotes = [
+
+                        // { TypeId: '1', Amount: '123' },
+                        // { TypeId: '1', Amount: '456' },
+                    ];
+
+
+                    for (var i in row) {
+
+                        if (row[i] == null)
+                            continue;
+                        else {
+
+                            debugger
+                            var obj = {};
+
+                            var Notes = "Notes" + row[i];
+                            var NotesId = document.getElementById(Notes).value;
+                            var Price = "Price" + row[i];
+                            var PriceValue = document.getElementById(Price).value;
+                            var Quantity = "Quantity" + row[i];
+                            var QuantityValue = document.getElementById(Quantity).value;
+                            var Total = "Total" + row[i];
+                            var TotalValue = document.getElementById(Total).value;
+
+                            obj['NotesId'] = NotesId;
+                            obj['Price'] = PriceValue;
+                            obj['Quantity'] = QuantityValue;
+                            obj['Total'] = TotalValue;
+
+                            PlaceNotes.push(obj);
+                        }
+
+                    }
+
+
+                    $.ajax({
+                        type: "post",
+                        url: "/AspnetNotes/SavePlaceOrder",
+                        data: { 'PlaceNotes': PlaceNotes, 'StudentId': StudentId, 'GrandTotal': GrandTotal },
+                        datatype: "json",
+                        cache: false,
+                        success: function (data) {
+
+                            window.location.href = "/AspnetNotes/Index";
+
+                        }
+                    })
+                }
+
+
+            }
+        })
+    })//end of document ready
+
+    function GetAllNotes(rowNumber) {
+        var id = "#Notes" + rowNumber;
+        var node = $(id);
+        $.ajax({
+            type: "POST",
+            url: "/AspnetNotes/GetAllNotes",
+            success: function (data) {
+                ///console.log(data);
+
+                node.append("<option value='' >Select Note</option>")
+                $.each(data, function (i, item) {
+                    // console.log(data.Name);
+                    node.append("<option value=" + item.Id + " >" + item.Title + "</option>")
+
+                });
+
+            }
+        });
+
+
+        GetGrandTotal();
+    }
+
+
+    function GetNoteDetail(rowNumber) {
+
+        var id = "#Notes" + rowNumber;
+        var node = $(id);
+        var id = node.val();
+
+        $.ajax({
+            type: "POST",
+            url: "/AspnetNotes/GetNoteDetail",
+            data: { "NoteId": id },
+            success: function (data) {
+                debugger
+                var NotesType = "#NotesType" + rowNumber;
+                var Price = "#Price" + rowNumber;
+                var Quantity = "#Quantity" + rowNumber;
+                var Total = "#Total" + rowNumber;
+
+                var NotesTypeJquery = $(NotesType);
+                var PriceJquery = $(Price);
+                var QuantityJquery = $(Quantity);
+                var TotalJquery = $(Total);
+
+                QuantityJquery.val("1");
+
+              
+
+                TotalJquery.val(0);
+                NotesTypeJquery.val(data.NotesType);
+                PriceJquery.val(data.GrandTotal);
+
+                  GetNotesTotalQuantityOne(rowNumber);
+            },
+            error: function (error) {
+
+                alert("error raised");
+
+            }
+
+        });
+
+    }
+
+    function GetNotesTotalQuantityOne(rowNumber) {
+
+      //  var QuantityId = "#Quantity" + rowNumber;
+       // var QuantityJquery = $(QuantityId);
+        var QuantityVal = 1;
+        var PriceId = "#Price" + rowNumber;
+        var PriceJquery = $(PriceId);
+        var PriceVal = PriceJquery.val();
+
+        var Total = 0;
+
+        if (QuantityVal != "" && PriceVal != "") {
+            console.log("in if condition");
+            Total = QuantityVal * PriceVal;
+
+
+        }
+        var TotalId = "#Total" + rowNumber;
+        var TotalJquery = $(TotalId);
+        TotalJquery.val(Total);
+
+        GetGrandTotal();
+    }
+
+    function GetNotesTotal(rowNumber) {
+
+        var QuantityId = "#Quantity" + rowNumber;
+        var QuantityJquery = $(QuantityId);
+        var QuantityVal = QuantityJquery.val();
+        var PriceId = "#Price" + rowNumber;
+        var PriceJquery = $(PriceId);
+        var PriceVal = PriceJquery.val();
+
+        var Total = 0;
+
+        if (QuantityVal != "" && PriceVal != "") {
+            console.log("in if condition");
+            Total = QuantityVal * PriceVal;
+
+
+        }
+        var TotalId = "#Total" + rowNumber;
+        var TotalJquery = $(TotalId);
+        TotalJquery.val(Total);
+
+        GetGrandTotal();
+    }
+
+    function NotesNewRow() {
+
+
+        $("#NotesNewRow").append('<div class="row" style="margin:0px" id="' + count + '">' +
+            '<div class="col-md-3">' +
+            '<label class="control-label"></label><select  name = "Notes" onchange = "GetNoteDetail(' + count + ')"  id="Notes' + count + '" class="form-control  NotesClass" required  ></select>' +
+            '</div>' +
+
+            '<div class="col-md-1" style="padding-left:0px">' +
+            '<label class="control-label"></label>   <input  id="NotesType' + count + '"  readonly placeholder="Notes Type" type="text"  class="form-control" /></select>' +
+            '</div>' +
+
+            '<div class="col-md-1" style="padding-left:0px">' +
+            ' <label class="control-label"></label>  <input readonly placeholder="" type="text" name="" id="Price' + count + '" class="form-control" />' +
+            '</div>' +
+            '<div class="col-md-2">' +
+            ' <label class="control-label"></label>  <select name = "Quantity" onchange = "GetNotesTotal(' + count + ')" class="form-control code  QuantityClass"  id="Quantity' + count + '" required>  <option value="">Select Quantity</option><option value ="1">1</option><option value="2">2</option><option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select>' +
+            '</div>' +
+            '<div class="col-md-1" style="padding-left:0px">' +
+            '<label class="control-label"></label><input value = "0"  readonly placeholder="Total" type="text" name="" id="Total' + count + '" class="form-control TotalClass" />' +
+            '</div>' +
+
+            '<div class="col-md-1"> <br />' +
+            '<button class="btn btn-sm btn-danger minusbutton"  onclick="Remove(' + count + ')"><i class="fa fa-times" aria-hidden="true" style="font-size:12px"></i></button>' +
+            '</div>' +
+            '</div>')
+        //var id = "#branch" + count;
+        //var node = $(id);
+        //node.prepend("<option value=''>---Select One---</option>").val('');
+        row[count] = count;
+        //addAllLedger(count);
+        //AddBranch(count);
+        //AddStudents(count);
+        GetAllNotes(count);
+
+        count = count + 1;
+        //$(".drop").select2();
+
+
+    }
+    function Remove(e) {
+        //var credit = 0;
+        //if ($("#zero").val() == "") {
+        //    credit = "";
+        //}
+        //else {
+        //    var creditvalue = parseInt(document.getElementById("credit" + e).value);
+        //    if (isNaN(creditvalue)) {
+        //        creditvalue = 0;
+        //    }
+        //    credit = parseInt($("#zero").val()) - creditvalue;
+        //}
+
+
+
+        //  $("#zero").val(credit);
+
+        document.getElementById(e).remove();
+        row.splice(e, 1);
+
+        GetGrandTotal();
+    }
+
+    function GetGrandTotal() {
+        debugger
+        var GrandTotal = 0;
+        $(".TotalClass").each(function () {
+
+            //alert( $(this).val());
+
+            GrandTotal = GrandTotal + parseInt($(this).val());
+        })
+        $("#GrandTotal").val(GrandTotal);
+    }
+
+
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>

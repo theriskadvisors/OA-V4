@@ -131,7 +131,7 @@ namespace SEA_Application.Controllers
             var userID = User.Identity.GetUserId();
             //ViewBag.SessionID = new SelectList(db.AspNetSessions, "Id", "SessionName");
 
-            ViewBag.SessionID = db.AspNetSessions.ToList().Select(x => new SelectListItem
+            ViewBag.SessionID = db.AspNetSessions.OrderByDescending(x=>x.Id).ToList().Select(x => new SelectListItem
                 {
                     Value = x.Id.ToString(),
                     Text = x.SessionName,
