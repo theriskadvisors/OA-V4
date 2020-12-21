@@ -56,11 +56,10 @@ else if (User.IsInRole("Staff"))
 
     table input[type=radio] {
     }
-    .dropdownstyle
-    {
-        pointer-events:none;
-    }
 
+    .dropdownstyle {
+        pointer-events: none;
+    }
 </style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script type="text/javascript">
@@ -431,6 +430,7 @@ else if (User.IsInRole("Staff"))
         debugger;
 
         var CourseType = $("#CourseType").val();
+       // alert(CourseType);
         var SectionTiming = $("#SectionTiming").val();
         //alert(SectionTiming);
         var Na = $("#NATION").val();
@@ -444,7 +444,9 @@ else if (User.IsInRole("Staff"))
         $("#ClassTimings option[value='" + SectionTiming + "']").prop('selected', true);
 
       //  $('#CourseType option[value="' + CourseType + '"]').prop('selected', true);
+
         $("input[value ='" + CourseType + "' ]").prop('checked', true);
+
         var SelectedClassValueFirst;
         var selectedStudent = '@Model.Id';
         $.get('@Url.Action("StudentClass")',
@@ -471,6 +473,7 @@ else if (User.IsInRole("Staff"))
 
                            var MandatorySubjectsList = data.MandatorySubjectsList;
                             var OptionalSubjecsList = data.OptionalSubjectsList;
+
                             $("#MandatorySubjectsPMS").html('');
                             $("#SubjectPMSGroup1").html('');
                             $("#SubjectPMSGroup2").html('');
@@ -488,8 +491,15 @@ else if (User.IsInRole("Staff"))
                             $("#SubjectCSSGroup7").html('');
 
 
+                            //One Paper
+                        //MandatorySubjectOnePaper
+                            $("#MandatorySubjectOnePaper").html('');
+
+
+
                         if (CourseType == "CSS") {
 
+                            $(".SubjectsBoxesOnePaper").css('display', 'none');
                             $(".SubjectsBoxesCSS").css('display', 'block');
                             $(".SubjectsBoxesPMS").css('display', 'none');
 
@@ -497,7 +507,7 @@ else if (User.IsInRole("Staff"))
                             $("#MandatorySubjectsCSS").append('<div class="table-responsive"><table  class="table table-condensed table-hover"><thead><tr><th class="SubjectHeader">Subjects</th><th>Marks</th><th>Select</th></tr></thead><tbody id ="MandatorySubjectsCSSTableBody"></tbody></table></div>');
                             $.each(MandatorySubjectsList, function (key, value1) {
 
-                             $("#MandatorySubjectsCSSTableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="checkbox" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects0"></td></tr>');
+                                $("#MandatorySubjectsCSSTableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="checkbox" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects0"></td></tr>');
 
                             })
                             $("#SubjectCSSGroup1").append('<h3><span style="color:#3C8DBC !important"><b>Group 1</b></span> <input  type="checkbox" class="CheckboxCSSGroup1"></h3>');
@@ -521,37 +531,37 @@ else if (User.IsInRole("Staff"))
                                 if (value1.SubjectGroup == "1") {
 
 
-                           $("#SubjectCSSGroup1TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects1"></td></tr>');
+                                    $("#SubjectCSSGroup1TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects1"></td></tr>');
 
                                 }
                                 else if (value1.SubjectGroup == "2") {
 
-                                    $("#SubjectCSSGroup2TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects2"></td></tr>');
+                                    $("#SubjectCSSGroup2TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects2"></td></tr>');
 
                                 }
                                 else if (value1.SubjectGroup == "3") {
 
-                                    $("#SubjectCSSGroup3TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects3"></td></tr>');
+                                    $("#SubjectCSSGroup3TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects3"></td></tr>');
 
                                 }
                                 else if (value1.SubjectGroup == "4") {
 
-                                    $("#SubjectCSSGroup4TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects4"></td></tr>');
+                                    $("#SubjectCSSGroup4TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects4"></td></tr>');
 
                                 }
                                 else if (value1.SubjectGroup == "5") {
 
-                                    $("#SubjectCSSGroup5TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects5"></td></tr>');
+                                    $("#SubjectCSSGroup5TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects5"></td></tr>');
 
                                 }
                                 else if (value1.SubjectGroup == "6") {
 
-                                    $("#SubjectCSSGroup6TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects6"></td></tr>');
+                                    $("#SubjectCSSGroup6TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects6"></td></tr>');
 
                                 }
                                 else if (value1.SubjectGroup == "7") {
 
-                                    $("#SubjectCSSGroup7TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects7"></td></tr>');
+                                    $("#SubjectCSSGroup7TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="CSSSubjects7"></td></tr>');
 
                                 }
                                 else {
@@ -568,6 +578,8 @@ else if (User.IsInRole("Staff"))
 
                             $(".SubjectsBoxesCSS").css('display', 'none');
 
+                            $(".SubjectsBoxesOnePaper").css('display', 'none');
+
                             $(".SubjectsBoxesPMS").css('display', 'block');
 
                             $("#MandatorySubjectsPMS").append('<h3><span style="color:#3C8DBC !important"><b>Mandatory Subjects</b></span> <input  type="checkbox" class="CheckboxPMSMandatory"></h3>');
@@ -575,7 +587,7 @@ else if (User.IsInRole("Staff"))
                             $.each(MandatorySubjectsList, function (key, value1) {
 
 
-                                $("#MandatorySubjectsPMSTableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="checkbox" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects0"></td></tr>');
+                                $("#MandatorySubjectsPMSTableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="checkbox" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects0"></td></tr>');
 
                             })
                             $("#SubjectPMSGroup1").append('<h3><span style="color:#3C8DBC !important"><b>Group 1</b></span><input  type="checkbox" class="CheckboxPMSGroup1"></h3>');
@@ -596,34 +608,34 @@ else if (User.IsInRole("Staff"))
                                 if (value1.SubjectGroup == "1") {
 
 
-                                    $("#SubjectPMSGroup1TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects1"></td></tr>');
+                                    $("#SubjectPMSGroup1TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects1"></td></tr>');
 
 
                                 }
                                 else if (value1.SubjectGroup == "2") {
 
-                                    $("#SubjectPMSGroup2TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects2"></td></tr>');
+                                    $("#SubjectPMSGroup2TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects2"></td></tr>');
 
 
 
                                 }
                                 else if (value1.SubjectGroup == "3") {
 
-                                    $("#SubjectPMSGroup3TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects3"></td></tr>');
+                                    $("#SubjectPMSGroup3TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects3"></td></tr>');
 
 
 
                                 }
                                 else if (value1.SubjectGroup == "4") {
 
-                                    $("#SubjectPMSGroup4TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects4"></td></tr>');
+                                    $("#SubjectPMSGroup4TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects4"></td></tr>');
 
 
 
                                 }
                                 else if (value1.SubjectGroup == "5") {
 
-                                    $("#SubjectPMSGroup5TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">'+value1.Points+'</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects5"></td></tr>');
+                                    $("#SubjectPMSGroup5TableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="radio" id=' + value1.Id + ' value=' + value1.Id + ' name="PMSSubjects5"></td></tr>');
 
                                 }
 
@@ -632,6 +644,28 @@ else if (User.IsInRole("Staff"))
                                 }
 
                             })
+
+                        }// end of pms
+
+                        else if (CourseType == "One Paper MCQs") {
+
+                            debugger
+                            $(".SubjectsBoxesCSS").css('display', 'none');
+                            $(".SubjectsBoxesPMS").css('display', 'none');
+                            $(".SubjectsBoxesOnePaper").css('display', 'block');
+
+
+                            $("#MandatorySubjectOnePaper").append('<h3><span style="color:#3C8DBC !important"><b>Mandatory Subjects</b></span><input  type="checkbox" id="CheckboxOnePaperMandatory"></h3>');
+                            $("#MandatorySubjectOnePaper").append('<div class="table-responsive"><table  class="table table-condensed table-hover"><thead><tr><th class="SubjectHeader">Subjects</th><th>Marks</th><th>Select</th></tr></thead><tbody id ="MandatorySubjectsOnePaperTableBody"></tbody></table></div>');
+                            $.each(MandatorySubjectsList, function (key, value1) {
+
+                                $("#MandatorySubjectsOnePaperTableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="checkbox" id=' + value1.Id + ' value=' + value1.Id + ' name="OnePaperSubjects0"></td></tr>');
+
+                            })
+
+
+                        }
+                        else {
 
                         }
 
@@ -736,6 +770,18 @@ else if (User.IsInRole("Staff"))
 
 
                                 }
+                                 else if (CourseType1 == "One Paper MCQs")
+
+                                {
+
+                                    $.each(MandatorySubjectsList, function (key, value1) {
+                                        //  $("#SubjectsList input[value='" + item.Id + "']").prop("checked", true);
+                                        $("#MandatorySubjectsOnePaperTableBody input[value='" + value1.Id + "']").prop("checked", true);
+
+
+                                    })
+
+                                }
                                 else {
 
                                 }
@@ -747,6 +793,8 @@ else if (User.IsInRole("Staff"))
 
 
            $('input[name="CourseType"]').click(function () {
+
+
 
              $('#SubjectsList').html('');
                $("#ClassID").click();
@@ -775,6 +823,7 @@ else if (User.IsInRole("Staff"))
 
                         var MandatorySubjectsList = data.MandatorySubjectsList;
                         var OptionalSubjecsList = data.OptionalSubjectsList;
+
                             $("#MandatorySubjectsPMS").html('');
                             $("#SubjectPMSGroup1").html('');
                             $("#SubjectPMSGroup2").html('');
@@ -790,6 +839,9 @@ else if (User.IsInRole("Staff"))
                             $("#SubjectCSSGroup5").html('');
                             $("#SubjectCSSGroup6").html('');
                             $("#SubjectCSSGroup7").html('');
+
+                        //One Paper
+                        $("#MandatorySubjectOnePaper").html('');
 
                         if (CourseType == "CSS") {
 
@@ -940,6 +992,19 @@ else if (User.IsInRole("Staff"))
 
                             })
 
+                        }//end of pms
+
+                        else if (CourseType == "One Paper MCQs") {
+
+                            $(".SubjectsBoxesCSS").css('display', 'none');
+                            $(".SubjectsBoxesPMS").css('display', 'none');
+                            $(".SubjectsBoxesOnePaper").css('display', 'block');
+
+                            $("#MandatorySubjectOnePaper").append('<h3><span style="color:#3C8DBC !important"><b>Mandatory Subjects</b></span><input  type="checkbox" id="CheckboxOnePaperMandatory"></h3>');
+                            $("#MandatorySubjectOnePaper").append('<div class="table-responsive"><table  class="table table-condensed table-hover"><thead><tr><th class="SubjectHeader">Subjects</th><th>Marks</th><th>Select</th></tr></thead><tbody id ="MandatorySubjectsOnePaperTableBody"></tbody></table></div>');
+                            $.each(MandatorySubjectsList, function (key, value1) {
+                                $("#MandatorySubjectsOnePaperTableBody").append('<tr> <td>' + value1.SubjectName + '</td > <td align="center">' + value1.Points + '</td><td align="center"><input  type="checkbox" id=' + value1.Id + ' value=' + value1.Id + ' name="OnePaperSubjects0"></td></tr>');
+                            })
                         }
 
                     })
@@ -1192,7 +1257,7 @@ else if (User.IsInRole("Staff"))
                                 </div>
 
                                 <div class="radio RadioButtonsInline">
-                                    <label><input type="radio" name="CourseType" id="OnePaper" value="OnePaper"> One Paper </label>
+                                    <label><input type="radio" name="CourseType" id="OnePaper" value="One Paper MCQs"> One Paper MCQs"> One Paper </label>
                                 </div>
                             </div>
                             <br />
@@ -1409,6 +1474,14 @@ else if (User.IsInRole("Staff"))
                             <div class="form-group SubjectsBoxesPMS" id="Group5PMS">
                                 <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup5"></div>
                             </div>
+
+
+                            <!--OnePaper-->
+                            <div class="form-group SubjectsBoxesOnePaper" id="MandatorySubjectOnePaper">
+                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsOnePaper"></div>
+                            </div>
+
+
                         </div>
                     </div>
                     <!--end of column-->
@@ -1512,7 +1585,7 @@ else if (User.IsInRole("Staff"))
 
         $("form").submit(function () {
             debugger
-           // alert("usama");
+            // alert("usama");
             var TotalFee = $("#TotalFee").val();
 
             if (TotalFee == "" && TotalFee < 0) {
@@ -1531,7 +1604,8 @@ else if (User.IsInRole("Staff"))
 
         })
 
-        $("input[value='OnePaper']").click(function () {
+
+        $("input[value='One Paper MCQs']").click(function () {
 
             // $('#subjects').prop('required', false);
 
@@ -1552,19 +1626,37 @@ else if (User.IsInRole("Staff"))
 
 
         })
-        if ($("input[value='OnePaper']").is(':checked')) {
+        if ($("input[value='One Paper MCQs']").is(':checked')) {
 
             //  $('#subjects').prop('required', false);
             $("#subjectsdiv").css("display", "none");
 
         }
 
+        $("#MandatorySubjectOnePaper").on('change', "#CheckboxOnePaperMandatory", function () {
+
+            var CourseType = $("input[name='CourseType']").val();
+            event.stopPropagation();
+
+            // alert("alert");
+
+            if ($(this).is(':checked')) {
+                $("input[name='OnePaperSubjects0']").prop("checked", true);
+                //alert("check");
+            }
+            else {
+                $("input[name='OnePaperSubjects0']").prop("checked", false);
+                // alert("uncheck");
+
+            }
+        })
+
 
         $("#MandatorySubjectsCSS").on('change', ".CheckboxCSSMandatory", function () {
             debugger
 
             var CourseType = $("input[name='CourseType']").val();
-              event.stopPropagation();
+            event.stopPropagation();
 
 
             if ($(this).is(':checked')) {
@@ -1721,7 +1813,7 @@ else if (User.IsInRole("Staff"))
             debugger
 
             var CourseType = $("input[name='CourseType']").val();
-              event.stopPropagation();
+            event.stopPropagation();
 
 
             if ($(this).is(':checked')) {
@@ -1825,8 +1917,6 @@ else if (User.IsInRole("Staff"))
 
                 $("input[name='PMSSubjects5']").prop("checked", false);
 
-
-
             }
 
         })
@@ -1835,7 +1925,11 @@ else if (User.IsInRole("Staff"))
 
 
 
-    })
+
+
+
+
+    })// end of document ready
 
 
 </script>

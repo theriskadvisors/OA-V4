@@ -108,6 +108,20 @@ namespace SEA_Application.Controllers
                 }, JsonRequestBehavior.AllowGet);
 
             }
+            else if (coursetype == "One Paper MCQs")
+            {
+                var MandatorySubjects = db.AspNetSubjects.Where(x => x.ClassID == id && x.CourseType == coursetype && x.IsManadatory == true);
+
+                //var OptionalSubjects = db.AspNetSubjects.Where(x => x.ClassID == id && x.CourseType == coursetype && x.IsManadatory == false);
+
+                return Json(new
+                {
+                    MandatorySubjectsList = MandatorySubjects,
+                    OptionalSubjectsList = "",
+
+
+                }, JsonRequestBehavior.AllowGet);
+            }
             else
             {
                 return Json(new
@@ -325,6 +339,21 @@ namespace SEA_Application.Controllers
 
                 }, JsonRequestBehavior.AllowGet);
 
+            }
+            else if (coursetype == "One Paper MCQs")
+            {
+                var MandatorySubjects = from Subject in db.AspNetSubjects
+                                        join StudentSubject in db.AspNetStudent_Subject on Subject.Id equals StudentSubject.SubjectID
+                                        where StudentSubject.StudentID == id && Subject.CourseType == coursetype && Subject.IsManadatory == true
+                                        select Subject;
+
+                return Json(new
+                {
+                    MandatorySubjectsList = MandatorySubjects,
+                    OptionalSubjectsList = "",
+
+
+                }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -1033,6 +1062,34 @@ namespace SEA_Application.Controllers
                             ViewBag.SubjectsErrorMsg = "Please Select at least one Subject";
                             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
 
+                            return View(aspNetUser);
+                        }
+                    }
+
+                    else if (CourseType == "One Paper MCQs")
+                    {
+                        var Subject = "OnePaperSubjects0";
+
+                        if (Request.Form[Subject] != null)
+                        {
+                            selectedsubjects.AddRange(Request.Form[Subject].Split(',').ToList());
+                        }
+                        else
+                        {
+                            AllNullCSSSubjects = AllNullCSSSubjects + 1;
+                        }
+
+                        if (AllNullCSSSubjects == 1)
+                        {
+
+                            var employee = db.AspNetStudents.Where(x => x.StudentID == aspNetUser.Id).Select(x => x).FirstOrDefault();
+                            ViewBag.CourseType = employee.CourseType;
+
+                            ViewBag.SubjectsErrorMsg = "Please Select at least one Subject";
+                            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+
+
+                          //  ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
                             return View(aspNetUser);
                         }
                     }

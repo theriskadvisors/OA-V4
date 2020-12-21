@@ -2297,7 +2297,7 @@ namespace SEA_Application.Controllers
                             ViewBag.SubjectsErrorMsg = "Please Select at least one Subject";
                             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
                             ViewBag.SessionFee = db.AspNetSessions.Where(x => x.Id == SessionID).FirstOrDefault().Total_Fee;
-                            return View(model);
+                           return View(model);
                         }
                     }
 
