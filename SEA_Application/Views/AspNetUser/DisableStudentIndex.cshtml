@@ -13,18 +13,16 @@
 
 <style>
     .pagination li > a {
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    width: 35px !important;
-    height: 35px !important;
-    padding: 0;
-    text-align: center;
-    line-height: 25px;
-    border-radius: 50% !important;
-}
-
-
-    </style>
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        width: 35px !important;
+        height: 35px !important;
+        padding: 0;
+        text-align: center;
+        line-height: 25px;
+        border-radius: 50% !important;
+    }
+</style>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -34,8 +32,13 @@
         $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
         $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Students</a></li>');
 
+           $('#example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="round-border" style="border-color:#053f89; border-radius:5px" placeholder="Search ' + title + '" />');
+        });
+
         var table = $('#example').dataTable({
-            initComplete: function () {
+          initComplete: function () {
                 // Apply the search
                 this.api().columns().every(function () {
                     var that = this;
@@ -84,6 +87,7 @@
         });
 
         $("#example_filter").addClass("hidden");
+        //   $('#example tfoot tr').appendTo('#example thead');
 
         $.get('@Url.Action("AllDisableStudents", "AspNetUser")',
                 function (data) {
@@ -97,6 +101,8 @@
 
         $.noConflict();
 
+
+         $('#example tfoot tr').appendTo('#example thead');
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //var bgcolor;
@@ -123,7 +129,6 @@
 
 
 <style>
-
 </style>
 
 @*<h4>DisableStudents</h4>
@@ -159,6 +164,26 @@
                                 </tr>
                             </thead>
                             <tbody id="submission_table"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Roll Number
+                                    </th>
+                                    <th>
+                                        Type
+                                    </th>
+                                    <th>
+                                        Phone Number
+                                    </th>
+                                    <th>
+                                        Class
+                                    </th>
+                                </tr>
+
+                            </tfoot>  
                         </table>
                     </div>
                     <div id="Error"></div>
@@ -167,4 +192,4 @@
         </div>
     </div>
 </div>
-        <!----------------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------------->

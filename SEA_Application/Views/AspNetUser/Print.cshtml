@@ -1,0 +1,497 @@
+﻿@model SEA_Application.Controllers.AspNetUserController.StudentPrintForm
+@{
+    ViewBag.Title = "OA Form";
+    Layout = null;
+}
+
+
+<script src="~/Content/assets/js/core/jquery.min.js"></script>
+
+
+
+<style type="text/css">
+
+    @@media print {
+  #print {
+    display: none;
+  }
+}
+    #container {
+        height: 1050px;
+        width: 750px;
+        /*border: 1px solid;*/
+        margin: auto;
+        padding: 30px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    table, tr, td {
+        border-collapse: collapse;
+    }
+
+    .headings {
+        background: black;
+        color: white;
+    }
+
+    .margin-padding-zero {
+        margin: 0;
+        padding: 10px;
+    }
+
+    .cnic_style {
+        height: 20px;
+        margin-left: 5px;
+        width: 20px;
+        border: 1px solid;
+        display: inline-block;
+    }
+</style>
+
+
+<input type="button" onclick="printDiv()" name="print" id="print" style="height:40px;cursor:pointer;width:70px;" value="Print" />
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <div id="container" class="container">
+
+            <div id="inner-container" class="inner-container">
+
+                <div id="logo-block">
+
+
+                    <img src="~/Content/Images/International-pree.png" height="150" style="display: inline-block;float: left">
+
+                    <div id="StudentPhoto" style="height: 150px;width: 151px;float:right;display: inline-block;">
+
+                        @if (ViewBag.StudentImage != null)
+                        {
+
+                            <img src="~/Content/Images/StudentImages/@ViewBag.StudentImage" height="150" width="150" alt="Alternate Text" />
+                        }
+                        else
+                        {
+
+
+                            <img src="~/Content/Images/StudentDummy3.png" height="150" width="150" alt="not exist" />
+                        }
+
+
+                    </div>
+
+
+                </div>
+                <div style="clear:both;">
+
+                </div>
+
+                <br>
+                <br>
+                <div id="form-body">
+
+                    <table border="1">
+
+                        <tr>
+                            <td style="text-align: center;"> <h2 class="headings margin-padding-zero"> ADMISSION   FORM  </h2>  </td>
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero">We need this information to be able to process you application for place. (Please fill BLOCK CAPTIALS) </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                                <h3 class="headings margin-padding-zero">
+                                    Applicant Information
+                                </h3>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">
+
+                                <table>
+                                    <tr>
+                                        <td>First Name: <span> @Model.FirstName</span> </td>
+
+                                        <td>Middle Name:<span> @Model.MiddleName </span></td>
+                                        <td>Last Name: <span> @Model.LastName</span> </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">
+                                <table>
+                                    <tr>
+
+                                        <td> Father's Name: <span>@Model.FatherName</span></td>
+                                        <td> Father's Occupation: <span></span></td>
+
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">
+                                <table>
+                                    <tr>
+                                        <td> Gender: M <input type="checkbox" name="Male"> F <input type="checkbox" name="Female"></td>
+                                        <td>
+                                            Age:
+                                        </td>
+                                        <td>
+                                            Nationality:
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">
+                                Mailing Address:
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">Email: <span>@Model.Email</span></td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">
+
+                                <table>
+                                    <tr>
+                                        <td>City:</td>
+                                        <td>Mobile: <span>@Model.Mobile</span></td>
+                                    </tr>
+                                </table>
+
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">
+                                CNIC &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                                <div class="cnic_style">
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero">
+
+                                <table>
+
+                                    <tr>
+                                        <td>
+                                            Class Timings:
+
+
+                                            Morning <input id="Morning" type="checkbox" name="morning">
+                                            Evening <input id="Evening" type="checkbox" name="evening">
+
+                                        </td>
+                                        <td>
+
+                                            Course Applied for:
+                                            CSS <input id="css" type="checkbox" name="css">
+                                            PMS <input id="pms" type="checkbox" name="pms">
+                                            ONE PAPER <input id="onepaper" type="checkbox" name="onepaper">
+
+                                        </td>
+
+                                    </tr>
+
+
+
+
+                                </table>
+
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero">
+                                <span style="font-weight:bold"> Mandatory Subjects:</span>
+                                @{
+
+                                    var last = Model.MandatorySubjects.Last();
+                                    var last1 = Model.ObtionalSubjects.Last();
+
+                                }
+
+                                @foreach (var subject in Model.MandatorySubjects)
+                                {
+
+
+                                    if (subject.Equals(last))
+                                    {
+                                        <span> @(subject) </span>
+                                    }
+                                    else
+                                    {
+                                        <span> @(subject + ",") </span>
+
+                                    }
+
+                                }
+
+
+                            </td>
+                        </tr>
+                        @*<tr>
+                                <td style="padding: 18px;">
+                                </td>
+                            </tr>*@
+
+                        <tr>
+                            <td class="margin-padding-zero">
+                                <span style="font-weight:bold">Optional Subjects:</span>
+                                @{
+                                    string subjectslist = "";
+
+                                }
+
+                                @foreach (var subject in Model.ObtionalSubjects)
+                                {
+
+
+                                    if (subject.Equals(last1))
+                                    {
+                                        <span> @(subject) </span>
+                                    }
+                                    else
+                                    {
+                                        <span> @(subject + ",") </span>
+
+                                    }
+
+
+                                }
+
+
+
+                            </td>
+                        </tr>
+                        @*<tr>
+                                <td style="padding: 18px;">
+                                </td>
+                            </tr>*@
+
+
+                    </table> <!--end of table 1 -->
+
+                    <table border="1">
+
+                        <tr>
+                            <td colspan="7">
+
+                                <h3 class="headings margin-padding-zero">
+                                    Academic Qualification (starting with last institute attended)
+                                </h3>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"> Name of institute</td>
+                            <td class="margin-padding-zero"> Location </td>
+                            <td class="margin-padding-zero">From</td>
+                            <td class="margin-padding-zero">To</td>
+                            <td class="margin-padding-zero">Qualification</td>
+                            <td class="margin-padding-zero">Divisions Obtained</td>
+
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="margin-padding-zero">1</td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+
+
+
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero">2</td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+
+
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">3</td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+
+
+                        </tr>
+                        <tr>
+                            <td class="margin-padding-zero">4</td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+                            <td class="margin-padding-zero"></td>
+
+
+                        </tr>
+
+
+                    </table>
+
+                </div>	<!--end of form body-->
+
+
+
+
+            </div> <!--inner container-->
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+
+            var ClassTimings = '@Model.ClassTimings';
+
+              //alert(ClassTimings);
+             //Morning
+            //Evening
+
+
+            if (ClassTimings == "Morning") {
+
+               // $("#Morning").attr("checked","che")
+
+                $("#Morning").prop("checked", true);
+            }
+            else if (ClassTimings == "Evening") {
+
+                $("#Evening").prop("checked", true);
+
+            }
+            else {
+
+
+            }
+
+
+            var CourseType = '@Model.CourseAppliedFor';
+
+            if (CourseType == "CSS") {
+
+                 $("#css").prop("checked", true);
+            }
+            else if ( CourseType == "PMS" ) {
+
+                 $("#pms").prop("checked", true);
+            }
+            else if ( CourseType == "OnePaper") {
+
+                 $("#onepaper").prop("checked", true);
+            }
+            else {
+
+            }
+
+
+        })
+
+
+    function printDiv() {
+
+      //  var divToPrint = document.getElementById('container');
+//
+      //  var newWin = window.open('', 'Print-Window');
+
+       // newWin.document.open();
+//
+       // newWin.document.write('<html><head><style>  #container {  height: 1050px;   width: 750px; /*border: 1px solid;*/margin: auto;  padding: 30px;  }table {   width: 100%;  } table, tr, td {   border-collapse:collapse;  }  .headings { background: black;   color: white; } .margin-padding-zero { margin: 0; padding: 10px; }  .cnic_style { height: 20px; margin-left: 5px;  width: 20px;border: 1px solid;  display: inline-block;}</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+       // newWin.document.close();
+
+      //  setTimeout(function () { newWin.close(); }, 10);
+        window.print();
+    }
+</script>

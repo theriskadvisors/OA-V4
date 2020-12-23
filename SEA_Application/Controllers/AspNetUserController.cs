@@ -29,7 +29,7 @@ namespace SEA_Application.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
-     int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         public AspNetUserController()
         {
 
@@ -369,10 +369,6 @@ namespace SEA_Application.Controllers
             }
 
 
-
-
-
-
             //return Json(subs, JsonRequestBehavior.AllowGet);
 
         }
@@ -445,15 +441,15 @@ namespace SEA_Application.Controllers
                             join t2 in db.AspNetUsers_Session
                              on teacher.Id equals t2.UserID
                             where teacher.AspNetRoles.Select(y => y.Name).Contains("Teacher")
-                                select new
-                                {
-                                    teacher.Id,
-                                    Class = t2.AspNetSession.SessionName,
-                                    Subject = "-",
-                                    teacher.Email,
-                                    teacher.PhoneNumber,
-                                    teacher.UserName,
-                                    teacher.Name,
+                            select new
+                            {
+                                teacher.Id,
+                                Class = t2.AspNetSession.SessionName,
+                                Subject = "-",
+                                teacher.Email,
+                                teacher.PhoneNumber,
+                                teacher.UserName,
+                                teacher.Name,
 
 
                             }).ToList();
@@ -600,12 +596,12 @@ namespace SEA_Application.Controllers
 
             int VoucherExist = 0;
             int TotalVoucher = db.Vouchers.Where(x => x.StudentId == employee.Id).Count();
-            string FeeType="";
-            double?  Discount =0;
-            double StudentFeeOfFeeType=0;
+            string FeeType = "";
+            double? Discount = 0;
+            double StudentFeeOfFeeType = 0;
             double? RemainingAmount = 0;
             double? DiscountPercentage = 0;
-            
+
             if (TotalVoucher == 1)
             {
                 StudentFeeMonth StudentFeeMonth = db.StudentFeeMonths.Where(x => x.StudentId == employee.Id).Select(x => x).FirstOrDefault();
@@ -613,13 +609,13 @@ namespace SEA_Application.Controllers
 
                 if (StudentFeeMonth != null)
                 {
-                 
+
                     FeeType = StudentFeeMonth.FeeType;
                     Discount = StudentFeeMonth.Discount;
 
                     int? SessionFee = db.AspNetSessions.Where(x => x.Id == StudentFeeMonth.SessionId).FirstOrDefault().Total_Fee;
                     double SessionFeeOfTypeDouble = Convert.ToDouble(SessionFee);
-                  
+
                     if (FeeType == "PerMonth")
                     {
                         StudentFeeOfFeeType = SessionFeeOfTypeDouble + 12000;
@@ -634,11 +630,11 @@ namespace SEA_Application.Controllers
 
                     }
 
-                   if(Discount !=0 )
+                    if (Discount != 0)
                     {
                         RemainingAmount = StudentFeeOfFeeType - Discount;
                         DiscountPercentage = Discount * (100 / StudentFeeOfFeeType);
-              
+
                     }
 
                     ViewBag.DiscountPercentage = DiscountPercentage;
@@ -650,7 +646,7 @@ namespace SEA_Application.Controllers
                     ViewBag.Discount = Discount;
                     ViewBag.NotesFee = StudentFeeMonth.NotesFee;
                     ViewBag.FeeType = StudentFeeMonth.FeeType;
-                    
+
                     VoucherExist = 1;
 
                 }
@@ -667,7 +663,7 @@ namespace SEA_Application.Controllers
                 ViewBag.DiscountPercentage = null;
                 ViewBag.RemainingAmount = null;
 
-             //   ViewBag.StudentFeeOfFeeType = null;
+                //   ViewBag.StudentFeeOfFeeType = null;
             }
 
             ViewBag.VoucherExist = VoucherExist;
@@ -678,6 +674,143 @@ namespace SEA_Application.Controllers
             }
 
             return View(aspNetUser);
+        }
+
+        public ActionResult Print(string id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            AspNetUser aspNetUser = db.AspNetUsers.Find(id);
+            var employee = db.AspNetStudents.Where(x => x.StudentID == id).Select(x => x).FirstOrDefault();
+
+            ViewBag.StudentImage = employee.StudentIMG;
+            ViewBag.UserDetails = aspNetUser.Highest_Degree;
+            ViewBag.CourseType = employee.CourseType;
+            ViewBag.ClassTiming = employee.ClassTimings;
+
+            var coursetype = employee.CourseType;
+
+            //ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            //ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+
+
+            var MandatorySubjects = from Subject in db.AspNetSubjects
+                                    join StudentSubject in db.AspNetStudent_Subject on Subject.Id equals StudentSubject.SubjectID
+                                    where StudentSubject.StudentID == id && Subject.CourseType == coursetype && Subject.IsManadatory == true
+                                    select Subject;
+
+
+            var OptionalSubjects = from Subject in db.AspNetSubjects
+                                   join StudentSubject in db.AspNetStudent_Subject on Subject.Id equals StudentSubject.SubjectID
+                                   where StudentSubject.StudentID == id && Subject.CourseType == coursetype && Subject.IsManadatory == false
+                                   select Subject;
+
+
+            var MandatorySubjectsList = MandatorySubjects.ToList();
+            var OptionalSubjectsList = OptionalSubjects.ToList();
+
+
+            StudentPrintForm studentPrintForm = new StudentPrintForm();
+
+            string[] names = aspNetUser.Name.Split(' ');
+          
+
+            studentPrintForm.FirstName = names[0];
+
+           
+            if (names.Length >1 )
+
+            {
+
+                studentPrintForm.MiddleName = names[1];
+
+            }
+            string lastName = "";
+
+            for (int i = 2; i < names.Length; i++)
+            {
+
+                lastName = lastName + " " + names[i];
+
+            }
+
+            studentPrintForm.LastName = lastName;
+            studentPrintForm.FatherName = employee.Fathers_Name;
+            studentPrintForm.Email = aspNetUser.Email;
+            studentPrintForm.Mobile = aspNetUser.PhoneNumber;
+            studentPrintForm.CourseAppliedFor = employee.CourseType;
+            studentPrintForm.ClassTimings = employee.ClassTimings;
+
+
+            foreach (var subject in MandatorySubjectsList)
+            {
+
+                // list1.Add(subject.SubjectName);
+                studentPrintForm.MandatorySubjects.Add(subject.SubjectName);
+            }
+
+
+            foreach (var subject in OptionalSubjectsList)
+            {
+
+                studentPrintForm.ObtionalSubjects.Add(subject.SubjectName);
+
+            }
+
+
+            return View(studentPrintForm);
+        }
+
+        public ActionResult StudentPrint2(string id)
+        {
+
+            int StudentId = db.AspNetStudents.Where(x => x.StudentID == id).Select(x => x.Id).FirstOrDefault();
+
+            StudentFeeMonth StudentFeeMonth = db.StudentFeeMonths.Where(x => x.StudentId == StudentId).Select(x => x).FirstOrDefault();
+
+            if (StudentFeeMonth != null)
+            {
+
+                double TotalFee = StudentFeeMonth.FeePayable.Value;
+
+                string FeeType = StudentFeeMonth.FeeType;
+
+
+                ViewBag.TotalFee = TotalFee;
+                ViewBag.FeeType = FeeType;
+            }
+            else
+            {
+
+                ViewBag.TotalFee = null;
+                ViewBag.FeeType = null;
+            }
+
+            return View();
+        }
+        public class StudentPrintForm
+        {
+            public string FirstName { get; set; }
+            public string MiddleName { get; set; }
+            public string LastName { get; set; }
+
+            public string FatherName { get; set; }
+            //public string Gender { get; set; }
+            public string Email { get; set; }
+            public string Mobile { get; set; }
+            public string ClassTimings { get; set; }
+            public string CourseAppliedFor { get; set; }
+
+            public List<string> MandatorySubjects = new List<string>();
+            public List<string> ObtionalSubjects = new List<string>();
+
+            public string FeeType { get; set; }
+            public string FeeAmount { get; set; }
+
         }
 
         public ActionResult AddUser()
@@ -764,28 +897,28 @@ namespace SEA_Application.Controllers
         public ActionResult GetProfilePic()
         {
 
-             var id = User.Identity.GetUserId();
-             string status = "logo_dp.jpg";      
-            AspNetStudent std   = db.AspNetStudents.Where(x => x.StudentID == id).FirstOrDefault();
-                
-            
-            if(std == null)
-                    {
-                        status= "logo_dp.jpg";
-                    }
-                    else
-                    {
-                        if(std.StudentIMG == null)
-                        {
-                           status = "logo_dp.jpg";
-                        }
-                        else
-                        {
-                            status= std.StudentIMG;
+            var id = User.Identity.GetUserId();
+            string status = "logo_dp.jpg";
+            AspNetStudent std = db.AspNetStudents.Where(x => x.StudentID == id).FirstOrDefault();
 
-                        }
 
-                    }
+            if (std == null)
+            {
+                status = "logo_dp.jpg";
+            }
+            else
+            {
+                if (std.StudentIMG == null)
+                {
+                    status = "logo_dp.jpg";
+                }
+                else
+                {
+                    status = std.StudentIMG;
+
+                }
+
+            }
             return Content(status);
         }
 
@@ -868,8 +1001,8 @@ namespace SEA_Application.Controllers
         {
 
 
-        //  var ChecktotalFee =  Request.Form["TotalFee"];
-         // var CheckDiscount = Request.Form["Discount"];
+            //  var ChecktotalFee =  Request.Form["TotalFee"];
+            // var CheckDiscount = Request.Form["Discount"];
 
 
             var dbTransaction = db.Database.BeginTransaction();
@@ -997,7 +1130,7 @@ namespace SEA_Application.Controllers
                     //    ViewBag.SubjectsErrorMsg = "please enter fee";
                     //    ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
 
-                      
+
 
                     //    return View(aspNetUser);
                     //}
@@ -1089,7 +1222,7 @@ namespace SEA_Application.Controllers
                             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
 
 
-                          //  ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+                            //  ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
                             return View(aspNetUser);
                         }
                     }
@@ -1098,7 +1231,7 @@ namespace SEA_Application.Controllers
                         selectedsubjects = null;
                     }
 
-                  
+
                     string selectedClass = Request.Form["ClassID"];
 
                     int ClassInt = Convert.ToInt32(selectedClass);
@@ -1128,12 +1261,6 @@ namespace SEA_Application.Controllers
 
                     db.Student_GenericSubjects.RemoveRange(AllGenricStudentSubjectsToRemove);
                     db.SaveChanges();
-
-
-
-
-
-                        
 
                     var student = db.AspNetStudents.Where(x => x.StudentID == aspNetUser.Id).Select(x => x).FirstOrDefault();
 
@@ -1170,7 +1297,7 @@ namespace SEA_Application.Controllers
                             db.AspNetStudent_Subject.Add(stu_sub);
                             db.SaveChanges();
                         }
-                  
+
 
                         var AllSubjectsOfAStudent = from subject in db.AspNetSubjects
                                                     where myIntegersSubjectsList.Contains(subject.Id)
@@ -1264,8 +1391,8 @@ namespace SEA_Application.Controllers
                         db.StudentFeeMonths.Remove(StudentFeeMonthToDelete);
                         db.SaveChanges();
 
-                       
-                
+
+
 
                         //Ledgers Manipulation//
 
@@ -1332,7 +1459,7 @@ namespace SEA_Application.Controllers
                         studentFeeMonth.StudentId = student.Id;
                         studentFeeMonth.Status = "Pending";
                         studentFeeMonth.DueDate = DueDateOfStudent;
-                        
+
                         db.StudentFeeMonths.Add(studentFeeMonth);
                         db.SaveChanges();
 
@@ -1477,7 +1604,7 @@ namespace SEA_Application.Controllers
             var employ = db.AspNetStudents.Where(x => x.StudentID == aspNetUser.Id).Select(x => x).FirstOrDefault();
 
 
-            
+
             ViewBag.StudentImage = studentimg;
 
             AspNetStudent employee = new AspNetStudent();

@@ -1502,6 +1502,9 @@ else if (User.IsInRole("Staff"))
                         }
                     }
 
+                  
+                    <button type="button" id="print" class="btn btn-default pull-right rounded rounded-lg" >Print</button>
+                    <button type="button" style="display:none" id="print2"></button>
                     <button type="submit" value="Register" id="FormSubmit" class="btn btn-primary pull-right rounded rounded-lg"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </button>
                     <button onclick="redirect()" id="cancel" type="button" class="btn btn-primary pull-right rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                         <i class="material-icons mr-2">cached</i>  Cancel &nbsp; &nbsp;
@@ -1551,6 +1554,11 @@ else if (User.IsInRole("Staff"))
         var id = $("#Id").val();
         window.location.href = "/AspNetUser/Enable?id=" + id + "&type=Student";
     }
+    function Print() {
+
+
+        //window.location.href = "/AspNetUser/Enable?id=" + id + "&type=Student";
+    }
 
     $(document).ready(function () {
         $("#UploadImg").change(function () {
@@ -1561,6 +1569,24 @@ else if (User.IsInRole("Staff"))
             readURL(this);
         });
 
+        $("#print").click(function (e) {
+
+           // event.preventDefault();
+
+         
+
+            var id = $("#Id").val();
+             window.open("/AspNetUser/Print?id=" + id, "_blank" );
+ 
+            window.open("/AspNetUser/StudentPrint2?id=" + id, "_blank");
+
+
+         
+
+           
+
+        })
+      
         function readURL(input) {
 
             $("#imgPreview").height("150");
