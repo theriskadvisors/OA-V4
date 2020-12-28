@@ -275,8 +275,8 @@
                                 <span style="font-weight:bold"> Mandatory Subjects:</span>
                                 @{
 
-                                    var last = Model.MandatorySubjects.Last();
-                                    var last1 = Model.ObtionalSubjects.Last();
+                                    var last = Model.MandatorySubjects.LastOrDefault();
+                                    var last1 = Model.ObtionalSubjects.LastOrDefault();
 
                                 }
 
