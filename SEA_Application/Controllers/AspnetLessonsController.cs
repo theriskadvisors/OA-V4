@@ -479,16 +479,33 @@ namespace SEA_Application.Controllers
 
             List<int> LessonIds = new List<int>();
 
+
+
             foreach (var id in AllLessonIds)
             {
                 var LessonSession = db.Lesson_Session.Where(x => x.LessonId == id && x.SessionId == SessionId).FirstOrDefault();
-                if (LessonSession == null)
+                    
+                if(LessonSession != null)
                 {
-                    LessonIds.Add(id);
+                    db.Lesson_Session.Remove(LessonSession);
+                    db.SaveChanges();
+
+
                 }
+                //Event
+
+                var newevent = db.Events.Where(x => x.LessonID == id && x.SessionID == SessionId).ToList();
+
+                db.Events.RemoveRange(newevent);
+                db.SaveChanges();
+
+                //if (LessonSession == null)
+                //{
+                //    LessonIds.Add(id);
+                //}
             }
 
-            foreach (var lessonId in LessonIds)
+            foreach (var lessonId in AllLessonIds)
             {
                 Lesson_Session ls = new Lesson_Session();
                 ls.LessonId = Convert.ToInt32(lessonId);
@@ -663,8 +680,8 @@ namespace SEA_Application.Controllers
 
                 else if (LessonIdsCount != 0 && LessonIdsCount == AllLessonSessionCount)
                 {
-                    Button = "Disabled";
-                    ErrorMsg = "Lessons are already Scheduled in selected Topic And Section";
+                    Button = "Enabled";
+                    ErrorMsg = "Lessons are already Scheduled in selected Topic And Section.But Editable";
                 }
                 else
                 {

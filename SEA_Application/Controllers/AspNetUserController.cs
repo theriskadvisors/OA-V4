@@ -591,6 +591,7 @@ namespace SEA_Application.Controllers
             ViewBag.ClassTiming = employee.ClassTimings;
             ViewBag.employee = employee;
 
+
             //ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
 
@@ -1273,14 +1274,12 @@ namespace SEA_Application.Controllers
                     student.SchoolName = Request.Form["SchoolName"];
                     student.ClassTimings = Request.Form["ClassTimings"];
 
-
                     if (image != null)
                     {
 
                         student.StudentIMG = image.FileName;
                     }
                     db.SaveChanges();
-
 
                     if (selectedsubjects != null)
                     {
@@ -1337,6 +1336,8 @@ namespace SEA_Application.Controllers
 
                     //  db.Entry(registration).Property(x => x.Name).IsModified = false;
 
+                    aspNetUser.PhoneNumber = Request.Form["cellNo"];
+
                     SEA_DatabaseEntities db1 = new SEA_DatabaseEntities();
 
                     db1.AspNetUsers.Attach(aspNetUser);
@@ -1347,6 +1348,15 @@ namespace SEA_Application.Controllers
 
                     db1.SaveChanges();
 
+
+
+                    int classIdInt = Convert.ToInt32(selectedClass);
+                    int? SessionIdOfSelectedStudent1 = db1.AspNetClasses.Where(x => x.Id == classIdInt).FirstOrDefault().SessionID;
+
+                    var UserSessionToUpdate = db1.AspNetUsers_Session.Where(x => x.UserID == aspNetUser.Id).FirstOrDefault();
+
+                    UserSessionToUpdate.SessionID = SessionIdOfSelectedStudent1;
+                    db1.SaveChanges();
 
 
                     var VoucherExist = Request.Form["VoucherExist"];
@@ -1390,8 +1400,6 @@ namespace SEA_Application.Controllers
 
                         db.StudentFeeMonths.Remove(StudentFeeMonthToDelete);
                         db.SaveChanges();
-
-
 
 
                         //Ledgers Manipulation//

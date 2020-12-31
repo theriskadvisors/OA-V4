@@ -57,9 +57,9 @@ else if (User.IsInRole("Staff"))
     table input[type=radio] {
     }
 
-    .dropdownstyle {
+    /*.dropdownstyle {
         pointer-events: none;
-    }
+    }*/
 </style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script type="text/javascript">
@@ -1231,6 +1231,12 @@ else if (User.IsInRole("Staff"))
                                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                             </div>
 
+                            <div class="form-group bmd-form-group my-3">
+                                <label class="control-label">Cell No <span class="red-mark">*</span> </label>
+                                <input value="@Model.PhoneNumber" type="text" class="form-control round-border" id="inputEmail3" name="cellNo" onblur="checkPhone(this)">
+                                <span class="text-danger" id="Phone-Error"></span>
+                            </div>
+
 
 
                             <div class="form-group bmd-form-group my-3 is-filled">
@@ -1411,7 +1417,7 @@ else if (User.IsInRole("Staff"))
 
                             <div class="form-group bmd-form-group my-3">
                                 <label class="control-label">Section <span class="red-mark">*</span></label>
-                                @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control dropdownstyle", @readonly = "readonly" })
+                                @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control dropdownstyle"})
                                 <br />
                                 <span style="color:red"> @ViewBag.SubjectsErrorMsg</span>
                             </div>
@@ -1617,7 +1623,9 @@ else if (User.IsInRole("Staff"))
             if (TotalFee == "" && TotalFee < 0) {
                 return false;
             }
-
+            if (TotalFee == "") {
+                return false;
+            }
 
             $("#FormSubmit").attr("disabled", true);
 
