@@ -1226,7 +1226,7 @@ else if (User.IsInRole("Staff"))
                             </div>
 
                             <div class="form-group bmd-form-group my-3">
-                                <label class="bmd-label-floating">Father Name *</label>
+                                <label class="">Father Name *</label>
                                 @Html.EditorFor(model => model.AspNetStudents.FirstOrDefault().Fathers_Name, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                             </div>
@@ -1290,7 +1290,7 @@ else if (User.IsInRole("Staff"))
                                 <h2 class="column-heading mb-4">Fee Details</h2>
 
                                 <div class="form-group bmd-form-group my-3">
-                                    <label class="bmd-label-floating">Notes Category <span class="red-mark">*</span> </label>
+                                    <label class="">Notes Category <span class="red-mark">*</span> </label>
                                     <div id="NotesCategoryDiv">
 
                                         <div class="radio RadioButtonsInline">
@@ -1325,7 +1325,7 @@ else if (User.IsInRole("Staff"))
                                 </div>
 
                                 <div class="form-group bmd-form-group my-3">
-                                    <label class="bmd-label-floating">Session Fee</label>
+                                    <label class="">Session Fee</label>
                                     <input type="text" class="form-control round-border" name="SessionFee" id="SessionFee" value="0" readonly />
                                 </div>
 
@@ -1355,17 +1355,17 @@ else if (User.IsInRole("Staff"))
 
 
                                 <div class="form-group bmd-form-group my-3">
-                                    <label class="bmd-label-floating">Fee</label>
+                                    <label class="">Fee</label>
                                     <input type="text" value="@ViewBag.StudentFeeOfFeeType" required class="form-control text_box_style" name="Fee" id="Fee" readonly />
                                 </div>
                                 <div id="DiscountDiv">
                                     <div class="form-group bmd-form-group my-3" id="DiscountPercentageDiv">
-                                        <label class="bmd-label-floating">Discount Percentage</label>
-                                        <input type="number" value="@ViewBag.DiscountPercentage" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control round-border" name="DiscountPercentage" id="DiscountPercentage" />
+                                        <label class="">Discount Percentage</label>
+                                        <input type="text" value="@ViewBag.DiscountPercentage" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control round-border" name="DiscountPercentage" id="DiscountPercentage" />
                                     </div>
 
                                     <div id="DiscountAmountDiv" class="form-group bmd-form-group my-3" style="display:none">
-                                        <label class="bmd-label-floating">Discount Amount</label>
+                                        <label class="">Discount Amount</label>
                                         @if (ViewBag.Discount != null)
                                         {
                                             <input type="number" readonly value="@ViewBag.Discount" class="form-control round-border" name="Discount" id="Discount" />
@@ -1382,13 +1382,13 @@ else if (User.IsInRole("Staff"))
 
 
                                     <div class="form-group bmd-form-group my-3">
-                                        <label class="bmd-label-floating">Remaining Amount</label>
+                                        <label class="">Remaining Amount</label>
                                         <input type="number" value="@ViewBag.RemainingAmount" class="form-control round-border" name="RemainingAmount" id="RemainingAmount" readonly />
                                     </div>
                                 </div>
 
                                 <div class="form-group bmd-form-group my-3">
-                                    <label class="bmd-label-floating">Total Fee</label>
+                                    <label class="">Total Fee</label>
                                     @if (ViewBag.FeePayAbleAsTotalFee != null)
                                     {
                                         <input type="text" value="@ViewBag.FeePayAbleAsTotalFee" required class="form-control text_box_style totalfeeclass" name="TotalFee" id="TotalFee" readonly />
