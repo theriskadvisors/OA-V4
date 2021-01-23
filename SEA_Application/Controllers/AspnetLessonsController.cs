@@ -88,26 +88,56 @@ namespace SEA_Application.Controllers
 
         }
 
+        //public ActionResult CheckLessonOrderBy(string TopicId, string OrderBy)
+        //{
+
+        //    int TopId = Convert.ToInt32(TopicId);
+        //    int OrderByValue = Convert.ToInt32(OrderBy);
+
+        //    var TopicExist = "";
+        //    AspnetLesson Lesson = db.AspnetLessons.Where(x => x.TopicId == TopId && x.OrderBy == OrderByValue).FirstOrDefault();
+
+        //    if (Lesson == null)
+        //    {
+        //        TopicExist = "No";
+        //    }
+        //    else
+        //    {
+        //        TopicExist = "Yes";
+        //    }
+
+
+        //    return Json(TopicExist, JsonRequestBehavior.AllowGet);
+        //}
+
         public ActionResult CheckLessonOrderBy(string TopicId, string OrderBy)
         {
 
             int TopId = Convert.ToInt32(TopicId);
             int OrderByValue = Convert.ToInt32(OrderBy);
-
+            var Msg = "";
             var TopicExist = "";
-            AspnetLesson Lesson = db.AspnetLessons.Where(x => x.TopicId == TopId && x.OrderBy == OrderByValue).FirstOrDefault();
+            var Lessons = db.AspnetLessons.Where(x => x.TopicId == TopId && x.OrderBy == OrderByValue).ToList();
 
-            if (Lesson == null)
+            if (Lessons.Count() == 0)
             {
                 TopicExist = "No";
             }
             else
             {
                 TopicExist = "Yes";
+                var Names = "";
+                foreach(var lesson in Lessons)
+                {
+                    Names = Names + lesson.Name + ",";
+                }
+
+                Names = Names.Substring(0, Names.Length - 1);
+
+                Msg = "Selected order by value is already assigned to " + Names + " Lesson.";
             }
-
-
-            return Json(TopicExist, JsonRequestBehavior.AllowGet);
+          
+            return Json( new {  TopicExist = TopicExist, Msg = Msg }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewAttendance(int id, string BranchName, string ClassName, string SectionName, string SubjectName, string LessonName, string StartDate, string Type)
