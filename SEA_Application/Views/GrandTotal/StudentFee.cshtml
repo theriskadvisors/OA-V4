@@ -653,7 +653,7 @@ else if (User.IsInRole("Staff"))
                         $('#ChallanForm').prop('disabled', false);
                         $('#DueDateError').html(" ");
                         if (dob[1] == month) {
-                            if (dob[2] > day) {
+                            if (dob[2] >= day) {
                                 $('#ChallanForm').prop('disabled', false);
                                 $('#DueDateError').html(" ");
                             } else {
