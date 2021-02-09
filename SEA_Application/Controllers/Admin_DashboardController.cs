@@ -2315,8 +2315,8 @@ namespace SEA_Application.Controllers
 
                         var userStore = new UserStore<ApplicationUser>(context);
                         var userManager = new UserManager<ApplicationUser>(userStore);
+                        
                         userManager.AddToRole(user.Id, "Student");
-
                         ruffdata rd = new ruffdata();
                         rd.SessionID = SessionIdOfSelectedStudent;
                         rd.StudentName = model.Name;
@@ -2326,7 +2326,7 @@ namespace SEA_Application.Controllers
                         db.SaveChanges();
 
                         var CreatedUser = db.AspNetUsers.Where(x => x.Id == user.Id).FirstOrDefault();
-                        CreatedUser.Status = "False";
+                        CreatedUser.Status = "True";
                         db.SaveChanges();
 
                         AspNetStudent student = new AspNetStudent();

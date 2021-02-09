@@ -1,7 +1,7 @@
 ﻿@model SEA_Application.Models.FeesData
 @{
     ViewBag.Title = "Create";
- //   Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+    //   Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
 @if (User.IsInRole("Admin"))
@@ -298,10 +298,10 @@ else if (User.IsInRole("Staff"))
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                        <label class="bmd-label-floating">Total Fee: <span class="red-mark">*</span></label>
+                                    <label class="bmd-label-floating">Total Fee: <span class="red-mark">*</span></label>
 
-                        <input type="number" name="TotalFee" class="form-control" value="" id="TotalFee" readonly />
-                    </div>*@
+                                    <input type="number" name="TotalFee" class="form-control" value="" id="TotalFee" readonly />
+                                </div>*@
 
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12 bmd-form-group">
@@ -324,10 +324,10 @@ else if (User.IsInRole("Staff"))
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                        <label class="bmd-label-floating">Payable Fee : <span class="red-mark">*</span></label>
+                                    <label class="bmd-label-floating">Payable Fee : <span class="red-mark">*</span></label>
 
-                        <input type="number" name="PayableFee" class="form-control" value="" id="PayableFee" readonly />
-                    </div>*@
+                                    <input type="number" name="PayableFee" class="form-control" value="" id="PayableFee" readonly />
+                                </div>*@
 
 
                             <div class="form-row mt-4">
@@ -340,18 +340,18 @@ else if (User.IsInRole("Staff"))
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                        <label class="bmd-label-floating"> Fee Type : <span class="red-mark">*</span></label>
+                                    <label class="bmd-label-floating"> Fee Type : <span class="red-mark">*</span></label>
 
-                        <input type="text" name="FeeType" class="form-control" value="" id="FeeType" readonly />
-                    </div>*@
+                                    <input type="text" name="FeeType" class="form-control" value="" id="FeeType" readonly />
+                                </div>*@
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                        <label class="bmd-label-floating"> Cash Received : <span class="red-mark">*</span></label>
+                                    <label class="bmd-label-floating"> Cash Received : <span class="red-mark">*</span></label>
 
-                        <input required type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="CashReceived" class="form-control" value="" id="CashReceived" />
+                                    <input required type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="CashReceived" class="form-control" value="" id="CashReceived" />
 
-                    </div>*@
+                                </div>*@
 
 
 
@@ -374,10 +374,10 @@ else if (User.IsInRole("Staff"))
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                        <label class="bmd-label-floating">Dicount: <span class="red-mark">*</span></label>
+                                    <label class="bmd-label-floating">Dicount: <span class="red-mark">*</span></label>
 
-                        <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
-                    </div>*@
+                                    <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
+                                </div>*@
 
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12 bmd-form-group">
@@ -389,10 +389,10 @@ else if (User.IsInRole("Staff"))
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                        <label class="bmd-label-floating"> Remaining Balance : <span class="red-mark">*</span></label>
+                                    <label class="bmd-label-floating"> Remaining Balance : <span class="red-mark">*</span></label>
 
-                        <input type="number" name="RemainingBalance" min="0" class="form-control" value="" id="RemainingBalance" readonly />
-                    </div>*@
+                                    <input type="number" name="RemainingBalance" min="0" class="form-control" value="" id="RemainingBalance" readonly />
+                                </div>*@
 
                             <div class="form-row mt-4">
                                 <div class="form-group col-md-12 bmd-form-group">
@@ -508,7 +508,7 @@ else if (User.IsInRole("Staff"))
 
 
                         @*</div>
-                </div>*@
+                            </div>*@
 
 
                     </div>
@@ -588,6 +588,21 @@ else if (User.IsInRole("Staff"))
     $(document).ready(function () {
 
         //  var table = $('#datatable').dataTable({});
+
+
+        var date = new Date();
+
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+
+        var today = year + "-" + month + "-" + day;
+       // document.getElementById("theDate").value = today;
+
+        $("#IssueDate").val(today);
 
         var table = $('#datatable').dataTable({
             buttons: [

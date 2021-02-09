@@ -312,7 +312,7 @@
                         <div class="col-sm-12 col-md-6 col-lg-5 align-items-center d-flex justify-content-end">
                             &nbsp;
                             <div class="student-attendance-headding align-items-center fc-left d-flex justify-content-between"><h2 class="m-0 mr-3"></h2><div class="fc-button-group"><button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left hidden" aria-label="prev"><span class="fc-icon fc-icon-left-single-arrow"></span></button><button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right hidden" aria-label="next"><span class="fc-icon fc-icon-right-single-arrow hidden"></span></button></div></div>
-                            <button onclick="window.print()" type="button" class="btn btn-primary  pull-left rounded rounded-lg createBtn coursesBtn mr-3">
+                            <button id="DownloadReportButton" type="button" class="btn btn-primary  pull-left rounded rounded-lg createBtn coursesBtn mr-3">
                                 Download Report
                             </button>
 
@@ -326,7 +326,7 @@
 
         </div>
     </div>
-    <div class="row">
+    <div class="row"  id="DivToPrint">
         <div class="col-md-12">
             <div class="card">
                 <div class="p-5">
@@ -401,6 +401,28 @@
         $("#BreadCrumbs").append(' <li> <a href="/AspnetSubjectTopics/ViewTopicsAndLessons"> Topics & Lessons </a> <span>&gt;</span></li>');
         $("#BreadCrumbs").append(' <li><a id="BreadCrumps1" href="' + URL + '">Lesson</a><span>&gt;</span></li>');
         $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Report</a></li>');
+
+         $("#DownloadReportButton").click(function () {
+
+            // alert(OrderType);
+
+            var mywindow = window.open('', '', '');
+            mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
+            mywindow.document.write('<style>  .announceSubjectList {     overflow-y: auto;     max-height: 310px;     position: relative;     overflow-x: hidden; }  @@media print {     #noprint {         visibility: hidden;     } }  .announceSubjectList.ps-container > .ps-scrollbar-x-rail, .announceSubjectList.ps-container > .ps-scrollbar-y-rail {     opacity: 0.6; }      .announceSubjectList.ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y,     .announceSubjectList.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y,     .announceSubjectList.ps-container:hover > .ps-scrollbar-y-rail > .ps-scrollbar-y {         background-color: #009ecb;     }  .announceSubjectList .form-check-label {     font-size: 16px;     font-weight: normal;     font-stretch: normal;     font-style: normal;     line-height: 1.63;     letter-spacing: normal;     text-align: left;     color: #141437; }  .lessonButton {     font-size: 16px;     font-weight: 600;     font-stretch: normal;     font-style: normal;     /*! line-height: 1.61; */     letter-spacing: normal;     text-align: center;     color: #ffffff;     border-radius: 6px !important; }  .text-muted.lessonButton {     color: #afbccc !important;     box-shadow: none;     font-weight: 500; }      .text-muted.lessonButton i {         font-size: 25px;     } /*subject list new*/ .text-subjectList {     font-size: 20px;     font-weight: 600;     font-stretch: normal;     font-style: normal;     letter-spacing: normal;     text-align: left;     color: #141437;     display: inline;     margin-right: 10px; }  .topicsCount.subjectListCount span {     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);     border: solid 2px #ff8543;     background-color: #ffffff;     color: #ff8543;     font-size: 14px;     font-weight: 600; }  .sub__box__text .time {     font-size: 14px;     font-weight: 500;     font-stretch: normal;     font-style: normal;     letter-spacing: normal;     text-align: left;     color: #646480;     display: inline-block;     margin-bottom: 0; }  .sub__box__text .form-check-sign {     line-height: 32px; }  .sub__box__text h3 {     margin-top: 0;     margin-bottom: 35px;     font-size: 16px;     font-weight: 500;     font-stretch: normal;     font-style: normal;     letter-spacing: normal;     text-align: left;     color: #141437; }  .progress__bar__bg {     background-color: #e2e2ee;     height: 5px; }  .progress__bar {     background-color: #ff8543;     height: 5px;     /*! display: inline-block; */     width: 0; }  .sub__box__text {     position: relative;     padding: 15px 12px;     text-align: left;     background-color: #f2f5fa; }  .subject-list-box.subject-list-box-new {     display: block;     min-height: 0 !important;     height: auto !important;     border: none !important; }      .subject-list-box.subject-list-box-new img {         width: 100%;     }  .sub__box__text { }  .progress__bar:after {     /*   background-color: #e2e2ee;     height: 5px; */ }  .subject-list-box.subject-list-box-new:hover {     background-color: transparent;     scale: 1.01; }  .subject-list-box.subject-list-box-new *, .subject-list-box.subject-list-box-new {     transition: width 0.4s cubic-bezier(0.4, 0, 1, 1), scale 0.1s cubic-bezier(0.4, 0, 1, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1); }      .subject-list-box.subject-list-box-new .form-check .form-check-input:checked ~ .form-check-sign .check::before {         color: #ff8543;     } /*attendance*/ .student-attendance-headding h2 {     font-size: 24px;     font-weight: 500;     font-stretch: normal;     font-style: normal;     letter-spacing: normal;     text-align: left;     color: #141437; }  .attendance-btn button.fc-button.fc-state-default {     font-size: 14px;     font-weight: normal;     border: solid 1px #e2e2ee !important;     border-radius: 0 !important;     height: 34px;     width: 97px; }      .attendance-btn button.fc-button.fc-state-default.att-present-btn.selected,     .attendance-btn button.fc-button.fc-state-default.att-present-btn:hover {         background-color: #45b84b !important;         border-color: #45b84b !important;     }  .attendance-btn button i {     margin-right: 5px; }  .fc-button-group.attendance-btn .fc-agendaWeek-button.fc-button.fc-state-default.att-absent-btn.selected, .fc-button-group.attendance-btn .fc-agendaWeek-button.fc-button.fc-state-default.att-absent-btn:hover {     background-color: #d92a2a; }  .fc-button-group.attendance-btn { }      .fc-button-group.attendance-btn .fc-listWeek-button.fc-button.fc-state-default.fc-corner-right.att-late-btn:hover,     .fc-button-group.attendance-btn .fc-listWeek-button.fc-button.fc-state-default.fc-corner-right.att-late-btn.selected {         background-color: #f6d132;     }  .att-present-btn.selected i, .att-present-btn.selected, .att-absent-btn.selected i, .att-absent-btn.selected, .att-late-btn.selected i, .att-late-btn.selected, .att-present-btn:hover i, .att-present-btn:hover, .att-absent-btn:hover i, .att-absent-btn:hover, .att-late-btn:hover i, .att-late-btn:hover {     color: #fff !important; }  .att-present-btn i {     color: #45b84b !important; }  .att-absent-btn i {     color: #d92a2a !important; }  .att-late-btn i {     color: #f6d132 !important; }  .datatablesData .dataTable > tbody > tr.rowHere > td {     height: 80px !important; }  .datatablesData.AttendanceTableCon .table > thead > tr > th {     height: 40px;     color: #646480 !important;     font-weight: 500 !important;     font-size: 14px !important; }  .greenTick {     color: #45b84b !important; }  .redTimes {     color: #d92a2a !important; }  .yellowMinus {     color: #f6d132 !important; }  .lastSeven > div + div {     margin-left: 5px; }  .lastSeven > div {     flex: 1; }      .lastSeven > div p {         margin-bottom: 3px;     }  .datatablesData.AttendanceTableCon tbody :not(button):not(.reasonText) {     font-size: 16px !important;     font-weight: 500 !important;     line-height: 18px !important; }  .datatablesData.AttendanceTableCon .table > thead > tr > th.attNumber, .attNumber {     color: #c0c0d1 !important; }  .attendance-btn input[type="radio"] {     display: none; }  span#heading {     font-size: 24px !important;     color: #000 !important;     font-weight: bold !important; }    </style>');
+            mywindow.document.write('</head><body >');
+
+            mywindow.document.write(document.getElementById('DivToPrint').innerHTML);
+
+            mywindow.document.write('</body></html>');
+            mywindow.document.close();
+            mywindow.focus();
+
+            mywindow.print();
+            mywindow.close();
+
+        });
+
+
     });
 
 
