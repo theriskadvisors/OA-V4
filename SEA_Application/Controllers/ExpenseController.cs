@@ -69,7 +69,7 @@ namespace SEA_Application.Controllers
 
                 decimal Total =  Convert.ToDecimal( Vouchers.uppertotal);
 
-                if (CurrentBalanceOfAdminDrawer > Total)
+                if (CurrentBalanceOfAdminDrawer >= Total)
                 {    
 
                     string[] D4 = Vouchers.Time.Split('-');

@@ -136,8 +136,13 @@ else if (User.IsInRole("Staff"))
 <script>
 
     $(document).ready(function () {
+
+          $("#PageHeader").html("Daily Account Sheet");
+
         var TotalDebit = 0;
         var TotalCredit = 0;
+
+
         $.ajax({
 
             type: "POST",

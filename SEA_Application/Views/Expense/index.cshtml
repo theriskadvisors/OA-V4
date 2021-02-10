@@ -20,7 +20,7 @@ else if (User.IsInRole("Staff"))
 {
     Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
 }
-
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <link href="~/Content/select2.min.css" rel="stylesheet" />
 
 <script>
@@ -214,15 +214,15 @@ else if (User.IsInRole("Staff"))
 
                             $("#AdminDrawerBalance").val(RemaningBalanceInAdminD);
 
-                            $("#Success").css('display', 'block');
-                            $("#Error").css('display', 'none');
+                            $(".Success").css('display', 'block');
+                            $(".Error").css('display', 'none');
 
                         } else {
 
 
                             //  window.location.href = "/Expense/index";
-                            $("#Error").css('display', 'block');
-                            $("#Success").css('display', 'none');
+                            $(".Error").css('display', 'block');
+                            $(".Success").css('display', 'none');
 
                         }
                         $("#submit").prop('disabled', false);
@@ -293,20 +293,20 @@ else if (User.IsInRole("Staff"))
 
         //var newDiv = document.createElement("div")
 
-        $("#journaldiv").append('<div class="col-md-10" style="margin-top:3px" id="' + count + '">' +
-            '<div class="col-md-2">' +
-            '<select id="Expenses' + count + '" style="width:135px" class="form-control ExpensesDynamic" ><option value="-1" selected>---Select One---</option>' + HeadName + ExpenseList + '</select>' +
+        $("#journaldiv").append('<div  class="row" style="margin:0px"  id="' + count + '">' +
+            '<div class="col-md-3">' +
+            '<select id="Expenses' + count + '" class="form-control  ExpensesDynamic" ><option value="-1" selected>---Select One---</option>' + HeadName + ExpenseList + '</select>' +
             '</div>' +
-            '<div class="col-md-4" style="padding-left:35px">' +
+            '<div class="col-md-3" >' +
             '<input type="text" name="Name" id="description' + count + '" class="form-control" />' +
             '</div>' +
 
-            '<div class="col-md-1" style="padding:0px">' +
+            '<div class="col-md-3" >' +
             '<input type="text" name="cr" onkeyup="creditvalue()" onblur="NAN(this)" id="credit' + count + '" class="form-control cr" />' +
             '</div>' +
 
             '<div class="col-md-1">' +
-            '<button class="btn btn-danger remove_btn" onclick="Remove(' + count + ')"><i class="fa fa-remove"></i></button>' +
+            '<button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button>' +
             '</div>' +
             '</div>')
         //var id = "#branch" + count;
@@ -320,7 +320,7 @@ else if (User.IsInRole("Staff"))
 
         count = count + 1;
 
-        // $(".drop").select2();
+         $(".drop").select2();
     }
     function Remove(e) {
 
@@ -394,8 +394,6 @@ else if (User.IsInRole("Staff"))
         })
     }
 
-
-
     function addAllLedger(rowNumber) {
 
         var id = "#Expenses" + rowNumber;
@@ -466,132 +464,179 @@ else if (User.IsInRole("Staff"))
         <div class="card">
             <div class="card-body p-5">
 
-                <div class="col-md-8 pl-5 pr-5 ">
-
-                    <h2 class="column-heading mb-4">Cash Transaction</h2>
 
 
-                    <div id="Success" style="display:none;color:white;background:rgb(150,181,103)">
+                <h2 class="column-heading mb-4">Cash Transaction</h2>
+
+
+                <div class="Success" style="display:none;color:white;background:rgb(150,181,103)">
+                    Expense has been Added
+                </div>
+                <div class="Error" style="color:white;display:none;background:rgb(176,71,85)">
+
+                    Admin Drawer Don't  have enough balance to perform this action.
+
+                </div>
+
+                @*<div>
+            <span id="title" style="color:#808080;font-size:15px;font-weight:600"></span>
+            <hr />
+        </div>*@
+
+
+
+
+                <div class="col-md-6">
+                    <label for="" class="control-label">Date </label>
+                    <input type="date" class="form-control round-border" id="ddate" />
+
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <label for="" class="control-label">Admin Drawer Balance </label>
+                    <input type="text" class="form-control round-border" value="@ViewBag.CurrentBalance" id="AdminDrawerBalance" readonly />
+
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <label for="" class="control-label">Voucher No </label>
+                    <input id="VoucherNo" type="text" class="form-control" readonly />
+
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <label for="" class="control-label">Voucher  </label>
+                    <input type="text" class="form-control round-border" id="voucher" />
+                    <span id="Error_Vocuher" style="color:red"></span>
+                    <br />
+
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <label class="control-label">Notes  </label>
+                    <input type="text" name="Name" id="Notes" class="form-control" />
+
+                </div>
+
+
+
+                <div style="text-align:center;display:none" id="loaderDiv">
+                    <img src="~/Content/InternetSlowdown_Day.gif" width="50" /> @* //put any image in content folder*@
+                </div>
+
+
+
+
+
+                <br />
+                <br />
+
+                <div class="row" style="margin:0">
+
+
+                    <div class="col-md-3 ">
+                        <label for="" class="control-label">Account  </label>
+                        <select id='Expenses0' class='form-control '></select>
+
+                    </div>
+
+
+                    <div class=" col-md-3 ">
+                        <label for="" class="control-label">Description  </label>
+                        <input type="text" name="Name" id="description0" class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-3 ">
+                        <label for="" class="control-label">Amount  </label>
+                        <input type="text" name="cr" onkeyup="creditvalue()" onblur="NAN(this)" id="credit0" class="form-control cr" />
+
+                    </div>
+
+                    <div class="col-md-1" style="padding:0">
+
+                        <button style="background:#32CD32" id="JournalEntries" class="btn btn-sm btn-default " onclick="journalentries()"><i class="fa fa-plus" style="font-size:12px"></i></button>
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+                <div id="journaldiv">
+
+                </div>
+
+                <div class="row" style="margin:0">
+                    <div class="col-sm-3">
+
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input type="text" name="total" onblur="NAN(this)" id="zero" class="form-control " readonly />
+                        <span id="ErrorMsgOfEmptyFields" style="color:red"></span>
+                    </div>
+
+                    <span id="zero_Error" style="color:red;margin-top:5px !important;"></span>
+                    <div>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div class="col-md-12">
+
+
+                    <div class="Success" style="display:none;color:white;background:rgb(150,181,103)">
                         Expense has been Added
                     </div>
-                    <div id="Error" style="color:white;display:none;background:rgb(176,71,85)">
+                    <div class="Error" style="color:white;display:none;background:rgb(176,71,85)">
 
                         Admin Drawer Don't  have enough balance to perform this action.
 
                     </div>
 
-                    @*<div>
-                <span id="title" style="color:#808080;font-size:15px;font-weight:600"></span>
-                <hr />
-            </div>*@
+
+
+                    <br />
+                    <hr />
+                    @*<button class="col-md-2 form-control color2" onclick="window.location.href = '/Vouchers/Voucher'" style="border-radius:35px;border:hidden;margin-right:10px;background-color:red;color:white;font-size:11px;width:98px;height:38px;font-family:Montserrat" id="return"><i class="fa fa-arrow-left"></i> &nbsp;&nbsp; Return</button>
+
+            <input class="col-md-2 form-control color" id="submit" onclick="SaveVoucher()" type="submit" value="Save" style="border-radius:35px;color:white;border:hidden;background-color:#128edb;font-size:11px;width:98px;height:38px;font-family:Montserrat" />*@
 
 
 
-                    <div class="form-row mt-4">
-                        <div class="form-group col-md-12 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Date </label>
-                            <input type="date" class="form-control round-border" id="ddate" />
+                    <button type="button" onclick="window.location.href = ''" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                        <i class="material-icons mr-2">cached</i>  Return
+                    </button>
 
-                        </div>
-                    </div>
-
-                    <div class="form-row mt-4">
-                        <div class="form-group col-md-12 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Admin Drawer Balance </label>
-                            <input type="text" class="form-control round-border" value="@ViewBag.CurrentBalance" id="AdminDrawerBalance" readonly />
-
-                        </div>
-                    </div>
-
-                    <div class="form-row mt-4">
-                        <div class="form-group col-md-12 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Voucher No </label>
-                            <input id="VoucherNo" type="text" class="form-control" readonly />
-
-                        </div>
-                    </div>
-
-                    <div class="form-row mt-4">
-                        <div class="form-group col-md-12 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Voucher  </label>
-                            <input type="text" class="form-control round-border" id="voucher" />
-                            <span id="Error_Vocuher" style="color:red"></span>
-                            <br />
-
-                        </div>
-                    </div>
-
-                    <div class="form-row mt-4">
-                        <div class="form-group col-md-12 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Notes  </label>
-                            <input type="text" name="Name" id="Notes" class="form-control" />
-
-                        </div>
-                    </div>
+                    <button type="submit" onclick="SaveVoucher()" id="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
 
 
-                    <div style="text-align:center;display:none" id="loaderDiv">
-                        <img src="~/Content/InternetSlowdown_Day.gif" width="50" /> @* //put any image in content folder*@
-                    </div>
+                </div>
 
-
-
-
-
-
-
-                </div><!--end of column-->
-                <div class="col-md-12 pl-5 pr-5 ">
-
-                    <div class="form-row mt-4">
-
-
-                        <div class="form-group col-md-3 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Account  </label>
-                            <select id='Expenses0' class='form-control'></select>
-
-                        </div>
-
-
-                        <div class="form-group col-md-3 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Description  </label>
-                            <input type="text" name="Name" id="description0" class="form-control" />
-
-                        </div>
-
-                        <div class="form-group col-md-3 bmd-form-group">
-                            <label for="" class="bmd-label-static pl-2">Amount  </label>
-                            <input type="text" name="cr" onkeyup="creditvalue()" onblur="NAN(this)" id="credit0" class="form-control cr" />
-
-                        </div>
-
-                        <div class="form-group col-md-3 bmd-form-group">
-
-                            <button id="JournalEntries" class="btn btn-default" onclick="journalentries()"><i class="fa fa-plus fa-2x" style="color:gray"></i></button>
-
-                        </div>
-
-
-                        <div id="journaldiv">
-
-                        </div>
-
-
-                        <div class="form-group col-md-offset-6 bmd-form-group">
-                            <input type="text" name="total" onblur="NAN(this)" id="zero" class="form-control" readonly />
-                            <span id="ErrorMsgOfEmptyFields" style="color:red"></span>
-                        </div>
-                        <span id="zero_Error" style="color:red;margin-top:5px !important;"></span>
-                        <div class="col-md-1 col-md-offset-6" style="padding:0px">
-                        </div>
-
-                    </div>
-
-                    </div>
             </div>
+
+                </div>
             </div>
     </div>
-</div>
 
-
-                <script src="~/Content/Toaster/toastr.min.js"></script>
+<script src="~/Content/Toaster/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
