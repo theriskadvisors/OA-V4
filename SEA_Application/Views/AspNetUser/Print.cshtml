@@ -12,10 +12,21 @@
 <style type="text/css">
 
     @@media print {
-  #print {
-    display: none;
-  }
-}
+        #print {
+            display: none;
+        }
+    }
+
+    @@media print {
+        .pagebreak {
+            clear: both;
+            page-break-before: always !important;
+        }
+    }
+
+
+
+
     #container {
         height: 1050px;
         width: 750px;
@@ -49,10 +60,18 @@
         border: 1px solid;
         display: inline-block;
     }
+
+    .emptytablepadding {
+        padding: 15px;
+        text-align: center;
+    }
 </style>
 
 
 <input type="button" onclick="printDiv()" name="print" id="print" style="height:40px;cursor:pointer;width:70px;" value="Print" />
+<input type="hidden" name="Feetype" id="FeeType" value="@ViewBag.FeeType" />
+<input type="hidden" name="FeeAmount" id="FeeAmount" value="@ViewBag.TotalFee" />
+
 
 <div class="card">
     <div class="card-body p-4">
@@ -64,7 +83,7 @@
                 <div id="logo-block">
 
 
-                    <img src="~/Content/Images/International-pree.png" height="150" style="display: inline-block;float: left">
+                    <img src="~/Content/Images/International-pree.png" height="150" style="display: inline-block; float: left">
 
                     <div id="StudentPhoto" style="height: 150px;width: 151px;float:right;display: inline-block;">
 
@@ -430,6 +449,298 @@
     </div>
 </div>
 
+
+<div class="pagebreak">
+
+
+    <div id="container" class="container">
+
+        <div id="inner-container" class="inner-container ">
+
+            <div id="logo-block">
+
+
+
+                <div id="form-body">
+
+                    <table border="1">
+
+                        <tr>
+                            <td> <h3 class="headings margin-padding-zero"> Terms & Conditions   </h3>  </td>
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero" id="TermsAndConditions">
+
+                                <span>
+
+                                    1.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Dues once paid are neither refundable nor adjustable in any case.
+
+                                </span>
+                                <br>
+
+                                <span>
+                                    2.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Session timings are subjected to the availability of the teachers and can be amended if required.
+
+                                </span>
+                                <br>
+
+                                <span>
+                                    3.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    A fine will be charged if tuition fee or any other charges are paid after the due
+                                    date.
+                                </span>
+
+                                <br>
+
+                                <span>
+                                    4.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Misconduct with any teacher or student will be dealt strictly.
+                                </span>
+
+                                <br>
+
+                                <span>
+                                    5.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Institution will not, in any case, be responsible for any loss suffered by the student.
+                                </span>
+
+                                <br>
+
+                                <span>
+                                    6.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Morally presentable dress code is to be observed.
+                                </span>
+
+                                <br>
+
+                                <span>
+                                    7.&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Use of mobile phones during lecture is prohibited.
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td> <h3 class="headings margin-padding-zero"> Declaration   </h3>  </td>
+                        </tr>
+
+                        <tr>
+
+                            <td class="margin-padding-zero">
+                                <span>
+
+                                    I hereby certify that the infromation given here is authentic to the best of my knowledge and belief I understand that i will abide by all the present rules and regulations of the institute and those to be implemented in future.
+
+                                </span>
+                                <br>
+                                <br>
+
+                                <span>
+
+                                    I, therefore, agree to uphold all the rules and regulations and cooperate with administration and teachers.
+                                </span>
+
+                            </td>
+
+
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="margin-padding-zero">
+                                <br>
+                                To be signed by an Applicant
+
+
+
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+
+                                <table style="width: 100%">
+
+                                    <tr>
+
+                                        <td class="margin-padding-zero" align="center">
+
+                                            .................................
+                                            <br>
+
+                                            <span>
+
+                                                Name
+                                            </span>
+
+                                        </td>
+
+                                        <td class="margin-padding-zero" align="center">
+
+                                            .................................
+                                            <br>
+                                            Signature
+
+                                        </td>
+
+                                        <td class="margin-padding-zero" align="center">
+
+
+                                            .................................
+                                            <br>
+                                            Date
+
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td> <h3 class="headings margin-padding-zero"> For Official Use    </h3>  </td>
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero">
+                                <br>
+
+                                <span>Documents Check List </span>
+
+                                <br>
+                                <br>
+                                <span>
+                                    a) One recent passport sized colour photograph with blue background.
+                                    <input type="checkbox" name="">
+                                </span>
+                                <br>
+
+                                <span>
+                                    b) Photo copy of CNIC
+                                    <input type="checkbox" name="">
+                                </span>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="margin-padding-zero"> <span class="font_style_size"> Installments monthly    </span>  </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+
+                                <table border="1">
+
+
+                                    <tr>
+
+                                        <td class="emptytablepadding">1st </td>
+                                        <td class="emptytablepadding">2nd </td>
+                                        <td class="emptytablepadding">3rd</td>
+                                        <td class="emptytablepadding"> 4th </td>
+                                        <td class="emptytablepadding">5th</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                        <td class="emptytablepadding"></td>
+                                    </tr>
+
+                                </table>
+
+
+                            </td>
+                        </tr>
+
+
+                    </table> <!--end of table 1 -->
+
+
+
+                    <br>
+
+                    <span> Lumpsum <input id="Lumpsum" type="checkbox" name="lumpsum"></span>
+                    <br>
+                    <br>
+
+                    <span style="text-decoration:underline" id="FeeAmountDetails"></span>
+
+                    <br>
+                    <br>
+                    <br>
+                    <table style="width: 100%">
+
+                        <tr>
+
+                            <td class="margin-padding-zero" align="center">
+
+                                .................................
+                                <br>
+
+                                <span>
+
+                                    Name
+                                </span>
+
+                            </td>
+
+                            <td class="margin-padding-zero" align="center">
+
+                                .................................
+                                <br>
+                                Signature
+
+                            </td>
+
+                            <td class="margin-padding-zero" align="center">
+
+
+                                .................................
+                                <br>
+                                Date
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+
+
+
+
+                </div>	<!--end of form body-->
+
+
+
+
+            </div> <!--inner container-->
+
+
+        </div> <!--end of container -->
+    </div> <!--end of container -->
+
+</div>
+
 <script>
         $(document).ready(function () {
 
@@ -479,6 +790,25 @@
         })
 
 
+         $(document).ready(function () {
+
+
+            var FeeType = $("#FeeType").val();
+            var FeeAmount = $("#FeeAmount").val();
+
+            // alert(FeeType);
+            // alert(FeeAmount);
+            if (FeeType == "FullFee") {
+
+
+                $("#Lumpsum").prop("checked", true);
+                $("#FeeAmountDetails").html(FeeAmount);
+            }
+
+
+        })
+
+
     function printDiv() {
 
       //  var divToPrint = document.getElementById('container');
@@ -495,3 +825,14 @@
         window.print();
     }
 </script>
+
+
+
+
+
+
+
+
+
+
+

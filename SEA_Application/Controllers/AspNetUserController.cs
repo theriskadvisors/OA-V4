@@ -762,12 +762,7 @@ namespace SEA_Application.Controllers
 
             }
 
-
-            return View(studentPrintForm);
-        }
-
-        public ActionResult StudentPrint2(string id)
-        {
+            //Second print page  Code 
 
             int StudentId = db.AspNetStudents.Where(x => x.StudentID == id).Select(x => x.Id).FirstOrDefault();
 
@@ -790,6 +785,14 @@ namespace SEA_Application.Controllers
                 ViewBag.TotalFee = null;
                 ViewBag.FeeType = null;
             }
+
+
+            return View(studentPrintForm);
+        }
+
+        public ActionResult StudentPrint2(string id)
+        {
+
 
             return View();
         }
@@ -1325,12 +1328,7 @@ namespace SEA_Application.Controllers
 
 
                         }
-
-
-
                     }
-
-
 
                     //db.Entry(aspNetUser).State = EntityState.Modified;
 
