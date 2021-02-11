@@ -1,4 +1,5 @@
-﻿using SEA_Application.Models;
+﻿using Microsoft.AspNet.Identity;
+using SEA_Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace SEA_Application.Controllers
         }
         public ActionResult ChartsOf_Accounts()
         {
+            var id = User.Identity.GetUserId();
+
+            ViewBag.UserRole = db.GetUserRoleById(id).FirstOrDefault().ToString();
+
+
             return View();
         }
         public JsonResult GetChart()

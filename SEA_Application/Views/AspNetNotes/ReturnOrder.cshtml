@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "PlaceOrder";
-    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+    // Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <style>
@@ -24,7 +24,16 @@
     }
 </style>
 
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
 <div class="card">
     <div class="card-body p-4">
 

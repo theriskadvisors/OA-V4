@@ -251,6 +251,12 @@ namespace SEA_Application.Controllers
                 System.Web.HttpContext.Current.Session["PhotoCopierID"] = userID;
                 return RedirectToAction("Dashboard", "PhotoCopier_Dashboard");
             }
+            else if (UserManager.IsInRole(userID, "Receptionist"))
+            {
+                System.Web.HttpContext.Current.Session["ReceptionistID"] = userID;
+                return RedirectToAction("Dashboard", "Receptionist_Dashboard");
+
+            }
             else if (UserManager.IsInRole(userID, "Supervisor"))
             {
                 System.Web.HttpContext.Current.Session["SupervisorID"] = userID;
@@ -345,6 +351,12 @@ namespace SEA_Application.Controllers
                     {
                         System.Web.HttpContext.Current.Session["PhotoCopierID"] = userID;
                         return RedirectToAction("Dashboard", "PhotoCopier_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "Receptionist"))
+                    {
+                        System.Web.HttpContext.Current.Session["ReceptionistID"] = userID;
+                        return RedirectToAction("Dashboard", "Receptionist_Dashboard");
+
                     }
 
                     else if (UserManager.IsInRole(userID, "Admin"))
@@ -442,7 +454,6 @@ namespace SEA_Application.Controllers
 
            // var data2 = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Accountant") && x.Status != "False").ToList();
            
-            
           AspNetUser asp =   db.AspNetUsers.Where(x => x.UserName == model.UserName).FirstOrDefault();
           var VerifyUser = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Student") && x.Id == asp.Id).FirstOrDefault();
           if (VerifyUser != null)
@@ -610,6 +621,13 @@ namespace SEA_Application.Controllers
                        System.Web.HttpContext.Current.Session["StudentID"] = userID;
                          return RedirectToAction("Dashboard", "Student_Dashboard");
                     
+                    }
+
+                    else if (UserManager.IsInRole(userID, "Receptionist"))
+                    {
+                        System.Web.HttpContext.Current.Session["ReceptionistID"] = userID;
+                        return RedirectToAction("Dashboard", "Receptionist_Dashboard");
+
                     }
                     else if (UserManager.IsInRole(userID, "Supervisor"))
                     {

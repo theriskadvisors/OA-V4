@@ -12,6 +12,11 @@ else if (User.IsInRole("Staff"))
 {
     Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
 }
+ else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
 
 <style>
     .page-sidebar .page-sidebar-menu, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu {

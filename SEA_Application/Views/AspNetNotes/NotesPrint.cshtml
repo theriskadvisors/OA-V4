@@ -1,10 +1,20 @@
 ﻿@model IEnumerable<SEA_Application.Controllers.AspNetNotesController.CourseType>
 @{
     ViewBag.Title = "NotesPrint";
-    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+  //  Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
 
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -78,7 +88,7 @@
     $(document).ready(function () {
 
 
-        
+
         $("#PageHeader").html("Notes List");
     })
 

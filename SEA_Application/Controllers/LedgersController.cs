@@ -206,7 +206,7 @@ namespace SEA_Application.Controllers
                     ledger.CurrentBalance = ledger.StartingBalance;
                     db.Ledgers.Add(ledger);
                     db.SaveChanges();
-                    return RedirectToAction("LedgerList");
+                    return RedirectToAction("ChartsOf_Accounts", "ChartOfAccounts");
                 }
                 catch
                 {

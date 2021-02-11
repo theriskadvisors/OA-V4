@@ -4,15 +4,6 @@
     //Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
-@if (User.IsInRole("Admin"))
-{
-    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
-}
-else if (User.IsInRole("Staff"))
-{
-    Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
-}
-
 
 
 @model SEA_Application.Models.AspNetNote
@@ -20,12 +11,22 @@ else if (User.IsInRole("Staff"))
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+   // Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 @*<label>@Html.ActionLink("Home", "Dashboard", "Account") > @Html.ActionLink("Notes", "Index", "AspnetNotes") > <a href="#"><b>Edit</b></a> </label>*@
 
 @*<h4 class="orange">Edit Notes </h4>*@
 
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
 
 <div class="row">
     <div class="col-md-12">
@@ -45,499 +46,499 @@ else if (User.IsInRole("Staff"))
 
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="col-md-8 pl-5 pr-5 ">
-
-              
-
-                <div class="form-group bmd-form-group is-filled">
-
-                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
-
-                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @required = true } })
-                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-
-                </div>
+                    <div class="col-md-8 pl-5 pr-5 ">
 
 
-                <div class="form-group bmd-form-group is-filled">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "bmd-label-floating" })
 
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        <div class="form-group bmd-form-group is-filled">
 
-                </div>
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
 
-                @*<div class="form-group">
-            @Html.LabelFor(model => model.SubjectID, "SubjectID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control", @required = true })
-                @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-
-                <div class="form-row mt-4">
-                    <div class="form-group col-md-12 bmd-form-group">
-                        <label class="control-label">Subject</label>
-
-                        @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control", @required = true })
-                        @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-                <div class="form-row mt-4">
-                    <div class="form-group col-md-12 ">
-                        @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label" })
-
-                        @Html.DropDownListFor(model => model.CourseType, new List<SelectListItem>() {
-                    new SelectListItem {Text="CSS", Value="CSS"},
-                    new SelectListItem { Text="PMS",Value="PMS"},
-
-
-                   }, new { @class = "form-control" })
-
-                        @Html.ValidationMessageFor(model => model.CourseType, "", new { @class = "text-danger" })
-
-                    </div>
-                </div>
-
-
-                @*<div class="form-row mt-4">
-            <div class="form-group col-md-12 bmd-form-group">
-
-                @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label" })
-
-                <select name="CourseType" class="form-control" required>
-                    <option value="CSS">CSS</option>
-                    <option value="PMS">PMS</option>
-                </select>
-                <span id="Phone-Error" class="text-danger"></span>
-            </div>
-        </div>*@
-                <div class="form-row mt-4">
-                    <div class="form-group col-md-12 bmd-form-group">
-                        @Html.LabelFor(model => model.NotesType, htmlAttributes: new { @class = "control-label " })
-                        <div>
-                            @Html.DropDownListFor(model => model.NotesType, new List<SelectListItem>() {
-                        new SelectListItem {Text="Select One", Value="Choose"},
-                        new SelectListItem {Text="Notes", Value="Notes"},
-                        new SelectListItem { Text="Books",Value="Books"},
-
-
-                       }, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.NotesType, "", new { @class = "text-danger", @id = "NotesTypeValidation" })
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="form-group bmd-form-group is-filled">
-
-
-                    <label class="bmd-label-floating">Price</label>
-
-                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @id = "price", @min = "0", @class = "form-control", @required = true } })
-                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-                    <span style="color:red;display:none;" id="priceMsg"></span>
-
-                </div>
-
-
-                <div id="bookPercentageBlock" style="display:none">
-                    <div class="form-group bmd-form-group is-filled">
-                        <div>
-
-                            <label class="bmd-label-floating">Book Percentage</label>
-
-                            @*<input type="number" min="0" class="form-control" id="bookPercentage" name="bookPercentage" value="" />*@
-                            @Html.EditorFor(model => model.OABookPercentage, new { htmlAttributes = new { @id = "bookPercentage", @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.OABookPercentage, "", new { @class = "text-danger" })
-
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
 
                         </div>
 
-                    </div>
-                </div>
+
+                        <div class="form-group bmd-form-group is-filled">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "bmd-label-floating" })
+
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.SubjectID, "SubjectID", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                                    @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label class="control-label">Subject</label>
+
+                                @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                                @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 ">
+                                @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label" })
+
+                                @Html.DropDownListFor(model => model.CourseType, new List<SelectListItem>() {
+                            new SelectListItem {Text="CSS", Value="CSS"},
+                            new SelectListItem { Text="PMS",Value="PMS"},
+
+
+                           }, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.CourseType, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-row mt-4">
+                                <div class="form-group col-md-12 bmd-form-group">
+
+                                    @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label" })
+
+                                    <select name="CourseType" class="form-control" required>
+                                        <option value="CSS">CSS</option>
+                                        <option value="PMS">PMS</option>
+                                    </select>
+                                    <span id="Phone-Error" class="text-danger"></span>
+                                </div>
+                            </div>*@
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                @Html.LabelFor(model => model.NotesType, htmlAttributes: new { @class = "control-label " })
+                                <div>
+                                    @Html.DropDownListFor(model => model.NotesType, new List<SelectListItem>() {
+                                new SelectListItem {Text="Select One", Value="Choose"},
+                                new SelectListItem {Text="Notes", Value="Notes"},
+                                new SelectListItem { Text="Books",Value="Books"},
+
+
+                               }, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.NotesType, "", new { @class = "text-danger", @id = "NotesTypeValidation" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group bmd-form-group is-filled">
+
+
+                            <label class="bmd-label-floating">Price</label>
+
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @id = "price", @min = "0", @class = "form-control", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                            <span style="color:red;display:none;" id="priceMsg"></span>
+
+                        </div>
+
+
+                        <div id="bookPercentageBlock" style="display:none">
+                            <div class="form-group bmd-form-group is-filled">
+                                <div>
+
+                                    <label class="bmd-label-floating">Book Percentage</label>
+
+                                    @*<input type="number" min="0" class="form-control" id="bookPercentage" name="bookPercentage" value="" />*@
+                                    @Html.EditorFor(model => model.OABookPercentage, new { htmlAttributes = new { @id = "bookPercentage", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.OABookPercentage, "", new { @class = "text-danger" })
+
+
+                                </div>
+
+                            </div>
+                        </div>
 
 
 
 
 
-                <div id="totalPagesBlock" style="display:none">
-                    <div class="form-group bmd-form-group is-filled">
-                        <div>
+                        <div id="totalPagesBlock" style="display:none">
+                            <div class="form-group bmd-form-group is-filled">
+                                <div>
 
-                            <label class="bmd-label-floating">Total Pages</label>
+                                    <label class="bmd-label-floating">Total Pages</label>
 
 
-                            @*<input type="number" min="0"  class="form-control" id="totalPages" name="totalPages" value="" />*@
-                            @Html.EditorFor(model => model.Pages, new { htmlAttributes = new { @id = "totalPages", @class = "form-control" } })
+                                    @*<input type="number" min="0"  class="form-control" id="totalPages" name="totalPages" value="" />*@
+                                    @Html.EditorFor(model => model.Pages, new { htmlAttributes = new { @id = "totalPages", @class = "form-control" } })
 
-                            @Html.ValidationMessageFor(model => model.Pages, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(model => model.Pages, "", new { @class = "text-danger" })
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="perPagePriceBlock" style="display:none">
+                            <div class="form-group bmd-form-group is-filled">
+
+                                <div>
+
+                                    <label class="bmd-label-floating">Per Page Price</label>
+
+                                    @*<input type="number" min="0" id="perPagePrice" class="form-control" name="perPagePrice" value="" />*@
+                                    @Html.EditorFor(model => model.PerPagePrice, new { htmlAttributes = new { @id = "perPagePrice", @class = "form-control" } })
+
+                                    @Html.ValidationMessageFor(model => model.PerPagePrice, "", new { @class = "text-danger" })
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group bmd-form-group is-filled">
+
+
+                            <label class="bmd-label-floating">Binding Price</label>
+
+                            @*<input type="number" min="0" id="bindingPrice" class="form-control"  name="bindingPrice" value="" />*@
+                            @Html.EditorFor(model => model.BindingPrice, new { htmlAttributes = new { @id = "bindingPrice", @class = "form-control", @required = true } })
+
+                            @Html.ValidationMessageFor(model => model.BindingPrice, "", new { @class = "text-danger" })
+
+                        </div>
+
+                        <br />
+
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4">OA Price</label>
+                            <div class="col-md-4">
+                                Rs  <span id="oAPrice">@Html.DisplayTextFor(x => x.OAPrice)</span>/-
+                                @Html.ValidationMessageFor(model => model.OAPrice, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4">PhotoCopier Price</label>
+                            <div class="col-md-4">
+                                Rs <span id="photoCopierPrice">@Html.DisplayTextFor(x => x.PhotoCopierPrice)</span>/-
+                                @Html.ValidationMessageFor(model => model.PhotoCopierPrice, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4">Grand Total</label>
+                            <div class="col-md-4">
+                                Rs <span id="grandTotal">@Html.DisplayTextFor(x => x.GrandTotal)</span> /-
+
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="col-md-8 pl-5 pr-5 ">
+                            <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                            <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                                <i class="material-icons mr-2">cached</i>  Cancel
+                            </button>
 
 
 
                         </div>
-                    </div>
-                </div>
-
-                <div id="perPagePriceBlock" style="display:none">
-                    <div class="form-group bmd-form-group is-filled">
-
-                        <div>
-
-                            <label class="bmd-label-floating">Per Page Price</label>
-
-                            @*<input type="number" min="0" id="perPagePrice" class="form-control" name="perPagePrice" value="" />*@
-                            @Html.EditorFor(model => model.PerPagePrice, new { htmlAttributes = new { @id = "perPagePrice", @class = "form-control" } })
-
-                            @Html.ValidationMessageFor(model => model.PerPagePrice, "", new { @class = "text-danger" })
 
 
 
-                        </div>
-                    </div>
-                </div>
+                        @*<div class="form-group">
+                                <div class="col-md-offset-2 col-md-4">
+                                    <input type="submit" value="Save" class="btn btn-default" />
+                                </div>
+                            </div>*@
 
 
-                <div class="form-group bmd-form-group is-filled">
-
-
-                    <label class="bmd-label-floating">Binding Price</label>
-
-                    @*<input type="number" min="0" id="bindingPrice" class="form-control"  name="bindingPrice" value="" />*@
-                    @Html.EditorFor(model => model.BindingPrice, new { htmlAttributes = new { @id = "bindingPrice", @class = "form-control", @required = true } })
-
-                    @Html.ValidationMessageFor(model => model.BindingPrice, "", new { @class = "text-danger" })
-
-                </div>
-
-                <br />
-
-
-                <div class="form-group row">
-                    <label class="control-label col-md-4">OA Price</label>
-                    <div class="col-md-4">
-                        Rs  <span id="oAPrice">@Html.DisplayTextFor(x => x.OAPrice)</span>/-
-                        @Html.ValidationMessageFor(model => model.OAPrice, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-
-                <div class="form-group row">
-                    <label class="control-label col-md-4">PhotoCopier Price</label>
-                    <div class="col-md-4">
-                        Rs <span id="photoCopierPrice">@Html.DisplayTextFor(x => x.PhotoCopierPrice)</span>/-
-                        @Html.ValidationMessageFor(model => model.PhotoCopierPrice, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-
-                <div class="form-group row">
-                    <label class="control-label col-md-4">Grand Total</label>
-                    <div class="col-md-4">
-                        Rs <span id="grandTotal">@Html.DisplayTextFor(x => x.GrandTotal)</span> /-
-
-                    </div>
-                </div>
-
-                <br>
-
-                <div class="col-md-8 pl-5 pr-5 ">
-                    <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
-
-
-                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                        <i class="material-icons mr-2">cached</i>  Cancel
-                    </button>
-
-
-
-                </div>
-
-
-
-                @*<div class="form-group">
-                    <div class="col-md-offset-2 col-md-4">
-                        <input type="submit" value="Save" class="btn btn-default" />
-                    </div>
-                </div>*@
-
-
-            </div> <!--End of Col 8-->
+                    </div> <!--End of Col 8-->
 
                 }
 
             </div>
-                </div>
+        </div>
     </div>
 </div>
 
-                <script>
-                    $(document).ready(function () {
+<script>
+    $(document).ready(function () {
 
-                        $("#PageHeader").html("Edit Notes");
+        $("#PageHeader").html("Edit Notes");
 
-                        $("#cancel").click(function () {
+        $("#cancel").click(function () {
 
-                            window.location.href = '/AspNetNotes/index';
+            window.location.href = '/AspNetNotes/index';
 
-                        });
+        });
 
 
-                        var oa = $("#oAPrice").text();
-                        var pc = $("#photoCopierPrice").text();
-                        var gt = $("#grandTotal").text();
+        var oa = $("#oAPrice").text();
+        var pc = $("#photoCopierPrice").text();
+        var gt = $("#grandTotal").text();
 
 
-                        $("#grandTotalHidden").val(gt);
-                        $("#photoCopierHidden").val(pc);
-                        $("#oAHidden").val(oa);
+        $("#grandTotalHidden").val(gt);
+        $("#photoCopierHidden").val(pc);
+        $("#oAHidden").val(oa);
 
 
 
 
-                        //$('input[type=submit]').on('click', function (e) {
+        //$('input[type=submit]').on('click', function (e) {
 
-                        //    e.preventDefault();
+        //    e.preventDefault();
 
 
 
-                        //});
-                        //  $("#NotesType").click(function () { alert("usama");    })
+        //});
+        //  $("#NotesType").click(function () { alert("usama");    })
 
 
 
 
 
-                        $("#NotesType").click(function () {
+        $("#NotesType").click(function () {
 
 
-                            $("#NotesTypeValidation").css('display', 'none');
+            $("#NotesTypeValidation").css('display', 'none');
 
-                        })
-                        var SelectedNotesType = $("#NotesType option:selected").val()
+        })
+        var SelectedNotesType = $("#NotesType option:selected").val()
 
-                        if (SelectedNotesType == "Notes") {
+        if (SelectedNotesType == "Notes") {
 
-                            $("#totalPagesBlock").css('display', 'block');
-                            $("#perPagePriceBlock").css('display', 'block');
-                            $("#bookPercentageBlock").css('display', 'none');
+            $("#totalPagesBlock").css('display', 'block');
+            $("#perPagePriceBlock").css('display', 'block');
+            $("#bookPercentageBlock").css('display', 'none');
 
-                            $("#totalPages").prop('required', true);
-                            $("#perPagePrice").prop('required', true);
-                            $("#bindingPrice").prop('required', true);
-                            $("#bookPercentage").prop('required', false);
+            $("#totalPages").prop('required', true);
+            $("#perPagePrice").prop('required', true);
+            $("#bindingPrice").prop('required', true);
+            $("#bookPercentage").prop('required', false);
 
-                        }
-                        else if (NotesType == "Choose") {
+        }
+        else if (NotesType == "Choose") {
 
 
-                            $("#totalPagesBlock").css('display', 'none');
-                            $("#perPagePriceBlock").css('display', 'none');
-                            $("#bookPercentageBlock").css('display', 'none');
-                            $("#bookPercentageBlock").css('display', 'none');
-                            $("#bindingPrice").prop('required', true);
+            $("#totalPagesBlock").css('display', 'none');
+            $("#perPagePriceBlock").css('display', 'none');
+            $("#bookPercentageBlock").css('display', 'none');
+            $("#bookPercentageBlock").css('display', 'none');
+            $("#bindingPrice").prop('required', true);
 
-                        } else {
+        } else {
 
 
-                            $("#totalPagesBlock").css('display', 'none');
-                            $("#perPagePriceBlock").css('display', 'none');
-                            $("#bookPercentageBlock").css('display', 'block');
-                            $("#totalPages").prop('required', false);
-                            $("#perPagePrice").prop('required', false);
-                            $("#bindingPrice").prop('required', true);
-                            $("#bookPercentage").prop('required', true);
+            $("#totalPagesBlock").css('display', 'none');
+            $("#perPagePriceBlock").css('display', 'none');
+            $("#bookPercentageBlock").css('display', 'block');
+            $("#totalPages").prop('required', false);
+            $("#perPagePrice").prop('required', false);
+            $("#bindingPrice").prop('required', true);
+            $("#bookPercentage").prop('required', true);
 
 
-                        }
+        }
 
-                        $("#NotesType").change(function () {
+        $("#NotesType").change(function () {
 
-                            var NotesType = $("#NotesType option:selected").val()
-                            $("#oAPrice").html('0.0');
-                            $("#photoCopierPrice").html('0.0');
-                            $("#grandTotal").html('0.0');
+            var NotesType = $("#NotesType option:selected").val()
+            $("#oAPrice").html('0.0');
+            $("#photoCopierPrice").html('0.0');
+            $("#grandTotal").html('0.0');
 
-                            if (NotesType == "Notes") {
+            if (NotesType == "Notes") {
 
-                                $("#totalPagesBlock").css('display', 'block');
-                                $("#perPagePriceBlock").css('display', 'block');
-                                $("#bookPercentageBlock").css('display', 'none');
+                $("#totalPagesBlock").css('display', 'block');
+                $("#perPagePriceBlock").css('display', 'block');
+                $("#bookPercentageBlock").css('display', 'none');
 
-                                $("#totalPages").prop('required', true);
-                                $("#perPagePrice").prop('required', true);
-                                $("#bindingPrice").prop('required', true);
-                                $("#bookPercentage").prop('required', false);
+                $("#totalPages").prop('required', true);
+                $("#perPagePrice").prop('required', true);
+                $("#bindingPrice").prop('required', true);
+                $("#bookPercentage").prop('required', false);
 
 
-                            }
-                            else if (NotesType == "Choose") {
+            }
+            else if (NotesType == "Choose") {
 
 
-                                $("#totalPagesBlock").css('display', 'none');
-                                $("#perPagePriceBlock").css('display', 'none');
-                                $("#bookPercentageBlock").css('display', 'none');
-                                $("#bookPercentageBlock").css('display', 'none');
-                                $("#bindingPrice").prop('required', true);
+                $("#totalPagesBlock").css('display', 'none');
+                $("#perPagePriceBlock").css('display', 'none');
+                $("#bookPercentageBlock").css('display', 'none');
+                $("#bookPercentageBlock").css('display', 'none');
+                $("#bindingPrice").prop('required', true);
 
-                            }
-                            else {
+            }
+            else {
 
 
-                                $("#totalPagesBlock").css('display', 'none');
-                                $("#perPagePriceBlock").css('display', 'none');
-                                $("#bookPercentageBlock").css('display', 'block');
-                                $("#totalPages").prop('required', false);
-                                $("#perPagePrice").prop('required', false);
-                                $("#bindingPrice").prop('required', true);
-                                $("#bookPercentage").prop('required', true);
+                $("#totalPagesBlock").css('display', 'none');
+                $("#perPagePriceBlock").css('display', 'none');
+                $("#bookPercentageBlock").css('display', 'block');
+                $("#totalPages").prop('required', false);
+                $("#perPagePrice").prop('required', false);
+                $("#bindingPrice").prop('required', true);
+                $("#bookPercentage").prop('required', true);
 
 
-                            }
+            }
 
 
-                        })
+        })
 
 
-                        $("#totalPages").bind('keyup mouseup', function () {
+        $("#totalPages").bind('keyup mouseup', function () {
 
 
-                            Calculations();
+            Calculations();
 
 
-                        });
+        });
 
 
-                        $("#perPagePriceBlock").bind('keyup mouseup', function () {
+        $("#perPagePriceBlock").bind('keyup mouseup', function () {
 
 
-                            Calculations();
+            Calculations();
 
 
-                        });
+        });
 
-                        $("#bindingPrice").bind('keyup mouseup', function () {
+        $("#bindingPrice").bind('keyup mouseup', function () {
 
-                            Calculations();
+            Calculations();
 
 
-                        });
-                        $("#bookPercentage").bind('keyup mouseup', function () {
+        });
+        $("#bookPercentage").bind('keyup mouseup', function () {
 
-                            Calculations();
+            Calculations();
 
 
-                        });
+        });
 
 
 
 
-                        $("#price").bind('keyup mouseup', function () {
+        $("#price").bind('keyup mouseup', function () {
 
 
-                            $("#priceMsg").css('display', 'none');
-                            Calculations();
+            $("#priceMsg").css('display', 'none');
+            Calculations();
 
 
-                        });
+        });
 
 
-                        function Calculations() {
-                            debugger
-                            var NotesType = $("#NotesType option:selected").val();
+        function Calculations() {
+            debugger
+            var NotesType = $("#NotesType option:selected").val();
 
 
-                            var price = $("#price").val();
-                            var bookPercentage = $("#bookPercentage").val();
-                            var totalPages = $("#totalPages").val();
-                            var perPagePrice = $("#perPagePrice").val();
+            var price = $("#price").val();
+            var bookPercentage = $("#bookPercentage").val();
+            var totalPages = $("#totalPages").val();
+            var perPagePrice = $("#perPagePrice").val();
 
-                            var perPagePrice = $("#perPagePrice").val();
-                            var bindingPrice = $("#bindingPrice").val();
+            var perPagePrice = $("#perPagePrice").val();
+            var bindingPrice = $("#bindingPrice").val();
 
-                            if (bindingPrice == "") {
-                                bindingPrice = 0;
-                                // alert("0");
-                            }
+            if (bindingPrice == "") {
+                bindingPrice = 0;
+                // alert("0");
+            }
 
-                            var photoCopier = 0;
-                            var OAPrice = 0;
+            var photoCopier = 0;
+            var OAPrice = 0;
 
 
-                            if (NotesType == "Notes") {
+            if (NotesType == "Notes") {
 
-                                if (price != "" && totalPages != "" && perPagePrice != "" && bindingPrice != "") {
-                                    debugger;
+                if (price != "" && totalPages != "" && perPagePrice != "" && bindingPrice != "") {
+                    debugger;
 
-                                    if (parseInt(price) > parseFloat(bindingPrice)) {
+                    if (parseInt(price) > parseFloat(bindingPrice)) {
 
-                                        var NotesPrice = 0;
+                        var NotesPrice = 0;
 
-                                        NotesPrice = (totalPages * perPagePrice);
+                        NotesPrice = (totalPages * perPagePrice);
 
-                                        photoCopier = (NotesPrice + parseFloat(bindingPrice));
+                        photoCopier = (NotesPrice + parseFloat(bindingPrice));
 
-                                        $("#photoCopierPrice").html(photoCopier);
-                                        $("#photoCopierHidden").val(photoCopier);
-                                        OAPrice = price - NotesPrice;
-                                        $("#oAPrice").html(OAPrice);
-                                        $("#oAHidden").val(OAPrice);
-                                        var GrandTotal = (parseFloat(price) + parseFloat(bindingPrice));
+                        $("#photoCopierPrice").html(photoCopier);
+                        $("#photoCopierHidden").val(photoCopier);
+                        OAPrice = price - NotesPrice;
+                        $("#oAPrice").html(OAPrice);
+                        $("#oAHidden").val(OAPrice);
+                        var GrandTotal = (parseFloat(price) + parseFloat(bindingPrice));
 
-                                        // grandTotal
-                                        $("#grandTotal").html(GrandTotal);
-                                        $("#grandTotalHidden").val(GrandTotal);
+                        // grandTotal
+                        $("#grandTotal").html(GrandTotal);
+                        $("#grandTotalHidden").val(GrandTotal);
 
-                                    }
-                                    else {
+                    }
+                    else {
 
-                                        $("#priceMsg").css('display', 'block');
-                                        $("#priceMsg").html("Price should be greater the binding price");
+                        $("#priceMsg").css('display', 'block');
+                        $("#priceMsg").html("Price should be greater the binding price");
 
-                                    }
+                    }
 
-                                }
-                            }
-                            else if (NotesType == "Books") {
+                }
+            }
+            else if (NotesType == "Books") {
 
-                                if (price != "" && bookPercentage != "" && bindingPrice != "") {
+                if (price != "" && bookPercentage != "" && bindingPrice != "") {
 
-                                    OAPrice = price * (parseFloat(bookPercentage) / 100);
+                    OAPrice = price * (parseFloat(bookPercentage) / 100);
 
-                                    $("#oAPrice").html(OAPrice);
-                                    $("#oAHidden").val(OAPrice);
+                    $("#oAPrice").html(OAPrice);
+                    $("#oAHidden").val(OAPrice);
 
-                                    photoCopier = (parseFloat(price) - parseFloat(OAPrice)) + parseFloat(bindingPrice);
+                    photoCopier = (parseFloat(price) - parseFloat(OAPrice)) + parseFloat(bindingPrice);
 
 
-                                    $("#photoCopierPrice").html(photoCopier);
-                                    $("#photoCopierHidden").val(photoCopier);
+                    $("#photoCopierPrice").html(photoCopier);
+                    $("#photoCopierHidden").val(photoCopier);
 
-                                    var GrandTotal = (parseFloat(price) + parseFloat(bindingPrice));
+                    var GrandTotal = (parseFloat(price) + parseFloat(bindingPrice));
 
-                                    // grandTotal
-                                    $("#grandTotal").html(GrandTotal);
+                    // grandTotal
+                    $("#grandTotal").html(GrandTotal);
 
-                                    $("#grandTotalHidden").val(GrandTotal);
+                    $("#grandTotalHidden").val(GrandTotal);
 
-                                    $("#photoCopierPrice").html(photoCopier);
+                    $("#photoCopierPrice").html(photoCopier);
 
-                                }
+                }
 
-                            }
-                            else {
+            }
+            else {
 
-                            }
+            }
 
-                        }// end of Calculation Function
+        }// end of Calculation Function
 
-                    })
+    })
 
-                </script>
+</script>
 
 

@@ -9,11 +9,12 @@
 {
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
-else if (User.IsInRole("Staff"))
-{
-    Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
-}
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
 
 <div class="row">
     <div class="col-md-12">
@@ -32,179 +33,179 @@ else if (User.IsInRole("Staff"))
 
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="col-md-8 pl-5 pr-5 ">
-                <h2 class="column-heading mb-4">Notes</h2>
-                <div class="form-group bmd-form-group is-filled">
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <h2 class="column-heading mb-4">Notes</h2>
+                        <div class="form-group bmd-form-group is-filled">
 
-                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
-                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @required = true } })
-                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
 
-                </div>
-
-                <div class="form-group bmd-form-group is-filled">
-
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "bmd-label-floating" })
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-
-                </div>
-
-
-
-                <div class="form-row mt-4">
-                    <div class="form-group col-md-12 bmd-form-group">
-                        <label class="control-label">Subject</label>
-
-                        @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control", @required = true })
-                        @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-                <div class="form-row mt-4">
-                    <div class="form-group col-md-12 bmd-form-group">
-
-                        @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label" })
-
-                        <select name="CourseType" class="form-control" required>
-                            <option value="CSS">CSS</option>
-                            <option value="PMS">PMS</option>
-                        </select>
-                        <span id="Phone-Error" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-row mt-4">
-                    <div class="form-group col-md-12 bmd-form-group">
-
-                        @Html.LabelFor(model => model.NotesType, htmlAttributes: new { @class = "control-label", @required = true })
-                        <div>
-                            <select id="Notestype" name="NotesType" class="form-control" required>
-                                <option value="Choose">Select One</option>
-                                <option value="Notes">Notes</option>
-                                <option value="Books">Books</option>
-
-                            </select>
-                            @Html.ValidationMessageFor(model => model.NotesType, "", new { @class = "text-danger", @id = "NotesTypeValidation" })
-
-                            <span id="Phone-Error" class="text-danger"></span>
                         </div>
 
-                        <span id="Phone-Error" class="text-danger"></span>
-                    </div>
-                </div>
+                        <div class="form-group bmd-form-group is-filled">
 
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "bmd-label-floating" })
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
 
-
-                <div class="form-group bmd-form-group is-filled">
-
-
-                    <label class="bmd-label-floating">Price</label>
-
-                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @id = "price", @min = "0", @class = "form-control", @required = true } })
-                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-                    <span style="color:red;display:none;" id="priceMsg"></span>
-
-                </div>
-
-
-                <div id="bookPercentageBlock" style="display:none">
-
-                    <div class="form-group bmd-form-group is-filled">
-
-                        <label class="bmd-label-floating">Book Percentage</label>
-                        @Html.EditorFor(model => model.OABookPercentage, new { htmlAttributes = new { @id = "bookPercentage", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.OABookPercentage, "", new { @class = "text-danger" })
-
-                    </div>
-
-                </div><!--Book Percentage Block-->
-
-
-
-                <div id="totalPagesBlock" style="display:none">
-
-                    <div class="form-group bmd-form-group is-filled">
-
-                        <label class="bmd-label-floating">Total Pages</label>
-                        @Html.EditorFor(model => model.Pages, new { htmlAttributes = new { @id = "totalPages", @class = "form-control" } })
-
-                        @Html.ValidationMessageFor(model => model.Pages, "", new { @class = "text-danger" })
-
-                    </div>
-
-
-                </div><!--total Pages Block-->
-
-
-                <div id="perPagePriceBlock" style="display:none">
-
-                    <div class="form-group bmd-form-group is-filled">
-
-                        <label class="bmd-label-floating">Per Page Price</label>
-                        @Html.EditorFor(model => model.PerPagePrice, new { htmlAttributes = new { @id = "perPagePrice", @class = "form-control" } })
-
-                        @Html.ValidationMessageFor(model => model.PerPagePrice, "", new { @class = "text-danger" })
-
-                    </div>
-
-
-                </div><!--perPagePriceBlock-->
-
-
-
-                <div class="form-group bmd-form-group is-filled">
-
-                    <label class="bmd-label-floating">Binding Price</label>
-                    @Html.EditorFor(model => model.BindingPrice, new { htmlAttributes = new { @id = "bindingPrice", @class = "form-control", @required = true } })
-
-                    @Html.ValidationMessageFor(model => model.BindingPrice, "", new { @class = "text-danger" })
-
-                </div>
-                <br />
-                
-              
-                    <div class="form-group row">
-
-                        <label class="control-label col-md-4">OA Price</label>
-                        <div class="col-md-4">
-                            Rs <span id="oAPrice">0.0</span>/-
                         </div>
-                    </div>
 
-                    <div class="form-group row">
 
-                        <label class="control-label col-md-4">PhotoCopier Price</label>
-                        <div class="col-md-4">
-                            Rs <span id="photoCopierPrice">0.0</span>/-
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label class="control-label">Subject</label>
+
+                                @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                                @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
 
-                        <label class="control-label col-md-4">Grand Total</label>
-                        <div class="col-md-4">
-                            Rs <span id="grandTotal">0.0</span>/-
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+
+                                @Html.LabelFor(model => model.CourseType, htmlAttributes: new { @class = "control-label" })
+
+                                <select name="CourseType" class="form-control" required>
+                                    <option value="CSS">CSS</option>
+                                    <option value="PMS">PMS</option>
+                                </select>
+                                <span id="Phone-Error" class="text-danger"></span>
+                            </div>
                         </div>
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+
+                                @Html.LabelFor(model => model.NotesType, htmlAttributes: new { @class = "control-label", @required = true })
+                                <div>
+                                    <select id="Notestype" name="NotesType" class="form-control" required>
+                                        <option value="Choose">Select One</option>
+                                        <option value="Notes">Notes</option>
+                                        <option value="Books">Books</option>
+
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.NotesType, "", new { @class = "text-danger", @id = "NotesTypeValidation" })
+
+                                    <span id="Phone-Error" class="text-danger"></span>
+                                </div>
+
+                                <span id="Phone-Error" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group bmd-form-group is-filled">
+
+
+                            <label class="bmd-label-floating">Price</label>
+
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @id = "price", @min = "0", @class = "form-control", @required = true } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                            <span style="color:red;display:none;" id="priceMsg"></span>
+
+                        </div>
+
+
+                        <div id="bookPercentageBlock" style="display:none">
+
+                            <div class="form-group bmd-form-group is-filled">
+
+                                <label class="bmd-label-floating">Book Percentage</label>
+                                @Html.EditorFor(model => model.OABookPercentage, new { htmlAttributes = new { @id = "bookPercentage", @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.OABookPercentage, "", new { @class = "text-danger" })
+
+                            </div>
+
+                        </div><!--Book Percentage Block-->
+
+
+
+                        <div id="totalPagesBlock" style="display:none">
+
+                            <div class="form-group bmd-form-group is-filled">
+
+                                <label class="bmd-label-floating">Total Pages</label>
+                                @Html.EditorFor(model => model.Pages, new { htmlAttributes = new { @id = "totalPages", @class = "form-control" } })
+
+                                @Html.ValidationMessageFor(model => model.Pages, "", new { @class = "text-danger" })
+
+                            </div>
+
+
+                        </div><!--total Pages Block-->
+
+
+                        <div id="perPagePriceBlock" style="display:none">
+
+                            <div class="form-group bmd-form-group is-filled">
+
+                                <label class="bmd-label-floating">Per Page Price</label>
+                                @Html.EditorFor(model => model.PerPagePrice, new { htmlAttributes = new { @id = "perPagePrice", @class = "form-control" } })
+
+                                @Html.ValidationMessageFor(model => model.PerPagePrice, "", new { @class = "text-danger" })
+
+                            </div>
+
+
+                        </div><!--perPagePriceBlock-->
+
+
+
+                        <div class="form-group bmd-form-group is-filled">
+
+                            <label class="bmd-label-floating">Binding Price</label>
+                            @Html.EditorFor(model => model.BindingPrice, new { htmlAttributes = new { @id = "bindingPrice", @class = "form-control", @required = true } })
+
+                            @Html.ValidationMessageFor(model => model.BindingPrice, "", new { @class = "text-danger" })
+
+                        </div>
+                        <br />
+
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-4">OA Price</label>
+                            <div class="col-md-4">
+                                Rs <span id="oAPrice">0.0</span>/-
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-4">PhotoCopier Price</label>
+                            <div class="col-md-4">
+                                Rs <span id="photoCopierPrice">0.0</span>/-
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label class="control-label col-md-4">Grand Total</label>
+                            <div class="col-md-4">
+                                Rs <span id="grandTotal">0.0</span>/-
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div> <!--End of Col 8-->
+                    <br>
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+
+
                     </div>
-
-
-
-
-
-                </div> <!--End of Col 8-->
-               <br>
-                <div class="col-md-8 pl-5 pr-5 ">
-                    <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
-
-
-                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                        <i class="material-icons mr-2">cached</i>  Cancel
-                    </button>
-
-
-
-                </div>
 
                 }
 
