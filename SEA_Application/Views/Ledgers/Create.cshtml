@@ -105,7 +105,7 @@ else
 
                         <div>
                             <div class="form-group">
-                                <div class="col-md-6">
+                                @*<div class="col-md-6">
                                     <label class="container" style="float:left">
                                         <input type="radio" value="Head" name="radio"><span>Group</span>
                                         <span class="checkmark"></span>
@@ -113,7 +113,7 @@ else
 
                                     @Html.DropDownList("LedgerGroupId", null, htmlAttributes: new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.LedgerGroupId, "", new { @class = "text-danger" })
-                                </div>
+                                </div>*@
                                 <div class="col-md-6">
                                     <label class="container" style="float:left">
                                         <input type="radio" value="Group" name="radio"><span>Accounting Head</span>
@@ -127,20 +127,20 @@ else
                             <div class="form-group">
                                 <div class="col-md-6">
                                     @*<span>Session</span>
-                                        @Html.DropDownList("SessionId", null, htmlAttributes: new { @class = "form-control", @required = "required" })
-                                        @Html.ValidationMessageFor(model => model.SessionId, "", new { @class = "text-danger" })*@
+        @Html.DropDownList("SessionId", null, htmlAttributes: new { @class = "form-control", @required = "required" })
+        @Html.ValidationMessageFor(model => model.SessionId, "", new { @class = "text-danger" })*@
 
+                                    @*<select class="form-control" id="LedgerGroupId" name="LedgerGroupId" required></select>*@
 
-                                    <div class="form-row mt-4">
+                                    @*<div class="form-row mt-4">
                                         <div class="form-group col-md-12 bmd-form-group">
                                             <label for="" class="bmd-label-static pl-2">Session</label>
 
-                                            @*<select class="form-control" id="LedgerGroupId" name="LedgerGroupId" required></select>*@
                                             @Html.DropDownList("SessionId", null, htmlAttributes: new { @class = "form-control", @required = "required" })
                                             @Html.ValidationMessageFor(model => model.SessionId, "", new { @class = "text-danger" })
 
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
                             </div>
                         </div>
