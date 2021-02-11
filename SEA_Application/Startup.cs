@@ -77,7 +77,33 @@ namespace SEA_Application
 
                 }
               }
-           
+
+            if (!roleManager.RoleExists("Receptionist"))
+            {
+                // first we create Admin rool   
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Receptionist";
+                roleManager.Create(role);
+
+                //Here we create a Admin super user who will maintain the website                  
+
+                var user = new ApplicationUser();
+                user.UserName = "Receptionist";
+                user.Name = "Receptionist";
+                user.Email = "Reception@Demo.com";
+
+                string userPWD = "Reception@1234";
+
+                var chkUser = UserManager.Create(user, userPWD);
+
+                //Add default User to Role Admin   
+                if (chkUser.Succeeded)
+                {
+                    var result1 = UserManager.AddToRole(user.Id, "Receptionist");
+
+                }
+            }
+
             if (!roleManager.RoleExists("Principal"))
             {
 
