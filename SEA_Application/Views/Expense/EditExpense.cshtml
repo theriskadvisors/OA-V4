@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<SEA_Application.Models.VoucherRecord>
 @{
     ViewBag.Title = "index";
     //Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
@@ -41,7 +41,7 @@ else if (User.IsInRole("Staff"))
         addAllLedger(0);
         // AddBranch(0);
         // addCashLedger();
-        CheckVoucherNo();
+       // CheckVoucherNo();
 
         var now = new Date();
 
@@ -60,7 +60,135 @@ else if (User.IsInRole("Staff"))
                 var id = $(this).children(".select2-hidden-accessible").context.id;
 
             });
-    })
+
+        var VoucherId = $("#VoucherIdHiddent").val();
+
+        $.ajax({
+
+            type: "POST",
+            url: "/Expense/ExpenseRecordsToEdit",
+            data: { "id": VoucherId },
+            success: function (data) {
+                //alert();
+
+                var Name = data.Name;
+                var Notes = data.Notes;
+                var VoucherNoOfVoucher = data.VoucherNo;
+                var VoucherRecordList = data.VoucherRecordsList;
+
+                $("#voucher").val(Name);
+                $("#Notes").val(Notes);
+                $("#VoucherNo").val(VoucherNoOfVoucher);
+
+
+                //   alert(Name);
+                // alert(Notes);
+                var i = 0;
+                  var Amount = 0;
+                $.each(VoucherRecordList, function (index) {
+
+                    if (i == 0) {
+
+
+                        $("#journaldiv0").append('<div class="row" style="margin:0px"   id="' + i + '">' +
+                            '<div class="col-md-3">' +
+                            '<select id="Expenses' + i + '" class="form-control  ExpensesDynamic" ><option value="-1" selected>---Select One---</option>' + HeadName + ExpenseList + '</select>' +
+                            '</div>' +
+                            '<div class="col-md-3" >' +
+                            '<input type="text" value = "' + VoucherRecordList[index].Description + '" name="Name" id="description' + i + '" class="form-control" />' +
+                            '</div>' +
+
+                            '<div class="col-md-3" >' +
+                            '<input type="text" name="cr" value = "' + VoucherRecordList[index].Amount + '" onkeyup="creditvalue()" onblur="NAN(this)" id="credit' + i + '" class="form-control cr" />' +
+                            '</div>' +
+
+                            '<div class="col-md-1">' +
+                            '<button style="background:#32CD32"  id="JournalEntries"  class="btn btn-sm btn-default  remove_btn" onclick="journalentries()"><i style ="font-size:12px;" class="fa fa-plus"></i></button>' +
+                            '</div>' +
+                            '</div>')
+
+                        //<button style="background:#32CD32" id="JournalEntries" class="btn btn-sm btn-default " onclick="journalentries()"><i class="fa fa-plus" style="font-size:12px"></i></button>
+
+                        $('#Expenses' + i).val(VoucherRecordList[index].LedgerId);
+
+                        Amount = Amount + parseFloat( VoucherRecordList[index].Amount);
+                    }
+                    else {
+
+
+                        $("#journaldiv").append('<div  class="row" style="margin:0px"  id="' + i + '">' +
+                            '<div class="col-md-3">' +
+                            '<select id="Expenses' + i + '" class="form-control  ExpensesDynamic" ><option value="-1" selected>---Select One---</option>' + HeadName + ExpenseList + '</select>' +
+                            '</div>' +
+                            '<div class="col-md-3" >' +
+                            '<input type="text" value = "' + VoucherRecordList[index].Description + '" name="Name" id="description' + i + '" class="form-control" />' +
+                            '</div>' +
+
+                            '<div class="col-md-3" >' +
+                            '<input type="text" value = "' + VoucherRecordList[index].Amount + '" name="cr" onkeyup="creditvalue()" onblur="NAN(this)" id="credit' + i + '" class="form-control cr" />' +
+                            '</div>' +
+
+                            '<div class="col-md-1">' +
+                            '<button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + i + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button>' +
+                            '</div>' +
+                            '</div>')
+
+                        $('#Expenses' + i).val(VoucherRecordList[index].LedgerId);
+
+                          Amount = Amount + parseFloat( VoucherRecordList[index].Amount);;
+
+                    }
+
+                    row[i] = i;
+                    arr[i] = i;
+                    i++;
+
+                    count = i; 
+
+                });
+
+                //alert(Amount);
+                $("#zero").val(Amount);
+
+
+            }//end of success method 
+
+
+
+
+        })
+
+
+        $("#DeleteButton").click(function () {
+
+            var HiddenVoucherId = $("#VoucherIdHiddent").val();
+
+            $.ajax({
+
+                type: "POST",
+                url: "/Expense/DeleteExpense",
+                data: { 'id': HiddenVoucherId },
+                success: function (data) {
+
+                    if (data == "success") {
+
+                       // alert("success");
+                        window.location.href = "/Expense/ExpenseList";
+
+                    }
+                }
+
+            })
+
+        })
+
+
+        $("#btnCancel").click(function () {
+
+            window.location.href = '/Expense/ExpenseList';
+        })
+
+    })//end of document ready
 
     var VoucherDetail =
     {
@@ -79,7 +207,8 @@ else if (User.IsInRole("Staff"))
         uppertotal: '',
         VoucherNo: '',
         accounttype: '',
-        VoucherDetail: []
+        VoucherDetail: [],
+        VoucherDeleteId: '',
     }
 
     Vouchers = [];
@@ -108,11 +237,16 @@ else if (User.IsInRole("Staff"))
 
         else {
 
+            var HiddenVoucherId = $("#VoucherIdHiddent").val();
+
             Voucher = Object.create(Voucher);
             Voucher.VoucherName = $('#voucher').val();
             Voucher.Narration = $('#Notes').val();
             Voucher.VoucherNo = $('#VoucherNo').val();
             Voucher.Time = $('#ddate').val();
+
+            Voucher.VoucherDeleteId = HiddenVoucherId;
+
             // Voucher.uppercode = $('#uppercode').val();
             //  Voucher.upperdesc = $('#upperdesc').val();
 
@@ -178,7 +312,7 @@ else if (User.IsInRole("Staff"))
                     contentType: 'application/json; charset=utf-8',
                     dataType: 'json',
                     type: 'POST',
-                    url: '/Expense/AddCashVoucher',
+                    url: '/Expense/EditCashVoucher',
                     data: Vouchers,
                     success: function (data) {
 
@@ -196,10 +330,12 @@ else if (User.IsInRole("Staff"))
                             $('#credit0').val("");
                             debugger
                             $(".remove_btn").click();
+
                             Voucher.uppertotal = $('#zero').val("");
                             //   $("#Expenses0").prepend("<option value='-1' selected>---Select One---</option>");
 
-                            CheckVoucherNo();
+
+                            //CheckVoucherNo();
 
                             var now = new Date();
                             var day = ("0" + now.getDate()).slice(-2);
@@ -216,6 +352,9 @@ else if (User.IsInRole("Staff"))
 
                             $(".Success").css('display', 'block');
                             $(".Error").css('display', 'none');
+
+
+                            window.location.href = '/Expense/ExpenseList';
 
                         } else {
 
@@ -320,7 +459,7 @@ else if (User.IsInRole("Staff"))
 
         count = count + 1;
 
-         $(".drop").select2();
+        $(".drop").select2();
     }
     function Remove(e) {
 
@@ -466,11 +605,11 @@ else if (User.IsInRole("Staff"))
 
 
 
-                <h2 class="column-heading mb-4">Cash Transaction</h2>
+                <h2 class="column-heading mb-4">Edit Expenses</h2>
 
 
                 <div class="Success" style="display:none;color:white;background:rgb(150,181,103)">
-                    Expense has been Added
+                    Expense has been updated
                 </div>
                 <div class="Error" style="color:white;display:none;background:rgb(176,71,85)">
 
@@ -479,12 +618,12 @@ else if (User.IsInRole("Staff"))
                 </div>
 
                 @*<div>
-            <span id="title" style="color:#808080;font-size:15px;font-weight:600"></span>
-            <hr />
-        </div>*@
+                        <span id="title" style="color:#808080;font-size:15px;font-weight:600"></span>
+                        <hr />
+                    </div>*@
 
 
-
+                <input type="hidden" id="VoucherIdHiddent" name="name" value="@ViewBag.VoucherId" />
 
                 <div class="col-md-6">
                     <label for="" class="control-label">Date </label>
@@ -539,36 +678,35 @@ else if (User.IsInRole("Staff"))
                 <br />
                 <br />
 
-                <div class="row" style="margin:0">
-
-
-                    <div class="col-md-3 ">
-                        <label for="" class="control-label">Account  </label>
-                        <select id='Expenses0' class='form-control '></select>
-
-                    </div>
-
-
-                    <div class=" col-md-3 ">
-                        <label for="" class="control-label">Description  </label>
-                        <input type="text" name="Name" id="description0" class="form-control" />
-
-                    </div>
-
-                    <div class="col-md-3 ">
-                        <label for="" class="control-label">Amount  </label>
-                        <input type="text" name="cr" onkeyup="creditvalue()" onblur="NAN(this)" id="credit0" class="form-control cr" />
-
-                    </div>
-
-                    <div class="col-md-1" style="padding:0">
-
-                        <button style="background:#32CD32" id="JournalEntries" class="btn btn-sm btn-default " onclick="journalentries()"><i class="fa fa-plus" style="font-size:12px"></i></button>
-
-                    </div>
+                <div id="journaldiv0">
 
 
 
+
+                    @*<div class="col-md-3 ">
+                            <label for="" class="control-label">Account  </label>
+                            <select id='Expenses0' class='form-control '></select>
+
+                        </div>
+
+
+                        <div class=" col-md-3 ">
+                            <label for="" class="control-label">Description  </label>
+                            <input type="text" name="Name" id="description0" class="form-control" />
+
+                        </div>
+
+                        <div class="col-md-3 ">
+                            <label for="" class="control-label">Amount  </label>
+                            <input type="text" name="cr" onkeyup="creditvalue()" onblur="NAN(this)" id="credit0" class="form-control cr" />
+
+                        </div>
+
+                        <div class="col-md-1" style="padding:0">
+
+                            <button style="background:#32CD32" id="JournalEntries" class="btn btn-sm btn-default " onclick="journalentries()"><i class="fa fa-plus" style="font-size:12px"></i></button>
+
+                        </div>*@
 
 
                 </div>
@@ -605,7 +743,7 @@ else if (User.IsInRole("Staff"))
 
 
                     <div class="Success" style="display:none;color:white;background:rgb(150,181,103)">
-                        Expense has been Added
+                        Expense has been updated
                     </div>
                     <div class="Error" style="color:white;display:none;background:rgb(176,71,85)">
 
@@ -619,14 +757,19 @@ else if (User.IsInRole("Staff"))
                     <hr />
                     @*<button class="col-md-2 form-control color2" onclick="window.location.href = '/Vouchers/Voucher'" style="border-radius:35px;border:hidden;margin-right:10px;background-color:red;color:white;font-size:11px;width:98px;height:38px;font-family:Montserrat" id="return"><i class="fa fa-arrow-left"></i> &nbsp;&nbsp; Return</button>
 
-            <input class="col-md-2 form-control color" id="submit" onclick="SaveVoucher()" type="submit" value="Save" style="border-radius:35px;color:white;border:hidden;background-color:#128edb;font-size:11px;width:98px;height:38px;font-family:Montserrat" />*@
+                        <input class="col-md-2 form-control color" id="submit" onclick="SaveVoucher()" type="submit" value="Save" style="border-radius:35px;color:white;border:hidden;background-color:#128edb;font-size:11px;width:98px;height:38px;font-family:Montserrat" />*@
 
 
 
-                    <button type="button" onclick="window.location.href = ''" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                    <button type="button"  id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                         <i class="material-icons mr-2">cached</i>  Return
                     </button>
 
+                    <button  class="btn btn-danger" id="DeleteButton">
+                        Delete
+                    </button>
+
+                    
                     <button type="submit" onclick="SaveVoucher()" id="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
 
 
@@ -634,9 +777,9 @@ else if (User.IsInRole("Staff"))
 
             </div>
 
-                </div>
-            </div>
+        </div>
     </div>
+</div>
 
 <script src="~/Content/Toaster/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
