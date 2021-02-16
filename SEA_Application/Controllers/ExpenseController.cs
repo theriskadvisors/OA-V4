@@ -362,10 +362,10 @@ namespace SEA_Application.Controllers
 
             var Name = VoucherObj.Name;
             var Notes = VoucherObj.Notes;
-
+            var Date = VoucherObj.Date;
             var VoucherNo = VoucherObj.VoucherNo;
 
-            return Json(new { Name = Name, Notes = Notes, VoucherNo = VoucherNo,  VoucherRecordsList = VoucherRecordsList }, JsonRequestBehavior.AllowGet);
+            return Json(new { Name = Name,Date = Date, Notes = Notes, VoucherNo = VoucherNo,  VoucherRecordsList = VoucherRecordsList }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

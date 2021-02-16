@@ -209,7 +209,7 @@ else if (User.IsInRole("Staff"))
 
                             if (data.FeeType == "FullFee") {
 
-                                $("#FeeType").val(data.ReceiptNo + "(Lumsum)");
+                                $("#FeeType").val(data.ReceiptNo + "(Lump Sum)");
                             }
 
                             else {
@@ -429,22 +429,22 @@ else if (User.IsInRole("Staff"))
                             <div class="ticket" id="ticket">
 
                                 <center>
-                                    <h2 style="float:left">Officers Academy</h2> <img style="width:50px;float:right" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
+                                     <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
                                     @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
                                 </center>
 
-                                <div style="clear:both">
+                                @*<div style="clear:both">
 
-                                </div>
+                                </div>*@
                                 
                                 <p class="centered">
                                 
-                                    <span id="Recipt">Recipt#<span id="challanNo"></span> </span>
-                                    <br><span id="DateTime"></span>
+                                    <b><span id="Recipt">Recipt#<span id="challanNo"></span> </span></b>
+                                    <br><b><span id="DateTime"></span></b>
                                 </p>
 
 
-                                <b>Cashier:</b> @ViewBag.UserName <span>
+                                <b>Cashier:</b> <b> @ViewBag.UserName </b><span>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Admin Copy</b>
                                 </span>
@@ -459,9 +459,9 @@ else if (User.IsInRole("Staff"))
                                     </thead>
                                     <tbody id="billbody" style="border: 1px solid black"></tbody>
                                 </table>
-                                <p class="centered">
-                                    Website: https://officersacademy.pk/
-                                    <br>Facebook Page: https://www.facebook.com/officersacademylahore
+                                <p class="centered" style="font-weight:bold">
+                                    <b style="font-weight:bold">Website: https://officersacademy.pk/ </b>
+                                    <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>
                                 </p>
                             </div>
 
@@ -477,22 +477,22 @@ else if (User.IsInRole("Staff"))
                             <div class="ticket" id="ticket">
 
                                 <center>
-                                    <h2 style="float:left">Officers Academy</h2> <img style="width:50px;float:right" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
+                                   <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
                                     @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
                                 </center>
 
-                                <div style="clear:both">
+                                @*<div style="clear:both">
 
-                                </div>
+                                </div>*@
 
 
                                 <p class="centered">
                                   
-                                   <span id="Recipt1">Recipt#<span id="challanNo1"></span> </span>
-                                    <br><span id="DateTime1"></span>
+                                 <b>  <span id="Recipt1">Recipt#<span id="challanNo1"></span> </span></b>
+                                    <br><b><span id="DateTime1"></span></b>
                                 </p>
 
-                                <b>Cashier:</b> @ViewBag.UserName <span>
+                                <b>Cashier:</b><b> @ViewBag.UserName</b> <span>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Student Copy</b>
                                 </span>
@@ -509,9 +509,9 @@ else if (User.IsInRole("Staff"))
                                     </thead>
                                     <tbody id="billbody1" style="border: 1px solid black"></tbody>
                                 </table>
-                                <p class="centered">
-                                    Website: https://officersacademy.pk/
-                                    <br>Facebook Page: https://www.facebook.com/officersacademylahore
+                                <p class="centered" style="font-weight:bold">
+                                    <b style="font-weight:bold">Website: https://officersacademy.pk/ </b>
+                                    <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>
                                 </p>
                             </div>
 
@@ -662,7 +662,7 @@ else if (User.IsInRole("Staff"))
 
         $("#DueDate").bind('change', function () {
 
-            debugger
+            //debugger
             var dob = $("#DueDate").val();
             var dob = dob.split("-");
             var date = new Date();
@@ -846,10 +846,10 @@ else if (User.IsInRole("Staff"))
             var TableRow;
             if (Discount != "") {
 
-                TableRow = "<tr>  <td class='description'>Student Name</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + student + "</td></tr><tr>  <td class='description'>Student Session</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + session + "</td></tr><tr>  <td class='description'>Fee Month</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + monthNames[d.getMonth()] + "</td></tr>  <tr><td  class='description'> FeeType</td> <td class='quantity'>&nbsp;&nbsp;&nbsp;" + FeeType + "</td> </tr>  <tr>  <td class='description'>Total Fee</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + $("#TotalFee").val() + "</td></tr><tr>  <td class='description'>Cash Received</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + cashReceived + "</td></tr>  <tr>  <td class='description'>Discount</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + Discount + "</td></tr> <tr>  <td class='description'>Remaining Balance</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + remainingBalance + "</td></tr>    <tr>  <td class='description'>Status</td> <td class='quantity' >&nbsp;&nbsp;&nbsp; " + status + " </td></tr>  <tr>  <td class='description'>Due Date</td> <td class='quantity' >&nbsp;&nbsp;&nbsp; " + DueDate + " </td></tr> "
+                TableRow = "<tr>  <td class='description'>Student Name</td> <td class='quantity' >&nbsp;&nbsp;" + student + "</td></tr><tr>  <td class='description'>Student Session</td> <td class='quantity' >&nbsp;&nbsp;" + session + "</td></tr><tr>  <td class='description'>Fee Month</td> <td class='quantity' >&nbsp;&nbsp;" + monthNames[d.getMonth()] + "</td></tr>  <tr><td  class='description'> FeeType</td> <td class='quantity'>&nbsp;&nbsp;" + FeeType + "</td> </tr>  <tr>  <td class='description'>Total Fee</td> <td class='quantity' >&nbsp;&nbsp;" + $("#TotalFee").val() + "</td></tr><tr>  <td class='description'>Cash Received</td> <td class='quantity' >&nbsp;&nbsp;" + cashReceived + "</td></tr>  <tr>  <td class='description'>Discount</td> <td class='quantity' >&nbsp;&nbsp;" + Discount + "</td></tr> <tr>  <td class='description'>Remaining Balance</td> <td class='quantity' >&nbsp;&nbsp;" + remainingBalance + "</td></tr>    <tr>  <td class='description'>Status</td> <td class='quantity' >&nbsp;&nbsp; " + status + " </td></tr>  <tr>  <td class='description'>Due Date</td> <td class='quantity' >&nbsp;&nbsp; " + DueDate + " </td></tr> "
             }
             else {
-                TableRow = "<tr>  <td class='description'>Student Name</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + student + "</td></tr><tr>  <td class='description'>Student Session</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + session + "</td></tr><tr>  <td class='description'>Fee Month</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + monthNames[d.getMonth()] + "</td></tr>   <tr> <td class='description'> FeeType  </td> <td class='quantity'>&nbsp;&nbsp;&nbsp;" + FeeType + "</td></tr>  <tr>  <td class='description'>Total Fee</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + $("#TotalFee").val() + "</td></tr><tr>  <td class='description'>Cash Received</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + cashReceived + "</td></tr>   <tr>  <td class='description'>Remaining Balance</td> <td class='quantity' >&nbsp;&nbsp;&nbsp;" + remainingBalance + "</td></tr>    <tr>  <td class='description'>Status</td> <td class='quantity' >&nbsp;&nbsp;&nbsp; " + status + " </td></tr>  <tr>  <td class='description'>Due Date</td> <td class='quantity' >&nbsp;&nbsp;&nbsp; " + DueDate + " </td></tr>    "
+                TableRow = "<tr>  <td class='description'>Student Name</td> <td class='quantity' >&nbsp;&nbsp;" + student + "</td></tr><tr>  <td class='description'>Student Session</td> <td class='quantity' >&nbsp;&nbsp;" + session + "</td></tr><tr>  <td class='description'>Fee Month</td> <td class='quantity' >&nbsp;&nbsp;" + monthNames[d.getMonth()] + "</td></tr>   <tr> <td class='description'> FeeType  </td> <td class='quantity'>&nbsp;&nbsp;" + FeeType + "</td></tr>  <tr>  <td class='description'>Total Fee</td> <td class='quantity' >&nbsp;&nbsp;" + $("#TotalFee").val() + "</td></tr><tr>  <td class='description'>Cash Received</td> <td class='quantity' >&nbsp;&nbsp;" + cashReceived + "</td></tr>   <tr>  <td class='description'>Remaining Balance</td> <td class='quantity' >&nbsp;&nbsp;" + remainingBalance + "</td></tr>    <tr>  <td class='description'>Status</td> <td class='quantity' >&nbsp;&nbsp; " + status + " </td></tr>  <tr>  <td class='description'>Due Date</td> <td class='quantity' >&nbsp;&nbsp; " + DueDate + " </td></tr>    "
 
             }
 
@@ -864,6 +864,7 @@ else if (User.IsInRole("Staff"))
             //var d = new Date($.now());
 
             $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
 
 
             //  $("#btnPrint").attr('name', data.Id);

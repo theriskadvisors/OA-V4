@@ -41,14 +41,14 @@ else if (User.IsInRole("Staff"))
         addAllLedger(0);
         // AddBranch(0);
         // addCashLedger();
-       // CheckVoucherNo();
+        // CheckVoucherNo();
 
         var now = new Date();
 
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
         var today = now.getFullYear() + "-" + (month) + "-" + (day);
-        $('#ddate').val(today);
+        //  $('#ddate').val(today);
 
 
 
@@ -75,7 +75,14 @@ else if (User.IsInRole("Staff"))
                 var Notes = data.Notes;
                 var VoucherNoOfVoucher = data.VoucherNo;
                 var VoucherRecordList = data.VoucherRecordsList;
+                var Datevar = data.Date;
 
+
+                const d = new Date(Datevar.match(/\d+/)[0] * 1);
+                const formattedDate = d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2)
+                //  $('#DueDate1').val(formattedDate);
+
+                $("#ddate").val(formattedDate);
                 $("#voucher").val(Name);
                 $("#Notes").val(Notes);
                 $("#VoucherNo").val(VoucherNoOfVoucher);
@@ -84,7 +91,7 @@ else if (User.IsInRole("Staff"))
                 //   alert(Name);
                 // alert(Notes);
                 var i = 0;
-                  var Amount = 0;
+                var Amount = 0;
                 $.each(VoucherRecordList, function (index) {
 
                     if (i == 0) {
@@ -111,7 +118,7 @@ else if (User.IsInRole("Staff"))
 
                         $('#Expenses' + i).val(VoucherRecordList[index].LedgerId);
 
-                        Amount = Amount + parseFloat( VoucherRecordList[index].Amount);
+                        Amount = Amount + parseFloat(VoucherRecordList[index].Amount);
                     }
                     else {
 
@@ -135,7 +142,7 @@ else if (User.IsInRole("Staff"))
 
                         $('#Expenses' + i).val(VoucherRecordList[index].LedgerId);
 
-                          Amount = Amount + parseFloat( VoucherRecordList[index].Amount);;
+                        Amount = Amount + parseFloat(VoucherRecordList[index].Amount);;
 
                     }
 
@@ -143,7 +150,7 @@ else if (User.IsInRole("Staff"))
                     arr[i] = i;
                     i++;
 
-                    count = i; 
+                    count = i;
 
                 });
 
@@ -151,7 +158,7 @@ else if (User.IsInRole("Staff"))
                 $("#zero").val(Amount);
 
 
-            }//end of success method 
+            }//end of success method
 
 
 
@@ -172,7 +179,7 @@ else if (User.IsInRole("Staff"))
 
                     if (data == "success") {
 
-                       // alert("success");
+                        // alert("success");
                         window.location.href = "/Expense/ExpenseList";
 
                     }
@@ -761,15 +768,15 @@ else if (User.IsInRole("Staff"))
 
 
 
-                    <button type="button"  id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                    <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                         <i class="material-icons mr-2">cached</i>  Return
                     </button>
 
-                    <button  class="btn btn-danger" id="DeleteButton">
+                    <button class="btn btn-danger" id="DeleteButton">
                         Delete
                     </button>
 
-                    
+
                     <button type="submit" onclick="SaveVoucher()" id="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
 
 
