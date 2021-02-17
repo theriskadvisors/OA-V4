@@ -63,7 +63,25 @@ namespace SEA_Application.Controllers
 
         public ActionResult ExpenseList()
         {
-            var VoucherRecordsList = db.VoucherRecords.Where(x => x.Ledger.LedgerHead.Name == "Expense" && x.Ledger.Name != "Discount" && x.Ledger.Name != "Photocopier").ToList();
+
+            DateTime? Datetime = GetLocalDateTime.GetLocalDateTimeFunction();
+
+            var Day = "";
+            var Month = "";
+            var Year = "";
+
+            Day = Datetime.Value.Day.ToString();
+            Month = Datetime.Value.Month.ToString();
+            Year = Datetime.Value.Year.ToString();
+
+            //   DateTime? dateTimeTo = Datetime.Value.AddDays(1);
+
+            //&& x.Voucher.Date == DateTime.Today
+
+
+            var VoucherRecordsList = db.VoucherRecords.Where(x => x.Ledger.LedgerHead.Name == "Expense" && x.Ledger.Name != "Discount" && x.Ledger.Name != "Photocopier"&&  x.Voucher.Date.Value.Day.ToString() == Day && x.Voucher.Date.Value.Month.ToString() == Month & x.Voucher.Date.Value.Year.ToString() == Year).ToList();
+
+
 
             return View(VoucherRecordsList);
         }
