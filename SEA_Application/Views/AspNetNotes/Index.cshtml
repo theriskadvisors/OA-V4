@@ -13,7 +13,7 @@ else if (User.IsInRole("Staff"))
 {
     Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
 }
-else if(User.IsInRole("Receptionist"))
+else if (User.IsInRole("Receptionist"))
 {
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
@@ -28,6 +28,7 @@ else if(User.IsInRole("Receptionist"))
     .page-header.navbar.navbar-fixed-top {
         padding-right: 0px;
     }
+    
 
     .ButtonStyle {
         color: #141437 !important;
@@ -453,23 +454,27 @@ else if(User.IsInRole("Receptionist"))
 
 
 
-                    <div class="col-md-12">
+                    <div>
+
+                        <div class="pull-left">
+                            <h2 style="color:#00b8ec;display:inline-block">Summary </h2>
+
+                            <label>From</label>
+                            <input type="hidden" id="FromDate">
+                            <img src="~/Content/Images/calendar.png" id="FromDateTrigger" width="25">
+
+                            <label>To</label>
+
+                            <input type="hidden" id="ToDate">
+                            <img src="~/Content/Images/calendar.png" id="ToDateTrigger" width="25">
+                            <br />
+                        </div>
 
 
-                        <h2 style="color:#00b8ec;display:inline-block">Summary </h2>
-
-                        <label>From</label>
-                        <input type="hidden" id="FromDate">
-                        <img src="~/Content/Images/calendar.png" id="FromDateTrigger" width="25">
-
-                        <label>To</label>
-
-                        <input type="hidden" id="ToDate">
-                        <img src="~/Content/Images/calendar.png" id="ToDateTrigger" width="25">
 
 
-                        <br />
-                        <div id="DateToView">
+                        <div class="pull-right">
+                            <button id="PrintNotes" class="btn btn-primary btn-sm">Print Notes</button>
 
                         </div>
 
@@ -477,9 +482,13 @@ else if(User.IsInRole("Receptionist"))
                     </div>
 
                     <br />
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="DivToPrint">
 
-                        <table class="table  table-bordered table-striped table-hover">
+                        <div id="DateToView">
+
+                        </div>
+
+                        <table  style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
 
 
                             <thead>
@@ -495,7 +504,7 @@ else if(User.IsInRole("Receptionist"))
                                     <th>Discount</th>
                                     <th>Total Discounted </th>
                                     @*<th>Total Discounted  OA Price  </th>*@
-                                    <th>Details</th>
+                                    <th class="detailscolumn">Details</th>
                                 </tr>
                             </thead>
 
@@ -575,7 +584,7 @@ else if(User.IsInRole("Receptionist"))
                 var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
 
 
-                $("#DateToView").html('<h5><span id="FromDateView"> ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+                $("#DateToView").html('<h3><span id="FromDateView"> Summary From: ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
 
 
                 GetNotesSummary(FromDate, ToDate);
@@ -614,16 +623,24 @@ else if(User.IsInRole("Receptionist"))
                 var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
 
 
-                $("#DateToView").html('<h5><span id="FromDateView"> ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+                $("#DateToView").html('<h3><span id="FromDateView">Summary From: ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
 
                 GetNotesSummary(FromDate, ToDate);
-
 
             }
 
         })
 
+        $("#PrintNotes").click(function () {
 
+            var divToPrint = document.getElementById('DivToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><head><style>.detailscolumn{ display:none; }</style></head><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
+            newWin.document.close();
+            setTimeout(function () { newWin.close(); }, 10);
+
+        })
 
         $('#FromDateApprovedOrder').datepicker({
             dateFormat: 'yy-mm-dd'
@@ -1311,7 +1328,7 @@ else if(User.IsInRole("Receptionist"))
                 var GrandTotalDiscountedOAPrice = 0;
                 $.each(data, function (index) {
                     debugger
-                    $("#SaleReport").append("<tr> <td style='display:none'></td><td>" + data[index].StudentName + "</td> <td>" + data[index].ClassName + "</td><td>" + data[index].Status + "</td><td>" + data[index].TotalPhotoCopier + "</td><td>" + data[index].TotalOA + "</td><td>" + data[index].Total + "</td><td> -" + data[index].Discount + "</td><td>" + data[index].TotalDiscounted + "</td><td><center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderId + "' ></center></td></tr>")
+                    $("#SaleReport").append("<tr> <td style='display:none'></td><td>" + data[index].StudentName + "</td> <td>" + data[index].ClassName + "</td><td>" + data[index].Status + "</td><td>" + data[index].TotalPhotoCopier + "</td><td>" + data[index].TotalOA + "</td><td>" + data[index].Total + "</td><td> -" + data[index].Discount + "</td><td>" + data[index].TotalDiscounted + "</td><td class='detailscolumn'><center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderId + "' ></center></td></tr>")
 
                     //"<center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' ></center>"
                     GrandTotalPhotoCopier = GrandTotalPhotoCopier + data[index].TotalPhotoCopier;
