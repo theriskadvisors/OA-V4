@@ -1,0 +1,281 @@
+﻿
+@{
+    ViewBag.Title = "StudentsNotesSummary";
+    Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
+}
+
+<link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+
+        <div>
+
+            <div class="pull-left">
+                <h5 style="color:#00b8ec;display:inline-block">Summary </h5>
+
+                <label>From</label>
+                <input type="hidden" id="FromDate">
+                <img src="~/Content/Images/calendar.png" id="FromDateTrigger" width="25">
+
+                <label>To</label>
+
+                <input type="hidden" id="ToDate">
+                <img src="~/Content/Images/calendar.png" id="ToDateTrigger" width="25">
+                <br />
+            </div>
+
+
+
+
+            <div class="pull-right">
+                <button id="PrintNotes" class="btn btn-primary btn-sm">Print Notes</button>
+
+            </div>
+
+
+        </div>
+
+        <br />
+        <div class="table-responsive" id="DivToPrint">
+
+            <div id="DateToView">
+
+            </div>
+
+            <table style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
+
+
+                <thead>
+
+                    <tr>
+                        <th style="display:none">NoteOrderId</th>
+                        <th>Student</th>
+                        <th>Class </th>
+                        <th>Status </th>
+                        <th>Total PhotoCopier</th>
+                        <th>Total OA</th>
+                        <th>Total</th>
+                        <th>Discount</th>
+                        <th>Total Discounted </th>
+                        @*<th>Total Discounted  OA Price  </th>*@
+                        <th class="detailscolumn">Details</th>
+                    </tr>
+                </thead>
+
+                <tbody id="SaleReport">
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Student Notes Summary");
+
+        $('#FromDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#ToDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $(function () {
+            $('#FromDate').datepicker();
+            $('#FromDateTrigger').click(function () {
+
+                $('#FromDate').datepicker('show');
+
+            });
+        });
+
+
+        $(function () {
+            $('#ToDate').datepicker();
+            $('#ToDateTrigger').click(function () {
+
+                $('#ToDate').datepicker('show');
+
+            });
+        });
+
+        $("#FromDate").change(function () {
+
+
+            var FromDate = $(this).val();
+            var ToDate = $("#ToDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h5><span id="FromDateView"> Summary From: ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+
+
+                GetNotesSummary(FromDate, ToDate);
+
+
+
+            }
+
+        })
+
+        $("#ToDate").change(function () {
+            debugger
+            var ToDate = $(this).val();
+            var FromDate = $("#FromDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h5><span id="FromDateView">Summary From: ' + FromDateFormat + ' </span> to <span id="ToDateView">' + ToDateFormat + ' </span></h5>');
+
+                GetNotesSummary(FromDate, ToDate);
+
+            }
+
+        })
+        $("#PrintNotes").click(function () {
+
+            var divToPrint = document.getElementById('DivToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><head><style>.detailscolumn{ display:none; }</style></head><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
+            newWin.document.close();
+            setTimeout(function () { newWin.close(); }, 10);
+
+        })
+
+
+              $("#SaleReport").on("click", "input[type='button']", function () {
+
+            var OrderId = $(this).attr('id');
+
+
+            window.open('/AspNetNotes/PendingOrdersDetails?OrderId=' + OrderId);
+            //    alert(OrderId);
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/AspNetNotes/RecentOrdersDetails",
+            //    data: { "OrderId": OrderId },
+
+            //    success: function (data) {
+
+            //        $('#modal0').html("");
+
+            //        $.each(data, function (index) {
+            //            $('#modal0').append('<div > Title Name : ' + data[index].Title + ' </div>  <div> Price : ' + data[index].Price + ' </div> <div> Quantity : ' + data[index].Quantity + ' </div> <div> Total : ' + data[index].Total + ' </div>  <div> Total Photo Copier Price : ' + data[index].PhotoCopierPrice + '</div><div> Total OA Price : ' + data[index].OAPrice + '</div>  <br>  ');
+            //        });
+            //    }
+            //})
+
+        });
+
+
+
+    })//end of document
+
+
+    function GetMonthName(monthNumber) {
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[monthNumber - 1];
+    }
+
+    function GetNotesSummary(FromDate, ToDate) {
+
+        $("#SaleReport").html("");
+
+        $.ajax({
+            type: "POST",
+            url: "/AspNetNotes/GetNotesSummary",
+            data: { "FromDate": FromDate, "ToDate": ToDate },
+
+
+            success: function (data) {
+
+                $("#SaleReport").html("");
+
+                var TotalDiscount = 0;
+                var GrandTotalPhotoCopier = 0;
+                var GrandTotalOA = 0;
+                var GrandTotal = 0;
+                var GrandTotalDiscounted = 0;
+                var GrandTotalDiscountedOAPrice = 0;
+                $.each(data, function (index) {
+                    debugger
+                    $("#SaleReport").append("<tr> <td style='display:none'></td><td>" + data[index].StudentName + "</td> <td>" + data[index].ClassName + "</td><td>" + data[index].Status + "</td><td>" + data[index].TotalPhotoCopier + "</td><td>" + data[index].TotalOA + "</td><td>" + data[index].Total + "</td><td> -" + data[index].Discount + "</td><td>" + data[index].TotalDiscounted + "</td><td class='detailscolumn'><center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderId + "' ></center></td></tr>")
+
+                    //"<center> <input type='button' class='btn btn-primary btn-sm white' value='Details' id='" + data[index].OrderID + "' ></center>"
+                    GrandTotalPhotoCopier = GrandTotalPhotoCopier + data[index].TotalPhotoCopier;
+                    GrandTotalOA = GrandTotalOA + data[index].TotalOA;
+                    GrandTotal = GrandTotal + data[index].Total;
+                    TotalDiscount = TotalDiscount + data[index].Discount;
+                    GrandTotalDiscounted = GrandTotalDiscounted + data[index].TotalDiscounted;
+                    //  GrandTotalDiscountedOAPrice = GrandTotalDiscountedOAPrice +data[index].TotalDiscountedOAPrice;
+
+                    //   Total = Total + data[index].Total;
+                })
+
+                // $("#SaleReport").append("<tr> <td style='display:none'></td><td>Grand Total</td> <td></td>  <td></td> <td>" + GrandTotalPhotoCopier + "</td><td>" + GrandTotalOA + "</td><td>" + GrandTotal + "</td><td></td><td>" + GrandTotalDiscounted + "</td><td>" + GrandTotalDiscountedOAPrice + "</td></tr>")
+                $("#SaleReport").append("<tr> <td style='display:none'></td><td>Grand Total</td> <td></td>  <td></td> <td>" + GrandTotalPhotoCopier + "</td><td>" + GrandTotalOA + "</td><td>" + GrandTotal + "</td><td>-" + TotalDiscount + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+
+            }
+        })
+    }
+
+
+</script>

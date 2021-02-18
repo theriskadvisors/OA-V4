@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
+    // Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
 }
 
 @using System.Linq;
@@ -18,6 +18,22 @@
     DateTime Endaday = Firstday.AddDays(6);
 
 }
+
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+else if (User.IsInRole("PhotoCopier"))
+{
+    Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
+
+}
+
 
 <style>
     .white {
@@ -50,31 +66,37 @@
     </div>
 </div>
 
+@if (User.IsInRole("PhotoCopier"))
+{
 
-<div class="pageHeading">
-    <div class="row">
-        <div class="col-sm-12 col-md-9 col-lg-9">
-            <div class="d-flex">
-                <div id="dayPart_div" class="mr-4 flex-3 sunSide"><img id="dayPart_img" src="~/Content/assets/img/sun.png" /></div>
-                <div>
-                    <div class="afternoon mt-2">
-                        <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
-                        <p>
+    <div class="pageHeading">
+        <div class="row">
+            <div class="col-sm-12 col-md-9 col-lg-9">
+                <div class="d-flex">
+                    <div id="dayPart_div" class="mr-4 flex-3 sunSide"><img id="dayPart_img" src="~/Content/assets/img/sun.png" /></div>
+                    <div>
+                        <div class="afternoon mt-2">
+                            <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
+                            <p>
 
-                        </p>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
-            <h4>Total PhotoCopier - <span id="PCGrandTotal">  </span> </h4>
-        </div>
+            <div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
+                <h4>Total PhotoCopier - <span id="PCGrandTotal">  </span> </h4>
+            </div>
 
 
+        </div>
     </div>
-</div>
 
-
+}
+else
+{
+    <h3 style="font-size:34px;font-weight:600;color:#053f89">Photocopier Summary</h3>
+}
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -133,7 +155,7 @@
 
                                 <th>
                                     Unit Price
-                                    
+
                                 </th>
                                 <th>
                                     Quantity
@@ -209,7 +231,7 @@
 
                 $.each(list, function (index) {
 
-                //  table2.fnAddData([data[index].NotesName, data[index].PhotoCopierUnitPrice, data[index].Quantity, data[index].PhotoCopierTotal]);
+                    //  table2.fnAddData([data[index].NotesName, data[index].PhotoCopierUnitPrice, data[index].Quantity, data[index].PhotoCopierTotal]);
 
                     $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
 
@@ -225,8 +247,8 @@
 
                 today = dd + '-' + mm + '-' + yyyy;
 
-                $("#DateToView").html('<h5> Date : <span > '+today+' </span></h5>');
-                  $("#PCGrandTotal").html("");
+                $("#DateToView").html('<h5> Date : <span > ' + today + ' </span></h5>');
+                $("#PCGrandTotal").html("");
                 $("#PCGrandTotal").html(GrandTotal);
 
                 // table2.fnDraw();

@@ -28,7 +28,6 @@ namespace SEA_Application.Controllers
 
             ViewBag.TotalPhotoCopierPrice = db.PhotoCopierTotal().Where(x => x.PublishDate == RemoveTimePart).Select(x => x.TotalPhotoCopierPrice).Sum();
 
-
             return View("BlankPage");
         }
         public ActionResult ApprovedOrders()
@@ -55,10 +54,8 @@ namespace SEA_Application.Controllers
                 PhotoCopierSummary photoCopierSummary = new PhotoCopierSummary();
                 photoCopierSummary.NotesName = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.Title).FirstOrDefault();
 
-
                 foreach (var OrderNote in OrderNotesList)
                 {
-
                     if (item == OrderNote.NotesID)
                     {
                         QuantityCounter = QuantityCounter + OrderNote.Quantity.Value;
@@ -75,7 +72,6 @@ namespace SEA_Application.Controllers
                 photoCopierSummaryList.Add(photoCopierSummary);
 
             }
-
 
            // var ReturnedNotesIdsList = OrderNotesList.Where(x => x.Status == "Returned").Select(x => x.NotesID).Distinct();
 
@@ -104,17 +100,15 @@ namespace SEA_Application.Controllers
                 photoCopierSummary.PhotoCopierTotal = Convert.ToDouble(photoCopierSummary.Quantity * photoCopierSummary.PhotoCopierUnitPrice);
 
                 GrandTotalPhotoCopier = GrandTotalPhotoCopier + photoCopierSummary.PhotoCopierTotal;
-
                 photoCopierSummaryList.Add(photoCopierSummary);
 
             }
-
-
 
             return Json( new { photoCopierSummaryList = photoCopierSummaryList, GrandTotalPhotoCopier = GrandTotalPhotoCopier }, JsonRequestBehavior.AllowGet);
 
         }
 
+        //PhotoCopier Summary Class
         public class PhotoCopierSummary
         {
             public string NotesName { get; set; }
@@ -200,8 +194,6 @@ namespace SEA_Application.Controllers
 
             }
 
-
-
             //   return Json(photoCopierSummaryList, JsonRequestBehavior.AllowGet);
 
             return Json(new { photoCopierSummaryList = photoCopierSummaryList, GrandTotalPhotoCopier = GrandTotalPhotoCopier }, JsonRequestBehavior.AllowGet);
@@ -210,6 +202,13 @@ namespace SEA_Application.Controllers
 
         public ActionResult BlankPage()
         {
+            return View();
+        }
+
+        public ActionResult StudentsNotesSummary()
+        {
+
+
             return View();
         }
 
