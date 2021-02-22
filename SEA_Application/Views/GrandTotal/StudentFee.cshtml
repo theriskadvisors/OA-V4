@@ -582,8 +582,6 @@ else if (User.IsInRole("Staff"))
                                     <tbody id="DefaulterStudents"></tbody>
                                 </table>
 
-
-
                             </div>
                         </div>
 
@@ -814,7 +812,27 @@ else if (User.IsInRole("Staff"))
 
         $("#ChallanForm").click(function () {
 
-            var DueDate = document.getElementById("DueDate").value;
+            var DueDate = document.getElementById("DueDate").value; 
+
+
+                var due = new Date(DueDate);
+                var day = due.getDate();
+                var month = due.getMonth() + 1;
+                var year = due.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                 DueDate = day + "/" + month + "/" + year;
+
+            var IssueDate = document.getElementById("IssueDate").value;  
+
+                var Issue = new Date(IssueDate);
+                var Issueday = Issue.getDate();
+                var Issuemonth = Issue.getMonth() + 1;
+                var Issueyear = Issue.getFullYear();
+
+              
+                 IssueDate = Issueday + "/" + Issuemonth + "/" + Issueyear;
 
             $('#billbody').html("");
             $('#billbody1').html("");
@@ -863,13 +881,15 @@ else if (User.IsInRole("Staff"))
 
             //var d = new Date($.now());
 
-            $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-            $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            //$("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            //$("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
 
+            //IssueDate
+
+            $("#DateTime").html(IssueDate);
+            $("#DateTime1").html(IssueDate);
 
             //  $("#btnPrint").attr('name', data.Id);
-
-
 
             $("#bill").css('display', 'block');
             $("#bill1").css('display', 'block');
@@ -1037,7 +1057,10 @@ else if (User.IsInRole("Staff"))
 
     })//end of document ready
 
-
+          function GetMonthName(monthNumber) {
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[monthNumber - 1];
+    }
 
     function drawTable() {
         $('#example_filter').addClass("form-group");

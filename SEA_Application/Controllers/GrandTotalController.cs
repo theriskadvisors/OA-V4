@@ -178,10 +178,127 @@ namespace SEA_Application.Controllers
             return View();
         }
 
-       public JsonResult DefaulterStudentsByClass (string ClassName )
+        public ActionResult StudentFeeTransactionList(int id)
+        {
+            var StudentFeeMonthsList = db.StudentFeeMonths.Where(x => x.StudentId == id).OrderBy(x => x.IssueDate).Select(x => new { x.Id, x.StudentId, x.Months, x.Status, x.InstalmentAmount, x.DueDate, x.Multiplier, x.FeePayable, x.IsPrinted, x.SessionId, x.FeeType, x.Discount, x.TotalFee, x.FeeReceived, x.NotesFee, x.IssueDate }).ToList();
+
+            var OrderedList = StudentFeeMonthsList.OrderBy(x => x.Id).ToList();
+
+            OrderedList.RemoveAt(0);
+
+            return Json(OrderedList, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult FeeReceipt(int ReceiptId)
         {
 
-            var AllDefaulterStudent = db.DefaulterStudents().Where(x=>x.ClassName == ClassName).ToList();
+            var FeeReceipt = db.StudentFeeMonths.Where(x => x.Id == ReceiptId).Select(x => new { x.Id, x.StudentId, x.Months, x.Status, x.InstalmentAmount,   x.DueDate, x.Multiplier, x.FeePayable, x.IsPrinted, x.SessionId, x.FeeType, x.Discount, x.TotalFee, x.FeeReceived, x.NotesFee,   x.IssueDate }).FirstOrDefault();
+
+            if (FeeReceipt != null)
+            {
+
+                int StudentId = FeeReceipt.StudentId.Value;
+                var StudentFeeMonthsList = db.StudentFeeMonths.Where(x => x.StudentId == StudentId).OrderBy(x => x.IssueDate).Select(x => new { x.Id, x.StudentId, x.Months, x.Status, x.InstalmentAmount, x.DueDate, x.Multiplier, x.FeePayable, x.IsPrinted, x.SessionId, x.FeeType, x.Discount, x.TotalFee, x.FeeReceived, x.NotesFee, x.IssueDate }).ToList();
+                var OrderedList = StudentFeeMonthsList.OrderBy(x => x.Id).ToList();
+                var AllRecords = OrderedList.Select(x=>new { x.Id }).ToList() ;
+
+                OrderedList.RemoveAt(0);
+
+                int FindIndex = 0;
+                int i = 0;
+
+                foreach (var item in OrderedList)
+                {
+                    i++;
+
+                    if (item.Id == FeeReceipt.Id)
+                    {
+                        FindIndex = i;
+                    }
+
+                }//end of foreach loop
+
+                int ReceiptNo = AllRecords[FindIndex - 1].Id;
+
+                var FeeCount = "";
+
+                if (FindIndex == 1)
+                {
+                    FeeCount = "1st";
+
+                }
+                else if (FindIndex == 2)
+                {
+                    FeeCount = "2nd";
+
+                }
+                else if (FindIndex == 3)
+                {
+                    FeeCount = "3rd";
+
+                }
+                else if (FindIndex == 4)
+                {
+                    FeeCount = "4th";
+
+                }
+                else if (FindIndex == 5)
+                {
+                    FeeCount = "5th";
+
+                }
+                else if (FindIndex == 6)
+                {
+                    FeeCount = "6th";
+
+                }
+
+                else if (FindIndex == 7)
+                {
+                    FeeCount = "7th";
+
+                }
+
+                else if (FindIndex == 8)
+                {
+                    FeeCount = "8th";
+
+                }
+
+                else if (FindIndex == 9)
+                {
+                    FeeCount = "9th";
+
+                }
+
+                else if (FindIndex == 10)
+                {
+                    FeeCount = "10th";
+
+                }
+
+                else
+                {
+                    FeeCount = "";
+
+                }
+
+
+
+
+                return Json(new { ReceiptNo = ReceiptNo, FeeReceipt = FeeReceipt, FeeCount = FeeCount }, JsonRequestBehavior.AllowGet);
+
+            }
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+        public JsonResult DefaulterStudentsByClass(string ClassName)
+        {
+
+            var AllDefaulterStudent = db.DefaulterStudents().Where(x => x.ClassName == ClassName).ToList();
             return Json(AllDefaulterStudent, JsonRequestBehavior.AllowGet);
         }
 
@@ -531,8 +648,37 @@ namespace SEA_Application.Controllers
             //   var studentList = db.AspNetStudents.Where(x => x.AspNetStudent_Session_class.Any(y => y.ClassID == id)).Select(x => x.Id).ToList();
             int? sessionId = db.AspNetClasses.Where(x => x.Id == id).FirstOrDefault().SessionID;
 
+            //   var studentList = db.AspNetStudents.Where(x => x.AspNetStudent_Session_class.Any(y => y.ClassID == id)).Select(x => x.Id).ToList();
 
             var result1 = db.GetPendingStudentsList(sessionId.ToString());
+
+            //&& !db.StudentFeeMonths.Any(m => m.StudentId == std.Id)
+            return Json(result1, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult AllStudentByClass(int id)
+        {
+
+
+            //   var studentList = db.AspNetStudents.Where(x => x.AspNetStudent_Session_class.Any(y => y.ClassID == id)).Select(x => x.Id).ToList();
+            int? sessionId = db.AspNetClasses.Where(x => x.Id == id).FirstOrDefault().SessionID;
+
+            //   var studentList = db.AspNetStudents.Where(x => x.AspNetStudent_Session_class.Any(y => y.ClassID == id)).Select(x => x.Id).ToList();
+
+            // var result1 = db.GetPendingStudentsList(sessionId.ToString());
+
+            var result1 = (from student in db.AspNetStudents
+
+                           join user in db.AspNetUsers on student.StudentID equals user.Id
+                           where student.ClassID == id
+                           select new
+                           {
+                               ID = student.Id,
+                               Name = user.Name,
+                               UserName = user.UserName,
+                           }).ToList();
+
 
             //&& !db.StudentFeeMonths.Any(m => m.StudentId == std.Id)
             return Json(result1, JsonRequestBehavior.AllowGet);
@@ -700,7 +846,7 @@ namespace SEA_Application.Controllers
 
         }
 
-        public ActionResult StudentFeeUpdate(int id, int ClassId, double RemainingFee = 0, double Discount = 0, double CashReceived = 0,string DueDate = null,string IssueDate = null)
+        public ActionResult StudentFeeUpdate(int id, int ClassId, double RemainingFee = 0, double Discount = 0, double CashReceived = 0, string DueDate = null, string IssueDate = null)
         {
             var FeePayable = RemainingFee + Discount + CashReceived;
             int? sessionId = db.AspNetClasses.Where(x => x.Id == ClassId).FirstOrDefault().SessionID;
@@ -712,9 +858,9 @@ namespace SEA_Application.Controllers
 
             StudentFeeMonth stdFeeMonth = new StudentFeeMonth();
             stdFeeMonth.StudentId = studenfee.StudentId;
-            
-        //    stdFeeMonth.IssueDate = DateTime.Now;
-             
+
+            //    stdFeeMonth.IssueDate = DateTime.Now;
+
 
             stdFeeMonth.TotalFee = studenfee.TotalFee;
             stdFeeMonth.FeePayable = RemainingFee;
@@ -722,7 +868,7 @@ namespace SEA_Application.Controllers
             stdFeeMonth.FeeType = studenfee.FeeType;
             stdFeeMonth.SessionId = sessionId;
             stdFeeMonth.FeeReceived = CashReceived;
-        
+
             DateTime Date = Convert.ToDateTime(DueDate);
 
             stdFeeMonth.DueDate = Date;
@@ -782,15 +928,15 @@ namespace SEA_Application.Controllers
             if (Discount != 0)
             {
 
-                AfterBalance = CurrentBalance - Convert.ToDecimal(CashReceived) - Math.Round( Convert.ToDecimal(Discount));
+                AfterBalance = CurrentBalance - Convert.ToDecimal(CashReceived) - Math.Round(Convert.ToDecimal(Discount));
             }
             else
             {
-                AfterBalance = CurrentBalance -  Convert.ToDecimal(CashReceived);
+                AfterBalance = CurrentBalance - Convert.ToDecimal(CashReceived);
             }
             voucherRecord.LedgerId = AccountReceiveableId;
             voucherRecord.Type = "Cr";
-            voucherRecord.Amount = Convert.ToDecimal(CashReceived) + Math.Round( Convert.ToDecimal(Discount));
+            voucherRecord.Amount = Convert.ToDecimal(CashReceived) + Math.Round(Convert.ToDecimal(Discount));
             voucherRecord.CurrentBalance = CurrentBalance;
 
             voucherRecord.AfterBalance = AfterBalance;
@@ -806,9 +952,9 @@ namespace SEA_Application.Controllers
                 db.SaveChanges();
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-               var a =  ex.Message;
+                var a = ex.Message;
             }
 
             var LeadgerAD = db.Ledgers.Where(x => x.Name == "Admin Drawer").FirstOrDefault();
@@ -838,10 +984,10 @@ namespace SEA_Application.Controllers
                 var LeadgerDiscount = db.Ledgers.Where(x => x.Name == "Discount").FirstOrDefault();
 
                 decimal? CurrentBalanceOfDiscount = LeadgerDiscount.CurrentBalance;
-                decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Math.Round( Convert.ToDecimal(Discount));
+                decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Math.Round(Convert.ToDecimal(Discount));
                 voucherRecord3.LedgerId = LeadgerDiscount.Id;
                 voucherRecord3.Type = "Dr";
-                voucherRecord3.Amount = Math.Round( Convert.ToDecimal(Discount));
+                voucherRecord3.Amount = Math.Round(Convert.ToDecimal(Discount));
                 voucherRecord3.CurrentBalance = CurrentBalanceOfDiscount;
                 voucherRecord3.AfterBalance = AfterBalanceOfDiscount;
                 voucherRecord3.VoucherId = voucher.Id;
@@ -858,5 +1004,26 @@ namespace SEA_Application.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
 
         }
+
+        public ActionResult FeeTransactions()
+        {
+
+            ViewBag.SessionId = new SelectList(db.AspNetSessions, "Id", "SessionName");
+            //  ViewBag.ClassId = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.OrderByDescending(x => x.Id), "Id", "ClassName");
+
+            ViewBag.ClassID1 = new SelectList(db.AspNetClasses.OrderByDescending(x => x.Id), "Id", "ClassName");
+
+
+            var UserId = User.Identity.GetUserId();
+            var username = db.AspNetUsers.Where(x => x.Id == UserId).Select(x => x.Name).FirstOrDefault();
+
+            ViewBag.UserName = username;
+
+
+
+            return View();
+        }
+
     }
 }
