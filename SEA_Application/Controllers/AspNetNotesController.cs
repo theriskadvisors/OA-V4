@@ -568,6 +568,17 @@ namespace SEA_Application.Controllers
 
             ViewBag.Discount = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault().Discount;
 
+            var NotesOrderObject  = db.AspNetNotesOrders.Where(x => x.OrderId == OrderId).FirstOrDefault();
+
+            if(NotesOrderObject != null)
+            {
+
+                ViewBag.StudentName = NotesOrderObject.AspNetStudent.AspNetUser.Name;
+                ViewBag.UserName = NotesOrderObject.AspNetStudent.AspNetUser.UserName;
+
+            }
+
+
             foreach (var item in result)
             {
 
@@ -592,6 +603,7 @@ namespace SEA_Application.Controllers
 
         public class OrderDetails
         {
+
 
             public int NotesOrderId { get; set; }
             public string OrderTitle { get; set; }
