@@ -1264,7 +1264,9 @@ namespace SEA_Application.Controllers
 
             }
 
-            return Json(SaleReportList, JsonRequestBehavior.AllowGet);
+            List<SaleReport> SortedList =  SaleReportList.OrderBy(x=>x.OrderId).ToList();
+
+            return Json(SortedList, JsonRequestBehavior.AllowGet);
 
         }
 
