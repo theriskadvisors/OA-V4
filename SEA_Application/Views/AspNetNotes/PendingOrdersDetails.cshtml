@@ -1,10 +1,32 @@
 ﻿@model IEnumerable<SEA_Application.Controllers.AspNetNotesController.OrderDetails>
 @{
     ViewBag.Title = "PendingOrdersDetails";
-    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+    //Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
 <link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+else if (User.IsInRole("Staff"))
+{
+    Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
+}
+else if (User.IsInRole("PhotoCopier"))
+{
+    Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+
+
 
 <style>
     .page-header.navbar.navbar-fixed-top {
@@ -141,21 +163,27 @@
 
             </tbody>
 
+        </table><!--end of table-->
 
-
-
-        </table>
 
 
         <div class="col-md-8 pl-5 pr-5 ">
             @*<button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>*@
 
-           
-                <button id="ApprovedBtn" class='btn btn-success white approveBtn' >Approve</button>
+            @if (!(User.IsInRole("PhotoCopier")))
+            {
+                <button id="ApprovedBtn" class='btn btn-success white approveBtn'>Approve</button>
 
-            <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                <i class="material-icons mr-2">cached</i>  Back
-            </button>
+                <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                    <i class="material-icons mr-2">cached</i>  Back
+                </button>
+            }
+            else
+            {
+                <button type="button" id="PhotoCopierCancelBtn" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                    <i class="material-icons mr-2">cached</i>  Back
+                </button>
+            }
 
 
 
@@ -166,7 +194,7 @@
         <div id="bill" style="display:none">
 
             <div class="ticket" id="ticket">
-              
+
                 <center>
                     <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
                     @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
@@ -186,11 +214,12 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Admin Copy</b>
                 </span>
 
+                <br><b>Student Name:</b><b> @ViewBag.StudentName (@ViewBag.UserName)</b>
+
                 <table>
                     <thead>
                         <tr>
                             <th class="description">Title</th>
-
                             <th class="quantity">Qty</th>
                             <th class="price">Price</th>
                             <th class="Amount">Total</th>
@@ -235,15 +264,15 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Student Copy</b>
                 </span>
 
+                <br><b>Student Name:</b><b> @ViewBag.StudentName (@ViewBag.UserName)</b>
+
                 <table>
                     <thead>
                         <tr>
                             <th class="description">Title</th>
-
                             <th class="quantity">Qty</th>
                             <th class="price">Price</th>
                             <th class="Amount">Total</th>
-
                         </tr>
 
 
@@ -272,13 +301,19 @@
 
             window.location.href = "/AspNetNotes/Index";
         })
+        //PhotoCopierCancelBtn
+        
+        $("#PhotoCopierCancelBtn").click(function () {
+
+            window.location.href = "/PhotoCopier_Dashboard/StudentsNotesSummary";
+        })
 
         var OrderStatus = $("#OrderStatus").val();
 
         if (OrderStatus == "Paid" || OrderStatus == "Returned") {
 
             //OAPrice
-            $("#ApprovedBtn").prop("disabled", true);
+            // $("#ApprovedBtn").prop("disabled", true);
             $(".OAPriceClass").prop("disabled", true);
 
             //OAPriceClass
@@ -409,6 +444,7 @@
 
         })
 
+        
 
         $("#btnPrint").click(function () {
 
@@ -536,11 +572,6 @@
         var DiscountedPrice = TotalPrice - parseFloat(Discount);
 
         $("#DiscountedPrice").html(DiscountedPrice);
-
-
-
-
-
 
     }
 
