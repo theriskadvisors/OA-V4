@@ -17,8 +17,11 @@ namespace SEA_Application.Controllers
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
 
         // GET: AspNetOrderNotes
-        public ActionResult Index()
+        public ActionResult Index(string OrderMsg = "NotPlaced")
         {
+
+            ViewBag.OrderMsg = OrderMsg;
+
             var aspNetNotes = db.AspNetNotes.Include(a => a.AspNetSubject);
             return View(aspNetNotes.ToList());
         }
