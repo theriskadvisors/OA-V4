@@ -28,17 +28,37 @@ namespace SEA_Application.Controllers
             //Console.WriteLine($"{day:yyyy-MM-dd}"); // Any manipulations with days go here
 
 
+            // fun();
+
             var aspNetNotes = db.AspNetNotes.Include(a => a.AspNetSubject);
             return View(aspNetNotes.ToList());
         }
+        public void fun()
+        {
+            var PaidOrderList = db.AspNetOrders.Where(x => x.Status == "Paid" || x.Status == "Returned").OrderBy(x => x.ApproveDate).ToList();
 
-        public ActionResult ApproveOrders(int OrderId, string OrderType, double DiscountedPrice, double Discount, List<ChangeNotesPrice> ChangeNotesPrice)
+            int count = 1000;
+
+            foreach (var item in PaidOrderList)
+            {
+
+                item.ApproveId = count;
+
+                db.SaveChanges();
+
+                count++;
+            }
+        }
+
+        public ActionResult ApproveOrders(int OrderId, string OrderType, double DiscountedPrice, double Discount, List<ChangeNotesPrice> ChangeNotesPrice, int ApprovedId)
         {
             //return Json("", JsonRequestBehavior.AllowGet);
 
             var dbTransaction = db.Database.BeginTransaction();
             try
             {
+                int MaxId = db.AspNetOrders.Select(x => x.ApproveId.Value).Max();
+
                 AspNetOrder OrderToModify = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
 
                 if (OrderToModify.Status == "Pending")
@@ -48,6 +68,7 @@ namespace SEA_Application.Controllers
                     OrderToModify.Discount = Discount;
                     OrderToModify.ApproveDate = GetLocalDateTime.GetLocalDateTimeFunction();
                     OrderToModify.TotalAmount = Convert.ToInt32(DiscountedPrice);
+                    OrderToModify.ApproveId = ApprovedId;
                     db.Entry(OrderToModify).State = EntityState.Modified;
                     db.SaveChanges();
 
@@ -539,6 +560,23 @@ namespace SEA_Application.Controllers
 
         public ActionResult PendingOrdersDetails(int OrderId)
         {
+            var UserId = User.Identity.GetUserId();
+            var UserNameOfCashier = db.AspNetUsers.Where(x => x.Id == UserId).Select(x=>x.UserName).FirstOrDefault();
+
+            int? MaxId = db.AspNetOrders.Select(x => x.ApproveId).Max();
+           
+            var SelectedOrder =  db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
+
+            if(SelectedOrder.Status == "Pending")
+            {
+                MaxId = (MaxId + 1);
+            }
+            else
+            {
+                MaxId = SelectedOrder.ApproveId;// order may be Paid or returned.
+
+            }
+
             var result = (from Notes in db.AspNetNotes
                           join OrderNotes in db.AspNetNotesOrders on Notes.Id equals OrderNotes.NotesID
                           where OrderNotes.OrderId == OrderId
@@ -559,18 +597,20 @@ namespace SEA_Application.Controllers
 
                           }).ToList();
 
-
+            //  db.AspNetOrders.Where(x=>x)
             List<OrderDetails> OrderDetailsList = new List<OrderDetails>();
 
             ViewBag.OrderId = OrderId;
+            ViewBag.ApprovedId = MaxId;
             ViewBag.OrderType = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault().OrderType;
             ViewBag.OrderStatus = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault().Status;
 
             ViewBag.Discount = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault().Discount;
+            ViewBag.UserNameOfCashier = UserNameOfCashier;
 
-            var NotesOrderObject  = db.AspNetNotesOrders.Where(x => x.OrderId == OrderId).FirstOrDefault();
+            var NotesOrderObject = db.AspNetNotesOrders.Where(x => x.OrderId == OrderId).FirstOrDefault();
 
-            if(NotesOrderObject != null)
+            if (NotesOrderObject != null)
             {
 
                 ViewBag.StudentName = NotesOrderObject.AspNetStudent.AspNetUser.Name;
@@ -939,6 +979,9 @@ namespace SEA_Application.Controllers
             var dbTransaction = db.Database.BeginTransaction();
             try
             {
+                int? MaxId = db.AspNetOrders.Select(x => x.ApproveId).Max();
+                //ViewBag.ApprovedId = (MaxId + 1);
+
                 var Order = PlaceNotes.FirstOrDefault();
 
                 AspNetOrder NewOrder = new AspNetOrder();
@@ -947,6 +990,7 @@ namespace SEA_Application.Controllers
                 NewOrder.PublishDate = GetLocalDateTime.GetLocalDateTimeFunction();
                 NewOrder.ApproveDate = GetLocalDateTime.GetLocalDateTimeFunction();
                 NewOrder.OrderType = null;
+                NewOrder.ApproveId = (MaxId + 1);
                 NewOrder.Discount = 0;
 
                 db.AspNetOrders.Add(NewOrder);
@@ -971,7 +1015,7 @@ namespace SEA_Application.Controllers
                 var TotalPhotoCopierToDelete = Order.PhotoCopierPrice * Order.Quantity;
                 var TotalOAToDelete = Order.OAPrice * Order.Quantity;
 
-                var Student = db.AspNetStudents.Where(x=>x.Id == StudentId).FirstOrDefault();
+                var Student = db.AspNetStudents.Where(x => x.Id == StudentId).FirstOrDefault();
 
 
                 var NameOfStudent = Student.AspNetUser.Name;
@@ -1158,6 +1202,18 @@ namespace SEA_Application.Controllers
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
+        public ActionResult ApprovedIdExist(int ApprovedId)
+        {
+            AspNetOrder Check = db.AspNetOrders.Where(x => x.ApproveId == ApprovedId).FirstOrDefault();
+            var Msg = "NotExist";
+
+            if (Check != null)
+            {
+                Msg = "Exist";
+            }
+
+            return Json(Msg, JsonRequestBehavior.AllowGet);
+        }
         public class PlaceNotes
         {
             public int NotesId { get; set; }
@@ -1191,6 +1247,8 @@ namespace SEA_Application.Controllers
                           where Order.ApproveDate >= dateTimeFrom && Order.ApproveDate <= dateTimeTo
                           select new
                           {
+                              ApprovedId = Order.ApproveId,
+
                               OrderId = Order.Id,
                               OrderNotesId = OrderNotes.Id,
                               Title = Notes.Title,
@@ -1217,6 +1275,7 @@ namespace SEA_Application.Controllers
 
                 SaleReport saleReport = new SaleReport();
                 saleReport.OrderId = item.Id;
+                saleReport.ApprovedId = item.ApproveId;
                 saleReport.StudentName = SearchedOrders.FirstOrDefault().StudentName;
                 saleReport.ClassName = SearchedOrders.FirstOrDefault().ClassName;
                 saleReport.Status = item.Status;
@@ -1264,7 +1323,7 @@ namespace SEA_Application.Controllers
 
             }
 
-            List<SaleReport> SortedList =  SaleReportList.OrderBy(x=>x.OrderId).ToList();
+            List<SaleReport> SortedList = SaleReportList.OrderBy(x => x.ApprovedId).ToList();
 
             return Json(SortedList, JsonRequestBehavior.AllowGet);
 
@@ -1272,6 +1331,7 @@ namespace SEA_Application.Controllers
 
         public class SaleReport
         {
+            public int? ApprovedId { get; set; }
             public int OrderId { get; set; }
             public string StudentName { get; set; }
             public string ClassName { get; set; }

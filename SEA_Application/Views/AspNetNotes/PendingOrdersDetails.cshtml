@@ -71,6 +71,7 @@ else if (User.IsInRole("Receptionist"))
         <input type="hidden" name="" id="OrderType" value="@ViewBag.OrderType" />
         <input type="hidden" name="name" id="OrderId" value="@ViewBag.OrderId" />
         <input type="hidden" name="" value="@ViewBag.OrderStatus" id="OrderStatus" />
+        <input type="hidden" name="" value="@ViewBag.ApprovedId" id="ApprovedId" />
         <table class="table table-bordered table-striped table-hover">
             <thead>
 
@@ -206,10 +207,12 @@ else if (User.IsInRole("Receptionist"))
                 <p class="centered">
                     @*Officers Academy*@
                     <b> <span id="OrderNo"></span></b>
+                    <br />
+                    <b>  <span id="ApprovedNo"></span></b>
                     <br>  <b> <span id="DateTime"></span></b>
                 </p>
 
-                <br><b>Cashier:</b><b> SeaAdmin</b> <span>
+                <br><b>Cashier:</b><b> @ViewBag.UserNameOfCashier</b> <span>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Admin Copy</b>
                 </span>
@@ -255,11 +258,13 @@ else if (User.IsInRole("Receptionist"))
                 <p class="centered">
 
                     <b>  <span id="OrderNo1"></span></b>
+                    <br />
+                    <b>  <span id="ApprovedNo1"></span></b>
                     <br>   <b> <span id="DateTime1"></span></b>
                 </p>
 
 
-                <br><b>Cashier:</b> <b> SeaAdmin</b> <span>
+                <br><b>Cashier:</b> <b> @ViewBag.UserNameOfCashier</b> <span>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Student Copy</b>
                 </span>
@@ -387,7 +392,9 @@ else if (User.IsInRole("Receptionist"))
             event.stopPropagation();
             var Total = 0.0;
             var OrderId = $("#OrderId").val();
+            var ApprovedId = $("#ApprovedId").val();
             //clickedOrderId = OrderId;
+           // alert(ApprovedId);
 
             $('#btnPrint').attr('name', OrderId);
 
@@ -431,6 +438,10 @@ else if (User.IsInRole("Receptionist"))
             $("#OrderNo").html('Order#' + OrderId);
             $("#OrderNo1").html('Order#' + OrderId);
 
+            
+            $("#ApprovedNo").html('Approved#' + ApprovedId);
+            $("#ApprovedNo1").html('Approved#' + ApprovedId);
+
             $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>");
             $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>");
 
@@ -452,6 +463,7 @@ else if (User.IsInRole("Receptionist"))
 
             var OrderId = $('#btnPrint').attr('name');
             var OrderType = $("#OrderType").val();
+            var ApprovedId = $("#ApprovedId").val();
             // alert(OrderType);
 
             var mywindow = window.open('', '', '');
@@ -512,7 +524,7 @@ else if (User.IsInRole("Receptionist"))
 
                 type: "POST",
                 url: "/AspNetNotes/ApproveOrders",
-                data: { "OrderId": OrderId, "OrderType": OrderType, "DiscountedPrice": DiscountedPrice, "Discount": Discount, 'ChangeNotesPrice': ChangeNotesPrice },
+                data: { "OrderId": OrderId, "OrderType": OrderType, "DiscountedPrice": DiscountedPrice, "Discount": Discount, 'ChangeNotesPrice': ChangeNotesPrice, 'ApprovedId':ApprovedId },
                 success: function (data) {
 
                     debugger
