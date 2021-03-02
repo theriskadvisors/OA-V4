@@ -26,6 +26,12 @@
 </style>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 @*<script src="~/Content/Toggle.js"></script>*@
 <script src="~/Content/Toggle.js"></script>
 
@@ -59,7 +65,7 @@
                 $('#Sessions').html("");
                 debugger
                 //  $('#Sessions').append('<option value= "">Select </option>');
-                $('#SessionId').append('<option value="">Select Section</option>');
+                $('#SessionId').append('<option value="" disabled>Select Section</option>');
                 $.each(sch, function (i, item) {
 
                     debugger
@@ -73,7 +79,7 @@
         var course = 'CSS';
         var Class;
         $('#CTId').change(function () {
-             $("#ErrorMsg1").html("");
+            $("#ErrorMsg1").html("");
             var crse = $(this).val();
 
             console.log(crse);
@@ -124,7 +130,7 @@
 
 
         $('#SecId').change(function () {
-             $("#ErrorMsg1").html("");
+            $("#ErrorMsg1").html("");
             var UserName = $(this).val();
             console.log(UserName);
             Class = UserName;
@@ -162,7 +168,7 @@
         });
 
         $('#TopId').change(function () {
-             $("#ErrorMsg1").html("");
+            $("#ErrorMsg1").html("");
             var topid = $(this).val();
             console.log(topid);
 
@@ -205,7 +211,7 @@
 
 
         $('#SubId').change(function () {
-             $("#ErrorMsg1").html("");
+            $("#ErrorMsg1").html("");
             var subid = $(this).val();
             console.log(subid);
             if (subid != "") {
@@ -282,12 +288,12 @@
 
         })
         $("#LessonId").change(function () {
-             $("#ErrorMsg1").html("");
+            $("#ErrorMsg1").html("");
             CheckLessonAlreadyScheduled();
         })
 
         $("#SessionId").change(function () {
-               $("#ErrorMsg1").html("");
+            $("#ErrorMsg1").html("");
             CheckLessonAlreadyScheduled();
         })
 
@@ -301,13 +307,16 @@
 
     function CheckLessonAlreadyScheduled() {
 
+        debugger
         var LessonId = $("#LessonId").val();
         var SessionId = $("#SessionId").val();
 
-        $("#ErrorMsg1").html("");
-       // $("#submit").attr('disabled', false);
+        // alert(SessionId);
 
-        if (LessonId != "" && SessionId != "") {
+        $("#ErrorMsg1").html("");
+        // $("#submit").attr('disabled', false);
+
+        if (LessonId != "" && LessonId != null && SessionId != "") {
 
 
             $.ajax({
@@ -317,14 +326,23 @@
                 url: "/AspnetLessons/CheckLessonAlreadyScheduled1?LessonId=" + LessonId + "&&SessionId=" + SessionId,
                 success: function (data) {
                     debugger
-                    var ErrorMsg = "";
-                    
-                    if (data.Error != "") {
 
 
-                        $("#ErrorMsg1").html(data.Error);
-                       // $("#submit").attr('disabled', true);
-                    }
+                    var ErrorListItems = "";
+
+                    $.each(data, function (i, item) {
+
+                       // $("#ErrorMsg1").append(item + "<br>");
+
+                        ErrorListItems = ErrorListItems + "<li>"+item+"</li>";
+
+                        // $("#submit").attr('disabled', true);
+                        // }
+
+                    })
+
+                    $("#ErrorMsg1").append("<ul> "+ErrorListItems+" </ul>");
+
 
 
 
@@ -389,12 +407,22 @@
                             </div>
 
 
-                            <div class="form-row mt-3">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Select Section*</label>
-                                    <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
+                            @*<div class="form-row mt-3">
+                                    <div class="form-group col-md-12 bmd-form-group">
+                                        <label for="" class="bmd-label-static pl-2">Select Section*</label>
+                                        <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
+                                    </div>
+                                </div>*@
+
+
+                            <div class="form-row mt-4">
+                                <div class="form-group col-md-12 control-label">
+                                    <label for="" class="control-label">Select Sections *</label>
+                                    <select class="js-example-basic-multiple SecIdDDL" multiple="multiple" style="width:400px" id="SessionId" name="SessionId" required></select>
+
                                 </div>
                             </div>
+
                             <span style="padding:10px"></span>
 
                             <div class="form-group">
@@ -413,9 +441,9 @@
 
                                 <input type="date" name="DueDate" id="DueDate" value="" class="form-control" required />
                                 <br />
-                                <span style="color:red;" id="ErrorMsg"></span>
+                                <span style="color:red; text-align: justify;" id="ErrorMsg" ></span>
                                 <br />
-                                <span style="color:red;" id="ErrorMsg1"></span>
+                                <span style="color:red; text-align: justify;" id="ErrorMsg1"></span>
 
                             </div>
 
@@ -455,6 +483,9 @@
 
 
         //    $("#QuestionType").change(function () {
+
+
+         $('.js-example-basic-multiple').select2();
 
 
         var QuestionType = "MCQ";

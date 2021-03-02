@@ -45,7 +45,7 @@ namespace SEA_Application.Controllers
 
         public ActionResult LoadSectionIdDDL()
         {
-            var ClassList = db.AspNetSessions.OrderByDescending(x=>x.Id).ToList().Select(x => new { x.Id, x.SessionName });
+            var ClassList = db.AspNetSessions.OrderByDescending(x => x.Id).ToList().Select(x => new { x.Id, x.SessionName });
 
             string status = Newtonsoft.Json.JsonConvert.SerializeObject(ClassList);
 
@@ -127,7 +127,7 @@ namespace SEA_Application.Controllers
             {
                 TopicExist = "Yes";
                 var Names = "";
-                foreach(var lesson in Lessons)
+                foreach (var lesson in Lessons)
                 {
                     Names = Names + lesson.Name + ",";
                 }
@@ -136,8 +136,8 @@ namespace SEA_Application.Controllers
 
                 Msg = "Selected order by value is already assigned to " + Names + " Lesson.";
             }
-          
-            return Json( new {  TopicExist = TopicExist, Msg = Msg }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { TopicExist = TopicExist, Msg = Msg }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewAttendance(int id, string BranchName, string ClassName, string SectionName, string SubjectName, string LessonName, string StartDate, string Type)
@@ -514,8 +514,8 @@ namespace SEA_Application.Controllers
             foreach (var id in AllLessonIds)
             {
                 var LessonSession = db.Lesson_Session.Where(x => x.LessonId == id && x.SessionId == SessionId).FirstOrDefault();
-                    
-                if(LessonSession != null)
+
+                if (LessonSession != null)
                 {
                     db.Lesson_Session.Remove(LessonSession);
                     db.SaveChanges();
@@ -595,70 +595,84 @@ namespace SEA_Application.Controllers
         [HttpPost]
         public ActionResult CreateLessonSession(int SessionId)
         {
-            var SessionId1 = Request.Form["SessionId"];
+            //var SessionId1 = Request.Form["SessionId"];
+
+            var SessionId1 = Request.Form["SessionId"].Split(',').ToList();
+
             var LessonId = Request.Form["LessonId"];
             var StartDate = Request.Form["StartDate"];
             var DueDate = Request.Form["DueDate"];
 
-            var sessionId = Convert.ToInt32(SessionId1);
+            // var sessionId = Convert.ToInt32(SessionId1);
             var lessonId = Convert.ToInt32(LessonId);
 
-            var LessonSession = db.Lesson_Session.Where(x => x.LessonId == lessonId && x.SessionId == sessionId).FirstOrDefault();
-
-            if(LessonSession != null)
+            foreach (var item in SessionId1)
             {
-                db.Lesson_Session.Remove(LessonSession);
+                int sessionId = Convert.ToInt32(item);
+
+                var LessonSession = db.Lesson_Session.Where(x => x.LessonId == lessonId && x.SessionId == sessionId).FirstOrDefault();
+
+                if (LessonSession != null)
+                {
+                    db.Lesson_Session.Remove(LessonSession);
+                    db.SaveChanges();
+                }
+            }
+
+            foreach (var item1 in SessionId1)
+            {
+                int sessionId = Convert.ToInt32(item1);
+
+                Lesson_Session ls = new Lesson_Session();
+                ls.LessonId = Convert.ToInt32(LessonId);
+                ls.SessionId = sessionId;
+                ls.StartDate = Convert.ToDateTime(StartDate);
+                ls.DueDate = Convert.ToDateTime(DueDate);
+
+                db.Lesson_Session.Add(ls);
                 db.SaveChanges();
+
+
+
+                var lesson = db.AspnetLessons.Where(x => x.Id == ls.LessonId).FirstOrDefault();
+                var Users = (from std in db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id)
+                             join session in db.AspNetStudent_Session_class on std.StudentId equals session.AspNetStudent.StudentID
+                             where session.SessionID == ls.SessionId
+                             select std.StudentId).ToList();
+                //var Users = db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id).Select(x=> x.StudentId).ToList();
+                string[] color = { "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Aqua" };
+
+                var AdminsAndStaff = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Admin") || x.AspNetRoles.Select(y => y.Name).Contains("Staff")).Select(x => x.Id).ToList();
+
+                foreach (var item in AdminsAndStaff)
+                {
+                    Users.Add(item);
+                }
+
+                foreach (var items in Users)
+                {
+                    Random random = new Random();
+                    int colorcode = random.Next(1, 5);
+                    var newEvent = new Event();
+                    newEvent.UserId = items;
+                    newEvent.IsFullDay = false;
+                    newEvent.IsPublic = false;
+                    newEvent.Subject = lesson.AspnetSubjectTopic.GenericSubject.SubjectName + "-" + lesson.AspnetSubjectTopic.GenericSubject.SubjectType;
+                    newEvent.Description = lesson.Description;
+                    newEvent.SessionID = db.AspNetUsers_Session.Where(x => x.UserID == items).Select(x => x.SessionID).FirstOrDefault();
+                    newEvent.ThemeColor = color[colorcode];
+                    newEvent.Start = ls.StartDate.Value.AddHours(10); //Convert.ToDateTime(day[0] + " " + starttime);
+                    newEvent.End = ls.StartDate.Value.AddHours(13);  //Convert.ToDateTime(day[0] + " " + Endtime);
+                    newEvent.TimeTableId = null; // item.Id;
+                    newEvent.LessonID = lesson.Id;
+                    newEvent.SessionID = ls.SessionId;
+                    db.Events.Add(newEvent);
+                }
+
+
+                db.SaveChanges();
+
             }
-
-            Lesson_Session ls = new Lesson_Session();
-            ls.LessonId = Convert.ToInt32(LessonId);
-            ls.SessionId = Convert.ToInt32(SessionId1);
-            ls.StartDate = Convert.ToDateTime(StartDate);
-            ls.DueDate = Convert.ToDateTime(DueDate);
-
-            db.Lesson_Session.Add(ls);
-            db.SaveChanges();
-
-            var lesson = db.AspnetLessons.Where(x => x.Id == ls.LessonId).FirstOrDefault();
-            var Users = (from std in db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id)
-                         join session in db.AspNetStudent_Session_class on std.StudentId equals session.AspNetStudent.StudentID
-                         where session.SessionID == ls.SessionId
-                         select std.StudentId).ToList();
-            //var Users = db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id).Select(x=> x.StudentId).ToList();
-            string[] color = { "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Aqua" };
-
-            var AdminsAndStaff = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Admin") || x.AspNetRoles.Select(y => y.Name).Contains("Staff")).Select(x => x.Id).ToList();
-
-            foreach (var item in AdminsAndStaff)
-            {
-                Users.Add(item);
-            }
-
-            foreach (var items in Users)
-            {
-                Random random = new Random();
-                int colorcode = random.Next(1, 5);
-                var newEvent = new Event();
-                newEvent.UserId = items;
-                newEvent.IsFullDay = false;
-                newEvent.IsPublic = false;
-                newEvent.Subject = lesson.AspnetSubjectTopic.GenericSubject.SubjectName + "-" + lesson.AspnetSubjectTopic.GenericSubject.SubjectType;
-                newEvent.Description = lesson.Description;
-                newEvent.SessionID = db.AspNetUsers_Session.Where(x => x.UserID == items).Select(x => x.SessionID).FirstOrDefault();
-                newEvent.ThemeColor = color[colorcode];
-                newEvent.Start = ls.StartDate.Value.AddHours(10); //Convert.ToDateTime(day[0] + " " + starttime);
-                newEvent.End = ls.StartDate.Value.AddHours(13);  //Convert.ToDateTime(day[0] + " " + Endtime);
-                newEvent.TimeTableId = null; // item.Id;
-                newEvent.LessonID = lesson.Id;
-                newEvent.SessionID = ls.SessionId;
-                db.Events.Add(newEvent);
-            }
-
-
-            db.SaveChanges();
-
-
 
             return RedirectToAction("LessonSessionView");
         }
@@ -729,24 +743,47 @@ namespace SEA_Application.Controllers
         }
 
 
-        public ActionResult CheckLessonAlreadyScheduled1(int LessonId, int SessionId)
+        public ActionResult CheckLessonAlreadyScheduled1(int LessonId, string SessionId)
         {
-            var Error = "";
+            //var Error = "";
 
-            var LessonSession = db.Lesson_Session.Where(x => x.LessonId == LessonId && x.SessionId == SessionId).FirstOrDefault();
+            List<string> Errors = new List<string>();
+
+            var ListItems = SessionId.Split(',').ToList();
+
+            foreach(var item in ListItems)
+            {
+                int sessionId = Convert.ToInt32(item);
+
+                var LessonSession = db.Lesson_Session.Where(x => x.LessonId == LessonId && x.SessionId == sessionId).FirstOrDefault();
 
             if (LessonSession != null)
             {
                 var FromDate = LessonSession.StartDate.Value.ToString("MM/dd/yyyy");
                 var ToDate = LessonSession.DueDate.Value.ToString("MM/dd/yyyy");
-                //  Error = "Lesson is already scheduled in selected section";
-                Error = "The selected lesson in already scheduled from " + FromDate + " to " + ToDate + " in selected session. On Creation," +
-                    " the pervious schedule will automatically delete.";
+
+                    var Error = "";
+
+                   Error = "The selected lesson in already scheduled from " + FromDate + " to " + ToDate + " in "+ LessonSession.AspNetSession.SessionName;
+
+                    Errors.Add(Error);
+            }
+            }
+
+            //. On Creation," +
+                 //  " the pervious schedule will automatically delete.
+
+            if( Errors.Count() != 0)
+            {
+
+                Errors.Add("On Creation the pervious schedule lessons will be automatically deleted.");
 
             }
 
+            //   return Json(new { Error, JsonRequestBehavior.AllowGet });
 
-            return Json(new { Error, JsonRequestBehavior.AllowGet });
+            return Json(Errors, JsonRequestBehavior.AllowGet);
+
         }
 
 

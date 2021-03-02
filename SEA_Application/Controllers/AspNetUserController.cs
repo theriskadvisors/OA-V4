@@ -718,12 +718,12 @@ namespace SEA_Application.Controllers
             StudentPrintForm studentPrintForm = new StudentPrintForm();
 
             string[] names = aspNetUser.Name.Split(' ');
-          
+
 
             studentPrintForm.FirstName = names[0];
 
-           
-            if (names.Length >1 )
+
+            if (names.Length > 1)
 
             {
 
@@ -1354,6 +1354,13 @@ namespace SEA_Application.Controllers
                     var UserSessionToUpdate = db1.AspNetUsers_Session.Where(x => x.UserID == aspNetUser.Id).FirstOrDefault();
 
                     UserSessionToUpdate.SessionID = SessionIdOfSelectedStudent1;
+                    db1.SaveChanges();
+
+
+                    var AspNetStudentSessionclassToUpdate = db1.AspNetStudent_Session_class.Where(x => x.StudentID == student.Id).FirstOrDefault();
+                    AspNetStudentSessionclassToUpdate.SessionID = SessionIdOfSelectedStudent1;
+                    AspNetStudentSessionclassToUpdate.ClassID = classIdInt;
+
                     db1.SaveChanges();
 
 
