@@ -8,21 +8,22 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace SEA_Application.Controllers
-{   
-    [Authorize(Roles = "Accountant")]
+{
+    [Authorize(Roles = "Accountant,Admin")]
     public class FinanceSummaryController : Controller
     {
-        SEA_DatabaseEntities db = new  SEA_DatabaseEntities();
+        SEA_DatabaseEntities db = new SEA_DatabaseEntities();
         // GET: FinanceSummary
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
-            public ActionResult CalendarNotification()
-           {
+        public ActionResult CalendarNotification()
+        {
             var id = User.Identity.GetUserId();
             var checkdate = DateTime.Now;
-            var date=TimeZoneInfo.ConvertTime(DateTime.UtcNow.ToUniversalTime(), TimeZoneInfo.Local);
+            var date = TimeZoneInfo.ConvertTime(DateTime.UtcNow.ToUniversalTime(), TimeZoneInfo.Local);
             var name = "";
-          
-            name =  db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
+
+            name = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
 
             var day = date.DayOfWeek;
             var dd = date.Day;
@@ -31,77 +32,293 @@ namespace SEA_Application.Controllers
             string[] array = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
             var Date = day + ", " + dd + " " + array[mm - 1] + " " + yy;
-            var result = new {checkdate, Date, name };
+            var result = new { checkdate, Date, name };
             return Json(result, JsonRequestBehavior.AllowGet);
-        
-    }
-            public JsonResult GetEvents()
+
+        }
+        public JsonResult GetEvents()
+        {
+            using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
             {
-                using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
+                var id = User.Identity.GetUserId();
+                var events = dc.Events.Where(x => x.UserId == id || x.IsPublic == true).Select(x => new { x.Description, x.End, x.EventID, x.IsFullDay, x.Subject, x.ThemeColor, x.Start, x.IsPublic }).ToList();
+                return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+        }
+        //public ActionResult AdminsCashSummary()
+        //{
+
+        //    DateTime? dateTime = GetLocalDateTime.GetLocalDateTimeFunction();
+        //    DateTime? RemoveTimePart = dateTime.Value.Date;
+
+        //    var Day = RemoveTimePart.Value.Day.ToString();
+        //    var Month = RemoveTimePart.Value.Month.ToString();
+        //    var Year = RemoveTimePart.Value.Year.ToString();
+
+
+
+        //    var AllAdmin = db.AspNetUsers.Where(x => x.AspNetRoles.Any(y => y.Name == "Admin")).Select(x => x.Name).ToList();
+
+
+        //    //            from Voucher in db.Vouchers.Where(x => x.Date.Value.Day.ToString() == Day && x.Date.Value.Month.ToString() == Month && x.Date.Value.Year.ToString() == Year)
+        //    ///          where Voucher.CreatedBy == "SeaAdmin" && Voucher.CreatedBy == "Receptionist"
+        //    AllAdmin.Add("Ammad");
+
+        //    List<StudentFee> studentfeelist = new List<StudentFee>();
+        //    List<NotesFee> Notesfeelist = new List<NotesFee>();
+
+        //    foreach (var admin in AllAdmin)
+        //    {
+        //        StudentFee studentfee = new StudentFee();
+        //        NotesFee notesFee = new NotesFee();
+
+        //        var TodayFeeRecord = (from fee in db.StudentFeeMonths
+        //                         join voucher in db.Vouchers on fee.IssueDate.Value.Day.ToString() equals voucher.Date.Value.Day.ToString()
+        //                         where fee.IssueDate.Value.Day.ToString() == Day && fee.IssueDate.Value.Month.ToString() == Month && fee.IssueDate.Value.Year.ToString() == Year
+        //                         && fee.IssueDate.Value.Month.ToString() == voucher.Date.Value.Month.ToString() && fee.IssueDate.Value.Year.ToString() == voucher.Date.Value.Year.ToString()
+        //                          //  group new { fee, voucher } by new { fee.FeeReceived, voucher.CreatedBy}
+        //                          // into grp
+        //                         &&  voucher.CreatedBy == admin
+        //                          select new { voucher.CreatedBy , fee.FeeReceived }).ToList();
+
+
+        //    var GroupByFeeRecords = (from item in TodayFeeRecord
+        //                         group item by item.CreatedBy into g
+        //                         select new { CreatedBy=g.Key, FeeReceived =  g.Sum(x => x.FeeReceived) }).ToList();
+
+
+
+
+        //    var TodayNotesRecord = (from order in db.AspNetOrders
+        //                          join voucher in db.Vouchers on order.ApproveDate.Value.Day.ToString() equals voucher.Date.Value.Day.ToString()
+        //                          where order.ApproveDate.Value.Day.ToString() == Day && order.ApproveDate.Value.Month.ToString() == Month && order.ApproveDate.Value.Year.ToString() == Year
+        //                          && order.ApproveDate.Value.Month.ToString() == voucher.Date.Value.Month.ToString() && order.ApproveDate.Value.Year.ToString() == voucher.Date.Value.Year.ToString()
+        //                          && voucher.CreatedBy == admin
+        //                         // group new { order, voucher } by new { order.TotalAmount, voucher.CreatedBy }
+        //                         // into grp
+        //                          select new { voucher.CreatedBy, order.TotalAmount }).ToList();
+
+
+        //    var GroupByNotesRecords = (from item in TodayNotesRecord
+        //                               group item by item.CreatedBy into g
+        //                               select new { CreatedBy = g.Key, TotalNotesAmount = g.Sum(x => x.TotalAmount) }).ToList();
+
+
+        //    }
+
+
+
+        //    List<CashSummary> cashSummaryList = new List<CashSummary>();
+        //    foreach(var item in AllAdmin)
+        //    {
+
+        //      // var Record =   GroupByFeeRecords.Where(x => x.CreatedBy == item).FirstOrDefault();
+        //      //  var NoteRecord = GroupByNotesRecords.Where(x => x.CreatedBy == item).FirstOrDefault();
+
+        //        CashSummary cashSummary = new CashSummary();
+        //        cashSummary.UserName = item;
+
+        //        cashSummary.FeeReceived = 0;
+        //        cashSummary.NotesAmount = 0;
+
+        //        //if (Record != null)
+        //        //{
+        //        //    cashSummary.FeeReceived = Convert.ToInt32( Record.FeeReceived.Value);
+
+        //        //}
+        //        //if(NoteRecord !=null)
+        //        //{
+        //        //    cashSummary.NotesAmount = Convert.ToInt32(NoteRecord.TotalNotesAmount.Value);
+
+        //        //}
+
+        //        cashSummary.TotalAmount = cashSummary.FeeReceived + cashSummary.NotesAmount;
+
+        //        cashSummaryList.Add(cashSummary);
+
+        //    }
+
+
+        //    return View(cashSummaryList);
+        //}
+
+        public ActionResult AdminsCashSummary()
+        {
+
+            DateTime? dateTime = GetLocalDateTime.GetLocalDateTimeFunction();
+            DateTime? RemoveTimePart = dateTime.Value.Date;
+
+            var Day = RemoveTimePart.Value.Day.ToString();
+            var Month = RemoveTimePart.Value.Month.ToString();
+            var Year = RemoveTimePart.Value.Year.ToString();
+
+            var AllAdmin = db.AspNetUsers.Where(x => x.AspNetRoles.Any(y => y.Name == "Admin")).Select(x => x.Name).ToList();
+
+            AllAdmin.Add("Ammad");
+
+
+            var StudentFeeRecords = (from voucher in db.Vouchers.Where(x => x.Date.Value.Day.ToString() == Day && x.Date.Value.Month.ToString() == Month && x.Date.Value.Year.ToString() == Year)
+                                     join voucherRecord in db.VoucherRecords on voucher.Id equals voucherRecord.VoucherId
+                                     where voucherRecord.Ledger.Name == "Admin Drawer" && voucherRecord.Type == "Dr" && voucherRecord.Description.Contains("Fee Collected by student")
+
+                                     group new { voucher, voucherRecord } by new { voucher.CreatedBy } into g
+
+                                     select new
+                                     {
+
+                                         g.Key.CreatedBy,
+                                         TotalFee = g.Sum(x => x.voucherRecord.Amount),
+
+                                     }).ToList();
+
+
+            var TodayAllDebitNotesList = (from voucher in db.Vouchers.Where(x => x.Date.Value.Day.ToString() == Day && x.Date.Value.Month.ToString() == Month && x.Date.Value.Year.ToString() == Year)
+                                          join voucherRecord in db.VoucherRecords on voucher.Id equals voucherRecord.VoucherId
+                                          where voucherRecord.Ledger.Name == "Admin Drawer" && voucherRecord.Type == "Dr" && voucherRecord.Description.Contains("Notes paid by student")
+
+                                          group new { voucher, voucherRecord } by new { voucher.CreatedBy } into g
+
+                                          select new
+                                          {
+
+                                              g.Key.CreatedBy,
+                                              TotalDrNotesFee = g.Sum(x => x.voucherRecord.Amount),
+
+                                          }).ToList();
+
+
+
+            var TodayAllCreditNotesList = (from voucher in db.Vouchers.Where(x => x.Date.Value.Day.ToString() == Day && x.Date.Value.Month.ToString() == Month && x.Date.Value.Year.ToString() == Year)
+                                           join voucherRecord in db.VoucherRecords on voucher.Id equals voucherRecord.VoucherId
+                                           where voucherRecord.Ledger.Name == "Admin Drawer" && voucherRecord.Type == "Cr" && voucherRecord.Description.Contains("Notes returned by student")
+
+                                           group new { voucher, voucherRecord } by new { voucher.CreatedBy } into g
+
+                                           select new
+                                           {
+
+                                               g.Key.CreatedBy,
+                                               TotalCrNotesFee = g.Sum(x => x.voucherRecord.Amount),
+
+                                           }).ToList();
+
+             List<CashSummary> cashSummaryList = new List<CashSummary>();
+
+            foreach (var item in AllAdmin)
+            {
+
+                var FeeRecord = StudentFeeRecords.Where(x => x.CreatedBy == item).FirstOrDefault();
+                var NoteRecordDr = TodayAllDebitNotesList.Where(x => x.CreatedBy == item).FirstOrDefault();
+                var NoteRecordCr = TodayAllCreditNotesList.Where(x => x.CreatedBy == item).FirstOrDefault();
+
+
+                CashSummary cashSummary = new CashSummary();
+                cashSummary.UserName = item;
+
+                cashSummary.FeeReceived = 0;
+                cashSummary.NotesAmount = 0;
+
+                if (FeeRecord != null)
                 {
-                    var id = User.Identity.GetUserId();
-                    var events = dc.Events.Where(x => x.UserId == id || x.IsPublic == true).Select(x => new { x.Description, x.End, x.EventID, x.IsFullDay, x.Subject, x.ThemeColor, x.Start, x.IsPublic }).ToList();
-                    return new JsonResult { Data = events, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    cashSummary.FeeReceived = Convert.ToInt32(FeeRecord.TotalFee.Value);
+
                 }
+                if (NoteRecordDr != null)
+                {
+                    cashSummary.NotesAmount = Convert.ToInt32(NoteRecordDr.TotalDrNotesFee.Value);
+
+                }
+              //  var CreditNoteFee = 0;
+                if(NoteRecordCr != null)
+                {
+                    cashSummary.NotesAmount  = cashSummary.NotesAmount - (Convert.ToInt32(NoteRecordCr.TotalCrNotesFee.Value));
+                }
+
+
+
+
+                cashSummary.TotalAmount = cashSummary.FeeReceived + cashSummary.NotesAmount;
+
+                cashSummaryList.Add(cashSummary);
+
             }
 
-            [HttpPost]
-            public JsonResult SaveEvent(Event e)
+
+
+
+
+
+            return View(cashSummaryList);
+        }
+
+
+
+
+        public class CashSummary
+        {
+            public string UserName { get; set; }
+            public int NotesAmount { get; set; }
+            public int FeeReceived { get; set; }
+            public int TotalAmount { get; set; }
+        }
+
+        [HttpPost]
+        public JsonResult SaveEvent(Event e)
+        {
+            e.UserId = User.Identity.GetUserId();
+            var status = false;
+            using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
             {
-                e.UserId = User.Identity.GetUserId();
-                var status = false;
-                using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
+                if (e.EventID > 0)
                 {
-                    if (e.EventID > 0)
-                    {
-                        //Update the event
-                        var v = dc.Events.Where(a => a.EventID == e.EventID).FirstOrDefault();
-                        if (v != null)
-                        {
-                            v.Subject = e.Subject;
-                            v.Start = e.Start;
-                            v.End = e.End;
-                            v.Description = e.Description;
-                            v.IsFullDay = e.IsFullDay;
-                            v.ThemeColor = e.ThemeColor;
-                        }
-                    }
-                    else
-                    {
-                        dc.Events.Add(e);
-                    }
-
-                    dc.SaveChanges();
-                    status = true;
-
-                }
-                return new JsonResult { Data = new { status = status } };
-            }
-
-            [HttpPost]
-            public JsonResult DeleteEvent(int eventID)
-            {
-                var status = false;
-                using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
-                {
-                    var v = dc.Events.Where(a => a.EventID == eventID).FirstOrDefault();
+                    //Update the event
+                    var v = dc.Events.Where(a => a.EventID == e.EventID).FirstOrDefault();
                     if (v != null)
                     {
-                        dc.Events.Remove(v);
-                        dc.SaveChanges();
-                        status = true;
+                        v.Subject = e.Subject;
+                        v.Start = e.Start;
+                        v.End = e.End;
+                        v.Description = e.Description;
+                        v.IsFullDay = e.IsFullDay;
+                        v.ThemeColor = e.ThemeColor;
                     }
                 }
-                return new JsonResult { Data = new { status = status } };
+                else
+                {
+                    dc.Events.Add(e);
+                }
+
+                dc.SaveChanges();
+                status = true;
+
             }
+            return new JsonResult { Data = new { status = status } };
+        }
+
+        [HttpPost]
+        public JsonResult DeleteEvent(int eventID)
+        {
+            var status = false;
+            using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
+            {
+                var v = dc.Events.Where(a => a.EventID == eventID).FirstOrDefault();
+                if (v != null)
+                {
+                    dc.Events.Remove(v);
+                    dc.SaveChanges();
+                    status = true;
+                }
+            }
+            return new JsonResult { Data = new { status = status } };
+        }
         public ActionResult UserName()
         {
             var id = User.Identity.GetUserId();
             var name = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
             var date = DateTime.Now;
             var result = new { date, name };
-        
-            return Json(result,JsonRequestBehavior.AllowGet);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Index()
         {
@@ -115,7 +332,7 @@ namespace SEA_Application.Controllers
         {
             var headlist = db.LedgerHeads.ToList();
             List<Ledger_Head> ledgerheadlist = new List<Ledger_Head>();
-            
+
             foreach (var h_item in headlist)
             {
                 Ledger_Head ledgerhead = new Ledger_Head();
@@ -123,7 +340,7 @@ namespace SEA_Application.Controllers
                 ledgerhead.HeadName = h_item.Name;
                 decimal? amount = 0;
                 var grouplist = db.LedgerGroups.Where(x => x.LedgerHeadID == h_item.Id).ToList();
-                var _ledgerlist = db.Ledgers.Where(x => x.LedgerHeadId == h_item.Id && x.LedgerGroupId==null).ToList();
+                var _ledgerlist = db.Ledgers.Where(x => x.LedgerHeadId == h_item.Id && x.LedgerGroupId == null).ToList();
                 ledgerhead.ledgerGroup = new List<Ledger_Group>();
                 ledgerhead.ledger = new List<_Ledger>();
                 foreach (var g_item in grouplist)
@@ -150,7 +367,7 @@ namespace SEA_Application.Controllers
                             groupAmount = groupAmount + l_item.CurrentBalance;
                             amount = amount + l_item.CurrentBalance;
                         }
-                        
+
                         lg.ledger.Add(l);
                     }
                     lg.GroupTotal = groupAmount;
@@ -175,10 +392,10 @@ namespace SEA_Application.Controllers
                 ledgerhead.TotalAmount = amount;
                 ledgerheadlist.Add(ledgerhead);
             }
-            
+
             return Json(ledgerheadlist, JsonRequestBehavior.AllowGet);
         }
-       
+
         ///////////////////////////////////////BANK///////////////////////////
         public ActionResult Bank()
         {
@@ -194,13 +411,13 @@ namespace SEA_Application.Controllers
             var bank = (from ledger in db.Ledgers
                         join grp in db.LedgerGroups on ledger.LedgerGroupId equals grp.Id
                         where grp.Name == "Bank"
-                        select new {ledger.Id, ledger.Name, ledger.StartingBalance, ledger.CurrentBalance, h_name = ledger.LedgerHead.Name, g_name = ledger.LedgerGroup.Name }).ToList();
+                        select new { ledger.Id, ledger.Name, ledger.StartingBalance, ledger.CurrentBalance, h_name = ledger.LedgerHead.Name, g_name = ledger.LedgerGroup.Name }).ToList();
             return Json(bank, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult JournalEntryList(int id)
         {
-       
+
             ViewBag.LedgerId = id;
             return View();
         }
@@ -223,7 +440,7 @@ namespace SEA_Application.Controllers
                 j.Afterbalance = item.AfterBalance.ToString();
                 entry.Add(j);
             }
-            return Json(entry,JsonRequestBehavior.AllowGet);
+            return Json(entry, JsonRequestBehavior.AllowGet);
         }
         /////////////////////////////////////////////////////////////////
         public ActionResult AddBankVoucher(_Voucher Vouchers)
@@ -439,11 +656,11 @@ namespace SEA_Application.Controllers
                 VoucherRecord voucherrcd = new VoucherRecord();
 
                 voucherrcd.LedgerId = Vouchers.uppercode;
-                if(Vouchers.accounttype== "Dr")
+                if (Vouchers.accounttype == "Dr")
                 {
                     voucherrcd.Type = "Dr";
                 }
-                else if(Vouchers.accounttype== "Cr")
+                else if (Vouchers.accounttype == "Cr")
                 {
                     voucherrcd.Type = "Cr";
                 }
@@ -451,7 +668,7 @@ namespace SEA_Application.Controllers
                 voucherrcd.Description = Vouchers.upperdesc;
                 var record = db.Ledgers.Where(x => x.Id == voucherrcd.LedgerId).FirstOrDefault();
                 var currentbalance = record.CurrentBalance;
-                if(currentbalance==null)
+                if (currentbalance == null)
                 {
                     voucherrcd.CurrentBalance = 0;
                 }
@@ -494,26 +711,26 @@ namespace SEA_Application.Controllers
                     //{
                     //    voucherrecord.BranchId = item.BranchId;
                     //}
-                    if(voucherrcd.Type == "Dr")
+                    if (voucherrcd.Type == "Dr")
                     {
                         voucherrecord.Type = "Cr";
                     }
-                    else if(voucherrcd.Type == "Cr")
+                    else if (voucherrcd.Type == "Cr")
                     {
                         voucherrecord.Type = "Dr";
                     }
                     voucherrecord.Description = item.Transaction;
-                    
+
                     var ledgerrecord = db.Ledgers.Where(x => x.Id == voucherrecord.LedgerId).FirstOrDefault();
                     voucherrecord.CurrentBalance = ledgerrecord.CurrentBalance;
                     //////////////////////////Game/////////////////////
                     var groupid = ledgerrecord.LedgerGroupId;
                     int? ledgerheadId = 0;
                     var ledgerHead = "";
-                    if (groupid!=null)
+                    if (groupid != null)
                     {
-                         ledgerheadId = db.LedgerGroups.Where(x => x.Id == groupid).Select(x => x.LedgerHeadID).FirstOrDefault();
-                         ledgerHead = db.LedgerHeads.Where(x => x.Id == ledgerheadId).Select(x => x.Name).FirstOrDefault();
+                        ledgerheadId = db.LedgerGroups.Where(x => x.Id == groupid).Select(x => x.LedgerHeadID).FirstOrDefault();
+                        ledgerHead = db.LedgerHeads.Where(x => x.Id == ledgerheadId).Select(x => x.Name).FirstOrDefault();
                     }
                     else
                     {
@@ -576,7 +793,7 @@ namespace SEA_Application.Controllers
         }
 
         public ActionResult Cash()
-         {
+        {
             return View();
         }
 
@@ -609,7 +826,7 @@ namespace SEA_Application.Controllers
                 HeadList hl = new HeadList();
                 hl.HeadId = item.Id;
                 hl.HeadName = item.Name;
-                var ledger = db.Ledgers.Where(x => (x.LedgerGroup.Name == "Cash" || x.LedgerGroup.Name == "Bank") && (x.LedgerGroupId==item.Id)).ToList();
+                var ledger = db.Ledgers.Where(x => (x.LedgerGroup.Name == "Cash" || x.LedgerGroup.Name == "Bank") && (x.LedgerGroupId == item.Id)).ToList();
                 hl.accountlist = new List<AccountsList>();
                 foreach (var l_item in ledger)
                 {
@@ -660,38 +877,38 @@ namespace SEA_Application.Controllers
             db.Vouchers.Add(v);
             db.SaveChanges();
             //////////////////////CREDIT//////////////////////////////
-                VoucherRecord voucherrecord = new VoucherRecord();
-                string[] fdfd = CBVoucher.PaymentFrom.Split(new char[] { '-' }, 2);
-                var ledgerid=Convert.ToInt32(fdfd[0]);
-                voucherrecord.LedgerId = ledgerid;
-                voucherrecord.VoucherId = db.Vouchers.Select(x => x.Id).Max();
-                var type = fdfd[1];
-                var amount = 0;
+            VoucherRecord voucherrecord = new VoucherRecord();
+            string[] fdfd = CBVoucher.PaymentFrom.Split(new char[] { '-' }, 2);
+            var ledgerid = Convert.ToInt32(fdfd[0]);
+            voucherrecord.LedgerId = ledgerid;
+            voucherrecord.VoucherId = db.Vouchers.Select(x => x.Id).Max();
+            var type = fdfd[1];
+            var amount = 0;
 
-                if (type=="Cr")
-                {
-                    voucherrecord.Type = "Cr";
-                    amount = CBVoucher.Amount;                    
-                          
-                voucherrecord.Amount = amount;         
+            if (type == "Cr")
+            {
+                voucherrecord.Type = "Cr";
+                amount = CBVoucher.Amount;
+
+                voucherrecord.Amount = amount;
                 voucherrecord.Description = CBVoucher.Description;
                 var ledgerrecord = db.Ledgers.Where(x => x.Id == voucherrecord.LedgerId).FirstOrDefault();
                 voucherrecord.CurrentBalance = ledgerrecord.CurrentBalance;
-               /////////////////Game/////////////////////
+                /////////////////Game/////////////////////
                 var groupid = ledgerrecord.LedgerGroupId;
                 var ledgerHead = "";
-              
+
                 var ledgerheadId = db.LedgerGroups.Where(x => x.Id == groupid).Select(x => x.LedgerHeadID).FirstOrDefault();
                 ledgerHead = db.LedgerHeads.Where(x => x.Id == ledgerheadId).Select(x => x.Name).FirstOrDefault();
-               
+
                 if (ledgerHead == "Assets")
-                {  
+                {
                     voucherrecord.AfterBalance = ledgerrecord.CurrentBalance - amount;
                     Ledger ledger = db.Ledgers.Where(x => x.Id == voucherrecord.LedgerId).FirstOrDefault();
                     ledger.CurrentBalance = voucherrecord.AfterBalance;
                     db.SaveChanges();
                 }
-              
+
                 db.VoucherRecords.Add(voucherrecord);
                 db.SaveChanges();
             }
@@ -699,46 +916,46 @@ namespace SEA_Application.Controllers
             VoucherRecord voucher_record = new VoucherRecord();
 
             string[] rece_Array = CBVoucher.ReceivedIn.Split(new char[] { '-' }, 2);
-                ledgerid = Convert.ToInt32(rece_Array[0]);
-                voucher_record.LedgerId = ledgerid;
-                voucher_record.VoucherId = db.Vouchers.Select(x => x.Id).Max();
-                type = rece_Array[1];
-                amount = 0;
+            ledgerid = Convert.ToInt32(rece_Array[0]);
+            voucher_record.LedgerId = ledgerid;
+            voucher_record.VoucherId = db.Vouchers.Select(x => x.Id).Max();
+            type = rece_Array[1];
+            amount = 0;
 
-               if (type == "Dr")
+            if (type == "Dr")
+            {
+                voucher_record.Type = "Dr";
+                amount = CBVoucher.Amount;
+
+                voucher_record.Amount = amount;
+                voucher_record.Description = CBVoucher.Description;
+                var ledgerrecord = db.Ledgers.Where(x => x.Id == voucher_record.LedgerId).FirstOrDefault();
+                voucher_record.CurrentBalance = ledgerrecord.CurrentBalance;
+                ////////////////Game/////////////////
+                var groupid = ledgerrecord.LedgerGroupId;
+                var ledgerHead = "";
+                var ledgerheadId = db.LedgerGroups.Where(x => x.Id == groupid).Select(x => x.LedgerHeadID).FirstOrDefault();
+                ledgerHead = db.LedgerHeads.Where(x => x.Id == ledgerheadId).Select(x => x.Name).FirstOrDefault();
+                if (ledgerHead == "Assets")
                 {
-                    voucher_record.Type = "Dr";
-                    amount = CBVoucher.Amount;
-                
-                    voucher_record.Amount = amount;
-                    voucher_record.Description = CBVoucher.Description;
-                    var ledgerrecord = db.Ledgers.Where(x => x.Id == voucher_record.LedgerId).FirstOrDefault();
-                    voucher_record.CurrentBalance = ledgerrecord.CurrentBalance;
-                    ////////////////Game/////////////////
-                    var groupid = ledgerrecord.LedgerGroupId;
-                    var ledgerHead = "";
-                    var ledgerheadId = db.LedgerGroups.Where(x => x.Id == groupid).Select(x => x.LedgerHeadID).FirstOrDefault();
-                    ledgerHead = db.LedgerHeads.Where(x => x.Id == ledgerheadId).Select(x => x.Name).FirstOrDefault();
-                    if (ledgerHead == "Assets")
-                    {
                     voucher_record.AfterBalance = ledgerrecord.CurrentBalance + amount;
-                            Ledger ledger = db.Ledgers.Where(x => x.Id == voucher_record.LedgerId).FirstOrDefault();
-                            ledger.CurrentBalance = voucher_record.AfterBalance;
-                            db.SaveChanges();
-                    }
-
-                    db.VoucherRecords.Add(voucher_record);
+                    Ledger ledger = db.Ledgers.Where(x => x.Id == voucher_record.LedgerId).FirstOrDefault();
+                    ledger.CurrentBalance = voucher_record.AfterBalance;
                     db.SaveChanges();
+                }
+
+                db.VoucherRecords.Add(voucher_record);
+                db.SaveChanges();
             }
             return Json(JsonRequestBehavior.AllowGet);
         }
         public JsonResult FindVoucherNo()
-            {
+        {
             int No;
             try
             {
-                    No =(int)db.Vouchers.Select(x => x.VoucherNo).Max();
-                    No++;
+                No = (int)db.Vouchers.Select(x => x.VoucherNo).Max();
+                No++;
 
             }
             catch
@@ -767,7 +984,7 @@ namespace SEA_Application.Controllers
         }
         public JsonResult SelectListLedgers()
         {
-            
+
             var ledger = db.Ledgers.Where(x => x.LedgerGroup.Name == "Cash").ToList();
             List<Ledger> List = new List<Ledger>();
 
@@ -782,7 +999,7 @@ namespace SEA_Application.Controllers
         }
         public JsonResult SelectAllLedgers()
         {
-            
+
             var headlist = db.LedgerHeads.ToList();
 
             List<HeadList> Head_list = new List<HeadList>();
@@ -792,7 +1009,7 @@ namespace SEA_Application.Controllers
                 hl.HeadId = item.Id;
                 hl.HeadName = item.Name;
 
-                var ledger = db.Ledgers.Where(x => x.LedgerGroup.Name != "Cash" && x.LedgerGroup.Name != "Bank" && x.LedgerHeadId==item.Id).ToList();
+                var ledger = db.Ledgers.Where(x => x.LedgerGroup.Name != "Cash" && x.LedgerGroup.Name != "Bank" && x.LedgerHeadId == item.Id).ToList();
                 hl.accountlist = new List<AccountsList>();
                 foreach (var l_item in ledger)
                 {
@@ -828,7 +1045,7 @@ namespace SEA_Application.Controllers
             public int Amount { get; set; }
             public string PaymentFrom { get; set; }
             public string ReceivedIn { get; set; }
-         }
+        }
         public class JournalEntry_List
         {
             public int ID { get; set; }
