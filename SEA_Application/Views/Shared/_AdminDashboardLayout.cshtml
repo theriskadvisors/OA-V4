@@ -88,30 +88,30 @@
                 </a>
             </div>
             <div class="sidebar-wrapper">
-                <ul class="nav">
+                <ul id="layout_navbar_toogle" class="nav">
 
-                    <li class="nav-item active">
+                    <li id="AdminHome" class="nav-item">
                         <a href="@Url.Action("Dashboard", "Admin_Dashboard" )" class="nav-link nav-toggle">
                             <i class="fal fa-home-alt"></i>
                             <p id="">Home </p>
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="Students" class="nav-item">
                         <a href="@Url.Action("StudentsIndex", "AspNetUser")" class="nav-link nav-toggle">
                             <i class="fal fa-users-class"></i>
                             <p id="">Students </p>
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="InactiveStudents" class="nav-item">
                         <a href="@Url.Action("DisableStudentIndex", "AspNetUser")" class="nav-link nav-toggle">
                             <i class="fal fa-ban"></i>
                             <p id="">Inactive Students </p>
                         </a>
                     </li>
 
-                    <li class="nav-item hidden">
+                    <li id="Teachers" class="nav-item hidden">
                         <a href="@Url.Action("TeachersIndex", "AspNetUser")" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -120,7 +120,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item hidden">
+                    <li id="Accountant" class="nav-item hidden">
                         <a href="@Url.Action("AccountantIndex", "AspNetUser")" class="nav-link nav-toggle">
 
                             <i class="sea-dash">
@@ -129,7 +129,7 @@
                             <p>Accountant</p>
                         </a>
                     </li>
-                    <li class="nav-item hidden">
+                    <li id="Employees" class="nav-item hidden">
                         <a href="@Url.Action("Index", "AspNetEmployees" )" class="nav-link nav-toggle">
 
                             <i class="sea-dash">
@@ -138,13 +138,13 @@
                             <p>Employees</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="CashSummary" class="nav-item">
                         <a href="@Url.Action("AdminsCashSummary", "FinanceSummary")" class="nav-link nav-toggle">
                             <i class="fa fa-money"></i>
                             <p id="">Cash Summary </p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="StudentFee" class="nav-item">
                         <a href="@Url.Action("StudentFee", "GrandTotal" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-teacher.png" alt="">
@@ -153,7 +153,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="FeeTransactions" class="nav-item">
                         <a href="@Url.Action("FeeTransactions", "GrandTotal" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-teacher.png" alt="">
@@ -163,7 +163,7 @@
                     </li>
 
 
-                    <li class="nav-item">
+                    <li id="ChartsOfAccounts" class="nav-item">
 
                         <a href="@Url.Action("ChartsOf_Accounts", "ChartOfAccounts")" class="nav-link nav-toggle">
                             <i class="sea-dash">
@@ -173,7 +173,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="FeeStatus" class="nav-item">
                         <a href="@Url.Action("MonthlyFeeStudent", "Admin_Dashboard" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Vouchers.png" alt="">
@@ -192,7 +192,7 @@
             </a>
         </li>*@
 
-                    <li class="nav-item">
+                    <li id="Expenses" class="nav-item">
                         <a href="@Url.Action("ExpenseList", "Expense" )" class="nav-link nav-toggle">
 
                             <i class="sea-dash">
@@ -201,7 +201,7 @@
                             <p>Expense</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="DailyAccountSheet" class="nav-item">
                         <a href="@Url.Action("Report", "Expense" )" class="nav-link nav-toggle">
 
                             <i class="sea-dash">
@@ -212,7 +212,7 @@
                     </li>
 
 
-                    <li class="nav-item">
+                    <li id="Subjects" class="nav-item">
 
                         <a href="@Url.Action("ClassIndex", "AspNetSubject" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
@@ -222,14 +222,14 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="TopicsAndLessons" class="nav-item">
                         <a href="@Url.Action("ViewTopicsAndLessons", "AspnetSubjectTopics" )" class="nav-link nav-toggle">
 
                             <i class="fal fa-chalkboard-teacher"></i>
                             <p>Topics & Lessons</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="QuestionsAndQuizs" class="nav-item">
                         <a href="@Url.Action("ViewQuestionAndQuiz", "AspnetQuestions" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
@@ -238,7 +238,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="ScheduleByLesson" class="nav-item">
                         <a href="@Url.Action("LessonSessionView", "AspnetLessons" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
@@ -247,7 +247,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="ScheduleByTopic" class="nav-item">
                         <a href="@Url.Action("ScheduleTopic", "AspnetLessons" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
@@ -256,7 +256,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="Notes" class="nav-item">
 
                         <a href="@Url.Action("Index", "AspNetNotes" )" class="nav-link nav-toggle">
                             <i class="fal fa-books"></i>
@@ -264,7 +264,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="PhotoCopierSummary" class="nav-item">
 
                         <a href="@Url.Action("Dashboard", "PhotoCopier_Dashboard" )" class="nav-link nav-toggle">
                             <i class="fal fa-books"></i>
@@ -273,7 +273,7 @@
                     </li>
 
 
-                    <li class="nav-item">
+                    <li id="DiscussionReport" class="nav-item">
 
                         <a href="@Url.Action("DiscussionReport", "AspNetNotification" )" class="nav-link nav-toggle">
                             <i class="fa fa-comments"></i>
@@ -281,14 +281,14 @@
                         </a>
                     </li>
 
-                    <li class="nav-item hidden">
+                    <li id="TimeTable" class="nav-item hidden">
                         <a href="@Url.Action("Index", "AspNetTimeTable" )" class="nav-link nav-toggle">
                             <i class="fal fa-calendar-alt"></i>
                             <p>Time Table</p>
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="Session" class="nav-item">
                         <a href="@Url.Action("Index", "AspNetSession" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -296,7 +296,7 @@
                             <p>Session</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="BlogsPanel" class="nav-item">
                         <a href="@Url.Action("Blogs", "Admin_Dashboard" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -304,7 +304,7 @@
                             <p>Blogs Panel</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="AdvertisePanel" class="nav-item">
                         <a href="@Url.Action("Advertise", "Admin_Dashboard" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -312,7 +312,7 @@
                             <p>Advertise Panel</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="StudentPasswords" class="nav-item">
                         <a href="@Url.Action("Password", "AspNetSession" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -320,7 +320,7 @@
                             <p>Student Passwords</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li id="Slot" class="nav-item">
                         <a href="@Url.Action("Index", "AspNetTimeslots" )" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -329,7 +329,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item hidden">
+                    <li id="MailBox" class="nav-item hidden">
                         <a href="@(Url.Action("Inbox", "AspNetMessages" ))" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-mailpay.png" alt="">
@@ -338,7 +338,7 @@
                         </a>
                     </li>
 
-                    <li class="nav-item hidden">
+                    <li id="Support" class="nav-item hidden">
                         <a href="https://smartereduanalytics.on.spiceworks.com/portal/tickets" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
@@ -1780,6 +1780,11 @@
             //$("#BreadCrumbs").append(' <li> <a href="#"> Home </a> <span>&gt;</span></li>');
             //$("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Students</a></li>');
 
+ 
+
+
+
+
               $.get('@Url.Action("GetNotifications","AspNetPushNotifications")', function (data) {
                 debugger
 
@@ -2224,3 +2229,26 @@
 </body>
 
 </html>
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#layout_navbar_toogle").on("click", "li", function () {
+
+
+
+            localStorage.ElementToActiveAfterPageLoad = $(this).attr('id');
+
+          //  alert(localStorage.ElementToActiveAfterPageLoad);
+        });
+
+
+        $("#" + localStorage.ElementToActiveAfterPageLoad).addClass('active');
+
+
+
+
+    }); 
+</script>

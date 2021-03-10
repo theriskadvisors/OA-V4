@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{
 
     List<SelectListItem> listItems = new List<SelectListItem>();
     listItems.Add(new SelectListItem
@@ -17,6 +17,9 @@
 
 <script>
     $(document).ready(function () {
+
+         $("#PageHeader").html("Edit");
+
         $('#cancel').click(function () {
             window.location.href = '@Url.Action("Index", "AspNetSession")';
         });
@@ -54,75 +57,119 @@
 
 
 </script>
-<label>@Html.ActionLink("Home", "Dashboard", "Account") >  <a href="#"><b>Edit</b></a> </label>
 
-<h4>Edit</h4>
-<div class="box box-primary">
-    <div class="box-body">
-        @model SEA_Application.Models.AspNetSession
-        @{
-            ViewBag.Title = "Edit";
-        }
 
-        <h4>Session</h4>
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body p-5">
 
-            <div class="form-horizontal">
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(model => model.Id)
-                <div class="form-group">
-                    <label class="control-label col-md-1 col-lg-1">Session Name<span class="red-mark">*</span></label>
-                    <div class="col-md-6">
-                        @Html.EditorFor(model => model.SessionName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.SessionName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-1 col-lg-1">Session Start Date<span class="red-mark">*</span></label>
-                    <div class="col-md-6">
-                        @Html.EditorFor(model => model.SessionStartDate, new { htmlAttributes = new { @class = "form-control" } })
-                        <input type="hidden" value="@Model.SessionStartDate" id="start"/>
-                        @Html.ValidationMessageFor(model => model.SessionStartDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-1 col-lg-1" >Session End Date<span class="red-mark">*</span></label>
-                    <div class="col-md-6">
-                        @Html.EditorFor(model => model.SessionEndDate, new { htmlAttributes = new { @class = "form-control" } })
-                        <input type="hidden" value="@Model.SessionEndDate" id="end" />
-                        @Html.ValidationMessageFor(model => model.SessionEndDate, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-1 col-lg-1">Total Fee<span class="red-mark">*</span></label>
-                    <div class="col-md-6">
-                        @Html.EditorFor(model => model.Total_Fee, new { htmlAttributes = new { @class = "form-control",required="required" } })
-                        <input type="hidden" value="@Model.Total_Fee" id="fee" />
-                        @Html.ValidationMessageFor(model => model.Total_Fee, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                     @*<div class="form-group">
-                    <label class="control-label col-md-1 col-lg-1">Status<span class="red-mark">*</span></label>
-                    <div class="col-md-6">
-                        @Html.DropDownListFor(model => model.Status, listItems, new  { @class = "form-control" } )   
-                        <input type="hidden" value="@Model.Status" id="STATUS" />
-                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-                    </div>
-                </div>*@
-                <hr />
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-lg-offset-1 col-md-6">
-                            <input type="submit" id="submit" value="Update" class="btn btn-primary" />
-                            <button type="button" id="cancel" class="btn btn-default">Cancel</button>
+
+                @model SEA_Application.Models.AspNetSession
+                @{
+                    ViewBag.Title = "Edit";
+                }
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+
+
+
+
+                        <div class="form-group bmd-form-group is-filled">
+
+                            <label class="bmd-label-floating">Session Name<span class="red-mark">*</span></label>
+                            @Html.EditorFor(model => model.SessionName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SessionName, "", new { @class = "text-danger" })
+
                         </div>
-                     
+
+
+                        @*<div class="form-group">
+                                <label class="control-label col-md-1 col-lg-1">Session Start Date<span class="red-mark">*</span></label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.SessionStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                                    <input type="hidden" value="@Model.SessionStartDate" id="start" />
+                                    @Html.ValidationMessageFor(model => model.SessionStartDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+
+                                <label class="bmd-label-static pl-2">Session Start Date<span class="red-mark">*</span></label>
+
+                                @Html.EditorFor(model => model.SessionStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.SessionStartDate, "", new { @class = "text-danger" })
+                                <input type="hidden" value="@Model.SessionStartDate" id="start" />
+
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-group">
+                                <label class="control-label col-md-1 col-lg-1">Session End Date<span class="red-mark">*</span></label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.SessionEndDate, new { htmlAttributes = new { @class = "form-control" } })
+                                    <input type="hidden" value="@Model.SessionEndDate" id="end" />
+                                    @Html.ValidationMessageFor(model => model.SessionEndDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+
+                                <label class="bmd-label-static pl-2">Session End Date<span class="red-mark">*</span></label>
+
+                                @Html.EditorFor(model => model.SessionEndDate, new { htmlAttributes = new { @class = "form-control" } })
+                                <input type="hidden" value="@Model.SessionEndDate" id="end" />
+                                @Html.ValidationMessageFor(model => model.SessionEndDate, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+
+
+                        @*<div class="form-group">
+                                <label class="control-label col-md-1 col-lg-1">Total Fee<span class="red-mark">*</span></label>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.Total_Fee, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    <input type="hidden" value="@Model.Total_Fee" id="fee" />
+                                    @Html.ValidationMessageFor(model => model.Total_Fee, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                        <div class="form-group bmd-form-group is-filled">
+
+                            <label class="bmd-label-floating">Total Fee: <span class="red-mark">*</span></label>
+
+                            @Html.EditorFor(model => model.Total_Fee, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                            <input type="hidden" value="@Model.Total_Fee" id="fee" />
+                            @Html.ValidationMessageFor(model => model.Total_Fee, "", new { @class = "text-danger" })
+
+                        </div>
+
+
                     </div>
-               
+
+                    <br>
+
+                    <div class="col-md-8 pl-5 pr-5 ">
+
+                        <input type="submit" id="submit" value="Update" class="btn btn-primary rounded rounded-lg" />
+                        <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">Cancel</button>
+                    </div>
+                }
             </div>
-        }
-       
+        </div>
     </div>
 </div>
+

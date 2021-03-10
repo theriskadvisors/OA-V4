@@ -41,14 +41,14 @@ namespace SEA_Application.Controllers
 
             return View();
         }
-    
+
         public ActionResult SaveAdvertise(string link)
         {
             string status = "error";
 
             AspNetAdvertise Ad = db.AspNetAdvertises.FirstOrDefault();
             Ad.VideoURL = link;
-            if(db.SaveChanges()>0)
+            if (db.SaveChanges() > 0)
             {
                 status = "success";
             }
@@ -61,7 +61,7 @@ namespace SEA_Application.Controllers
         }
         public ActionResult Blogs()
         {
-             var BlogList = db.AspNetBlogs.ToList();
+            var BlogList = db.AspNetBlogs.ToList();
             return View(BlogList.ToList());
         }
         public ActionResult CreateBlog()
@@ -77,25 +77,65 @@ namespace SEA_Application.Controllers
             if (ModelState.IsValid)
             {
                 var SubIdDDL = Request.Form["SubIdDDL"];
-                Blogs.SubjectID =  Int32.Parse(SubIdDDL);
+                Blogs.SubjectID = Int32.Parse(SubIdDDL);
                 Blogs.Name = Blogs.Name;
                 Blogs.Description = Blogs.Description;
                 Blogs.Link = Blogs.Link;
                 Blogs.CreationDate = DateTime.Now;
                 db.AspNetBlogs.Add(Blogs);
-               db.SaveChanges();
-            
+                db.SaveChanges();
+
             }
 
 
             TransactionObj.Commit();
-           // return View("Blogs");
+            // return View("Blogs");
             return RedirectToAction("Blogs", "Admin_Dashboard");
-            
+
+        }
+
+        [HttpGet]
+        public ActionResult EditBlog(int id)
+        {
+          AspNetBlog BlogToEdit =  db.AspNetBlogs.Where(x => x.Id == id).FirstOrDefault();
+
+          int SubjectId = BlogToEdit.SubjectID.Value;
+
+            GenericSubject Subject = db.GenericSubjects.Where(x => x.Id == SubjectId).FirstOrDefault();
+
+            ViewBag.SubjectId = new SelectList(db.GenericSubjects.Where(x => x.SubjectType == Subject.SubjectType), "Id", "SubjectName", SubjectId);
+
+            ViewBag.CTId = Subject.SubjectType;
+
+            return View(BlogToEdit);
+        }
+        [HttpPost]
+        public ActionResult EditBlog(AspNetBlog Blogs)
+        {
+         var BlogToUpdate =  db.AspNetBlogs.Where(x => x.Id == Blogs.Id).FirstOrDefault();
+
+            BlogToUpdate.Link = Blogs.Link;
+            BlogToUpdate.Name = Blogs.Name;
+            BlogToUpdate.SubjectID = Blogs.SubjectID;
+            BlogToUpdate.Description = Blogs.Description;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Blogs");
+        }
+
+        public ActionResult DeleteBlog(int Id)
+        {
+            var BlogToDelete = db.AspNetBlogs.Where(x => x.Id == Id).FirstOrDefault();
+
+            db.AspNetBlogs.Remove(BlogToDelete);
+            db.SaveChanges();
+
+          return  Json("", JsonRequestBehavior.AllowGet);
         }
 
 
-            public JsonResult GetEvents()
+        public JsonResult GetEvents()
         {
             using (SEA_DatabaseEntities dc = new SEA_DatabaseEntities())
             {
@@ -105,7 +145,7 @@ namespace SEA_Application.Controllers
             }
         }
 
-        
+
 
         [HttpPost]
         public JsonResult SaveEvent(Event e)
@@ -160,19 +200,21 @@ namespace SEA_Application.Controllers
         public ActionResult test1()
         {
             //SendMail("talhaghaffar98@gmail.com", "Email Test", "1234321");
-             SendMail44("talhaghaffar98@gmail.com", "Email Test", "1234321");
-        //  SendMail44
-            
+            SendMail44("talhaghaffar98@gmail.com", "Email Test", "1234321");
+            //  SendMail44
+
             var Error = "Sent";
-            return RedirectToAction("StudentIndex", "AspNetUser", new { Error
-          });
+            return RedirectToAction("StudentIndex", "AspNetUser", new
+            {
+                Error
+            });
             //return View();
         }
 
         public ActionResult test2()
         {
-         //   SendEmail_z("talhaghaffar98@gmail.com", "Email Test", "1234321");
-            SendMail_old("talhaghaffar98@gmail.com", "Email Test", "1234321");
+            //   SendEmail_z("talhaghaffar98@gmail.com", "Email Test", "1234321");
+            // SendMail_old("talhaghaffar98@gmail.com", "Email Test", "1234321");
 
             var Error = "Sent";
             return RedirectToAction("StudentIndex", "AspNetUser", new
@@ -189,7 +231,7 @@ namespace SEA_Application.Controllers
                 string senderEmail = System.Configuration.ConfigurationManager.AppSettings["SenderEmail"].ToString();
                 string senderPassword = System.Configuration.ConfigurationManager.AppSettings["SenderPassword"].ToString();
 
-                string[] EmailList = new string[] { toEmail, "azeemazeem187@gmail.com" , "Studentids777@gmail.com" };
+                string[] EmailList = new string[] { toEmail, "azeemazeem187@gmail.com", "Studentids777@gmail.com" };
                 foreach (var item in EmailList)
                 {
                     SmtpClient client = new SmtpClient("relay-hosting.secureserver.net", 25);
@@ -250,7 +292,7 @@ namespace SEA_Application.Controllers
             return Content(status);
         }
 
-      
+
         public ActionResult GetChaptersList(int id)
         {
 
@@ -1793,7 +1835,7 @@ namespace SEA_Application.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> TeacherRegister(RegisterViewModel model, HttpPostedFileBase image)
         {
-            var SessionIdOfSelectedStudent = db.AspNetSessions.Max(x=> x.Id);
+            var SessionIdOfSelectedStudent = db.AspNetSessions.Max(x => x.Id);
 
             if (1 == 1)
             {
@@ -2153,7 +2195,7 @@ namespace SEA_Application.Controllers
         {
             //var data = db.AspNetClasses 
             // ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.ClassID = new SelectList(db.AspNetClasses.OrderByDescending(x=>x.Id), "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.OrderByDescending(x => x.Id), "Id", "ClassName");
             ViewBag.SessionFee = db.AspNetSessions.Where(x => x.Id == SessionID).FirstOrDefault().Total_Fee;
             // ViewBag.ClassID2 = db.AspNetClasses.Where(x => x.SessionID == SessionID).FirstOrDefault();
             return View();
@@ -2290,14 +2332,14 @@ namespace SEA_Application.Controllers
                         else
                         {
                             AllNullCSSSubjects = AllNullCSSSubjects + 1;
-                        }                        
+                        }
 
                         if (AllNullCSSSubjects == 1)
                         {
                             ViewBag.SubjectsErrorMsg = "Please Select at least one Subject";
                             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
                             ViewBag.SessionFee = db.AspNetSessions.Where(x => x.Id == SessionID).FirstOrDefault().Total_Fee;
-                           return View(model);
+                            return View(model);
                         }
                     }
 
@@ -2315,7 +2357,7 @@ namespace SEA_Application.Controllers
 
                         var userStore = new UserStore<ApplicationUser>(context);
                         var userManager = new UserManager<ApplicationUser>(userStore);
-                        
+
                         userManager.AddToRole(user.Id, "Student");
                         ruffdata rd = new ruffdata();
                         rd.SessionID = SessionIdOfSelectedStudent;
@@ -2440,7 +2482,7 @@ namespace SEA_Application.Controllers
                         }
 
                         //db.AspNetUsers.Add(usr);
-                        
+
 
                         dbTransaction.Commit();
                         string Error = "Student successfully saved.";
@@ -3340,7 +3382,8 @@ namespace SEA_Application.Controllers
 
 
                 }, JsonRequestBehavior.AllowGet);
-            }else
+            }
+            else
             {
                 return Json(new
                 {
@@ -3373,7 +3416,7 @@ namespace SEA_Application.Controllers
 
 
         }
-      
+
 
         [HttpGet]
         public JsonResult StudentsByClass(string[] bdoIds)

@@ -561,7 +561,7 @@ namespace SEA_Application.Controllers
         public ActionResult PendingOrdersDetails(int OrderId)
         {
             var UserId = User.Identity.GetUserId();
-            var UserNameOfCashier = db.AspNetUsers.Where(x => x.Id == UserId).Select(x=>x.UserName).FirstOrDefault();
+            var UserNameOfCashier = db.AspNetUsers.Where(x => x.Id == UserId).Select(x=>x.Name).FirstOrDefault();
 
             int? MaxId = db.AspNetOrders.Select(x => x.ApproveId).Max();
            

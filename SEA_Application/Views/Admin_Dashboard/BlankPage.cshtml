@@ -25,6 +25,10 @@ else if (User.IsInRole("Staff"))
     Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
 }
 <script>
+    $(document).ready(function () {
+     localStorage.ElementToActiveAfterPageLoad = "AdminHome";
+
+    })
     //$(document).ready(function () {
 
     //    $.ajax({

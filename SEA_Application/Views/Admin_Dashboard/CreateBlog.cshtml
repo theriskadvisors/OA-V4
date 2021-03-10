@@ -28,38 +28,43 @@
             $('#CT').change(function () {
 
                 var crse = $(this).val();
-
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "/AspnetLessons/GetSubjectsList?CT=" + crse,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        debugger;
-                        var sch = JSON.parse(data);
-                        console.log(sch);
-                        var $el = $(".SubIdDDL");
-                        $el.empty();
-                        if (sch.length > 0) {
-                            $el.append($("<option></option>")
-                                .attr("value", "").text('Select Subject'));
-                            for (i = 0; i < sch.length; i++) {
-
+                if (crse != "") {
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        url: "/AspnetLessons/GetSubjectsList?CT=" + crse,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            debugger;
+                            var sch = JSON.parse(data);
+                            console.log(sch);
+                            var $el = $(".SubIdDDL");
+                            $el.empty();
+                            if (sch.length > 0) {
                                 $el.append($("<option></option>")
-                                    .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                                    .attr("value", "").text('Select Subject'));
+                                for (i = 0; i < sch.length; i++) {
+
+                                    $el.append($("<option></option>")
+                                        .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                                }
                             }
+                            else {
+                                $el.append($("<option></option>")
+                                    .attr("value", '').text('Select'));
+                            }
+
+
                         }
-                        else {
-                            $el.append($("<option></option>")
-                                .attr("value", '').text('Select'));
-                        }
+                    });
 
+                }
+                else {
 
-                    }
-                });
-
-
+                    //   $("#SubIdDDL").html
+                        $("#SubIdDDL").empty();
+                }
             });
         });
     </script>
@@ -76,8 +81,7 @@
                     {
                     <div class="col-md-8 pl-5 pr-5 ">
 
-                        <h2 class="column-heading mb-4">Create Blogs</h2>
-                        <br>
+
 
                         <div class="form-row mt-4">
                             <div class="form-group col-md-12 bmd-form-group">
@@ -111,8 +115,9 @@
 
                         <div class="form-group bmd-form-group my-3 is-filled">
                             <label class="bmd-label-floating">Course Type <span class="red-mark">*</span> </label>
-                           
+
                             <select name="CT" id="CT" class="form-control" style="color: #b9cbe1;" required>
+                                <option value="">Select One</option>
                                 <option value="CSS">CSS</option>
                                 <option value="PMS">PMS</option>
                                 <option value="One Paper MCQs">One Paper MCQs</option>
@@ -122,27 +127,26 @@
                         <div class="form-group bmd-form-group my-3 is-filled">
                             <label class="bmd-label-floating">Subjects <span class="red-mark">*</span> </label>
                             <select name="SubIdDDL" id="SubIdDDL" class="form-control SubIdDDL" style="color: #b9cbe1;" required>
-                        
                             </select>
                         </div>
 
 
                     </div>
 
-                     
-
-                        <div class="col-md-8 pl-5 pr-5 ">
-                            <br>
-                            <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
 
 
-                            <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                                <i class="material-icons mr-2">cached</i>  Cancel
-                            </button>
+                    <div class="col-md-8 pl-5 pr-5 ">
+                        <br>
+                        <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
 
 
 
-                        </div>
+                    </div>
 
 
                     }
@@ -151,7 +155,7 @@
             </div>
         </div>
     </div>
-    
+
 
 
 </body>

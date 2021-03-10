@@ -26,6 +26,7 @@ namespace SEA_Application.Controllers
         // GET: AspNetSession
         public ActionResult Index()
         {
+
             return View(db.AspNetSessions.ToList());
         }
 
