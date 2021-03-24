@@ -393,22 +393,120 @@ namespace SEA_Application.Controllers
             return View("LessonSessionView");
         }
 
-        public ActionResult GetLessonSessions()
+        public ActionResult GetLessonSessions(DataTablesParam param)
         {
-            var AllLessonSessions = from lesson in db.AspnetLessons
-                                    join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
-                                    select new
-                                    {
-                                        lessonsesion.Id,
-                                        lesson.Name,
-                                        lessonsesion.AspNetSession.SessionName,
-                                        lessonsesion.StartDate,
-                                        lessonsesion.DueDate,
-                                        lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
-                                    };
+           // var StartDateList =  db.Lesson_Session.Select( x => x.StartDate..ToString());
+
+           //var StartDateList =  db.Lesson_Session.Select(x => string.Concat( x.StartDate.Value.Month.ToString() +"/"+x.StartDate.Value.Day.ToString()+"/"+x.StartDate.Value.Year.ToString()));
 
 
-            return Json(AllLessonSessions, JsonRequestBehavior.AllowGet);
+            try
+            {
+
+            int pageNo = 1;
+
+            if (param.iDisplayStart >= param.iDisplayLength)
+            {
+
+                pageNo = (param.iDisplayStart / param.iDisplayLength) + 1;
+
+            }
+
+            int totalCount = 0;
+
+
+            if (param.sSearch != null)
+            {
+
+
+                totalCount = (from lesson in db.AspnetLessons
+                                        join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                                        select new
+                                        {
+                                            lessonsesion.Id,
+                                            lesson.Name,
+                                            lessonsesion.AspNetSession.SessionName,
+                                            lessonsesion.StartDate,
+                                            lessonsesion.DueDate,
+                                            lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                                        }).Where(x=>x.Name.ToLower().Contains(param.sSearch.ToLower()) || x.SessionName.ToLower().Contains(param.sSearch.ToLower()) || x.SubjectName.ToLower().Contains(param.sSearch.ToLower()) || string.Concat(x.StartDate.Value.Month.ToString() +"/"+ x.StartDate.Value.Day.ToString()+"/"+x.StartDate.Value.Year.ToString()).Contains(param.sSearch) || string.Concat(x.DueDate.Value.Month.ToString() + "/" + x.DueDate.Value.Day.ToString() + "/" + x.DueDate.Value.Year.ToString()).Contains(param.sSearch) /*x.DueDate.ToString().Contains(param.sSearch)*/).ToList().Count();
+
+
+                var AllLessonSessions = (from lesson in db.AspnetLessons
+                                        join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                                        select new
+                                        {
+                                            lessonsesion.Id,
+                                            lesson.Name,
+                                            lessonsesion.AspNetSession.SessionName,
+                                            lessonsesion.StartDate,
+                                            lessonsesion.DueDate,
+                                            lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                                        }).Where(x => x.Name.ToLower().Contains(param.sSearch.ToLower()) || x.SessionName.ToLower().Contains(param.sSearch.ToLower()) || x.SubjectName.ToLower().Contains(param.sSearch.ToLower()) || string.Concat(x.StartDate.Value.Month.ToString() + "/" + x.StartDate.Value.Day.ToString() + "/" + x.StartDate.Value.Year.ToString()).Contains(param.sSearch) || string.Concat(x.DueDate.Value.Month.ToString() + "/" + x.DueDate.Value.Day.ToString() + "/" + x.DueDate.Value.Year.ToString()).Contains(param.sSearch)).OrderBy(x=>x.Name).Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
+
+                return Json(new
+                {
+                    aaData = AllLessonSessions,
+                    sEcho = param.sEcho,
+                    iTotalDisplayRecords = totalCount,
+                    iTotalRecords = totalCount
+
+                }, JsonRequestBehavior.AllowGet);
+
+
+
+
+            }
+            else
+            {
+
+                totalCount = (from lesson in db.AspnetLessons
+                              join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                              select new
+                              {
+                                  lessonsesion.Id,
+                                  lesson.Name,
+                                  lessonsesion.AspNetSession.SessionName,
+                                  lessonsesion.StartDate,
+                                  lessonsesion.DueDate,
+                                  lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                              }).ToList().Count();
+
+
+               var AllLessonSessions = (from lesson in db.AspnetLessons
+                              join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                              select new
+                              {
+                                  lessonsesion.Id,
+                                  lesson.Name,
+                                  lessonsesion.AspNetSession.SessionName,
+                                  lessonsesion.StartDate,
+                                  lessonsesion.DueDate,
+                                  lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                              }).ToList().Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
+
+                return Json(new
+                {
+                    aaData = AllLessonSessions,
+                    sEcho = param.sEcho,
+                    iTotalDisplayRecords = totalCount,
+                    iTotalRecords = totalCount
+
+                }, JsonRequestBehavior.AllowGet);
+
+            }
+
+            }
+            catch(Exception ex)
+            {
+                var Msg = ex.Message;
+                var inner = ex.InnerException.Message;
+            }
+
+            return Json("", JsonRequestBehavior.AllowGet);
+
+
+
         }
         [HttpGet]
         public ActionResult EditLessonSession(int id)
