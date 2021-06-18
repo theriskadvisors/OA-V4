@@ -1460,6 +1460,16 @@ namespace SEA_Application.Controllers
                         // ScheduleLesson.Date = FirstDate.ToString();
                         string[] DateArray = FirstDate.ToString().Split('/');
                         string[] yeararray = DateArray[2].Split(' ');
+
+                        if (int.Parse(DateArray[0]) < 11 && DateArray[0].ToString().Length == 1)
+                        {
+                            DateArray[0] = "0" + DateArray[0];
+                        }
+                        if (int.Parse(DateArray[1]) < 11 && DateArray[1].ToString().Length == 1)
+                        {
+                            DateArray[1] = "0" + DateArray[1];
+                        }
+
                         ScheduleLesson.Date = yeararray[0] + "-" + DateArray[0] + "-" + DateArray[1];
 
                         //DueDate Section
@@ -1480,6 +1490,15 @@ namespace SEA_Application.Controllers
 
                         string[] DueDateArray = DueDate.ToString().Split('/');
                         string[] DueDateyeararray = DateArray[2].Split(' ');
+
+                        if(int.Parse(DueDateArray[0]) < 11 && DueDateArray[0].ToString().Length == 1)
+                        {
+                            DueDateArray[0] = "0" + DueDateArray[0];
+                        }
+                        if (int.Parse(DueDateArray[1]) < 11 && DueDateArray[1].ToString().Length == 1)
+                        {
+                            DueDateArray[1] = "0" + DueDateArray[1];
+                        }
 
                         ScheduleLesson.DueDate = DueDateyeararray[0] + "-" + DueDateArray[0] + "-" + DueDateArray[1];
 
@@ -1512,6 +1531,18 @@ namespace SEA_Application.Controllers
                         string[] DateArray = PerviousDate.ToString().Split('/');
                         string[] yeararray = DateArray[2].Split(' ');
 
+
+
+                        if (int.Parse(DateArray[0]) < 11 && DateArray[0].ToString().Length == 1)
+                        {
+                            DateArray[0] = "0" + DateArray[0];
+                        }
+                        if (int.Parse(DateArray[1]) < 11 && DateArray[1].ToString().Length == 1)
+                        {
+                            DateArray[1] = "0" + DateArray[1];
+                        }
+
+
                         ScheduleLesson.Date = yeararray[0] + "-" + DateArray[0] + "-" + DateArray[1];
 
 
@@ -1533,6 +1564,15 @@ namespace SEA_Application.Controllers
 
                         string[] DueDateArray = DueDate.ToString().Split('/');
                         string[] DueDateyeararray = DateArray[2].Split(' ');
+
+                        if (int.Parse(DueDateArray[0]) < 11 && DueDateArray[0].ToString().Length == 1)
+                        {
+                            DueDateArray[0] = "0" + DueDateArray[0];
+                        }
+                        if (int.Parse(DueDateArray[1]) < 11 && DueDateArray[1].ToString().Length == 1)
+                        {
+                            DueDateArray[1] = "0" + DueDateArray[1];
+                        }
 
                         ScheduleLesson.DueDate = DueDateyeararray[0] + "-" + DueDateArray[0] + "-" + DueDateArray[1];
 
