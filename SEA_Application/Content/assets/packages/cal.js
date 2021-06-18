@@ -26,6 +26,7 @@ $(document).ready(function () {
                     type: v.type,
                     calendar: v.calendar,
                     className: v.className,
+                    LessonFullName: v.LessonFullName,
                     subjectClass: v.subjectClass,
                     backgroundColor: v.backgroundColor,
                     textColor: v.textColor,
@@ -154,7 +155,7 @@ function RenderCalendar(events) {
         },
 
         eventRender: function (event, element, view) {
-
+            debugger
             var startTimeEventInfo = moment(event.start).format('HH:mm a');
             var endTimeEventInfo = moment(event.end).format('HH:mm a');
             // console.log(startTimeEventInfo);
@@ -210,262 +211,262 @@ function RenderCalendar(events) {
             }
 
             if (event.subjectClass == "Accounting and Auditing") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'Red');
                 var paColor = '#d92a2a';
-                element.css('color', paColor);
+                element.css('color', 'black');
                 element.css('border-color', paColor);
             }
 
             if (event.subjectClass == "British History") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', '#ff007f');
                 var faColor = '#2c80c5';
-                element.css('color', faColor);
+                element.css('color', 'black');
                 element.css('border-color', faColor);
             }
 
             if (event.subjectClass == "Business Administration") {
                 var csColor = '#45b84b';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'Green');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Commerce") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'yellow');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Constitutional Law") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'orange');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Criminology") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'pink');
                 var paColor = '#45b84b';
-                element.css('color', paColor);
+                element.css('color', 'black');
                 element.css('border-color', paColor);
             }
 
             if (event.subjectClass == "Current affairs") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'gold');
                 var faColor = '#2c80c5';
-                element.css('color', faColor);
+                element.css('color', 'black');
                 element.css('border-color', faColor);
             }
 
             if (event.subjectClass == "English") {
                 var csColor = '#e07f9f';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'red');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "English (Precis and Composition)") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', '#ff007f');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "English Essay") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'green');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "English Precis and Composition") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'yellow');
                 var paColor = '#45b84b';
-                element.css('color', paColor);
+                element.css('color', 'black');
                 element.css('border-color', paColor);
             }
 
             if (event.subjectClass == "Environmental Sciences") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'orange');
                 var paColor = '#2c80c5';
-                element.css('color', paColor);
+                element.css('color', 'black');
                 element.css('border-color', paColor);
             }
 
             if (event.subjectClass == "Every Day Science") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'pink');
                 var faColor = '#e07f9f';
-                element.css('color', faColor);
+                element.css('color', 'black');
                 element.css('border-color', faColor);
             }
 
             if (event.subjectClass == "Gender Studies") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'gold');
                 var paColor = '#d92a2a';
-                element.css('color', paColor);
+                element.css('color', 'black');
                 element.css('border-color', paColor);
             }
 
             if (event.subjectClass == "General science and ability") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'red');
                 var faColor = '#2c80c5';
-                element.css('color', faColor);
+                element.css('color', 'black');
                 element.css('border-color', faColor);
             }
 
             if (event.subjectClass == "General Knowledge") {
                 var csColor = '#45b84b';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', '#ff007f');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Geography") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'green');
                 var paColor = '#2c80c5';
-                element.css('color', paColor);
+                element.css('color', 'black');
                 element.css('border-color', paColor);
             }
 
             if (event.subjectClass == "History of Indo Pak") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'yellow');
                 var faColor = '#fcba03';
-                element.css('color', faColor);
+                element.css('color', 'black');
                 element.css('border-color', faColor);
             }
 
             if (event.subjectClass == "History of USA") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'orange');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "International Law") {
-                element.css('background-color', '#ffffff');
+                element.css('background-color', 'pink');
                 var faColor = '#2c80c5';
-                element.css('color', faColor);
+                element.css('color', 'black');
                 element.css('border-color', faColor);
             }
 
             if (event.subjectClass == "International Relations") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'gold');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             
             if (event.subjectClass == "Islamiat") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'red');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Islamic studies") {
                 var csColor = '#45b84b';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', '#ff007f');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Journalism") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'green');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Mass Communication") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'yellow');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Math") {
                 var csColor = '#45b84b';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'orange');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Mercantile Law") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'pink');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Pakistan affairs") {
                 var csColor = '#e07f9f';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'gold');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Pakistan Studies") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'red');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Physics") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', '#ff007f');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Political Science") {
                 var csColor = '#45b84b';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'green');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
             if (event.subjectClass == "Public Administration") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'yellow');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             if (event.subjectClass == "Punjabi") {
                 var csColor = '#e07f9f';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'orange');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             if (event.subjectClass == "Social Work") {
                 var csColor = '#d92a2a';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'pink');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             if (event.subjectClass == "Sociology") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'gold');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             if (event.subjectClass == "Solved Past Papers") {
                 var csColor = '#45b84b';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'red');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             if (event.subjectClass == "Urdu") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', '#ff007f');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
             if (event.subjectClass == "Old") {
                 var csColor = '#2c80c5';
-                element.css('background-color', '#ffffff');
-                element.css('color', csColor);
+                element.css('background-color', 'orange');
+                element.css('color', 'black');
                 element.css('border-color', csColor);
             }
 
@@ -475,7 +476,7 @@ function RenderCalendar(events) {
                     '  <a href="#" class="popButton float-right"  onclick="hidethis(this);"><img src="/Content/assets/img/cross-pop.png"></a><a href="#" class="popButton float-right"></a>',
                 // title:    '<div class="popoverTitleCalendar" style="background-color:'+ event.backgroundColor +'; color:'+ event.textColor +'">'+ event.title +'</div>',
                 content: '<div class="popoverInfoCalendar">' +
-                    '<div class="popTime">' + event.title + '</div>' +
+                    '<div class="popTime">' + event.title + ' (' + event.LessonFullName+')</div>' +
                     '<div class="popInstructor"> ' +
 
                     '</div>' +
