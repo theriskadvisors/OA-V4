@@ -1,0 +1,471 @@
+﻿
+@{
+    Layout = null;
+
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+
+}
+<style>
+    .boldClass {
+        font-weight: bold !important;
+    }
+
+
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+
+            <div class="card-body p-5">
+
+                <div class="row">
+
+                    <div class="col-md-6 pl-5 pr-5 ">
+
+
+                        <div class="form-row mt-4">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="control-label">Select Sections *</label>
+                                <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
+
+                            </div>
+                           
+
+                        </div>
+                        <br />
+
+                        <div class="form-group" style="margin-top:32px;">
+                            <label class="control-label">Date</label>
+                            <input type="date" name="Date" id="Date" value="" class="form-control" />
+                        </div>
+
+                    </div><!--end of col 6-->
+
+
+                    <div class="col-md-6 pl-5 pr-5 " style="margin-top:10px;">
+
+
+                        <div class="form-row mt-3">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="control-label">Select Course Type*</label>
+                                <select class="form-control CTIdDDL" id="CTId" name="CTId" required>
+
+                                    <option value="">Select One</option>
+
+                                    <option value="CSS">CSS</option>
+                                    <option value="PMS">PMS</option>
+                                    <option value="One Paper MCQs">One Paper MCQs</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-row mt-3">
+                            <div class="form-group col-md-12 bmd-form-group">
+                                <label for="" class="control-label">Select Subject*</label>
+                                <select class="form-control SubIdDDL" id="SubId" name="SubId" required></select>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <br />
+                <div class="col-md-12 pl-5 pr-5">
+
+                    <div>
+                        <span class="Error" style="color:red"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-12 pl-5 pr-5">
+
+                    <br />
+                    <div id="LessonsList">
+
+                    </div>
+
+
+
+                    <div>
+                        <span class="Error" style="color:red"></span>
+                    </div>
+
+
+                    <br />
+
+
+
+                    <input type="submit" value="Create" id="CreateBtn" class="btn btn-primary  rounded rounded-lg shadow-none mr-3" />
+                    <button id="cancelBtn" class="btn btn-primary  rounded rounded-lg bg-transparent text-muted shadow-none mr-3" type="button">Cancel</button>
+
+
+                </div><!--end of col 12-->
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Session Pre Plan");
+        $("#BreadCrumbs").append(' <li> <a href="/Account/Dashboard"> Home </a> <span>&gt;</span></li>');
+        $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Lesson Pre Plan</a></li>');
+
+        $("#cancelBtn").click(function () {
+
+            window.location.href = "/admin_dashboard/dashboard";
+        })
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/AspnetLessons/LoadSectionIdDDL",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                $('#Sessions').html("");
+                debugger
+                //  $('#Sessions').append('<option value= "">Select </option>');
+                $('#SessionId').append('<option value="" >Select Section</option>');
+                $.each(sch, function (i, item) {
+
+                    debugger
+                    $('#SessionId').append('<option value=' + item.Id + '>' + item.SessionName + '</option>');
+                });
+
+            }
+        });
+
+
+
+
+        $('#CTId').change(function () {
+
+            var crse = $(this).val();
+
+            if (crse != "") {
+                console.log(crse);
+                course = crse;
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/AspNetProject/GetSubjectsByClass?CT=" + course,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var sch = JSON.parse(data);
+                        console.log(sch);
+                        var $el = $(".SubIdDDL");
+                        $el.empty();
+                        var $e2 = $(".TopicIdDDL");
+                        $e2.empty();
+                        if (sch.length > 0) {
+                            $el.append($("<option></option>")
+                                .attr("value", "").text('Select Subject'));
+                            for (i = 0; i < sch.length; i++) {
+
+                                $el.append($("<option></option>")
+                                    .attr("value", sch[i].Id).text(sch[i].SubjectName));
+                            }
+                        }
+                        else {
+                            $el.append($("<option></option>")
+                                .attr("value", '').text('Select'));
+                        }
+                    }
+                });
+            }
+            else {
+
+                var $el = $(".SubIdDDL");
+                $el.empty();
+                var $e2 = $(".TopicIdDDL");
+                $e2.empty();
+
+            }
+
+
+        });
+
+
+
+        //$('#SubId').change(function () {
+
+        //    var subid = $(this).val();
+        //    var Date = $("#Date").val();
+        //    console.log(subid);
+
+        //    if (subid != "" && Date != "") {
+
+        //        $.ajax({
+        //            type: "POST",
+        //            url: "/AspnetLessons/GetTopicLessonScheduled?SubID=" + subid + "&Date=" + Date,
+        //            success: function (data) {
+
+        //                $("#LessonsList").html("");
+
+        //                $.each(data, function (i, item) {
+        //                    // console.log(data.Name);
+        //                    debugger;
+
+        //                    var LessonsByTopic = item.ScheduledLessons;
+
+
+        //                    var table = "";
+
+        //                    table = '<table  border="1" class="table table-bordered table-hover"  width="100%">' +
+
+        //                        '<tr class="boldClass">' +
+
+        //                        ' <td width="50%"><h4>Topic Name</h4></td>' +
+        //                        ' <td colspan="2" align =""><h4> ' + item.TopicName + ' </h4> </td>' +
+
+        //                        '</tr>' +
+
+        //                        '<tr class="boldClass"><td><h4>Lessons</h4></td> <td><h4>Order By</h4></td><td><h4>Date</h4></td></tr>';
+
+        //                    debugger
+
+        //                    $.each(LessonsByTopic, function (j, item1) {
+        //                        debugger
+
+        //                        table = table + '<tr><td>' + item1.LessonName + '</td><td align="center">' + item1.OrderBy + '</td><td><input value = "' + item1.Date + '" type = "date"></td></tr>';
+        //                    });
+
+
+        //                    table = table + "</html><br>";
+        //                    $("#LessonsList").append(table);
+
+        //                });
+
+
+
+        //            }//end of success method
+
+
+        //        });
+
+        //    }
+        //    else {
+        //        $("#LessonsList").html("");
+
+        //    }
+
+        //});
+
+
+
+
+        $("#SubId").change(function () {
+            GetAllScheduledLessonsAndTopic();
+            $("#LessonsList").html("");
+
+            CheckSessionAlreadyScheduled();
+
+        });
+        $("#Date").change(function () {
+            GetAllScheduledLessonsAndTopic();
+            $("#LessonsList").html("");
+
+        });
+        $("#SessionId").change(function () {
+
+            CheckSessionAlreadyScheduled();
+        })
+        $("#CTId").change(function () {
+            $(".Error").html("");
+            $("#LessonsList").html("");
+
+
+        });
+
+        $("#CreateBtn").click(function () {
+
+            var subid = $("#SubId").val();
+            var Date = $("#Date").val();
+            var SessionId = $("#SessionId").val();
+
+
+            var LessonsList =
+            {
+                LessonId: '',
+                Date: '',
+                DueDate: '',
+            };
+
+            LessonsList = [
+
+                // { TypeId: '1', Amount: '123' },
+                // { TypeId: '1', Amount: '456' },
+            ];
+
+
+            $(".LessonsList").each(function () {
+
+                var obj = {};
+
+                // var InputField = $(this).find('').val();
+
+                var td = $(this).children("td");
+
+                var LessonId = $(td[0]).children("input").val();
+                var StartDate = $(td[1]).children("input").val();
+                var EndDate = $(td[2]).children("input").val();
+
+
+                //alert(LessonId + " " + StartDate + " " + EndDate);
+
+
+                obj['LessonId'] = LessonId;
+                obj['Date'] = StartDate;
+                obj['DueDate'] = EndDate;
+
+                LessonsList.push(obj);
+            })
+
+            debugger
+
+            if (subid != "" && Date != "" && subid != null && Date != null && SessionId != "" && SessionId != null && LessonsList != "" && LessonsList != null) {
+
+                $("#CreateBtn").prop('disabled', true);
+
+                $.ajax({
+
+                    type: "POST",
+                    url: "/AspnetLessons/SaveLessonsSchedule",
+                    data: { 'SessionId': SessionId, "SubjectId": subid, "LessonsList": LessonsList },
+                    success: function () {
+
+
+                        window.location.href = "/AspnetLessons/SessionPrePlan";
+
+                    }
+
+
+                })
+            }
+
+
+        })
+
+
+
+
+    })//end of document ready
+
+
+    function CheckSessionAlreadyScheduled() {
+
+        var SessionId = $("#SessionId").val();
+        var SubId = $("#SubId").val();
+        $(".Error").html("");
+
+
+        if (SessionId != "" && SessionId != null && SubId != null && SubId != "")
+
+            $.ajax({
+
+                type: "POST",
+                url: "/AspnetLessons/CheckSessionAlreadyScheduled",
+                data: { "SessionId": SessionId, "SubjectId": SubId },
+                success: function (Msg) {
+                    $(".Error").html("");
+                    if (Msg != "Success") {
+
+                        $(".Error").html(Msg);
+                    }
+
+
+                }
+
+
+            });
+
+
+    }
+
+    function GetAllScheduledLessonsAndTopic() {
+
+        debugger
+        var subid = $("#SubId").val();
+        var Date = $("#Date").val();
+        //console.log(subid);
+
+        if (subid != "" && Date != "" && subid != null && Date != null) {
+
+            $.ajax({
+                type: "POST",
+                url: "/AspnetLessons/GetTopicLessonScheduled?SubID=" + subid + "&Date=" + Date,
+                success: function (data) {
+
+                    $("#LessonsList").html("");
+
+                    $.each(data, function (i, item) {
+                        // console.log(data.Name);
+                        debugger;
+
+                        var LessonsByTopic = item.ScheduledLessons;
+
+
+                        var table = "";
+
+                        table = '<table  border="1" class="table table-bordered table-hover"  width="100%">' +
+
+                            '<tr class="boldClass" style ="background:#F2F5FA">' +
+
+                            ' <td width="50%"><h4>Topic Name</h4></td>' +
+                            ' <td colspan="2" align =""><h4> ' + item.TopicName + ' </h4> </td>' +
+
+                            '</tr>' +
+
+                            '<tr style ="background:#F2F5FA" class="boldClass"><td><h4>Lessons</h4></td> <td><h4>Start Date</h4></td><td><h4> Due Date</h4></td></tr>';
+
+                        debugger
+
+                        $.each(LessonsByTopic, function (j, item1) {
+                            debugger
+
+                            table = table + '<tr class="LessonsList"><td><input type ="hidden" value  = ' + item1.LessonId + '> ' + item1.LessonName + '</td><td><input required value = "' + item1.Date + '" type = "date"></td><td><input required value = "' + item1.DueDate + '" type = "date"></td></tr>';
+                        });
+
+
+                        table = table + "</html><br>";
+                        $("#LessonsList").append(table);
+
+                    });
+
+
+
+                }//end of success method
+
+
+            });
+
+        }
+        else {
+            $("#LessonsList").html("");
+
+
+        }
+
+    }
+
+
+</script>

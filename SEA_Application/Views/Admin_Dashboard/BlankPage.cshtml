@@ -16,6 +16,8 @@
     int countLesson = db.Events.Where(x => x.UserId == CurrentUserId && x.Start <= Endaday && x.Start >= Firstday).Count();
 }
 
+
+
 @if (User.IsInRole("Admin"))
 {
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
@@ -93,8 +95,6 @@ else if (User.IsInRole("Staff"))
                                 <img src="~/Content/assets/img/filter.png">
                             </button>
                             <div id="ClassesFilter" aria-labelledby="navbarDropdownProfile" x-placement="bottom-end" style="position: absolute; top: 45px; left: 1607px; will-change: top, left;" class="dropdown-menu dropdown-menu-right">
-
-
 
                                 @foreach (var c in ViewBag.AllClasses)
                                 {

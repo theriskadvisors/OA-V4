@@ -26,8 +26,6 @@ namespace SEA_Application.Controllers
             //    var day1 = day;
             //}
             //Console.WriteLine($"{day:yyyy-MM-dd}"); // Any manipulations with days go here
-
-
             // fun();
 
             var aspNetNotes = db.AspNetNotes.Include(a => a.AspNetSubject);
@@ -187,7 +185,6 @@ namespace SEA_Application.Controllers
                                          Ledger.Id
 
                                      };
-
 
                     int photoCopierId = Convert.ToInt32(IdofLedger.FirstOrDefault().Id);
                     var LeadgerPhotoCopierL = db.Ledgers.Where(x => x.Id == photoCopierId).FirstOrDefault();

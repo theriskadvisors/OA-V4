@@ -667,6 +667,25 @@
                                 </div>
 
 
+                                <div class="form-row mt-3">
+                                    <div class="form-group col-md-12 bmd-form-group">
+                                        <label class="bmd-label-floating">Days Ahead*</label>
+                                        <input type="number" min="0" max="300" value="0" onkeydown="return false" class="form-control" name="DaysAhead" id="DaysAhead" required />
+                                        @Html.ValidationMessageFor(model => model.DaysAhead, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+
+                                <div class="form-row mt-3">
+                                    <div class="form-group col-md-12 bmd-form-group">
+                                        <label class="bmd-label-floating">Due Days*</label>
+                                        <input type="number" min="0" max="300" value="0" onkeydown="return false" class="form-control" name="DueDays" id="DueDays" required />
+                                        @Html.ValidationMessageFor(model => model.DueDays, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+
+
                             </div>
 
                         </div>

@@ -107,5 +107,11 @@ namespace SEA_Application.Models
 
         public int SessionId { get; set; }
 
+        [Display(Name = "Days Ahead")]
+        public int? DaysAhead { get; set; }
+
+        [Display(Name = "Due Days")]
+        public int? DueDays { get; set; }
+
     }
 }

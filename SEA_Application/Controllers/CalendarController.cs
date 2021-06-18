@@ -33,7 +33,7 @@ namespace SEA_Application.Controllers
 
 
                 var events = db.Events.Where(x => x.UserId == id && x.Start >= ThreeMonthBeforeDate).Select(x => new
-                { subjectName = x.AspnetLesson.AspnetSubjectTopic.GenericSubject.SubjectName, TimeTable = x.AspNetTimeTable.AspNetSubject.SubjectName, _id = x.EventID, description = x.Description, end = x.End, allDay = x.IsFullDay, textColor = "#ffffff", title = x.Subject, backgroundColor = x.ThemeColor, start = x.Start, x.IsPublic, instructor = x.AspNetUser.Name, type = "Appointment", calendar = "Sales", LessonName = x.Subject, className = x.AspNetSession.SessionName, subjectClass = x.AspNetSession.SessionName }).ToList();
+                { subjectName = x.AspnetLesson.AspnetSubjectTopic.GenericSubject.SubjectName, TimeTable = x.AspNetTimeTable.AspNetSubject.SubjectName, _id = x.EventID, description = x.Description, end = x.End, allDay = x.IsFullDay, textColor = "#ffffff", title = x.Subject, backgroundColor = x.ThemeColor, start = x.Start,LessonFullName = x.AspnetLesson.Name, x.IsPublic, instructor = x.AspNetUser.Name, type = "Appointment", calendar = "Sales", LessonName = x.Subject, className = x.AspNetSession.SessionName, subjectClass = x.AspNetSession.SessionName }).ToList();
 
                 TimeZoneInfo PK_ZONE = TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time");
                 DateTime today = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, PK_ZONE);
@@ -50,6 +50,7 @@ namespace SEA_Application.Controllers
                     else { eventstimatable.subjectClass = item.subjectClass; }
 
                     eventstimatable.LessonName = item.LessonName;
+                    eventstimatable.LessonFullName = item.LessonFullName;
                     eventstimatable.calendar = item.calendar;
                     eventstimatable.instructor = item.instructor;
                     eventstimatable._id = item._id;
@@ -75,8 +76,11 @@ namespace SEA_Application.Controllers
                         //eventstimatable.Section = item.Section;
                         if (item.subjectName == null) { subject = item.TimeTable; }
                         else { subject = item.subjectName; }
+
+
                         eventstimatable.className = subject;
                         eventstimatable.LessonName = item.LessonName;
+                        eventstimatable.LessonFullName = item.LessonFullName;
                         eventstimatable.calendar = item.calendar;
                         eventstimatable.subjectClass = subject;
                         eventstimatable.instructor = item.instructor;
@@ -113,6 +117,8 @@ namespace SEA_Application.Controllers
             public string Section { get; set; }
             public string className { get; set; }
             public string LessonName { get; set; }
+
+            public string LessonFullName { get; set; }
             public string calendar { get; set; }
             public string Url { get; set; }
             public string subjectClass { get; set; }

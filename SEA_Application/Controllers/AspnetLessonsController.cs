@@ -202,7 +202,6 @@ namespace SEA_Application.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(LessonViewModel LessonViewModel)
         {
-
             AspnetLesson Lesson = new AspnetLesson();
 
             Lesson.Name = LessonViewModel.LessonName;
@@ -214,9 +213,10 @@ namespace SEA_Application.Controllers
             Lesson.Description = LessonViewModel.LessonDescription;
             Lesson.OrderBy = LessonViewModel.OrderBy;
             Lesson.CreationDate = DateTime.Now;
+            Lesson.DaysAhead = LessonViewModel.DaysAhead;
+            Lesson.DueDays = LessonViewModel.DueDays;
 
             string EncrID = Lesson.Name + Lesson.Description + Lesson.Id;
-
             Lesson.EncryptedID = Encrpt.Encrypt(EncrID, true);
 
 
@@ -395,109 +395,109 @@ namespace SEA_Application.Controllers
 
         public ActionResult GetLessonSessions(DataTablesParam param)
         {
-           // var StartDateList =  db.Lesson_Session.Select( x => x.StartDate..ToString());
+            // var StartDateList =  db.Lesson_Session.Select( x => x.StartDate..ToString());
 
-           //var StartDateList =  db.Lesson_Session.Select(x => string.Concat( x.StartDate.Value.Month.ToString() +"/"+x.StartDate.Value.Day.ToString()+"/"+x.StartDate.Value.Year.ToString()));
+            //var StartDateList =  db.Lesson_Session.Select(x => string.Concat( x.StartDate.Value.Month.ToString() +"/"+x.StartDate.Value.Day.ToString()+"/"+x.StartDate.Value.Year.ToString()));
 
 
             try
             {
 
-            int pageNo = 1;
+                int pageNo = 1;
 
-            if (param.iDisplayStart >= param.iDisplayLength)
-            {
-
-                pageNo = (param.iDisplayStart / param.iDisplayLength) + 1;
-
-            }
-
-            int totalCount = 0;
-
-
-            if (param.sSearch != null)
-            {
-
-
-                totalCount = (from lesson in db.AspnetLessons
-                                        join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
-                                        select new
-                                        {
-                                            lessonsesion.Id,
-                                            lesson.Name,
-                                            lessonsesion.AspNetSession.SessionName,
-                                            lessonsesion.StartDate,
-                                            lessonsesion.DueDate,
-                                            lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
-                                        }).Where(x=>x.Name.ToLower().Contains(param.sSearch.ToLower()) || x.SessionName.ToLower().Contains(param.sSearch.ToLower()) || x.SubjectName.ToLower().Contains(param.sSearch.ToLower()) || string.Concat(x.StartDate.Value.Month.ToString() +"/"+ x.StartDate.Value.Day.ToString()+"/"+x.StartDate.Value.Year.ToString()).Contains(param.sSearch) || string.Concat(x.DueDate.Value.Month.ToString() + "/" + x.DueDate.Value.Day.ToString() + "/" + x.DueDate.Value.Year.ToString()).Contains(param.sSearch) /*x.DueDate.ToString().Contains(param.sSearch)*/).ToList().Count();
-
-
-                var AllLessonSessions = (from lesson in db.AspnetLessons
-                                        join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
-                                        select new
-                                        {
-                                            lessonsesion.Id,
-                                            lesson.Name,
-                                            lessonsesion.AspNetSession.SessionName,
-                                            lessonsesion.StartDate,
-                                            lessonsesion.DueDate,
-                                            lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
-                                        }).Where(x => x.Name.ToLower().Contains(param.sSearch.ToLower()) || x.SessionName.ToLower().Contains(param.sSearch.ToLower()) || x.SubjectName.ToLower().Contains(param.sSearch.ToLower()) || string.Concat(x.StartDate.Value.Month.ToString() + "/" + x.StartDate.Value.Day.ToString() + "/" + x.StartDate.Value.Year.ToString()).Contains(param.sSearch) || string.Concat(x.DueDate.Value.Month.ToString() + "/" + x.DueDate.Value.Day.ToString() + "/" + x.DueDate.Value.Year.ToString()).Contains(param.sSearch)).OrderBy(x=>x.Name).Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
-
-                return Json(new
+                if (param.iDisplayStart >= param.iDisplayLength)
                 {
-                    aaData = AllLessonSessions,
-                    sEcho = param.sEcho,
-                    iTotalDisplayRecords = totalCount,
-                    iTotalRecords = totalCount
 
-                }, JsonRequestBehavior.AllowGet);
+                    pageNo = (param.iDisplayStart / param.iDisplayLength) + 1;
 
+                }
 
+                int totalCount = 0;
 
 
-            }
-            else
-            {
-
-                totalCount = (from lesson in db.AspnetLessons
-                              join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
-                              select new
-                              {
-                                  lessonsesion.Id,
-                                  lesson.Name,
-                                  lessonsesion.AspNetSession.SessionName,
-                                  lessonsesion.StartDate,
-                                  lessonsesion.DueDate,
-                                  lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
-                              }).ToList().Count();
-
-
-               var AllLessonSessions = (from lesson in db.AspnetLessons
-                              join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
-                              select new
-                              {
-                                  lessonsesion.Id,
-                                  lesson.Name,
-                                  lessonsesion.AspNetSession.SessionName,
-                                  lessonsesion.StartDate,
-                                  lessonsesion.DueDate,
-                                  lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
-                              }).ToList().Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
-
-                return Json(new
+                if (param.sSearch != null)
                 {
-                    aaData = AllLessonSessions,
-                    sEcho = param.sEcho,
-                    iTotalDisplayRecords = totalCount,
-                    iTotalRecords = totalCount
 
-                }, JsonRequestBehavior.AllowGet);
+
+                    totalCount = (from lesson in db.AspnetLessons
+                                  join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                                  select new
+                                  {
+                                      lessonsesion.Id,
+                                      lesson.Name,
+                                      lessonsesion.AspNetSession.SessionName,
+                                      lessonsesion.StartDate,
+                                      lessonsesion.DueDate,
+                                      lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                                  }).Where(x => x.Name.ToLower().Contains(param.sSearch.ToLower()) || x.SessionName.ToLower().Contains(param.sSearch.ToLower()) || x.SubjectName.ToLower().Contains(param.sSearch.ToLower()) || string.Concat(x.StartDate.Value.Month.ToString() + "/" + x.StartDate.Value.Day.ToString() + "/" + x.StartDate.Value.Year.ToString()).Contains(param.sSearch) || string.Concat(x.DueDate.Value.Month.ToString() + "/" + x.DueDate.Value.Day.ToString() + "/" + x.DueDate.Value.Year.ToString()).Contains(param.sSearch) /*x.DueDate.ToString().Contains(param.sSearch)*/).ToList().Count();
+
+
+                    var AllLessonSessions = (from lesson in db.AspnetLessons
+                                             join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                                             select new
+                                             {
+                                                 lessonsesion.Id,
+                                                 lesson.Name,
+                                                 lessonsesion.AspNetSession.SessionName,
+                                                 lessonsesion.StartDate,
+                                                 lessonsesion.DueDate,
+                                                 lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                                             }).Where(x => x.Name.ToLower().Contains(param.sSearch.ToLower()) || x.SessionName.ToLower().Contains(param.sSearch.ToLower()) || x.SubjectName.ToLower().Contains(param.sSearch.ToLower()) || string.Concat(x.StartDate.Value.Month.ToString() + "/" + x.StartDate.Value.Day.ToString() + "/" + x.StartDate.Value.Year.ToString()).Contains(param.sSearch) || string.Concat(x.DueDate.Value.Month.ToString() + "/" + x.DueDate.Value.Day.ToString() + "/" + x.DueDate.Value.Year.ToString()).Contains(param.sSearch)).OrderBy(x => x.Name).Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
+
+                    return Json(new
+                    {
+                        aaData = AllLessonSessions,
+                        sEcho = param.sEcho,
+                        iTotalDisplayRecords = totalCount,
+                        iTotalRecords = totalCount
+
+                    }, JsonRequestBehavior.AllowGet);
+
+
+
+
+                }
+                else
+                {
+
+                    totalCount = (from lesson in db.AspnetLessons
+                                  join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                                  select new
+                                  {
+                                      lessonsesion.Id,
+                                      lesson.Name,
+                                      lessonsesion.AspNetSession.SessionName,
+                                      lessonsesion.StartDate,
+                                      lessonsesion.DueDate,
+                                      lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                                  }).ToList().Count();
+
+
+                    var AllLessonSessions = (from lesson in db.AspnetLessons
+                                             join lessonsesion in db.Lesson_Session on lesson.Id equals lessonsesion.LessonId
+                                             select new
+                                             {
+                                                 lessonsesion.Id,
+                                                 lesson.Name,
+                                                 lessonsesion.AspNetSession.SessionName,
+                                                 lessonsesion.StartDate,
+                                                 lessonsesion.DueDate,
+                                                 lesson.AspnetSubjectTopic.GenericSubject.SubjectName,
+                                             }).ToList().Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
+
+                    return Json(new
+                    {
+                        aaData = AllLessonSessions,
+                        sEcho = param.sEcho,
+                        iTotalDisplayRecords = totalCount,
+                        iTotalRecords = totalCount
+
+                    }, JsonRequestBehavior.AllowGet);
+
+                }
 
             }
-
-            }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var Msg = ex.Message;
                 var inner = ex.InnerException.Message;
@@ -607,8 +607,6 @@ namespace SEA_Application.Controllers
 
             List<int> LessonIds = new List<int>();
 
-
-
             foreach (var id in AllLessonIds)
             {
                 var LessonSession = db.Lesson_Session.Where(x => x.LessonId == id && x.SessionId == SessionId).FirstOrDefault();
@@ -617,7 +615,6 @@ namespace SEA_Application.Controllers
                 {
                     db.Lesson_Session.Remove(LessonSession);
                     db.SaveChanges();
-
 
                 }
                 //Event
@@ -760,7 +757,7 @@ namespace SEA_Application.Controllers
                     newEvent.SessionID = db.AspNetUsers_Session.Where(x => x.UserID == items).Select(x => x.SessionID).FirstOrDefault();
                     newEvent.ThemeColor = color[colorcode];
                     newEvent.Start = ls.StartDate.Value.AddHours(10); //Convert.ToDateTime(day[0] + " " + starttime);
-                    newEvent.End = ls.StartDate.Value.AddHours(13);  //Convert.ToDateTime(day[0] + " " + Endtime);
+                    newEvent.End = ls.DueDate.Value.AddHours(13);  //Convert.ToDateTime(day[0] + " " + Endtime);
                     newEvent.TimeTableId = null; // item.Id;
                     newEvent.LessonID = lesson.Id;
                     newEvent.SessionID = ls.SessionId;
@@ -813,7 +810,8 @@ namespace SEA_Application.Controllers
 
                     if (LessonIdsCount != count)
                     {
-                        ErrorMsg = "New lesson found in selected topic and section";
+
+                        ErrorMsg = "New lesson found in selected topic and Session";
 
                     }
 
@@ -823,7 +821,7 @@ namespace SEA_Application.Controllers
                 else if (LessonIdsCount != 0 && LessonIdsCount == AllLessonSessionCount)
                 {
                     Button = "Enabled";
-                    ErrorMsg = "Lessons are already Scheduled in selected Topic And Section.But Editable";
+                    ErrorMsg = "Lessons are already scheduled for the selected topic and selected session. if you click continue system will delete the previous ones of this topic for the selected session.";
                 }
                 else
                 {
@@ -849,29 +847,29 @@ namespace SEA_Application.Controllers
 
             var ListItems = SessionId.Split(',').ToList();
 
-            foreach(var item in ListItems)
+            foreach (var item in ListItems)
             {
                 int sessionId = Convert.ToInt32(item);
 
                 var LessonSession = db.Lesson_Session.Where(x => x.LessonId == LessonId && x.SessionId == sessionId).FirstOrDefault();
 
-            if (LessonSession != null)
-            {
-                var FromDate = LessonSession.StartDate.Value.ToString("MM/dd/yyyy");
-                var ToDate = LessonSession.DueDate.Value.ToString("MM/dd/yyyy");
+                if (LessonSession != null)
+                {
+                    var FromDate = LessonSession.StartDate.Value.ToString("MM/dd/yyyy");
+                    var ToDate = LessonSession.DueDate.Value.ToString("MM/dd/yyyy");
 
                     var Error = "";
 
-                   Error = "The selected lesson in already scheduled from " + FromDate + " to " + ToDate + " in "+ LessonSession.AspNetSession.SessionName;
+                    Error = "The selected lesson in already scheduled from " + FromDate + " to " + ToDate + " in " + LessonSession.AspNetSession.SessionName;
 
                     Errors.Add(Error);
-            }
+                }
             }
 
             //. On Creation," +
-                 //  " the pervious schedule will automatically delete.
+            //  " the pervious schedule will automatically delete.
 
-            if( Errors.Count() != 0)
+            if (Errors.Count() != 0)
             {
 
                 Errors.Add("On Creation the pervious schedule lessons will be automatically deleted.");
@@ -906,7 +904,8 @@ namespace SEA_Application.Controllers
             lessonViewModel.LessonVideoURL = aspnetLesson.Video_Url;
             lessonViewModel.LessonName = aspnetLesson.Name;
             lessonViewModel.LessonDuration = aspnetLesson.DurationMinutes;
-
+            lessonViewModel.DaysAhead = aspnetLesson.DaysAhead;
+            lessonViewModel.DueDays = aspnetLesson.DueDays;
             //    Lesson_Session LessonSession = db.Lesson_Session.Where(x => x.LessonId == id).FirstOrDefault();
 
             lessonViewModel.IsActive = Convert.ToBoolean(aspnetLesson.IsActive);
@@ -1045,7 +1044,6 @@ namespace SEA_Application.Controllers
         public ActionResult Edit(LessonViewModel LessonViewModel)
         {
 
-
             AspnetLesson Lesson = db.AspnetLessons.Where(x => x.Id == LessonViewModel.Id).FirstOrDefault();
             Lesson.Name = LessonViewModel.LessonName;
             Lesson.Video_Url = LessonViewModel.LessonVideoURL;
@@ -1054,8 +1052,9 @@ namespace SEA_Application.Controllers
             Lesson.Description = LessonViewModel.LessonDescription;
             Lesson.IsActive = LessonViewModel.IsActive;
             Lesson.OrderBy = LessonViewModel.OrderBy;
+            Lesson.DaysAhead = LessonViewModel.DaysAhead;
+            Lesson.DueDays = LessonViewModel.DueDays;
             db.SaveChanges();
-
 
 
             HttpPostedFileBase Assignment = Request.Files["Assignment"];
@@ -1418,6 +1417,278 @@ namespace SEA_Application.Controllers
 
             return RedirectToAction("ViewTopicsAndLessons", "AspnetSubjectTopics");
         }
+
+        public ActionResult SessionPrePlan()
+        {
+
+
+
+            return View();
+        }
+        public JsonResult GetTopicLessonScheduled(int SubID, string Date)
+        {
+
+
+            var FirstDate = Convert.ToDateTime(Date);
+
+            var AllTopics = db.AspnetSubjectTopics.Where(x => x.SubjectId == SubID).OrderBy(x => x.OrderBy).Select(x => new { x.Id, x.Name, x.OrderBy }).ToList();
+
+            List<ScheduledLessonsOfTopic> List = new List<ScheduledLessonsOfTopic>();
+            int count = 0;
+            var PerviousDate = FirstDate;
+
+            foreach (var Topic in AllTopics)
+            {
+                ScheduledLessonsOfTopic Schedule = new ScheduledLessonsOfTopic();
+
+                Schedule.TopicId = Topic.Id;
+                Schedule.TopicName = Topic.Name;
+
+                var AllLessons = db.AspnetLessons.Where(x => x.TopicId == Topic.Id).OrderBy(x => x.OrderBy).ToList();
+
+
+                foreach (var Lesson in AllLessons)
+                {
+                    ScheduledLesson ScheduleLesson = new ScheduledLesson();
+
+
+                    if (count == 0)
+                    {
+                        ScheduleLesson.LessonId = Lesson.Id;
+                        ScheduleLesson.LessonName = Lesson.Name;
+                        ScheduleLesson.OrderBy = Lesson.OrderBy;
+                        // ScheduleLesson.Date = FirstDate.ToString();
+                        string[] DateArray = FirstDate.ToString().Split('/');
+                        string[] yeararray = DateArray[2].Split(' ');
+                        ScheduleLesson.Date = yeararray[0] + "-" + DateArray[0] + "-" + DateArray[1];
+
+                        //DueDate Section
+                        var DueDays = Lesson.DueDays;
+
+                        var DueDate = FirstDate;
+
+                        if (DueDays != null)
+                        {
+                            DueDate = FirstDate.AddDays(Lesson.DueDays.Value);
+                        }
+                        else
+                        {
+                            DueDate = FirstDate.AddDays(0);
+
+                        }
+
+
+                        string[] DueDateArray = DueDate.ToString().Split('/');
+                        string[] DueDateyeararray = DateArray[2].Split(' ');
+
+                        ScheduleLesson.DueDate = DueDateyeararray[0] + "-" + DueDateArray[0] + "-" + DueDateArray[1];
+
+
+                        count++;
+                    }
+
+
+                    else
+                    {
+
+                        ScheduleLesson.LessonId = Lesson.Id;
+                        ScheduleLesson.LessonName = Lesson.Name;
+                        ScheduleLesson.OrderBy = Lesson.OrderBy;
+                        //  ScheduleLesson.Date = PerviousDate.AddDays(Lesson.DaysAhead.Value).ToString();
+
+                        var DaysAhead = Lesson.DaysAhead;
+                        if (DaysAhead != null)
+                        {
+
+                            PerviousDate = PerviousDate.AddDays(Lesson.DaysAhead.Value);
+
+                        }
+                        else
+                        {
+                            PerviousDate = PerviousDate.AddDays(0);
+
+                        }
+
+                        string[] DateArray = PerviousDate.ToString().Split('/');
+                        string[] yeararray = DateArray[2].Split(' ');
+
+                        ScheduleLesson.Date = yeararray[0] + "-" + DateArray[0] + "-" + DateArray[1];
+
+
+                        //DueDate Section
+                        var DueDays = Lesson.DueDays;
+
+                        var DueDate = PerviousDate;
+
+                        if (DueDays != null)
+                        {
+                            DueDate = PerviousDate.AddDays(Lesson.DueDays.Value);
+                        }
+                        else
+                        {
+                            DueDate = PerviousDate.AddDays(0);
+
+                        }
+
+
+                        string[] DueDateArray = DueDate.ToString().Split('/');
+                        string[] DueDateyeararray = DateArray[2].Split(' ');
+
+                        ScheduleLesson.DueDate = DueDateyeararray[0] + "-" + DueDateArray[0] + "-" + DueDateArray[1];
+
+
+
+                        //  PerviousDate = PerviousDate.AddDays(Lesson.DaysAhead.Value);
+
+                    }
+
+                    Schedule.ScheduledLessons.Add(ScheduleLesson);
+
+                }
+
+
+                List.Add(Schedule);
+
+            }
+
+
+            return Json(List, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SaveLessonsSchedule(int SessionId, int SubjectId, List<ScheduledLesson> LessonsList)
+        {
+            string Msg = "Success";
+
+            try
+            {
+                var AllLessonSessionToDelete = db.Lesson_Session.Where(x => x.AspnetLesson.AspnetSubjectTopic.GenericSubject.Id == SubjectId && x.SessionId == SessionId).ToList();
+
+                if (AllLessonSessionToDelete.Count() != 0)
+                {
+
+
+                    db.Lesson_Session.RemoveRange(AllLessonSessionToDelete);
+                    db.SaveChanges();
+
+
+                    var newevents = db.Events.Where(x => x.AspnetLesson.AspnetSubjectTopic.GenericSubject.Id == SubjectId && x.SessionID == SessionId).ToList();
+
+                    db.Events.RemoveRange(newevents);
+                    db.SaveChanges();
+                    
+                }
+
+                List<Lesson_Session> LessonSessionList = new List<Lesson_Session>();
+
+                foreach (var item in LessonsList)
+                {
+
+                    Lesson_Session LessonSession = new Lesson_Session();
+
+
+                    LessonSession.LessonId = item.LessonId;
+                    LessonSession.StartDate = Convert.ToDateTime(item.Date);
+                    LessonSession.DueDate = Convert.ToDateTime(item.DueDate);
+                    LessonSession.SessionId = SessionId;
+
+                    db.Lesson_Session.Add(LessonSession);
+                    db.SaveChanges();
+
+                   
+
+
+                    var lesson = db.AspnetLessons.Where(x => x.Id == LessonSession.LessonId).FirstOrDefault();
+                    var Users = (from std in db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id)
+                                 join session in db.AspNetStudent_Session_class on std.StudentId equals session.AspNetStudent.StudentID
+                                 where session.SessionID == LessonSession.SessionId
+                                 select std.StudentId).ToList();
+                    //var Users = db.Student_GenericSubjects.Where(x => x.GenericSubject.Id == lesson.AspnetSubjectTopic.GenericSubject.Id).Select(x=> x.StudentId).ToList();
+                    string[] color = { "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Aqua" };
+
+                    var AdminsAndStaff = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Admin") || x.AspNetRoles.Select(y => y.Name).Contains("Staff")).Select(x => x.Id).ToList();
+
+                    foreach (var item1 in AdminsAndStaff)
+                    {
+                        Users.Add(item1);
+                    }
+
+                    foreach (var items in Users)
+                    {
+                        Random random = new Random();
+                        int colorcode = random.Next(1, 5);
+                        var newEvent = new Event();
+                        newEvent.UserId = items;
+                        newEvent.IsFullDay = false;
+                        newEvent.IsPublic = false;
+                        newEvent.Subject = lesson.AspnetSubjectTopic.GenericSubject.SubjectName + "-" + lesson.AspnetSubjectTopic.GenericSubject.SubjectType;
+                        newEvent.Description = lesson.Description;
+                        newEvent.SessionID = db.AspNetUsers_Session.Where(x => x.UserID == items).Select(x => x.SessionID).FirstOrDefault();
+                        newEvent.ThemeColor = color[colorcode];
+                        newEvent.Start = LessonSession.StartDate.Value.AddHours(10); //Convert.ToDateTime(day[0] + " " + starttime);
+                        newEvent.End = LessonSession.DueDate.Value.AddHours(13);  //Convert.ToDateTime(day[0] + " " + Endtime);
+                        newEvent.TimeTableId = null; // item.Id;
+                        newEvent.LessonID = lesson.Id;
+                        newEvent.SessionID = LessonSession.SessionId;
+                        db.Events.Add(newEvent);
+                    }
+
+
+                    db.SaveChanges();
+
+                    // LessonSessionList.Add(LessonSession);
+
+                }
+                // LessonSessionList.AddRange(LessonSessionList);
+
+                //db.Lesson_Session.AddRange(LessonSessionList);
+                ///db.SaveChanges();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Msg = "Error";
+            }
+
+
+
+            return Json(Msg, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CheckSessionAlreadyScheduled(int SessionId, int SubjectId)
+        {
+
+            //  var AllSubjectTopics =  db.AspnetSubjectTopics.Where(x => x.Id == SubjectId).Select(x=>x.Id).ToList();
+            var Msg = "Success";
+            var AllLessonSession = db.Lesson_Session.Where(x => x.AspnetLesson.AspnetSubjectTopic.GenericSubject.Id == SubjectId && x.SessionId == SessionId).ToList();
+
+            if (AllLessonSession.Count() != 0)
+            {
+                //    Msg = "Selected session is already pre-planned for the selected subject if continue it will automatically delete the pervious lessons planned for the selected subject of selected session .";
+                 Msg = "The selected session is already pre-planned for the selected subject, if you click on create, the system will delete the previous lessons planned for the selected subject of selected session.";
+            }
+
+            return Json(Msg, JsonRequestBehavior.AllowGet);
+        }
+
+        public class ScheduledLessonsOfTopic
+        {
+            public int TopicId { get; set; }
+            public string TopicName { get; set; }
+
+            public List<ScheduledLesson> ScheduledLessons = new List<ScheduledLesson>();
+        }
+        public class ScheduledLesson
+        {
+            public int LessonId { get; set; }
+            public string LessonName { get; set; }
+
+            public int? OrderBy { get; set; }
+            public string Date { get; set; }
+            public string DueDate { get; set; }
+        }
+
 
         // GET: AspnetLessons/Delete/5
         public ActionResult Delete(int? id)

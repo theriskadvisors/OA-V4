@@ -106,12 +106,8 @@ namespace SEA_Application.Controllers
 
             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
 
-
-
             return View();
         }
-
-
 
         // POST: AspnetSubjectTopics/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

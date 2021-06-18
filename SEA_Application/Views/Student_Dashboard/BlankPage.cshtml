@@ -16,6 +16,11 @@
     int countLesson = db.Events.Where(x => x.UserId == CurrentUserId && x.Start <= Endaday && x.Start >= Firstday).Count();
 }
 
+@if (User.IsInRole("Student"))
+{
+    Layout = "~/Views/Shared/_StudentDashboardLayout.cshtml";
+}
+
 <style>
     .list-group-item {
         position: relative;
@@ -50,6 +55,7 @@
         background: #28BAE3;
         color: white;
     }
+    
 </style>
 <div class="pageHeading">
     <div class="row">
@@ -80,7 +86,7 @@
             <a class="nav-link active" id="Welcome-tab-attr" data-toggle="tab" href="#Welcome-attr" role="tab" aria-controls="Welcome-attr"
                aria-selected="true">Welcome</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" style="">
             <a class="nav-link" id="TimeTable-tab-attr" data-toggle="tab" href="#TimeTable-attr" role="tab" aria-controls="TimeTable-attr"
                aria-selected="false" onclick="navClicked()">TimeTable</a>
         </li>
@@ -161,10 +167,16 @@
             </div>
         </div>
     </div>
+</div>
 
     <script>
 
         $(document).ready(function () {
+
+           
+
+            localStorage.ElementToActiveAfterPageLoad = "StudentHome";
+
 
 
             $.ajax({
@@ -207,6 +219,7 @@
 
         }
 
+ 
     </script>
     @*<script>
             function navClicked() {

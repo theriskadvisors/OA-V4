@@ -247,13 +247,20 @@
 
 
         $("#TopId").change(function () {
+            $("#ErrorMsg").html(ErrorMsg);
+
 
             CheckLessonAlreadyScheduled();
         })
 
         $("#SessionId").change(function () {
-
+    
             CheckLessonAlreadyScheduled();
+        })
+        $("#CTId").change(function () {
+            $("#ErrorMsg").html(ErrorMsg);
+
+
         })
 
 
@@ -279,7 +286,7 @@
 
             if (StartDate != '' && EndDate != '' && sDate > eDate) {
 
-                $("#ErrorMsg").html("Start Date Should be lesser than Due Date");
+                $("#ErrorMsg").append("<br>Start Date Should be lesser than Due Date");
                 $("#submit").prop('disabled', false);
                 return false;
             }
@@ -288,14 +295,14 @@
 
         $("#DueDate").change(function () {
 
-            $("#ErrorMsg").html("");
+            //$("#ErrorMsg").html("");
 
         })
 
 
         $("#StartDate").change(function () {
 
-            $("#ErrorMsg").html("");
+            //$("#ErrorMsg").html("");
 
         })
 
@@ -308,6 +315,9 @@
     });//End of Document Ready
 
     function CheckLessonAlreadyScheduled() {
+
+        $("#ErrorMsg").html(ErrorMsg);
+
 
         var TopicId = $("#TopId").val();
         var SessionId = $("#SessionId").val();
@@ -417,7 +427,7 @@
 
                             <div class="form-row mt-3">
                                 <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Select Section*</label>
+                                    <label for="" class="bmd-label-static pl-2">Select session*</label>
                                     <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
 
                                 </div>
