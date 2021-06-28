@@ -1418,8 +1418,10 @@ namespace SEA_Application.Controllers
             return RedirectToAction("ViewTopicsAndLessons", "AspnetSubjectTopics");
         }
 
-        public ActionResult SessionPrePlan()
+        public ActionResult SessionPrePlan(string Msg = "NotCreated")
         {
+
+            ViewBag.Msg = Msg;
 
 
 
@@ -1487,7 +1489,6 @@ namespace SEA_Application.Controllers
 
                         }
 
-
                         string[] DueDateArray = DueDate.ToString().Split('/');
                         string[] DueDateyeararray = DateArray[2].Split(' ');
 
@@ -1545,7 +1546,6 @@ namespace SEA_Application.Controllers
 
                         ScheduleLesson.Date = yeararray[0] + "-" + DateArray[0] + "-" + DateArray[1];
 
-
                         //DueDate Section
                         var DueDays = Lesson.DueDays;
 
@@ -1575,8 +1575,6 @@ namespace SEA_Application.Controllers
                         }
 
                         ScheduleLesson.DueDate = DueDateyeararray[0] + "-" + DueDateArray[0] + "-" + DueDateArray[1];
-
-
 
                         //  PerviousDate = PerviousDate.AddDays(Lesson.DaysAhead.Value);
 

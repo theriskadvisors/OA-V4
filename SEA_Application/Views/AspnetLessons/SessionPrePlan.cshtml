@@ -23,10 +23,11 @@
 
                     <div class="col-md-6 pl-5 pr-5 ">
 
+                        <input type="hidden" name="SessionCreatedMsg" id="SessionCreatedMsg" value="@ViewBag.Msg" />
 
                         <div class="form-row mt-4">
                             <div class="form-group col-md-12 bmd-form-group">
-                                <label for="" class="control-label">Select Sections *</label>
+                                <label for="" class="control-label">Select Session *</label>
                                 <select class="form-control SecIdDDL" id="SessionId" name="SessionId" required></select>
 
                             </div>
@@ -132,6 +133,13 @@
             window.location.href = "/admin_dashboard/dashboard";
         })
 
+        if ($("#SessionCreatedMsg").val() == "Created") {
+            var type = 'success';
+            var msg = "Selected session Pre-planned successfully for the selected subject";
+            showNotification('top', 'center', msg, type);
+            //toastr.success('Lesson created successfully');
+        }
+
         $.ajax({
             type: "POST",
             cache: false,
@@ -143,7 +151,7 @@
                 $('#Sessions').html("");
                 debugger
                 //  $('#Sessions').append('<option value= "">Select </option>');
-                $('#SessionId').append('<option value="" >Select Section</option>');
+                $('#SessionId').append('<option value="" >Select Session</option>');
                 $.each(sch, function (i, item) {
 
                     debugger
@@ -293,7 +301,6 @@
             $(".Error").html("");
             $("#LessonsList").html("");
 
-
         });
 
         $("#CreateBtn").click(function () {
@@ -354,7 +361,8 @@
                     success: function () {
 
 
-                        window.location.href = "/AspnetLessons/SessionPrePlan";
+
+                        window.location.href = "/AspnetLessons/SessionPrePlan?Msg="+"Created";
 
                     }
 
@@ -375,10 +383,11 @@
 
         var SessionId = $("#SessionId").val();
         var SubId = $("#SubId").val();
+        var Date = $("#Date").val();
         $(".Error").html("");
 
 
-        if (SessionId != "" && SessionId != null && SubId != null && SubId != "")
+        if (SessionId != "" && SessionId != null && SubId != null && SubId != "" && Date != null && Date != "")
 
             $.ajax({
 
@@ -449,9 +458,11 @@
                         table = table + "</html><br>";
                         $("#LessonsList").append(table);
 
+                        
+
                     });
 
-
+                    CheckSessionAlreadyScheduled();
 
                 }//end of success method
 
