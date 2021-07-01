@@ -28,6 +28,11 @@ else if (User.IsInRole("PhotoCopier"))
 {
     Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
 }
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
 else
 {
     Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
