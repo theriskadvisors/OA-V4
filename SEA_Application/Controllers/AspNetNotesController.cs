@@ -504,7 +504,9 @@ namespace SEA_Application.Controllers
             var result = (from Order in db.AspNetOrders
                           join OrderNotes in db.AspNetNotesOrders on Order.Id equals OrderNotes.OrderId
                           join student in db.AspNetStudents on OrderNotes.StudentID equals student.Id
-                          where Order.Status == "Paid" && Order.PublishDate >= FromDateInDateTime && Order.PublishDate <= ToDateInDateTime
+                          //   where Order.Status == "Paid" && Order.PublishDate >= FromDateInDateTime && Order.PublishDate <= ToDateInDateTime
+                           where Order.Status == "Paid" && Order.ApproveDate >= FromDateInDateTime && Order.ApproveDate <= ToDateInDateTime
+
                           select new
                           {
                               OrderID = Order.Id,
@@ -517,11 +519,13 @@ namespace SEA_Application.Controllers
                               student.AspNetUser.UserName,
                               student.AspNetClass.ClassName,
                               StudentId = student.Id,
-                              UsrId = student.AspNetUser.Id
+                              UsrId = student.AspNetUser.Id,
+                              ApprovedId = Order.ApproveId
                           }).Distinct().ToList();
 
+            var result1 = result.OrderBy(x => x.ApprovedId).ToList();
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(result1, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ApprovedOrdersByDate(string FromDate, string ToDate)
@@ -534,7 +538,7 @@ namespace SEA_Application.Controllers
             var result = (from Order in db.AspNetOrders
                           join OrderNotes in db.AspNetNotesOrders on Order.Id equals OrderNotes.OrderId
                           join student in db.AspNetStudents on OrderNotes.StudentID equals student.Id
-                          where Order.Status == "Paid" && Order.PublishDate >= dateTimeFrom && Order.PublishDate <= dateTimeTo
+                          where Order.Status == "Paid" && Order.ApproveDate >= dateTimeFrom && Order.ApproveDate <= dateTimeTo
                           select new
                           {
                               OrderID = Order.Id,
@@ -547,10 +551,13 @@ namespace SEA_Application.Controllers
                               student.AspNetUser.UserName,
                               student.AspNetClass.ClassName,
                               StudentId = student.Id,
-                              UsrId = student.AspNetUser.Id
+                              UsrId = student.AspNetUser.Id,
+                              ApprovedId = Order.ApproveId
                           }).Distinct().ToList();
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var result1 = result.OrderBy(x => x.ApprovedId).ToList();
+
+            return Json(result1, JsonRequestBehavior.AllowGet);
 
             // return Json("", JsonRequestBehavior.AllowGet);
         }
