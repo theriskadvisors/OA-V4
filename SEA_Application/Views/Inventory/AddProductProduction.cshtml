@@ -1,0 +1,696 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    th, td {
+        padding: 5px;
+    }
+
+    .error {
+        color: red !important;
+    }
+
+    #table1 td {
+        width: 50%;
+    }
+</style>
+
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/select2.min.css" rel="stylesheet" />
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <form method="post" id="ProductionForm">
+
+            <div class="col-md-9">
+
+                <table id="table1">
+                    <tr>
+                        <td>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <label class="control-label">Date</label>
+
+                                    <input type="date" id="Date" name="Date" class="form-control" required />
+
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            @*<div class="form-group">
+
+                                    <div class="col-md-12">
+
+                                        <label class="control-label">Order No</label>
+
+                                        <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+
+                                    </div>
+                                </div>*@
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <label class="control-label">Finished Item</label>
+                                    <select style="width:300px;" class="form-control drop" id="FinishedProducts" name="FinishedProducts" required></select>
+
+                                </div>
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <label class="control-label">Total Quantity</label>
+
+                                    <input type="number" value="1" min="1" id="TotalFinishedQuantity" name="TotalFinishedQuantity" class="form-control" required />
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <label class="control-label">Unit Cost Price</label>
+                                    <input readonly type="text" value="0" id="UnitCostPrice" name="UnitCostPrice" class="form-control" required />
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <label class="control-label">Total Cost</label>
+
+                                    <input readonly type="number" value="0" id="TotalCostOfFinishedItem" name="TotalCostOfFinishedItem" class="form-control" required />
+
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+            </div><!--end of column 5-->
+
+            <br />
+            <div class="col-md-12" id="ProductProductionBlock">
+
+                <div class="col-md-12">
+
+                    <table width="100%" id="ProdcutProductionTable" style="border:0px solid">
+
+                        <thead>
+                            <tr>
+
+                                <td> <label class="control-label">Select Item</label></td>
+                                <td> <label class="control-label">Average Cost </label> </td>
+                                <td> <label class="control-label">Available Quantity </label> </td>
+                                <td> <label class="control-label"> Quantity </label> </td>
+
+                                <td> <label class="control-label"> Total Cost </label> </td>
+                                <td> <label class="control-label"> Action</label></td>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="TableBody">
+
+                            <tr id="TableRow0">
+
+                                <td style="width:20%">
+
+                                    <select style="width:300px;" class="form-control drop RawProductInventoryDropDown" id="InventoryStocks0" name="InventoryStocks0" required></select>
+
+                                </td>
+                                <td style="width:15%">
+
+                                    <input readonly class="form-control RawProductInventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" required />
+                                </td>
+
+                                <td style="width:15%">
+
+                                    <input readonly class="form-control RawProductInventoryAvailableQuantity" id="AvailableQuantity0" value="0" type="number" min="1" name="AvailableQuantity0" required />
+                                </td>
+
+                                <td style="width:15%">
+
+                                    <input class="form-control RawProductInventoryQuantity" id="StockQuantity0" value="1" type="number" min="1" name="StockQuantity0" required />
+                                </td>
+
+                                <td style="width:15%">
+
+                                    <input type="number" id="TotalCost0" name="TotalCost0" class="form-control" readonly value="0" required />
+
+                                </td>
+                                <td style="width:15%">
+                                    <button type="button" style="background:#32CD32" id="" class="btn btn-sm btn-default " onclick="RawStock()"><i class="fa fa-plus" style="font-size:12px"></i></button>
+                                </td>
+
+                            </tr>
+
+                            <tr id="GrandTotalRow">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td align="center" valign="bottom"></td>
+                                <td><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="GrandTotal" name="GrandTotal" required></td>
+                                <td></td>
+
+                            </tr>
+
+                        </tbody>
+
+
+
+                    </table>
+
+                    <span id="Error" style="color:red"></span>
+
+                </div>
+
+            </div><!--End of column 12-->
+
+            <div class="col-md-8">
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+        </form>
+
+
+    </div>
+</div>
+
+<script src="~/Content/Toaster/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+
+<script>
+
+
+    count = 1;
+    row = [];
+    row[0] = 0;
+
+    var arr = [];
+    arr[0] = 0;
+
+    var FinishedProductsList = "";
+    var RawProductsList = "";
+
+    var RawProductsObj =
+    {
+        RawProductId: '',
+        Name: '',
+        UnitPurchasePrice: '',
+        QuantityOnHand: '',
+        AverageCost: '',
+    };
+
+    RawProductsObj = [
+    ];
+
+
+    $(document).ready(function () {
+
+
+        document.getElementById('Date').valueAsDate = new Date();
+
+        $(".drop").select2();
+
+        $("#PageHeader").html("Production");
+
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Inventory/GetFinishedProductsList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#FinishedProducts");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Product'));
+
+                    FinishedProductsList = FinishedProductsList + "<option value=''>Select Product</option>";
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+                        FinishedProductsList = FinishedProductsList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+
+
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Inventory/RawProductsList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#InventoryStocks0");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Product'));
+                    debugger
+                    RawProductsList = RawProductsList + "<option value=''>Select Product</option>";
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        var obj = {};
+
+
+                        obj['RawProductId'] = sch[i].Id;
+                        obj['Name'] = sch[i].Name;
+                        obj['UnitPurchasePrice'] = sch[i].UnitPurchasePrice;
+                        obj['QuantityOnHand'] = sch[i].QuantityOnHand;
+                        obj['AverageCost'] = sch[i].AverageCost;
+                        //AveragePrice
+                        RawProductsObj.push(obj);
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+                        RawProductsList = RawProductsList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+
+        $("#ProdcutProductionTable").on('change', ".RawProductInventoryDropDown", function () {
+            debugger
+            // Calculations();
+
+            var ChangedValue = $(this).val();
+
+            var Id = $(this).attr('id');
+
+            let str = Id;
+            const myArr = str.split("Stocks");
+
+            var UnitAverageCostOfRawItem = 0;
+            var QuantityOnHand = 0;
+
+            RawProductsObj.forEach(function (arrayItem) {
+                if (arrayItem.RawProductId == ChangedValue) {
+
+                    UnitAverageCostOfRawItem = arrayItem.AverageCost;
+                    QuantityOnHand = arrayItem.QuantityOnHand;
+                }
+
+            });
+
+            $("#PurchaseUnitPrice" + myArr[1] + "").val(UnitAverageCostOfRawItem);
+
+            // alert(QuantityOnHand);
+            $("#StockQuantity" + myArr[1]).prop('max', QuantityOnHand);
+
+            $("#AvailableQuantity" + myArr[1]).val(QuantityOnHand);
+
+            Total(myArr[1]);
+
+        })
+
+
+        $("#ProdcutProductionTable").on('keyup mouseup', ".RawProductInventoryUnitPrice", function () {
+
+            var Id = $(this).attr('id');
+
+            let str = Id;
+            const myArr = str.split("Price");
+
+            Total(myArr[1]);
+            // var UnitPurchasePrice = 0;
+            //  var UnitQuantity = 0;
+
+            // alert(myArr[1]);
+
+        })
+
+        $("#ProdcutProductionTable").on('keyup mouseup', ".RawProductInventoryQuantity", function () {
+            // Calculations();
+
+            // $($"")
+
+            var Id = $(this).attr('id');
+
+            let str = Id;
+            const myArr = str.split("Quantity");
+
+            Total(myArr[1]);
+        })
+
+
+        $('input[type="number"]').on('keypress', function (event) {
+            var regex = new RegExp("^[a-zA-Z0-9]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        //$("#TotalFinishedQuantity").keyup(function () {
+
+
+
+        //})
+
+        $("#TotalFinishedQuantity").on("keyup mouseup", function (e) {
+            // do stuff!
+
+
+            var TotalCostOfFinishedItem = $("#TotalCostOfFinishedItem").val();
+            var TotalFinishedQuantity = $("#TotalFinishedQuantity").val();
+
+            if (TotalFinishedQuantity == "") {
+                TotalFinishedQuantity = 0;
+            }
+            //  alert(TotalFinishedQuantity);
+
+
+            var UnitCostPrice = 0;
+
+            if (TotalCostOfFinishedItem == 0 && TotalCostOfFinishedItem == 0) {
+                UnitCostPrice = 0
+            }
+            else {
+                UnitCostPrice = parseFloat(TotalCostOfFinishedItem) / parseFloat(TotalFinishedQuantity);
+            }
+
+            $("#UnitCostPrice").val(UnitCostPrice);
+
+
+        })
+
+
+
+        $('#ProductionForm').validate({ // initialize the plugin
+            rules: {
+                Name: {
+                    required: true,
+                },
+                StockQuantity0: {
+                    required: true,
+                    min: 1,
+
+
+                }
+
+            },
+            submitHandler: function (form) {
+                debugger;
+
+                $("#Error").html("");
+                var ProductProductionList =
+                {
+                    InventoryId: '',
+                    // UnitPrice: '',
+                    Quantity: '',
+                    Cost: '',
+                };
+
+                ProductProductionList = [
+
+
+                ];
+
+                var selectedInventoryArary = [];
+                let map = {};
+                let result = false;
+
+                for (var i in arr) {
+
+                    var InventorStocks = "InventoryStocks" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    selectedInventoryArary.push(InventorStocks);
+                }
+
+                for (let i = 0; i < selectedInventoryArary.length; i++) {
+                    // check if object contains entry with this element as key
+                    if (map[selectedInventoryArary[i]]) {
+                        result = true;
+                        // terminate the loop
+                        break;
+                    }
+                    map[selectedInventoryArary[i]] = true;
+                }
+
+                if (result) {
+                    //  document.write('Array contains duplicate elements');
+
+                    // alert("duplicate values ");
+                    $("#Error").html("Inventroy Raw Items cannot repeat");
+                    return false;
+                }
+
+                for (var i in arr) {
+
+                    if (arr[i] == null)
+                        continue;
+
+                    var obj = {};
+
+                    var InventorStocks = "InventoryStocks" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    //var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
+                    //PurchaseUnitPrice = document.getElementById(PurchaseUnitPrice).value;
+
+                    var Quantity = "StockQuantity" + arr[i];
+                    Quantity = document.getElementById(Quantity).value;
+
+                    var Cost = "TotalCost" + arr[i];
+                    Cost = document.getElementById(Cost).value;
+
+                    obj['InventoryId'] = InventorStocks;
+                    //obj['UnitPrice'] = PurchaseUnitPrice;
+                    obj['Quantity'] = Quantity;
+                    obj['Cost'] = Cost;
+
+                    ProductProductionList.push(obj);
+
+                }//end of for loop
+
+                // console.log(NewStocksList);
+
+                var Date = $("#Date").val();
+                //  var OrderNo = $("#OrderNo").val();
+                //  var Note = $("#Note").val();
+                var FinishedItem = $("#FinishedProducts").val();
+                var UnitCostPrice = $("#UnitCostPrice").val();
+                var TotalCostOfFinishedItem = $("#TotalCostOfFinishedItem").val();
+                var TotalFinishedQuantity = $("#TotalFinishedQuantity").val();
+
+                $.ajax({
+                    type: "post",
+                    url: "/Inventory/SaveProductProduction",
+                    data: { 'Date': Date, 'FinishedItem': FinishedItem, 'UnitCostPrice': UnitCostPrice, 'TotalCostOfFinishedItem': TotalCostOfFinishedItem, 'TotalFinishedQuantity': TotalFinishedQuantity, 'ProductProductionList': ProductProductionList },
+                    datatype: "json",
+                    cache: false,
+                    success: function (data) {
+                        debugger
+                        if (data == "") {
+
+                            window.location.href = "/Inventory/Inventory";
+
+                        }
+
+                        else if (data == "Exception") {
+                            //Exception
+                            //alert("Exception");
+                        }
+                        else {
+
+                            $("#error").html(data);
+                            $("#SaveButton").prop("disabled", false);
+
+                        }
+
+                    }
+                })
+
+
+            }
+
+        })
+
+
+    });//end of document ready
+
+
+    function RawStock() {
+
+
+        $("#GrandTotalRow").before('<tr id="TableRow' + count + '"><td style="width:20%"> <select   style ="width:300px;" class="form-control drop RawProductInventoryDropDown" id="InventoryStocks' + count + '" name="InventoryStocks' + count + '" required>' + RawProductsList + '</select></td><td style="width:15%"> <input readonly class="form-control RawProductInventoryUnitPrice" id="PurchaseUnitPrice' + count + '" value="0" min="0" type="number" name="PurchaseUnitPrice' + count + '" required /></td>   <td style="width:15%"><input readonly class="form-control RawProductInventoryAvailableQuantity" id="AvailableQuantity' + count + '" value="0" type="number" min="1" name="AvailableQuantity' + count + '" required /></td><td style="width:15%" > <input class="form-control RawProductInventoryQuantity" id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" required /></td> <td style="width:15%">  <input readonly type="number" id="TotalCost' + count + '" name="TotalCost' + count + '" class="form-control" value="0" required /></td><td style="width:15%"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
+        $(".drop").select2();
+
+        row[count] = count;
+        //addAllLedger(count);
+        //AddBranch(count);
+        arr[count] = count;
+        count = count + 1;
+
+    }
+
+    function Remove(e) {
+
+
+
+        var RowToDelete = "TableRow" + e;
+        document.getElementById(RowToDelete).remove();
+
+
+        arr.splice($.inArray(e, arr), 1);
+
+        GrandTotal();
+
+    }
+
+
+    function Total(RowNumber) {
+
+        debugger
+
+        var GetUnitPurchasePrice = $("#PurchaseUnitPrice" + RowNumber).val();
+        var GetUnitQuantity = $("#StockQuantity" + RowNumber).val();
+
+
+        if (GetUnitPurchasePrice == "") {
+            GetUnitPurchasePrice = 0;
+        }
+        if (GetUnitQuantity == "") {
+
+            GetUnitQuantity = 0;
+
+        }
+
+        var Total = parseFloat(GetUnitPurchasePrice) * parseFloat(GetUnitQuantity);
+
+        Total = Total.toFixed(2);
+        // alert(Total);
+        $("#TotalCost" + RowNumber).val(Total);
+
+
+        GrandTotal();
+
+    }
+
+    function GrandTotal() {
+
+
+        var GrandTotal = 0;
+
+        for (var i in arr) {
+
+            if (arr[i] == null)
+                continue;
+
+
+            var TotalCost = $("#TotalCost" + arr[i]).val();
+
+
+            GrandTotal = parseFloat(TotalCost) + GrandTotal;
+
+            //VendorId = document.getElementById(VendorId).value;
+
+
+        }
+
+        $("#GrandTotal").val(GrandTotal);
+        $("#TotalCostOfFinishedItem").val(GrandTotal);
+
+        var TotalFinishedQuantity = $("#TotalFinishedQuantity").val();
+
+        if (TotalFinishedQuantity == "") {
+            TotalFinishedQuantity = 0;
+        }
+        // alert(TotalFinishedQuantity);
+
+        var UnitCostPrice = 0;
+
+        if (TotalFinishedQuantity == 0 && GrandTotal == 0) {
+            UnitCostPrice = 0
+        }
+        else {
+            UnitCostPrice = GrandTotal / parseFloat(TotalFinishedQuantity);
+
+            UnitCostPrice = UnitCostPrice.toFixed(2);
+        }
+
+
+        $("#UnitCostPrice").val(UnitCostPrice);
+
+    }
+
+
+
+
+</script> 

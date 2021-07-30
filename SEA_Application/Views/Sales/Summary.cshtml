@@ -1,0 +1,343 @@
+﻿
+
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Cashier"))
+{
+    Layout = "~/Views/Shared/_CashierDashboardLayout.cshtml";
+
+}
+
+<style>
+
+    * {
+        font-size: 14px;
+        font-family: Arial;
+        font-weight: normal;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>
+
+<link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+<div class="card">
+    <div class="card-body p-4">
+
+
+        <div>
+
+            <div class="pull-left">
+                <h3 style="color:#00b8ec;display:inline-block">Summary </h3>
+
+                <label>From</label>
+                <input type="hidden" id="FromDate">
+                <img src="~/Content/Images/calendar.png" id="FromDateTrigger" width="25">
+
+                <label>To</label>
+
+                <input type="hidden" id="ToDate">
+                <img src="~/Content/Images/calendar.png" id="ToDateTrigger" width="25">
+                <br />
+            </div>
+
+
+
+
+            <div class="pull-right">
+                <button id="PrintNotes" class="btn btn-primary btn-sm" style="font-size:14px;">Print Notes</button>
+
+            </div>
+
+
+        </div>
+
+        <br />
+        <div class="table-responsive" id="DivToPrint">
+
+            <h2 style="text-align: center; color: #053f89">Sales Summary</h2>
+            <div id="DateToView">
+
+            </div>
+
+            <table style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
+
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Order No </th>
+                        <th>Status </th>
+                        <th>Total</th>
+                        <th>Discount</th>
+                        <th>Total Discounted </th>
+
+                        <th class="detailscolumn">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="SaleReport">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Summary");
+
+
+        var GetDate = new Date();
+        // var GetToDate = new Date();
+
+
+        var FullDateInYYYYMMDD = GetDate.getFullYear() + "-" + (GetDate.getMonth() + 1) + "-" + GetDate.getDate();
+
+
+        var FulldateInString = GetDate.getDate() + "-" + GetMonthName((GetDate.getMonth() + 1)) + "-" + GetDate.getFullYear();
+
+
+
+        $("#DateToView").html('<h3><span id="FromDateView"> Summary From: ' + FulldateInString + ' </span><span> to</span> <span id="ToDateView">' + FulldateInString + ' </span></h3>');
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Sales/GetSaleSummary",
+            data: { "FromDate": FullDateInYYYYMMDD, "ToDate": FullDateInYYYYMMDD },
+
+            success: function (data) {
+
+                $("#SaleReport").html("");
+
+                var GrandTotal = 0;
+                var DiscountTotal = 0;
+                var GrandTotalDiscounted = 0;
+
+
+                $.each(data, function (index) {
+
+
+                    var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
+                    var dat = value.getMonth() +
+                        1 +
+                        "/" +
+                        value.getDate() +
+                        "/" +
+                        value.getFullYear();
+
+                    GrandTotal = GrandTotal + data[index].Total;
+                    DiscountTotal = DiscountTotal + data[index].Discount;
+                    GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
+
+                    $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+
+                })
+
+                $("#SaleReport").append("<tr> <td >Grand Total</td><td></td>   <td></td> <td>" + GrandTotal + "</td><td>-" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+
+
+            }
+        })
+
+
+
+
+        $('#FromDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        $('#ToDate').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+
+        $(function () {
+            $('#FromDate').datepicker();
+            $('#FromDateTrigger').click(function () {
+
+                $('#FromDate').datepicker('show');
+
+            });
+        });
+
+
+        $(function () {
+            $('#ToDate').datepicker();
+            $('#ToDateTrigger').click(function () {
+
+                $('#ToDate').datepicker('show');
+
+            });
+        });
+
+
+
+        $("#FromDate").change(function () {
+
+
+            var FromDate = $(this).val();
+            var ToDate = $("#ToDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h3><span id="FromDateView"> Summary From: ' + FromDateFormat + ' </span><span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
+
+
+                SaleSummary(FromDate, ToDate);
+
+
+
+            }
+
+        })
+
+        $("#ToDate").change(function () {
+            debugger
+            var ToDate = $(this).val();
+            var FromDate = $("#FromDate").val();
+
+            if (FromDate != "" && ToDate != "") {
+
+                var d = new Date(FromDate);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+
+                var monthName = GetMonthName(month);
+
+                var FromDateFormat = day + "-" + monthName + "-" + year;
+
+
+                var d1 = new Date(ToDate);
+                var day1 = d1.getDate();
+                var month1 = d1.getMonth() + 1;
+                var year1 = d1.getFullYear();
+
+                var monthName1 = GetMonthName(month1);
+                var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
+
+
+                $("#DateToView").html('<h3><span id="FromDateView">Summary From: ' + FromDateFormat + ' </span> <span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
+
+                SaleSummary(FromDate, ToDate);
+
+            }
+
+        })//End of ToDate
+
+
+
+        $("#PrintNotes").click(function () {
+
+            var divToPrint = document.getElementById('DivToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><head><style>td,th{text-align:center;} .detailscolumn{ display:none; }</style></head><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
+            newWin.document.close();
+            setTimeout(function () { newWin.close(); }, 10);
+
+        })
+
+    })
+
+
+    function SaleSummary(FromDate, ToDate) {
+
+        //   alert(FromDate + " " + ToDate);
+
+
+        $("#SaleReport").html("");
+
+        $.ajax({
+            type: "POST",
+            url: "/Sales/GetSaleSummary",
+            data: { "FromDate": FromDate, "ToDate": ToDate },
+
+            success: function (data) {
+
+                $("#SaleReport").html("");
+
+                var GrandTotal = 0;
+                var DiscountTotal = 0;
+                var GrandTotalDiscounted = 0;
+
+
+                $.each(data, function (index) {
+
+
+                    var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
+                    var dat = value.getMonth() +
+                        1 +
+                        "/" +
+                        value.getDate() +
+                        "/" +
+                        value.getFullYear();
+
+                    GrandTotal = GrandTotal + data[index].Total;
+                    DiscountTotal = DiscountTotal + data[index].Discount;
+                    GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
+
+                    $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+
+                })
+
+                $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td>  <td></td> <td>" + GrandTotal + "</td><td>" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+
+
+            }
+        })
+
+    }//sale summary
+
+
+    function OrderDetails(OrderId) {
+
+        window.location.href = "/Sales/ViewSaleOrderDetails?id=" + OrderId;
+
+    }
+
+    function GetMonthName(monthNumber) {
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[monthNumber - 1];
+    }
+</script>

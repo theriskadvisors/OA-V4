@@ -1,0 +1,147 @@
+﻿@model SEA_Application.Models.Supplier
+
+@{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+
+}
+
+<div class="card">
+    <div class="card-body p-4">
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+        <div class="col-md-8">
+
+            
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Company, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control"} })
+                    @Html.ValidationMessageFor(model => model.Company, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                  
+                    <label class="control-label">Contact No</label>
+
+                    @Html.EditorFor(model => model.ContactNo, new { htmlAttributes = new { onblur = "checkPhone(this)", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+                    <span class="text-danger" id="Phone-Error"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new {@type = "email", @class = "form-control",  } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    <span class="text-danger" id="Email-Error"></span>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control", } })
+                    @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+
+                    <textarea class="form-control" name="Address" id="Address" rows="5" ></textarea>
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <input id="FormSubmit" type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
+
+                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                        <i class="material-icons mr-2">cached</i>  Cancel
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+        }
+
+        @*<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Add Supplier");
+
+    });
+   
+    function redirect() {
+
+        window.location.href = "/Suppliers/Index";
+    }
+
+
+    function checkPhone(phone) {
+
+      
+        
+        var length = phone.value.length;
+            
+        if (length == 11) {
+            var patt = new RegExp("^[0]+[0-9]{10,}$");
+            var test = patt.test(phone.value);
+            console.log(test);
+            if (test == false) {
+                $('#Phone-Error').html("Phone number is not in correct format.");
+                $('#FormSubmit').prop('disabled', true);
+            } else {
+                $('#FormSubmit').prop('disabled', false);
+                $('#Phone-Error').html(" ");
+            }
+        } else {
+            $('#Phone-Error').html("Phone number is not in correct formate");
+            $('#FormSubmit').prop('disabled', true);
+        }
+    }
+
+</script>

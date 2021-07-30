@@ -1,0 +1,169 @@
+﻿@model IEnumerable<SEA_Application.Models.RawStock>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CashierDashboardLayout.cshtml";
+}
+<style>
+
+    #datatable_filter {
+        display: block !important;
+    }
+   
+</style>
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <table class="table hover table-bordered table-striped" id="datatable">
+            <thead>
+                <tr>
+                    <th>
+                        Order No
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                   
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Discount
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                   <th>
+                     Action
+                   </th>
+                  
+                </tr>
+
+            </thead>
+
+            <tbody id="tbody">
+
+             
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Sale Orders");
+
+        var table = $('#datatable').dataTable({
+            buttons: [
+                {
+                    text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
+                },
+
+                
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Sale Order</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '/Sales/Create';
+                    }
+                },
+
+                //{
+                //    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Return Order</span>',
+                //    action: function (e, dt, button, config) {
+                //        window.location.href = '/Sales/ReturnSaleOrder';
+                //    }
+                //},
+
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Summary</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '/Sales/Summary';
+                    }
+                },
+
+                {
+                    text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
+                }
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Sales/AllSaleOrdersList",
+            data: {},
+            success: function (data) {
+                table.fnClearTable();
+                $.each(data, function (index) {
+
+                    var value = new Date(parseInt(data[index].Date.replace(/(^.*\()|([+-].*$)/g, '')));
+                    var dat = value.getMonth() +
+                        1 +
+                        "/" +
+                        value.getDate() +
+                        "/" +
+                        value.getFullYear();
+
+                        table.fnAddData([data[index].OrderNo, dat, data[index].Status, data[index].Discount, data[index].DiscountedPrice, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> " ]);
+
+
+                });
+                table.fnDraw();
+
+                var AllTds = $("tr td:nth-child(4) td:nth-child(5)");
+
+                for (var i = 0; i < AllTds.length; i++) {
+
+                    var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
+
+                    AllTds[i].innerHTML = CommaSeparatedValue;
+                }
+            }
+        });
+
+
+        //$('.table').on('click', 'tbody tr', function () {
+        //    var td = $(this).children("td");
+        //    var Id = $(td[0]).children("input").val();
+        //    Id = Id.trim();
+
+        //    window.location.href = "/RawStocks/Edit?id=" + Id;
+        //});
+    })
+    function OrderDetails(OrderId) {
+
+
+        window.location.href = "/Sales/ViewSaleOrderDetails?id=" + OrderId;
+
+        //alert(OrderId);
+    }
+
+
+    function numberWithCommas(x) {
+        debugger
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+
+</script>

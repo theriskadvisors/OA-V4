@@ -1,0 +1,93 @@
+﻿@model IEnumerable<IGrouping<string, SEA_Application.Models.Inventory>>
+@{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <span style="float:left"></span>
+        <input style="float:right" class="btn btn-primary" type='button' id='btn' value='Print' onclick='printDiv();'>
+        <div style="clear:both"></div>
+        <br />
+        <div id="PrintDiv">
+
+            <h2 style="text-align: center; color: #053f89">Products List</h2>
+
+            @foreach (var item in Model)
+            {
+
+                <h3 style="text-decoration:underline">@item.Key</h3>
+
+                <table border="1" class="table table-bordered table-striped" style="width:100%">
+
+
+                    <thead>
+                        <tr>
+
+
+                            <th> Product Name</th>
+                            <th> Product No</th>
+                            <th>Available Quantity</th>
+
+                        </tr>
+
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var inventory in item)
+                        {
+                        <tr>
+
+
+                            <td>@inventory.Name</td>
+
+                            <td>@inventory.ItemNo</td>
+
+                            <td>@inventory.QuantityOnHand</td>
+                        </tr>
+
+
+                        }
+                    </tbody>
+
+                </table>
+
+
+            }
+
+
+
+        </div>
+    </div>
+    </div>
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $("#PageHeader").html("Inventory Print ");
+
+    })
+
+
+    function printDiv() {
+
+        var divToPrint = document.getElementById('PrintDiv');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><style> td:nth-child(2),td:nth-child(3){ text-align:center;} td{padding:8px;} th,td,table{border-collapse: collapse;}</style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+
+    }
+</script>

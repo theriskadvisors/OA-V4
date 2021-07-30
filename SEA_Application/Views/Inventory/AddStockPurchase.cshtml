@@ -1,0 +1,470 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    th, td {
+        padding: 5px;
+    }
+
+    .error {
+        color: red !important;
+    }
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/select2.min.css" rel="stylesheet" />
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        @*@using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()*@
+        <form method="post" id="ProductForm">
+
+            <div class="col-md-5">
+
+
+                @*<div class="form-group">
+                        <div class="col-md-12">
+
+                            <label class="control-label">Order No</label>
+
+                            <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label">Date</label>
+
+                        <input type="date" id="Date" name="Date" class="form-control" required />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label">Description</label>
+
+                        <textarea class="form-control" name="Note" id="Note" rows="5" ></textarea>
+
+
+                    </div>
+                </div>
+
+
+                <br />
+
+
+            </div><!--end of col 8-->
+
+
+            <div class="col-md-12">
+
+                <div class="col-md-12">
+
+                    <table width="100%" id="StockTable">
+
+                        <thead>
+                            <tr>
+                                <td> <label class="control-label">Select Item</label></td>
+                                <td> <label class="control-label"> Vendor </label> </td>
+                                @*<td> <label class="control-label">Purchase Unit Price </label> </td>*@
+                                <td> <label class="control-label"> Quantity </label> </td>
+                                @*<td> <label class="control-label"> Total </label> </td>*@
+                                <td> <label class="control-label"> Action</label></td>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="TableBody">
+
+                            <tr id="TableRow0">
+
+                                <td style="width:20%">
+
+                                    <select style="width:250px;" class="form-control drop InventoryDropDown" id="InventoryStocks0" name="InventoryStocks0" required></select>
+
+                                </td>
+                                <td style="width:20%">
+
+                                    <select style="width:250px;" class="form-control drop" id="Supplier0" name="Supplier0" required></select>
+
+                                </td>
+
+                                @*<td style="width:15%">
+
+                                    <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" />
+
+                                </td>*@
+
+
+                                <td style="width:15%">
+
+                                    <input class="form-control InventoryQuantity" id="StockQuantity0" value="1" min="0" type="number" name="StockQuantity0" />
+
+                                </td>
+
+                                @*<td style="width:15%">
+
+                                    <input readonly class="form-control InventoryTotal" id="Total0" value="0" min="0" type="number" name="Total0" />
+                                </td>*@
+
+                                <td style="width:15%">
+
+                                    <button type="button" style="background:#32CD32" id="" class="btn btn-sm btn-default " onclick="RawStock()"><i class="fa fa-plus" style="font-size:12px"></i></button>
+
+                                </td>
+
+                            </tr>
+
+
+                            @*<tr id="GrandTotalRow">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td align="center" valign="bottom"></td>
+                                <td><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="GrandTotal" name="GrandTotal" required></td>
+                                <td></td>
+
+                            </tr>*@
+
+                        </tbody>
+
+
+
+                    </table>
+
+                    <span id="Error" style="color:red"></span>
+
+
+                </div><!--End of column 12-->
+            </div>
+            <div class="col-md-8">
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+
+            @*}*@
+        </form>
+
+
+    </div>
+</div>
+
+<script>
+
+    count = 1;
+    row = [];
+    row[0] = 0;
+
+    var arr = [];
+    arr[0] = 0;
+    var HeadName = "";
+    var ExpenseList = "";
+
+    var RawAndExternalProductsList = "";
+    var AllSuppliersList = "";
+
+    $(document).ready(function () {
+
+        // document.getElementById('Date').valueAsDate = new Date();
+
+
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        //  document.getElementById('Date').valueAsDate = output;
+
+        $("#Date").val(today);
+
+
+        $(".drop").select2();
+
+        $("#PageHeader").html("Add Stocks");
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Inventory/GetAllInventoryItems",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#InventoryStocks0");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Product'));
+
+                    RawAndExternalProductsList = RawAndExternalProductsList + "<option value=''>Select Product</option>";
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+
+                        RawAndExternalProductsList = RawAndExternalProductsList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Inventory/GetAllSuppliers",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#Supplier0");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Supplier'));
+
+                    AllSuppliersList = AllSuppliersList + "<option value=''>Select Supplier</option>";
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+
+                        AllSuppliersList = AllSuppliersList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+
+
+
+        //$("#StockTable").on('keyup mouseup', ".InventoryUnitPrice", function () {
+                
+        //    var Id = $(this).attr('id');
+
+        //    let str = Id;
+        //    const myArr = str.split("Price");
+
+        //    Total(myArr[1]);
+
+        //})
+
+
+        $("#StockTable").on('change', ".InventoryDropDown", function () {
+
+
+             var Id = $(this).attr('id');
+
+           let str = Id;
+            const myArr = str.split("Stocks");
+
+
+            $("#StockQuantity" + myArr[1]).val(1);
+            
+
+        })
+
+        //  $("#ProductForm").validate();
+
+        $('#ProductForm').validate({ // initialize the plugin
+            rules: {
+                Name: {
+                    required: true,
+                },
+
+            },
+            submitHandler: function (form) {
+                debugger;
+                var NewStocksList =
+                {
+                    InventoryId: '',
+                   // UnitPrice: '',
+                    Quantity: '',
+                    SupplierId: '',
+
+                };
+
+                NewStocksList = [
+
+
+                ];
+
+                var selectedInventoryArary = [];
+                let map = {};
+                let result = false;
+
+                for (var i in arr) {
+
+                    var InventorStocks = "InventoryStocks" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    selectedInventoryArary.push(InventorStocks);
+                }
+
+                for (let i = 0; i < selectedInventoryArary.length; i++) {
+                    // check if object contains entry with this element as key
+                    if (map[selectedInventoryArary[i]]) {
+                        result = true;
+                        // terminate the loop
+                        break;
+                    }
+                    map[selectedInventoryArary[i]] = true;
+                }
+
+                if (result) {
+                    //  document.write('Array contains duplicate elements');
+
+                    // alert("duplicate values ");
+                    $("#Error").html("Inventroy Item cannot repeat");
+                    return false;
+                }
+
+
+                for (var i in arr) {
+
+                    if (arr[i] == null)
+                        continue;
+
+                    var obj = {};
+
+                    var InventorStocks = "InventoryStocks" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    //var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
+                    //PurchaseUnitPrice = document.getElementById(PurchaseUnitPrice).value;
+
+                    var Quantity = "StockQuantity" + arr[i];
+                    Quantity = document.getElementById(Quantity).value;
+
+                    var VendorId = "Supplier" + arr[i];
+                    VendorId = document.getElementById(VendorId).value;
+
+                    obj['InventoryId'] = InventorStocks;
+                   // obj['UnitPrice'] = PurchaseUnitPrice;
+                    obj['Quantity'] = Quantity;
+                    obj['VendorId'] = VendorId;
+
+                    NewStocksList.push(obj);
+
+                }//end of for loop
+
+                // console.log(NewStocksList);
+
+                var Date = $("#Date").val();
+                // var OrderNo = $("#OrderNo").val();
+                var Note = $("#Note").val();
+
+
+                $.ajax({
+                    type: "post",
+                    url: "/Inventory/SaveNewPurchasedStock",
+                    data: { 'Date': Date, 'Note': Note, 'NewStocksList': NewStocksList },
+                    datatype: "json",
+                    cache: false,
+                    success: function (data) {
+                        debugger
+                        if (data == "Created") {
+
+                            window.location.href = "/Inventory/Inventory";
+
+                        }
+
+                        else if (data == "Exception") {
+                            //Exception
+                            //alert("Exception");
+                        }
+                        else {
+
+                            $("#error").html(data);
+                            $("#SaveButton").prop("disabled", false);
+
+                        }
+
+                    }
+                })
+
+
+            }
+
+        })
+
+
+
+    })//end of document ready
+
+
+
+    function RawStock() {
+
+        $("#TableBody").append('<tr id="TableRow' + count + '"><td style="width:20%"> <select style ="width:250px;" class="form-control drop InventoryDropDown" id="InventoryStocks' + count + '" name="InventoryStocks' + count + '" required>' + RawAndExternalProductsList + '</select></td><td style="width:20%"><select style="width:250px;" class="form-control drop" id="Supplier' + count + '" name="Supplier' + count + '" required>' + AllSuppliersList + '</select>  </td> <td style="width:15%"> <input class="form-control InventoryQuantity" id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" /> </td> <td style="width:15%"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
+        $(".drop").select2();
+        row[count] = count;
+
+        //addAllLedger(count);
+        //AddBranch(count);
+        arr[count] = count;
+
+        count = count + 1;
+
+    }
+
+    function Remove(e) {
+
+
+
+        var RowToDelete = "TableRow" + e;
+        document.getElementById(RowToDelete).remove();
+
+
+        arr.splice($.inArray(e, arr), 1);
+
+     
+    }
+
+
+
+
+</script>
+
+<script src="~/Content/Toaster/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>

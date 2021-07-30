@@ -1,0 +1,141 @@
+﻿
+
+
+@{
+    ViewBag.Title = "ViewStockDeatils";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body p-4">
+
+       
+            <table class="table hover table-striped table-bordered" id="datatable">
+                <thead>
+
+                    <tr>
+                        <th>
+                            Order Id
+                        </th>
+                        <th>
+                            Finished Item
+                        </th>
+                        <th>
+                            Total Quantity
+                        </th>
+                      
+
+                        <th>
+                            Total Cost
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Action
+                        </th>
+
+                        @*<th></th>*@
+                    </tr>
+                </thead>
+
+                <tbody id="Stocks">
+                </tbody>
+
+
+            </table>
+        </div>
+
+
+    </div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Production Orders");
+
+        var table;
+        table = $('#datatable').dataTable({
+
+
+            buttons: [
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Reset</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = "";
+                    }
+                },
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Add Production</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = "/Inventory/AddProductProduction";
+                    }
+                },
+
+                {
+                    text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
+                }
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Inventory/ProductionOrdersList",
+            //pending Orders tab
+            data: {},
+            success: function (data) {
+                table.fnClearTable();
+                $.each(data, function (index) {
+
+
+                    var value = new Date(parseInt(data[index].OrderDate.replace(/(^.*\()|([+-].*$)/g, '')));
+                    var dat = value.getMonth() +
+                        1 +
+                        "/" +
+                        value.getDate() +
+                        "/" +
+                        value.getFullYear();
+
+                        table.fnAddData([data[index].OrderNo + "<input  type=hidden value=" + data[index].Id + ">", data[index].Name, data[index].OrderQuantity, data[index].TotalCost, dat, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'>" ]);
+                    
+
+                });
+                table.fnDraw();
+
+            }
+        });
+
+
+    })
+
+
+    function OrderDetails(id) {
+
+
+        window.location.href = "/Inventory/ProductionOrderDetails?id=" + id;
+
+        //alert(OrderId);
+    }
+
+</script>

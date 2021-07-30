@@ -1,0 +1,196 @@
+﻿@model SEA_Application.Models.Inventory
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="col-md-8">
+
+            <input type="hidden" id="InventoryType" name="InventoryType" value="@ViewBag.InventoryType" />
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Product No</label>
+
+                    @*@Html.EditorFor(model => model.ProductNo, new { htmlAttributes = new { @class = "form-control", @required = true } })*@
+
+
+                    <input type="number" min="1" name="ItemNo" value="@ViewBag.ItemNo" class="form-control" />
+
+                    @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Unit Name</label>
+
+                    @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Unit Sale Price </label>
+
+                    @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { @value = "0", type = "number", min = "0", @class = "form-control", @required = true } })*@
+
+
+                    <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="0" min="0" class="form-control"  />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Select Category</label>
+
+                    <select class="form-control" id="CategoryId" name="CategoryId" required></select>
+
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+
+                    <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
+
+
+                </div>
+            </div>
+
+
+            <div class="form-group" style="display:none">
+                <div class="col-md-12">
+
+                    <label class="control-label"> Select Type</label>
+
+
+                    <select readonly class="form-control" id="Type" name="Type">
+
+                        <option value="">Select One</option>
+                        <option value="RawProduct">Raw Product</option>
+                        <option value="ExternalProduct">External Product </option>
+                        <option value="ProductProduction">Product Production</option>
+                    </select>
+
+                    <br />
+
+                    <span style="color:red;">@ViewBag.Error</span>
+
+                </div>
+            </div>
+
+            @*<input type="hidden" name="UnitSalePrice" value="0" />*@
+            <input type="hidden" name="UnitPurchasePrice" value="0" />
+            <input type="hidden" name="QuantityOnHand" value="0" />
+
+
+
+
+            <div class="form-group">
+                <div class=" col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
+
+                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                        <i class="material-icons mr-2">cached</i>  Cancel
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+        }
+
+
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Add Product");
+
+
+        var InventoryType = $("#InventoryType").val();
+
+       // alert(InventoryType);
+
+        $('#Type').val(InventoryType);
+
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/InventoryCategories/InventoryCategoryList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#CategoryId");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Category'));
+
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+    })
+    function redirect() {
+
+        window.location.href = "/Inventory/Inventory";
+    }
+</script>
+
+

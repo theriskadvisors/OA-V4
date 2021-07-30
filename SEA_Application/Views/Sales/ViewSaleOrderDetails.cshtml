@@ -1,0 +1,243 @@
+﻿
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Cashier"))
+{
+    Layout = "~/Views/Shared/_CashierDashboardLayout.cshtml";
+
+}
+
+<style>
+
+    .description, .card-description, .footer-big p {
+        color: black !important;
+    }
+
+    th, td {
+        padding: 5px;
+    }
+
+    #bill1 {
+        margin-left: 30px;
+    }
+</style>
+
+<link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <input type="hidden" name="name" id="SaleOrderId" value="@ViewBag.SaleOrderID" />
+
+        <table class="table table-bordered table-striped table-hover">
+
+            <thead>
+
+                <tr>
+                    <th>Product Name</th>
+                    <th>Sale Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tbody">
+            </tbody>
+
+
+        </table>
+
+        <br />
+
+        <div id="ReceiptBlock" style="display:none">
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var SaleOrderId = $("#SaleOrderId").val();
+
+        $("#PageHeader").html("Order Details");
+
+        $.ajax({
+            type: "POST",
+            url: "/Sales/GetSaleOrderDetails",
+            data: { 'id': SaleOrderId },
+            success: function (data) {
+                //  table.fnClearTable();
+
+                var Status = data.Status;
+                //  var StudentNameAndRollNo =  data.StudentName;
+                var DateAndTime = data.DateTime;
+                var Total = data.Total;
+                var Discount = data.Discount;
+                var DiscountedPrice = data.DiscountedPrice;
+                //var OrderNo = data.OrderNo;
+                var OrderNo = "Order#" + data.OrderNo;
+                var SaleOrderId = data.Id;
+                var CustomerName = data.CustomerName;
+                var SaleDetailList = data.SaleOrderList;
+                //alert(SaleDetailList);
+
+
+                var value = new Date(parseInt(data.DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
+                var dat = value.getDate()
+                    +
+                    "-" +
+                    (value.getMonth() + 1) +
+                    "-" +
+                    value.getFullYear() + " " + value.getHours() + ":" + value.getMinutes() + ":" + value.getSeconds();
+
+
+                var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>";
+                var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
+
+                var TableRow = "";
+
+
+                $.each(SaleDetailList, function (index) {
+
+                    // alert(SaleDetailList[index].InventoryName);
+
+                    $("#tbody").append("<tr><td>" + SaleDetailList[index].InventoryName + "</td><td>" + SaleDetailList[index].UnitSalePrice + "</td><td>" + SaleDetailList[index].Quantity + "</td><td>" + SaleDetailList[index].Cost + "</td></tr>");
+
+                    //  table.fnAddData([data[index].OrderNo, dat, data[index].StudentName, data[index].Status, data[index].Discount, data[index].DiscountedPrice, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> "]);
+
+
+                    TableRow = TableRow + "<tr>  <td class='description'>" + SaleDetailList[index].InventoryName + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + SaleDetailList[index].Quantity + "</td> <td  class='price'>" + SaleDetailList[index].UnitSalePrice + "</td>  <td   class='Amount' >&nbsp; " + SaleDetailList[index].Cost + "</td></tr>";
+
+
+                });
+
+
+                $("#tbody").append("<tr><td></td><td></td><td>Total Price</td><td>" + Total + "</td></tr>");
+                $("#tbody").append("<tr><td></td><td></td><td>Discount</td><td>-" + Discount + "</td></tr>");
+                $("#tbody").append("<tr><td></td><td></td><td>Discounted Price</td><td>" + DiscountedPrice + "</td></tr>");
+
+                // SaleDetailList = null;
+                var keyCount = Object.keys(SaleDetailList).length;
+
+                if (keyCount > 0) {
+
+                    $("table").after("<button onclick='PrintReceipt()'  class='btn btn-primary btn-sm'> Receipt</button>");
+
+                }
+
+
+                $("#ReceiptBlock").append('<div id="bill" style="display:block"><div class="ticket" id="ticket" ><center>' +
+                    '<img style="width: 150px;" src="/Content/assets/assets/img/orignal.png" alt="Alternate Text" /></center>' +
+
+                    '<p class="centered">' +
+                    '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
+                    '<b> <span id="DateTime">' + dat + '</span></b> </p>' +
+                    ' <br><b>Cashier:</b><b> SeaAdmin</b> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Cashier Copy</b>' +
+                    ' </span>' +
+
+
+                    '<table>' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th class="description">Item</th>' +
+                    '<th class="quantity">Qty</th>' +
+                    '<th class="price">Price</th>' +
+                    '<th class="Amount">Total</th>' +
+
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
+                    '</table>' +
+                    '<p class="centered">' +
+                    '<b style="font-weight:bold">  Website: https://officersacademy.pk/ </b>' +
+                    ' <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>' +
+                    ' </p>' +
+
+                    '</div></div>');
+
+
+                $("#ReceiptBlock").append('<div id="bill1" style="display:block"><div class="ticket" id="ticket" ><center>' +
+                    '<img style="width: 150px;" src="/Content/assets/assets/img/orignal.png" alt="Alternate Text" /></center>' +
+
+                    '<p class="centered">' +
+                    '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
+                    '<b> <span id="DateTime">' + dat + '</span></b> </p>' +
+                    ' <br><b>Cashier:</b><b> SeaAdmin</b> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Customer Copy</b>' +
+                    ' </span>' +
+
+
+                    '<table>' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th class="description">Item</th>' +
+                    '<th class="quantity">Qty</th>' +
+                    '<th class="price">Price</th>' +
+                    '<th class="Amount">Total</th>' +
+
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
+                    '</table>' +
+                    '<p class="centered">' +
+                    '<b style="font-weight:bold">  Website: https://officersacademy.pk/ </b>' +
+                    ' <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>' +
+                    ' </p>' +
+
+                    '</div></div>');
+
+                //  table.fnDraw();
+
+            }//end of success method
+        });
+
+
+    })//end of document ready
+
+    function PrintReceipt() {
+
+        $("#ReceiptBlock").css('display', 'block');
+        // alert(SaleDetailList);
+
+        $("#ReceiptBlock").after("<br><button onclick='Receipt()' class='btn btn-sm btn-primary'>Print</button>");
+    }
+    function Receipt() {
+
+        var mywindow = window.open('', '', '');
+        mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
+        mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
+        mywindow.document.write('</head><body >');
+
+        mywindow.document.write(document.getElementById('bill').innerHTML);
+        mywindow.document.write(document.getElementById('bill1').innerHTML);
+
+        mywindow.document.write('</body></html>');
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+
+        //window.location.reload(true);
+        window.location.href = "/Sales/Index";
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>

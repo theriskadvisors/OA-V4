@@ -1,0 +1,499 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+<style>
+    th, td {
+        padding: 5px;
+    }
+
+    #SaleOrderTable tr, th, td {
+        border: 0px !important;
+    }
+
+    .error {
+        color: red !important;
+    }
+
+    #table1 td {
+        width: 50%;
+    }
+
+    
+</style>
+
+<link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <form method="post" id="SaleForm">
+
+            <div class="col-md-5">
+
+                <div class="col-md-12">
+
+                    <label class="control-label">Date</label>
+
+                    <input readonly type="date" id="Date" name="Date" class="form-control" required />
+
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label"> Customer Name</label>
+
+                        @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
+
+                        <input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
+
+                    </div>
+                </div>
+
+            </div><!--end of column 6-->
+
+
+            <br />
+
+            <div class="col-md-12" id="SaleOrderBlock">
+
+                <div class="col-md-12">
+
+
+                    <table width="100%" id="SaleOrderTable" style="border:0px solid">
+
+                        <thead>
+                            <tr>
+                                <td><label class="control-label">Select Item</label> </td>
+                                <td><label class="control-label">Unit Name</label> </td>
+                                <td><label class="control-label"> Unit Sale Price</label> </td>
+                                <td><label class="control-label">Aailable Quantity </label> </td>
+                                <td><label class="control-label">Quantity</label> </td>
+                                <td><label class="control-label"> Total</label> </td>
+
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr id="TableRow0">
+
+                                <td style="width:20%">
+                                    <select style="width:200px;" class="form-control drop ItemInventoryDropDown" id="InventoryStocks0" name="InventoryStocks0" required></select>
+                                </td>
+                                <td>
+                                    <input readonly class="form-control ItemSaleUnitPrice" id="UnitName0" type="text" name="UnitName0"  />
+
+                                </td>
+
+                                <td style="width:15%">
+                                    <input readonly class="form-control ItemSaleUnitPrice" id="SaleUnitPrice0" value="0" min="0" type="number" name="SaleUnitPrice0" required />
+                                </td>
+
+                                <td style="width:15%">
+
+                                    <input readonly class="form-control ItemAvailableQuantity" id="AvailableQuantity0" value="0" type="number" min="1" name="AvailableQuantity0" required />
+                                </td>
+
+                                <td style="width:15%">
+                                    <input class="form-control ItemSelectionQuantity" id="StockQuantity0" value="1" type="number" min="1" name="StockQuantity0" required />
+                                </td>
+
+
+                                <td style="width:15%">
+                                    <input type="number" id="TotalCost0" name="TotalCost0" class="form-control" readonly value="0" required />
+                                </td>
+
+                            </tr>
+
+
+                            <tr id="GrandTotalRow">
+
+                                <td style="width:20%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"> <label class="control-label"> Total</label></td>
+                                <td style="width:15%"><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="GrandTotal" name="GrandTotal" required></td>
+                                <td style="width:15%"></td>
+
+                            </tr>
+
+
+
+
+                        </tbody>
+
+                    </table>
+
+                    <span id="Error" style="color:red"></span>
+                    <span id="Success" style="color:green"></span>
+
+
+                </div>
+            </div><!--col 12-->
+
+
+
+            <div class="col-md-8">
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+                </div>
+
+            </div><!--end of col 8 -->
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    count = 1;
+    row = [];
+    row[0] = 0;
+
+    var arr = [];
+    arr[0] = 0;
+
+    // var FinishedProductsList = "";
+    var ExternalAndProductionList = "";
+
+    var ProductsObj =
+    {
+        ProductId: '',
+        UnitName: '',
+        Name: '',
+        UnitSalePrice: '',
+        QuantityOnHand: '',
+
+    };
+
+
+    ProductsObj = [
+    ];
+
+
+
+    $(document).ready(function () {
+
+
+        $("#PageHeader").html("Return Order");
+
+        //document.getElementById('Date').valueAsDate = new Date();
+
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        //  document.getElementById('Date').valueAsDate = output;
+
+        $("#Date").val(today);
+
+        $(".drop").select2();
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Sales/GetExternalAndProductionList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#InventoryStocks0");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Product'));
+                    debugger
+                    ExternalAndProductionList = ExternalAndProductionList + "<option value=''>Select Product</option>";
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        var obj = {};
+
+
+                        obj['ProductId'] = sch[i].Id;
+                        obj['Name'] = sch[i].Name;
+                        obj['UnitSalePrice'] = sch[i].UnitSalePrice;
+                        obj['QuantityOnHand'] = sch[i].QuantityOnHand;
+                        obj['UnitName'] = sch[i].UnitName;
+
+                        ProductsObj.push(obj);
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+                        ExternalAndProductionList = ExternalAndProductionList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+        $("#SaleOrderTable").on('change', ".ItemInventoryDropDown", function () {
+            debugger
+
+            var ChangedValue = $(this).val();
+
+            var Id = $(this).attr('id');
+
+            let str = Id;
+            const myArr = str.split("Stocks");
+
+            var UnitSalePriceOfProduct = 0;
+            var QuantityOnHand = 0;
+            var UnitName = "";
+
+            ProductsObj.forEach(function (arrayItem) {
+                if (arrayItem.ProductId == ChangedValue) {
+
+                    UnitSalePriceOfProduct = arrayItem.UnitSalePrice;
+                    QuantityOnHand = arrayItem.QuantityOnHand;
+                    UnitName = arrayItem.UnitName;
+                }
+
+            });
+
+            $("#SaleUnitPrice" + myArr[1] + "").val(UnitSalePriceOfProduct);
+            $("#UnitName" + myArr[1]).val(UnitName);
+            $("#AvailableQuantity" + myArr[1]).val(QuantityOnHand);
+
+            Total(myArr[1]);
+
+        })
+
+
+        $('input[type="number"]').on('keypress', function (event) {
+            var regex = new RegExp("^[a-zA-Z0-9]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+
+        $("#SaleOrderTable").on('keyup mouseup', ".ItemSelectionQuantity", function () {
+
+            var Id = $(this).attr('id');
+
+            let str = Id;
+            const myArr = str.split("Quantity");
+
+            Total(myArr[1]);
+        })
+
+        $('#SaleForm').validate({ // initialize the plugin
+            rules: {
+                Name: {
+                    required: true,
+                },
+                StockQuantity0: {
+                    required: true,
+                    min: 1,
+                }
+
+            },
+            submitHandler: function (form) {
+                debugger;
+
+                $("#Error").html("");
+                var SalesList =
+                {
+                    InventoryId: '',
+                    UnitSalePrice: '',
+                    Quantity: '',
+                    Cost: '',
+                };
+
+                SalesList = [
+
+
+                ];
+
+                var selectedInventoryArary = [];
+                let map = {};
+                let result = false;
+
+                for (var i in arr) {
+
+                    var InventorStocks = "InventoryStocks" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    selectedInventoryArary.push(InventorStocks);
+                }
+
+                for (let i = 0; i < selectedInventoryArary.length; i++) {
+                    // check if object contains entry with this element as key
+                    if (map[selectedInventoryArary[i]]) {
+                        result = true;
+                        // terminate the loop
+                        break;
+                    }
+                    map[selectedInventoryArary[i]] = true;
+                }
+
+                if (result) {
+
+                    $("#Error").html("Inventroy Raw Items cannot repeat");
+                    return false;
+                }
+                var TableRow = "";
+                for (var i in arr) {
+
+                    if (arr[i] == null)
+                        continue;
+
+                    var obj = {};
+
+                    var InventorStocks = "InventoryStocks" + arr[i];
+                    var IventoryStocksId = InventorStocks;
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    var SaleUnitPrice = "SaleUnitPrice" + arr[i];
+                    SaleUnitPrice = document.getElementById(SaleUnitPrice).value;
+
+                    var Quantity = "StockQuantity" + arr[i];
+                    Quantity = document.getElementById(Quantity).value;
+
+                    var Cost = "TotalCost" + arr[i];
+                    Cost = document.getElementById(Cost).value;
+
+                    obj['InventoryId'] = InventorStocks;
+                    obj['UnitSalePrice'] = SaleUnitPrice;
+                    obj['Quantity'] = Quantity;
+                    obj['Cost'] = Cost;
+
+                    var ProductName = $("#" + IventoryStocksId + " option:selected").text();
+
+
+                    TableRow = TableRow + "<tr>  <td class='description'>" + ProductName + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + Quantity + "</td> <td  class='price'>" + SaleUnitPrice + "</td>  <td   class='Amount' >&nbsp; " + Cost + "</td>";
+
+                    SalesList.push(obj);
+
+                }//end of for loop
+
+                var Date = $("#Date").val();
+
+               // var StudentId = $("#StudentID").val();
+                var CustomerName = $("#CustomerName").val();
+
+               
+                $.ajax({
+                    type: "post",
+                    url: "/Sales/SaveReturnSaleOrder",
+                    data: { 'Date': Date, 'CustomerName': CustomerName, 'GrandTotal': GrandTotal, 'SaleOrdersList': SalesList },
+                    datatype: "json",
+                    cache: false,
+                    success: function (data) {
+                        debugger
+                        if (data == "Returned") {
+
+                            window.location.href = "/Sales/Index";
+                        }
+
+                        else if (data == "Exception") {
+                        }
+                        else {
+
+                            $("#error").html(data);
+                            $("#SaveButton").prop("disabled", false);
+
+                        }
+
+                    }
+                })
+
+
+            }
+
+        })
+
+
+
+
+
+    })//end of document ready
+
+
+  
+    function Total(RowNumber) {
+
+        debugger
+
+        var GetUnitSalePrice = $("#SaleUnitPrice" + RowNumber).val();
+        var GetUnitQuantity = $("#StockQuantity" + RowNumber).val();
+
+
+        if (GetUnitSalePrice == "") {
+            GetUnitSalePrice = 0;
+        }
+        if (GetUnitQuantity == "") {
+
+            GetUnitQuantity = 0;
+
+        }
+
+        var Total = parseFloat(GetUnitSalePrice) * parseFloat(GetUnitQuantity);
+
+        $("#TotalCost" + RowNumber).val(Total);
+
+        GrandTotal();
+
+    }
+
+    function GrandTotal() {
+
+
+        var GrandTotal = 0;
+
+        for (var i in arr) {
+
+            if (arr[i] == null)
+                continue;
+
+
+            var TotalCost = $("#TotalCost" + arr[i]).val();
+            GrandTotal = parseFloat(TotalCost) + GrandTotal;
+
+        }
+
+        $("#GrandTotal").val(GrandTotal);
+
+       
+
+    }
+
+
+
+
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
