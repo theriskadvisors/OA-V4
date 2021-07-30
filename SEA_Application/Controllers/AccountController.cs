@@ -124,8 +124,6 @@ namespace SEA_Application.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-
-        
             //RecurringJob.AddOrUpdate(() => DoStuff(), Cron.Daily);
 
             var userID = User.Identity.GetUserId();
@@ -142,7 +140,7 @@ namespace SEA_Application.Controllers
             {
                 if (userID != null)
                 {
-                    SessionIDStaticController.GlobalSessionID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id.ToString();
+                        SessionIDStaticController.GlobalSessionID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id.ToString();
 
                     if (UserManager.IsInRole(userID, "Teacher"))
                     {
@@ -257,6 +255,12 @@ namespace SEA_Application.Controllers
                 return RedirectToAction("Dashboard", "Receptionist_Dashboard");
 
             }
+            else if (UserManager.IsInRole(userID, "Cashier"))
+            {
+                System.Web.HttpContext.Current.Session["CashierID"] = userID;
+                return RedirectToAction("Dashboard", "Cashier_Dashboard");
+
+            }
             else if (UserManager.IsInRole(userID, "Supervisor"))
             {
                 System.Web.HttpContext.Current.Session["SupervisorID"] = userID;
@@ -358,6 +362,13 @@ namespace SEA_Application.Controllers
                         return RedirectToAction("Dashboard", "Receptionist_Dashboard");
 
                     }
+                    else if (UserManager.IsInRole(userID, "Cashier"))
+                    {
+                        System.Web.HttpContext.Current.Session["CashierID"] = userID;
+                        return RedirectToAction("Dashboard", "Cashier_Dashboard");
+
+                    }
+
 
                     else if (UserManager.IsInRole(userID, "Admin"))
                     {
@@ -629,6 +640,13 @@ namespace SEA_Application.Controllers
                         return RedirectToAction("Dashboard", "Receptionist_Dashboard");
 
                     }
+                    else if (UserManager.IsInRole(userID, "Cashier"))
+                    {
+                        System.Web.HttpContext.Current.Session["CashierID"] = userID;
+                        return RedirectToAction("Dashboard", "Cashier_Dashboard");
+
+                    }
+
                     else if (UserManager.IsInRole(userID, "Supervisor"))
                     {
                         System.Web.HttpContext.Current.Session["SupervisorID"] = userID;
