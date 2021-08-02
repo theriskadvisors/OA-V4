@@ -71,12 +71,12 @@
                     }
                 },
 
-                //{
-                //    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Return Order</span>',
-                //    action: function (e, dt, button, config) {
-                //        window.location.href = '/Sales/ReturnSaleOrder';
-                //    }
-                //},
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Return Order</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '/Sales/ReturnSaleOrder';
+                    }
+                },
 
                 {
                     text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Summary</span>',
@@ -117,7 +117,7 @@
                 table.fnClearTable();
                 $.each(data, function (index) {
 
-                    var value = new Date(parseInt(data[index].Date.replace(/(^.*\()|([+-].*$)/g, '')));
+                    var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
                     var dat = value.getMonth() +
                         1 +
                         "/" +

@@ -408,11 +408,35 @@ namespace SEA_Application.Controllers
 
         public ActionResult StockOrderList()
         {
-            var StockOrdersList = db.StockOrders.Select(x => new { x.Id, x.PurchaseDate, x.Notes, x.OrderNo, x.Status }).ToList();
+            var StockOrdersList = db.StockOrders.Select(x => new { x.Id,  PurchaseDate = x.PurchaseDate, x.Notes, x.OrderNo, x.Status }).ToList();
 
-            return Json(StockOrdersList, JsonRequestBehavior.AllowGet);
+            List<StockOrderVM> StockOrderListForView = new List<StockOrderVM>();
+
+            foreach(var item in StockOrdersList)
+            {
+                StockOrderVM obj = new StockOrderVM();
+
+                obj.Id = item.Id;
+                obj.PurchaseDate = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.PurchaseDate.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
+                obj.OrderNo = item.OrderNo.Value;
+                obj.Notes = item.Notes;
+                obj.Status = item.Status;
+
+                StockOrderListForView.Add(obj);
+            }
+
+            return Json(StockOrderListForView, JsonRequestBehavior.AllowGet);
         }
+        public  class StockOrderVM
+        {
+            public int Id { get; set; }
+            public DateTime PurchaseDate{ get; set; }
 
+            public string Notes { set; get; }
+            public int OrderNo{ set; get; }
+            public string Status{ set; get; }
+
+        }
 
         public ActionResult ListProductionOrders()
         {

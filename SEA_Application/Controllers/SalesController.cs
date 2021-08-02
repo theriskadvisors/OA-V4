@@ -19,9 +19,35 @@ namespace SEA_Application.Controllers
         }
         public ActionResult AllSaleOrdersList()
         {
-            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount, x.Date, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
+            //TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(x.PurchaseDate.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local) 
+            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount,Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
 
-            return Json(SaleOrdersList, JsonRequestBehavior.AllowGet);
+            List<SaleOrderCustom> CustomModelList = new List<SaleOrderCustom>();
+
+
+            foreach(var item in SaleOrdersList)
+            {
+                SaleOrderCustom obj = new SaleOrderCustom();
+
+                obj.Id = item.Id;
+                obj.OrderNo = item.OrderNo.Value;
+                obj.Status = item.Status;
+                obj.CustomerName = item.CustomerName;
+                obj.Discount = item.Discount.Value;
+             
+                obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
+                obj.Discount = item.Discount.Value;
+                obj.Total = item.Total;
+                obj.DiscountedPrice = item.DiscountedPrice.Value;
+
+
+                CustomModelList.Add(obj);
+            }
+
+
+
+
+            return Json(CustomModelList, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ReturnSaleOrder()
@@ -42,20 +68,15 @@ namespace SEA_Application.Controllers
 
             return View();
         }
-        public ActionResult SaveReturnSaleOrder(string Date, string CustomerName, List<SaleOrdersList> SaleOrdersList)
+        public ActionResult SaveReturnSaleOrder(string Date,double GrandTotal, List<SaleOrdersList> SaleOrdersList)
         {
             int? MaxId = 1000;
-
-
             int? GetID = db.SaleOrders.Select(x => x.OrderNo).Max();
 
-
             if (GetID != null)
-
             {
                 MaxId = GetID + 1;
             }
-
 
             var Datetime = GetLocalDateTime.GetLocalDateTimeFunction();
             var Time = Datetime.Value.TimeOfDay;
@@ -65,10 +86,10 @@ namespace SEA_Application.Controllers
             saleorder.Date = saleorder.Date.Value.Add(Time);
             saleorder.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
             saleorder.StudentId = null;
-            saleorder.CustomerName = CustomerName;
-            saleorder.Total = SaleOrdersList.FirstOrDefault().Cost;
+            saleorder.CustomerName = null;
+            saleorder.Total = -GrandTotal;
             saleorder.Discount = 0;
-            saleorder.DiscountedPrice = 0;
+            saleorder.DiscountedPrice = -GrandTotal;
             saleorder.OrderNo = MaxId;
             saleorder.Status = "Returned";
 
@@ -83,7 +104,7 @@ namespace SEA_Application.Controllers
                 saleDetail.InventoryId = item.InventoryId;
                 saleDetail.Quantity = item.Quantity;
                 saleDetail.UnitSalePrice = item.UnitSalePrice;
-                saleDetail.TotalPrice = item.Cost;
+                saleDetail.TotalPrice = -item.Cost;
                 saleDetail.SaleOrderId = saleorder.Id;
 
                 db.SaleDetails.Add(saleDetail);
@@ -93,11 +114,11 @@ namespace SEA_Application.Controllers
                 InventoryToUpdate.QuantityOnHand = InventoryToUpdate.QuantityOnHand + item.Quantity;
 
 
-                var TotalCost = saleDetail.Quantity * InventoryToUpdate.AverageCost;
+             //   var TotalCost = saleDetail.Quantity * InventoryToUpdate.AverageCost;
 
                 ////update average cost and total cost 
-                InventoryToUpdate.TotalCost = InventoryToUpdate.TotalCost + TotalCost;
-                InventoryToUpdate.AverageCost = Math.Round((InventoryToUpdate.TotalCost.Value / InventoryToUpdate.QuantityOnHand.Value), 2);
+               // InventoryToUpdate.TotalCost = InventoryToUpdate.TotalCost + TotalCost;
+                //InventoryToUpdate.AverageCost = Math.Round((InventoryToUpdate.TotalCost.Value / InventoryToUpdate.QuantityOnHand.Value), 2);
 
                 db.SaveChanges();
 
@@ -137,7 +158,7 @@ namespace SEA_Application.Controllers
                 obj.Discount = item.Discount.Value;
                 obj.Total = item.Total.Value;
                 obj.DiscountedPrice = item.DiscountedPrice.Value;
-                obj.DateTime = item.Date.Value;
+                obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
 
                 SalesList.Add(obj);
             }
@@ -236,7 +257,6 @@ namespace SEA_Application.Controllers
 
                 var InventoryToUpdate = db.Inventories.Where(x => x.Id == item.InventoryId).FirstOrDefault();
                 InventoryToUpdate.QuantityOnHand = InventoryToUpdate.QuantityOnHand - item.Quantity;
-
 
 
                 //var TotalCost = saleDetail.Quantity * InventoryToUpdate.AverageCost;
