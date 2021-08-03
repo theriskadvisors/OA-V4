@@ -97,7 +97,7 @@ namespace SEA_Application.Controllers
         public ActionResult PrintAllInventoryByCategory()
         {
 
-            var ItemsByCategory = db.Inventories.GroupBy(x => x.InventoryCategory.Name).OrderBy(x=>x.Key).ToList();
+            var ItemsByCategory = db.Inventories.GroupBy(x => x.InventoryCategory.Name).OrderBy(x => x.Key).ToList();
 
             //foreach (var group in ItemsByCategory)
             //{
@@ -408,11 +408,11 @@ namespace SEA_Application.Controllers
 
         public ActionResult StockOrderList()
         {
-            var StockOrdersList = db.StockOrders.Select(x => new { x.Id,  PurchaseDate = x.PurchaseDate, x.Notes, x.OrderNo, x.Status }).ToList();
+            var StockOrdersList = db.StockOrders.Select(x => new { x.Id, PurchaseDate = x.PurchaseDate, x.Notes, x.OrderNo, x.Status }).ToList();
 
             List<StockOrderVM> StockOrderListForView = new List<StockOrderVM>();
 
-            foreach(var item in StockOrdersList)
+            foreach (var item in StockOrdersList)
             {
                 StockOrderVM obj = new StockOrderVM();
 
@@ -427,14 +427,14 @@ namespace SEA_Application.Controllers
 
             return Json(StockOrderListForView, JsonRequestBehavior.AllowGet);
         }
-        public  class StockOrderVM
+        public class StockOrderVM
         {
             public int Id { get; set; }
-            public DateTime PurchaseDate{ get; set; }
+            public DateTime PurchaseDate { get; set; }
 
             public string Notes { set; get; }
-            public int OrderNo{ set; get; }
-            public string Status{ set; get; }
+            public int OrderNo { set; get; }
+            public string Status { set; get; }
 
         }
 
@@ -576,9 +576,11 @@ namespace SEA_Application.Controllers
 
             // var AllProductionProduction = db.ProductProductions.Where(x => x.InventoryId == InventoryId).Select(x => new { x.ProductOrder.Id, x.StockQuantity, x.ProductOrder.CreationDate, Transcataions = "Production Order", x.ProductOrder.OrderDate, InventoryName = x.Inventory.Name, PurchasePrice = 0, x.Inventory.AverageCost }).ToList();
 
-            var AllSaleOrdersPaid = db.SaleDetails.Where(x => x.InventoryId == InventoryId && x.SaleOrder.Status == "Paid").Select(x => new { x.SaleOrder.Id, x.Quantity, x.SaleOrder.Date, Transcataions = "Sale Order", InventoryName = x.Inventory.Name, PurchasePrice = 0, x.Inventory.AverageCost }).ToList();
+            var AllSaleOrdersPaid = db.SaleDetails.Where(x => x.InventoryId == InventoryId && x.SaleOrder.Status == "Paid").Select(x => new { x.SaleOrder.Id, x.Quantity, x.SaleOrder.Date, Transcataions = "Sale Order (Paid)", InventoryName = x.Inventory.Name, PurchasePrice = 0, x.Inventory.AverageCost }).ToList();
 
             //  var AllSaleOrdersReturn = db.SaleDetails.Where(x => x.InventoryId == InventoryId && x.SaleOrder.Status == "Returned").Select(x => new { x.SaleOrder.Id, x.Quantity, x.SaleOrder.Date, Transcataions = "Sale Order (Returned)", InventoryName = x.Inventory.Name, PurchasePrice = 0, x.Inventory.AverageCost }).ToList();
+
+            var AllSaleOrdersReturned = db.SaleDetails.Where(x => x.InventoryId == InventoryId && x.SaleOrder.Status == "Returned").Select(x => new { x.SaleOrder.Id, x.Quantity, x.SaleOrder.Date, Transcataions = "Sale Order (Returned)", InventoryName = x.Inventory.Name, PurchasePrice = 0, x.Inventory.AverageCost }).ToList();
 
             List<InventoryDetails> InventoryDetailList = new List<InventoryDetails>();
 
@@ -628,6 +630,26 @@ namespace SEA_Application.Controllers
 
 
 
+            foreach (var Item in AllSaleOrdersReturned)
+            {
+
+                InventoryDetails inventoryDetails = new InventoryDetails();
+                inventoryDetails.Id = Item.Id;
+                inventoryDetails.CreationDate = Item.Date.Value;
+                inventoryDetails.InventoryName = Item.InventoryName;
+                inventoryDetails.PurchasePrice = 0;
+                inventoryDetails.QuantityOnHand = Item.Quantity.Value;
+                inventoryDetails.SupplierName = "";
+                inventoryDetails.TranscationName = Item.Transcataions;
+                inventoryDetails.Balance = 0;
+
+                // inventoryDetails.TotalAmountBalance = inventoryDetails.QuantityOnHand * Item.AverageCost.Value;
+                //inventoryDetails.AverageCost = inventoryDetails.TotalAmountBalance / Item.Quantity.Value;
+
+                InventoryDetailList.Add(inventoryDetails);
+
+            }
+
             var InventoryDetails = InventoryDetailList.OrderBy(x => x.CreationDate).ToList();
 
             var RememberQuantity = 0;
@@ -654,11 +676,11 @@ namespace SEA_Application.Controllers
 
 
 
-                else  //(item.TranscationName == "Sale Order")
+                else  //(item.TranscationName == "Sale Order") //Paid or Returned Both
                 {
                     //item.AverageCost = Math.Round((RememberTotalCost / RememberQuantity), 2);
 
-                    item.Balance = item.QuantityOnHand + RememberQuantity; // In case Quantity in minus(-)
+                    item.Balance = item.QuantityOnHand + RememberQuantity; // Both Quantity in minus(-) and +
                     RememberQuantity = item.Balance;
 
                     // item.Amount = item.AverageCost * item.QuantityOnHand;
@@ -681,6 +703,49 @@ namespace SEA_Application.Controllers
 
             return View();
         }
+
+        public ActionResult EditStockPurchase(int id)
+        {
+
+            ViewBag.StockOrderId = id;
+
+
+
+            return View();
+        }
+        public ActionResult ListStockOrderForEdit(int StockOrderId)
+        {
+
+            var StockOrder = db.StockOrders.Where(x => x.Id == StockOrderId).FirstOrDefault();
+
+            var Description = StockOrder.Notes;
+            var PurchaseDate = StockOrder.PurchaseDate;
+
+            var StockPurchaseList = db.StockPurchases.Where(x=>x.StockOrderId==StockOrderId).ToList();
+
+            List<NewStocksList> StockList = new List<NewStocksList>();
+
+
+            foreach(var item in StockPurchaseList)
+            {
+                NewStocksList stock = new NewStocksList();
+
+                stock.InventoryId = item.InventoryId;
+                stock.VendorId = item.VendorId;
+                stock.Quantity = item.Quantity.Value;
+                StockList.Add(stock);
+
+            }
+
+            return Json(new { Description = Description, PurchaseDate = PurchaseDate, StockList = StockList }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateStockPurchase()
+        {
+
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetPurchasedOrderDetails(int id)
         {
             var PurchasedStockList = db.StockPurchases.Where(x => x.StockOrderId == id).ToList();

@@ -143,16 +143,17 @@
                         table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='PurchaseOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
 
                     }
-                    else if (data[index].TranscationName == "Sale Order") {
+                    else if (data[index].TranscationName == "Sale Order (Paid)") {
 
 
                         table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;color:red !important">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='SaleOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
 
                     }
 
+                    else if (data[index].TranscationName == "Sale Order (Returned)") {
+                        table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='SaleOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
 
-
-
+                    }
                     else {
                         table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, data[index].PurchasePrice, '<span style="font-weight:bold !important;">' + data[index].QuantityOnHand + '</span>', data[index].Balance, data[index].AverageCost, data[index].Amount, data[index].TotalAmountBalance, "<input  onclick='PurchaseOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
 
@@ -162,7 +163,7 @@
                 });
 
 
-                table.fnAddData([" ", " ",  " ", " ", TotalRemainingQuantity,  " ", ""]);
+                table.fnAddData([" ", " ", " ", " ", TotalRemainingQuantity, " ", ""]);
 
 
                 table.fnDraw();

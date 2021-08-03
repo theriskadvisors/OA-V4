@@ -69,7 +69,7 @@ namespace SEA_Application.Controllers
             return View();
         }
         public ActionResult SaveReturnSaleOrder(string Date,double GrandTotal, List<SaleOrdersList> SaleOrdersList)
-        {
+            {
             int? MaxId = 1000;
             int? GetID = db.SaleOrders.Select(x => x.OrderNo).Max();
 
