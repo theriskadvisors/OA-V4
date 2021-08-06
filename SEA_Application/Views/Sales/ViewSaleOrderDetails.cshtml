@@ -84,6 +84,7 @@ else if (User.IsInRole("Cashier"))
             data: { 'id': SaleOrderId },
             success: function (data) {
                 //  table.fnClearTable();
+                debugger
 
                 var Status = data.Status;
                 //  var StudentNameAndRollNo =  data.StudentName;
@@ -115,7 +116,7 @@ else if (User.IsInRole("Cashier"))
 
 
                 $.each(SaleDetailList, function (index) {
-
+                    debugger
                     // alert(SaleDetailList[index].InventoryName);
 
                     $("#tbody").append("<tr><td>" + SaleDetailList[index].InventoryName + "</td><td>" + SaleDetailList[index].UnitSalePrice + "</td><td>" + SaleDetailList[index].Quantity + "</td><td>" + SaleDetailList[index].Cost + "</td></tr>");
@@ -149,8 +150,8 @@ else if (User.IsInRole("Cashier"))
                     '<p class="centered">' +
                     '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
                     '<b> <span id="DateTime">' + dat + '</span></b> </p>' +
-                    ' <br><b>Cashier:</b><b> SeaAdmin</b> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                    ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Cashier Copy</b>' +
+                    ' <br><b>Cashier:</b><b>Bismarck </b> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
                     ' </span>' +
 
 
@@ -174,35 +175,7 @@ else if (User.IsInRole("Cashier"))
                     '</div></div>');
 
 
-                $("#ReceiptBlock").append('<div id="bill1" style="display:block"><div class="ticket" id="ticket" ><center>' +
-                    '<img style="width: 150px;" src="/Content/assets/assets/img/orignal.png" alt="Alternate Text" /></center>' +
-
-                    '<p class="centered">' +
-                    '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
-                    '<b> <span id="DateTime">' + dat + '</span></b> </p>' +
-                    ' <br><b>Cashier:</b><b> SeaAdmin</b> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                    ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Customer Copy</b>' +
-                    ' </span>' +
-
-
-                    '<table>' +
-                    '<thead>' +
-                    '<tr>' +
-                    '<th class="description">Item</th>' +
-                    '<th class="quantity">Qty</th>' +
-                    '<th class="price">Price</th>' +
-                    '<th class="Amount">Total</th>' +
-
-                    '</tr>' +
-                    '</thead>' +
-                    '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
-                    '</table>' +
-                    '<p class="centered">' +
-                    '<b style="font-weight:bold">  Website: https://officersacademy.pk/ </b>' +
-                    ' <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>' +
-                    ' </p>' +
-
-                    '</div></div>');
+           
 
                 //  table.fnDraw();
 
@@ -211,7 +184,6 @@ else if (User.IsInRole("Cashier"))
 
 
     })//end of document ready
-
     function PrintReceipt() {
 
         $("#ReceiptBlock").css('display', 'block');
@@ -227,7 +199,7 @@ else if (User.IsInRole("Cashier"))
         mywindow.document.write('</head><body >');
 
         mywindow.document.write(document.getElementById('bill').innerHTML);
-        mywindow.document.write(document.getElementById('bill1').innerHTML);
+        //mywindow.document.write(document.getElementById('bill1').innerHTML);
 
         mywindow.document.write('</body></html>');
         mywindow.document.close(); // necessary for IE >= 10
