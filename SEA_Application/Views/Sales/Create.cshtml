@@ -573,7 +573,7 @@
                             var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
 
                             $("#ReceiptBlock").append('<div id="bill" style="display:block"><div class="ticket" id="ticket" ><center>' +
-                                '<img style="width: 150px;" src="/Content/assets/assets/img/orignal.png"  alt="Alternate Text" /></center>' +
+                                '<img style="width: 150px;" src="/Content/assets/assets/img/bis.png"  alt="Alternate Text" /></center>' +
 
                                 '<p class="centered">' +
                                 '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
@@ -604,7 +604,11 @@
 
 
 
-                            Receipt();
+                            setTimeout(function () {
+                                // Do something after 1 second 
+
+                                Receipt();
+                            }, 1000);
 
                         }
 
