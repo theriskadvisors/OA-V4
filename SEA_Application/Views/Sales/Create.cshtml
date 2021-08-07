@@ -47,14 +47,14 @@
 
                 @*<div class="form-group">
 
-                        <div class="col-md-12">
+                <div class="col-md-12">
 
-                            <label class="control-label">Order No</label>
+                    <label class="control-label">Order No</label>
 
-                            <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+                    <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
 
-                        </div>
-                    </div>*@
+                </div>
+            </div>*@
                 <div class="col-md-12">
 
                     <label class="control-label">Date</label>
@@ -63,17 +63,16 @@
 
                 </div>
                 <!--<br />
-                <div class="form-group">
-                    <div class="col-md-12">
+        <div class="form-group">
+            <div class="col-md-12">
 
-                        <label class="control-label"> Customer Name</label>-->
+                <label class="control-label"> Customer Name</label>-->
+                @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
 
-                        @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
+                <!--<input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
 
-                        <!--<input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
-
-                    </div>
-                </div>-->
+            </div>
+        </div>-->
 
             </div><!--end of column 6-->
 
@@ -116,12 +115,12 @@
 
                                 </td>
                                 <td style="width:15%">
-                                    <input  tabindex="2"   class="form-control ItemSaleUnitPrice" id="SaleUnitPrice0" value="0" min="0" type="number" name="SaleUnitPrice0" required />
+                                    <input tabindex="2" class="form-control ItemSaleUnitPrice" id="SaleUnitPrice0" value="0" min="0" type="number" name="SaleUnitPrice0" required />
                                 </td>
 
                                 <td style="width:15%">
 
-                                    <input readonly class="form-control ItemAvailableQuantity" id="AvailableQuantity0" value="0" type="number"  name="AvailableQuantity0" required />
+                                    <input readonly class="form-control ItemAvailableQuantity" id="AvailableQuantity0" value="0" type="number" name="AvailableQuantity0" required />
                                 </td>
 
                                 <td style="width:15%">
@@ -197,7 +196,7 @@
                         <button tabindex="99" type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
 
 
-                        <button tabindex="100" type="button" id="btnCancel"  class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                        <button tabindex="100" type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                             <i class="material-icons mr-2">cached</i>  Cancel
                         </button>
 
@@ -207,13 +206,28 @@
             </div><!--end of col 8 -->
 
             <br />
-            <div id="ReceiptBlock">
+            <div id="ReceiptBlock" style="display:none">
+
+                <div id="bill" style="display:none">
+                    <div class="ticket" id="ticket">
+                        <center>
+
+                            <img style="width: 150px;" src="/Content/assets/assets/img/Bis.png" alt="Alternate Text" />
+                        </center>
+
+                        <div id="ReceiptInner">
+
+                        </div>
+
+
+
+                    </div>
+                </div>
 
 
 
 
             </div>
-
 
 
         </form>
@@ -572,8 +586,8 @@
                             var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>";
                             var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
 
-                            $("#ReceiptBlock").append('<div id="bill" style="display:block"><div class="ticket" id="ticket" ><center>' +
-                                '<img style="width: 150px;" src="/Content/assets/assets/img/bis.png"  alt="Alternate Text" /></center>' +
+                            $("#ReceiptInner").append('' +
+                                '' +
 
                                 '<p class="centered">' +
                                 '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
@@ -600,15 +614,18 @@
                                 ' <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>' +
                                 ' </p>' +
 
-                                '</div></div>');
+                                '</div>');
 
 
 
-                            setTimeout(function () {
-                                // Do something after 1 second 
+                            //setTimeout(function () {
+                            //    // Do something after 1 second 
 
-                                Receipt();
-                            }, 1000);
+                            //}, 1000);
+
+                            $("#bill").css('display', 'block');
+
+                            Receipt();
 
                         }
 
