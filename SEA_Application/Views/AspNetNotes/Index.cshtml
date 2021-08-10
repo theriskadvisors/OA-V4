@@ -28,7 +28,7 @@ else if (User.IsInRole("Receptionist"))
     .page-header.navbar.navbar-fixed-top {
         padding-right: 0px;
     }
-    
+
 
     .ButtonStyle {
         color: #141437 !important;
@@ -139,11 +139,15 @@ else if (User.IsInRole("Receptionist"))
 
                                         <tr>
                                             <th>
+                                                Code No
+                                            </th>
+                                            <th>
                                                 @Html.DisplayNameFor(model => model.Title)
                                             </th>
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Description)
                                             </th>
+                                            <th>Is Active</th>
                                             <th>
                                                 Course Type
                                             </th>
@@ -171,48 +175,73 @@ else if (User.IsInRole("Receptionist"))
 
                                         @foreach (var item in Model)
                                         {
-                                            <tr id="@item.Id">
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Title)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Description)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CourseType)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.NotesType)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.GrandTotal)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.OAPrice)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CreationDate)
-                                                </td>
-                                                <td>
-                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                                        @Html.ActionLink("Details", "Details", new { id = item.Id })*@
-                                                </td>
-                                            </tr>
+                                        <tr id="@item.Id">
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NotesNo)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Title)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Description)
+                                            </td>
+
+
+                                            @if (item.IsVisible == false)
+                                            {
+
+                                                <td> <span>No</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td> <span>Yes</span></td>
+
+
+                                            }
+
+
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CourseType)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NotesType)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.GrandTotal)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.OAPrice)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CreationDate)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id })*@
+                                            </td>
+                                        </tr>
                                         }
                                     </tbody>
 
                                     <tfoot>
                                         <tr>
                                             <th>
+                                                Code No
+                                            </th>
+                                            <th>
                                                 Title
                                             </th>
                                             <th>
                                                 Description
                                             </th>
+                                            <th>Is Active</th>
+
                                             <th>
                                                 Course Type
                                             </th>
@@ -491,13 +520,13 @@ else if (User.IsInRole("Receptionist"))
 
                         </div>
 
-                        <table  style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
+                        <table style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
 
 
                             <thead>
 
                                 <tr>
-                                    <th >Approved No </th>
+                                    <th>Approved No </th>
                                     <th>Student</th>
                                     <th>Class </th>
                                     <th>Status </th>
@@ -639,7 +668,7 @@ else if (User.IsInRole("Receptionist"))
             var divToPrint = document.getElementById('DivToPrint');
             var newWin = window.open('', 'Print-Window');
             newWin.document.open();
-            newWin.document.write('<html><head><style>.detailscolumn{ display:none; }</style></head><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
+            newWin.document.write('<html><style>td,th{padding:10px;}</style><head><style>.detailscolumn{ display:none; }</style></head><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
             newWin.document.close();
             setTimeout(function () { newWin.close(); }, 10);
 
@@ -960,7 +989,7 @@ else if (User.IsInRole("Receptionist"))
             success: function (data) {
                 table2.fnClearTable();
 
-                
+
                 //  alert("Approved Order Tab");
                 $.each(data, function (index) {
                     //var tablerow = '<tr>'
@@ -986,6 +1015,8 @@ else if (User.IsInRole("Receptionist"))
                     //alert(data[index].Discription);
                     // $('#RecentOrderTableBody').append(TableRow);
                 });
+
+
                 table2.fnDraw();
 
             }
@@ -1162,7 +1193,7 @@ else if (User.IsInRole("Receptionist"))
 
         var mywindow = window.open('', '', '');
         mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
-        mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
+        mywindow.document.write('<style> td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
         mywindow.document.write('</head><body >');
         // mywindow.document.write('<h1>' + document.title + '</h1>');
         mywindow.document.write(document.getElementById('bill').innerHTML);
@@ -1350,6 +1381,19 @@ else if (User.IsInRole("Receptionist"))
                 // $("#SaleReport").append("<tr> <td style='display:none'></td><td>Grand Total</td> <td></td>  <td></td> <td>" + GrandTotalPhotoCopier + "</td><td>" + GrandTotalOA + "</td><td>" + GrandTotal + "</td><td></td><td>" + GrandTotalDiscounted + "</td><td>" + GrandTotalDiscountedOAPrice + "</td></tr>")
                 $("#SaleReport").append("<tr> <td >Grand Total</td><td></td> <td></td>  <td></td> <td>" + GrandTotalPhotoCopier + "</td><td>" + GrandTotalOA + "</td><td>" + GrandTotal + "</td><td>-" + TotalDiscount + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
 
+
+
+                //var AllTds = $("#SaleReport td:nth-child(5),td:nth-child(6),td:nth-child(7),td:nth-child(8),td:nth-child(9)");
+
+                //for (var i = 0; i < AllTds.length; i++) {
+
+                //    var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
+
+                //    AllTds[i].innerHTML = CommaSeparatedValue;
+                //}
+
+
+
             }
         })
     }
@@ -1386,5 +1430,10 @@ else if (User.IsInRole("Receptionist"))
         })
 
     }
+
+    //function numberWithCommas(x) {
+    //    debugger
+    //    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //}
 
 </script>

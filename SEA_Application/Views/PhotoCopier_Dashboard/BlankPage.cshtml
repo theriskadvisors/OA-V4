@@ -155,7 +155,11 @@ else
                         <thead>
                             <tr>
                                 <th>
-                                    Notes
+                                    Code No
+                                </th>
+                                
+                                <th>
+                                    Notes 
                                 </th>
 
                                 <th>
@@ -194,6 +198,8 @@ else
 <script>
 
     $(document).ready(function () {
+
+        localStorage.ElementToActiveAfterPageLoad = "PhotoCopierHome";
 
         //var table2 = $('#datatable2').dataTable({
         //    buttons: [
@@ -237,13 +243,33 @@ else
                 $.each(list, function (index) {
 
                     //  table2.fnAddData([data[index].NotesName, data[index].PhotoCopierUnitPrice, data[index].Quantity, data[index].PhotoCopierTotal]);
+                    if (list[index].CodeNo == null) {
 
-                    $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
+                        $("#ApprovedOrdersTableBody").append("<tr><td> </td><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
+
+                    }
+                    else {
+                        $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].CodeNo + "</td><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
+
+                    }
+
+                    var AllTds = $("td:nth-child(3),td:nth-child(4),td:nth-child(5)");
+
+                    for (var i = 0; i < AllTds.length; i++) {
+
+                        var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
+
+                        AllTds[i].innerHTML = CommaSeparatedValue;
+                    }
+
+
+
+
 
                 });
 
 
-                $("#ApprovedOrdersTableBody").append("<tr><td></td><td></td><td>Grand Total </td><td>" + GrandTotal + "</td></tr>");
+                $("#ApprovedOrdersTableBody").append("<tr><td></td><td></td><td></td><td>Grand Total </td><td>" + GrandTotal + "</td></tr>");
 
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
@@ -291,7 +317,7 @@ else
             var divToPrint = document.getElementById('DivToPrint');
             var newWin = window.open('', 'Print-Window');
             newWin.document.open();
-            newWin.document.write('<html><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
+            newWin.document.write('<html><style>td,th{padding:10px}</style><body onload="window.print()">' + divToPrint.outerHTML + '</body></html>');
             newWin.document.close();
             setTimeout(function () { newWin.close(); }, 10);
 
@@ -428,16 +454,33 @@ else
 
 
                     //  table2.fnAddData([data[index].NotesName, data[index].PhotoCopierUnitPrice, data[index].Quantity, data[index].PhotoCopierTotal]);
+                    if (list[index].CodeNo == null) {
+                        $("#ApprovedOrdersTableBody").append("<tr><td></td><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
 
-                    $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
+                    }
+                    else {
+                        $("#ApprovedOrdersTableBody").append("<tr><td>" + list[index].CodeNo + "</td><td>" + list[index].NotesName + "</td><td>" + list[index].PhotoCopierUnitPrice + "</td><td>" + list[index].Quantity + "</td><td>" + list[index].PhotoCopierTotal + "</td></tr>");
+
+                    }
+
 
                 });
 
-                $("#ApprovedOrdersTableBody").append("<tr><td></td><td></td><td>Grand Total </td><td>" + GrandTotal + "</td></tr>");
+                $("#ApprovedOrdersTableBody").append("<tr><td></td><td></td><td></td><td>Grand Total </td><td>" + GrandTotal + "</td></tr>");
 
                 $("#PCGrandTotal").html("");
                 $("#PCGrandTotal").html(GrandTotal);
                 //  table2.fnDraw();
+
+                var AllTds = $("td:nth-child(3),td:nth-child(4),td:nth-child(5)");
+
+                for (var i = 0; i < AllTds.length; i++) {
+
+                    var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
+
+                    AllTds[i].innerHTML = CommaSeparatedValue;
+                }
+
 
             }
 
@@ -449,6 +492,11 @@ else
 
 
 
+    }
+
+    function numberWithCommas(x) {
+        debugger
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
 </script>

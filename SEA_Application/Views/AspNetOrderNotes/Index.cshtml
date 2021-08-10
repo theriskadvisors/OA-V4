@@ -75,11 +75,14 @@
                         <div class="box-title"></div>
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table class="table" id="datatable1">
+                                <table class="table hover table-striped table-bordered" id="datatable1">
                                     <thead>
                                         <tr>
                                             <th>
                                                 ID
+                                            </th>
+                                            <th>
+                                                Code No
                                             </th>
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Title)
@@ -108,39 +111,43 @@
 
                                         @foreach (var item in Model)
                                         {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Id)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Title)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Description)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CourseType)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.NotesType)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.GrandTotal)
-                                                </td>
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NotesNo)
+                                            </td>
 
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
-                                                </td>
-                                                <td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Title)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Description)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CourseType)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NotesType)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.GrandTotal)
+                                            </td>
 
-                                                    @*<a href="/AspNetOrderNotes/Details/@item.EncryptedID">  <button style="color:white !important" type="button" class="btn btn-success" id="@item.Id">Add to Cart</button> </a>*@
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
+                                            </td>
+                                            <td>
 
-                                                    <button onclick="PlaceNotesOrder('@item.EncryptedID')" style="color:white !important" class="btn btn-success">Add to Cart</button>
+                                                @*<a href="/AspNetOrderNotes/Details/@item.EncryptedID">  <button style="color:white !important" type="button" class="btn btn-success" id="@item.Id">Add to Cart</button> </a>*@
+
+                                                <button onclick="PlaceNotesOrder('@item.EncryptedID')" style="color:white !important" class="btn btn-success">Add to Cart</button>
 
 
 
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
                                         }
                                     </tbody>
 
@@ -157,7 +164,7 @@
                         <div class="box-title"></div>
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table class="table" id="datatable2">
+                                <table class="table hover " id="datatable2">
                                     <thead>
                                         <tr>
 
@@ -211,11 +218,14 @@
                         <div class="box-title"></div>
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table class="table" id="datatable3">
+                                <table class="table hover table-striped table-bordered" id="datatable3">
                                     <thead>
                                         <tr>
                                             <th>
                                                 Order Id
+                                            </th>
+                                            <th>
+                                                Code No
                                             </th>
                                             <th>
                                                 Title
@@ -403,7 +413,7 @@
                     //    var TableRow = "<tr><td>" + data[index].Title + "</td> <td>" + data[index].Discription + "</td>  <td>" + data[index].CourseType + "</td> <td>" + data[index].Price + "</td>  <td>" + data[index].Quantity + "</td><td>" + data[index].Status + "</td> <td id='btnid'><button data-toggle='modal' data-target='#myModal' style='display:none'  class='CancelOrderBtn btn btn-danger' id='" + data[index].Id + "' >Cancel Order</button></td>    </tr> "
 
                     //                    table1.fnAddData(["<input class='checkboxes' id=" + data[index].Id + " type='checkbox' value=" + data[index].Total + "  >", data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Total, data[index].Status]);
-                    table2.fnAddData([data[index].OrderId, data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Status]);
+                    table2.fnAddData([data[index].OrderId, data[index].Codeno, data[index].Title, data[index].Discription, data[index].CourseType, data[index].Price, data[index].Quantity, data[index].Status]);
 
                     //$('#RecentOrderTableBody').append(TableRow);
                 });
@@ -606,6 +616,7 @@
     })
     function PlaceNotesOrder(NotesStringId) {
         debugger
+       // alert(NotesStringId);
         if (NotesStringId != "") {
 
 

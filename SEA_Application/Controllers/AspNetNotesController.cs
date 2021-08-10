@@ -48,14 +48,30 @@ namespace SEA_Application.Controllers
             }
         }
 
-        public ActionResult ApproveOrders(int OrderId, string OrderType, double DiscountedPrice, double Discount, List<ChangeNotesPrice> ChangeNotesPrice, int ApprovedId)
+        public ActionResult ApproveOrders(int OrderId, string OrderType, double DiscountedPrice, double Discount, List<ChangeNotesPrice> ChangeNotesPrice)
         {
             //return Json("", JsonRequestBehavior.AllowGet);
+
+            int? MaxId = 1000;
+
 
             var dbTransaction = db.Database.BeginTransaction();
             try
             {
-                int MaxId = db.AspNetOrders.Select(x => x.ApproveId.Value).Max();
+                //   int MaxId = db.AspNetOrders.Select(x => x.ApproveId.Value).Max();
+
+                int? GetID = db.AspNetOrders.Select(x => x.ApproveId).Max();
+
+
+                if (GetID != null)
+
+                {
+                    MaxId = GetID + 1;
+                }
+
+                int ApprovedId = MaxId.Value;
+
+                
 
                 AspNetOrder OrderToModify = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
 
@@ -250,6 +266,12 @@ namespace SEA_Application.Controllers
                     }
 
                 }
+
+                else
+                {
+                   MaxId  = db.AspNetOrders.Where(x => x.Id == OrderId).Select(x=>x.ApproveId.Value).FirstOrDefault();
+                }
+
                 dbTransaction.Commit();
 
             }//end of try block
@@ -261,7 +283,7 @@ namespace SEA_Application.Controllers
             }
 
 
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(new { Msg = "Created", ApprovedId = MaxId }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PlaceOrder()
@@ -385,11 +407,6 @@ namespace SEA_Application.Controllers
             return Json(PlaceNotesList, JsonRequestBehavior.AllowGet);
         }
 
-
-
-
-
-
         public ActionResult GetAllNotes()
         {
 
@@ -505,7 +522,7 @@ namespace SEA_Application.Controllers
                           join OrderNotes in db.AspNetNotesOrders on Order.Id equals OrderNotes.OrderId
                           join student in db.AspNetStudents on OrderNotes.StudentID equals student.Id
                           //   where Order.Status == "Paid" && Order.PublishDate >= FromDateInDateTime && Order.PublishDate <= ToDateInDateTime
-                           where Order.Status == "Paid" && Order.ApproveDate >= FromDateInDateTime && Order.ApproveDate <= ToDateInDateTime
+                          where Order.Status == "Paid" && Order.ApproveDate >= FromDateInDateTime && Order.ApproveDate <= ToDateInDateTime
 
                           select new
                           {
@@ -565,27 +582,29 @@ namespace SEA_Application.Controllers
         public ActionResult PendingOrdersDetails(int OrderId)
         {
             var UserId = User.Identity.GetUserId();
-            var UserNameOfCashier = db.AspNetUsers.Where(x => x.Id == UserId).Select(x=>x.Name).FirstOrDefault();
+            var UserNameOfCashier = db.AspNetUsers.Where(x => x.Id == UserId).Select(x => x.Name).FirstOrDefault();
 
-            int? MaxId = db.AspNetOrders.Select(x => x.ApproveId).Max();
-           
-            var SelectedOrder =  db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
+            // int? MaxId = db.AspNetOrders.Select(x => x.ApproveId).Max();
 
-            if(SelectedOrder.Status == "Pending")
-            {
-                MaxId = (MaxId + 1);
-            }
-            else
-            {
-                MaxId = SelectedOrder.ApproveId;// order may be Paid or returned.
+            var SelectedOrder = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
 
-            }
+            //if (SelectedOrder.Status == "Pending")
+            //{
+            //  //  MaxId = (MaxId + 1);
+            //}
+            //else
+            //{
+            //    MaxId = SelectedOrder.ApproveId;// order may be Paid or returned.
+
+            //}
 
             var result = (from Notes in db.AspNetNotes
                           join OrderNotes in db.AspNetNotesOrders on Notes.Id equals OrderNotes.NotesID
                           where OrderNotes.OrderId == OrderId
                           select new
+
                           {
+                              CodeNo = Notes.NotesNo,
                               Id = OrderNotes.Id,
                               Title = Notes.Title,
                               Discription = Notes.Description,
@@ -605,7 +624,7 @@ namespace SEA_Application.Controllers
             List<OrderDetails> OrderDetailsList = new List<OrderDetails>();
 
             ViewBag.OrderId = OrderId;
-            ViewBag.ApprovedId = MaxId;
+            // ViewBag.ApprovedId = MaxId;
             ViewBag.OrderType = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault().OrderType;
             ViewBag.OrderStatus = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault().Status;
 
@@ -628,6 +647,7 @@ namespace SEA_Application.Controllers
 
                 OrderDetails orderDetail = new OrderDetails();
 
+                orderDetail.CodeNo = item.CodeNo;
                 orderDetail.NotesOrderId = item.Id;
                 orderDetail.OrderTitle = item.Title;
                 orderDetail.Quantity = item.Quantity.Value;
@@ -648,7 +668,7 @@ namespace SEA_Application.Controllers
         public class OrderDetails
         {
 
-
+            public int? CodeNo { get; set; }
             public int NotesOrderId { get; set; }
             public string OrderTitle { get; set; }
             public int Quantity { get; set; }
@@ -686,6 +706,19 @@ namespace SEA_Application.Controllers
         // GET: AspNetNotes/Create
         public ActionResult Create()
         {
+
+
+            int? MaxId = 1;
+            int? GetID = db.AspNetNotes.Select(x => x.NotesNo).Max();
+
+            if (GetID != null)
+
+            {
+                MaxId = GetID + 1;
+            }
+
+            ViewBag.NotesNo = MaxId;
+
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => x.ClassID == 1), "Id", "SubjectName");
 
             return View();
@@ -711,7 +744,7 @@ namespace SEA_Application.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Description,SubjectID,CourseType,NotesType,Price,CreationDate,Pages,PerPagePrice,photoCopierHidden")] AspNetNote aspNetNote)
+        public ActionResult Create([Bind(Include = "Id,Title,Description,SubjectID,CourseType,NotesType,Price,CreationDate,Pages,PerPagePrice,photoCopierHidden,NotesNo")] AspNetNote aspNetNote)
         {
             if (aspNetNote.NotesType == "Notes")
             {
@@ -791,6 +824,34 @@ namespace SEA_Application.Controllers
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetNote.SubjectID);
             return View(aspNetNote);
         }
+
+        public ActionResult CheckNotesNoExist(int id, int NotesNo)
+        {
+            var IsExist = "No";
+
+            if (id == 0)
+            {
+                var Note = db.AspNetNotes.Where(x => x.NotesNo == NotesNo).FirstOrDefault();
+
+                if (Note != null)
+                {
+                    IsExist = "Yes";
+                }
+
+            }
+            else
+            {
+                var Note = db.AspNetNotes.Where(x => x.NotesNo == NotesNo && x.Id != id).FirstOrDefault();
+
+                if (Note != null)
+                {
+                    IsExist = "Yes";
+                }
+            }
+
+            return Json(IsExist, JsonRequestBehavior.AllowGet);
+        }
+
         //public ActionResult SaveReturnOrder(List<PlaceNotes> PlaceNotes, int StudentId )
         //{
 
@@ -1363,6 +1424,24 @@ namespace SEA_Application.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AspNetNote aspNetNote = db.AspNetNotes.Where(x => x.Id == id).FirstOrDefault();
+
+            var IsVisible = "";
+            if (aspNetNote.IsVisible == true)
+            {
+                IsVisible = "Yes";
+            }
+            else if (aspNetNote.IsVisible == false)
+            {
+                IsVisible = "No";
+
+            }
+            else
+            {
+                IsVisible = "Yes";
+
+            }
+            ViewBag.IsVisibleString = IsVisible;
+
             if (aspNetNote == null)
             {
                 return HttpNotFound();
@@ -1376,8 +1455,19 @@ namespace SEA_Application.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,SubjectID,CourseType,Price,CreationDate,NotesType")] AspNetNote aspNetNote)
+        public ActionResult Edit([Bind(Include = "Id,Title,Description,SubjectID,CourseType,Price,CreationDate,NotesType,NotesNo")] AspNetNote aspNetNote)
         {
+            var IsVisibleValue = Request.Form["IsVisible"];
+            if (IsVisibleValue == "Yes")
+            {
+                aspNetNote.IsVisible = true;
+            }
+            else
+            {
+                aspNetNote.IsVisible = false;
+
+            }
+
             if (aspNetNote.NotesType == "Notes")
 
             {
@@ -1392,9 +1482,13 @@ namespace SEA_Application.Controllers
                 aspNetNote.PhotoCopierPrice = Convert.ToDouble(Request.Form["photoCopierHidden"]);
                 aspNetNote.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
 
+
+
                 if (ModelState.IsValid)
                 {
                     db.Entry(aspNetNote).State = EntityState.Modified;
+                    db.Entry(aspNetNote).Property(x => x.EncryptedID).IsModified = false;
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }

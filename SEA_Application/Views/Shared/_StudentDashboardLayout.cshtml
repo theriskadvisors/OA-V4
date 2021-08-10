@@ -79,8 +79,8 @@
 
         #Notification_Dropdown_Area {
             list-style-type: none;
-            margin:0px;
-            padding:0px;
+            margin: 0px;
+            padding: 0px;
         }
     </style>
 
@@ -112,8 +112,8 @@
                 </a>
             </div>
             <div class="sidebar-wrapper">
-                <ul class="nav">
-                    <li class="nav-item active">
+                <ul id="layout_navbar_toogle" class="nav">
+                    <li id="StudentHome" class="nav-item ">
                         <a href="@Url.Action("Dashboard", "Student_Dashboard")" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-home.png" alt="">
@@ -152,7 +152,7 @@
                     @if (NotesFee != null)
                     {
 
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a href="@(Url.Action("PrepaidNotesIndex", "AspNetOrderNotes"))" class="nav-link nav-toggle">
 
                                 <i class="sea-dash">
@@ -160,23 +160,23 @@
                                 </i>
                                 <p>Buy Prepaid Notes</p>
                             </a>
-                        </li>
+                        </li>*@
                     }
 
 
 
                     @*<li class="nav-item">
-                    <a href="@(Url.Action("Index", "AspNetFeeDetail"))" class="nav-link nav-toggle">
-                        <i class="sea-dash">
-                            <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                        </i>
-                        <p>Online Courses</p>
-                    </a>
-                </li>*@
+                            <a href="@(Url.Action("Index", "AspNetFeeDetail"))" class="nav-link nav-toggle">
+                                <i class="sea-dash">
+                                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
+                                </i>
+                                <p>Online Courses</p>
+                            </a>
+                        </li>*@
 
                     @*@if (Session == "Online Session")
-                {*@
-                    <li class="nav-item">
+                        {*@
+                    <li class="nav-item" id="MyCourses">
                         <a href="@(Url.Action("Index", "StudentCourses"))" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-lessons.png" alt="">
@@ -214,18 +214,18 @@
                     </li>
 
                     @*<li class="nav-item  ">
-                    <a href="@(Url.Action("Student_Dairy", "Student_Dashboard"))">
-                        <i class="fa fa-database"></i>
-                        <span class="title">Dairy</span>
-                    </a>
-                </li>
+                            <a href="@(Url.Action("Student_Dairy", "Student_Dashboard"))">
+                                <i class="fa fa-database"></i>
+                                <span class="title">Dairy</span>
+                            </a>
+                        </li>
 
-                <li class="nav-item  ">
-                    <a href="@(Url.Action("StudentAssessment", "Student_Dashboard"))">
-                        <i class="fa fa-calendar"></i>
-                        <span class="title">Student Term Assessment</span>
-                    </a>
-                </li>*@
+                        <li class="nav-item  ">
+                            <a href="@(Url.Action("StudentAssessment", "Student_Dashboard"))">
+                                <i class="fa fa-calendar"></i>
+                                <span class="title">Student Term Assessment</span>
+                            </a>
+                        </li>*@
 
                     <li class="nav-item hidden">
                         <a href="@(Url.Action("Inbox", "AspNetMessages"))" class="nav-link nav-toggle">
@@ -249,85 +249,85 @@
 
 
                     @*<li class="nav-item" id="studenttopic">
-                    <a href="@Url.Action("Index", "AspnetSubjectTopics")" class="nav-link nav-toggle">
-                        <i class="fa fa-list-ul"></i>
-                        <span class="title">Topic</span>
-                    </a>
-                </li>
-                <li class="nav-item" id="studentlesson">
-                    <a href="@Url.Action("Index", "AspnetLessons")" class="nav-link nav-toggle">
-                        <i class="fa fa-leaf"></i>
-                        <span class="title">Lesson</span>
-                    </a>
-                </li>*@
+                            <a href="@Url.Action("Index", "AspnetSubjectTopics")" class="nav-link nav-toggle">
+                                <i class="fa fa-list-ul"></i>
+                                <span class="title">Topic</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" id="studentlesson">
+                            <a href="@Url.Action("Index", "AspnetLessons")" class="nav-link nav-toggle">
+                                <i class="fa fa-leaf"></i>
+                                <span class="title">Lesson</span>
+                            </a>
+                        </li>*@
 
                     @*<li class="nav-item" id="studentQuestionAnswer">
-                    <a href="@Url.Action("Index", "AspnetQuestions")" class="nav-link nav-toggle">
-                        <i class="fa fa-book"></i>
-                        <span class="title">Questions Answers</span>
-                    </a>
-                </li>
+                            <a href="@Url.Action("Index", "AspnetQuestions")" class="nav-link nav-toggle">
+                                <i class="fa fa-book"></i>
+                                <span class="title">Questions Answers</span>
+                            </a>
+                        </li>
 
 
 
-                <li class="nav-item" id="TestQuestions">
-                    <a href="@Url.Action("TestQuestions", "AspnetQuestions")" class="nav-link nav-toggle">
-                        <i class="fa fa-book"></i>
-                        <span class="title">Test Questions</span>
-                    </a>
-                </li>*@
+                        <li class="nav-item" id="TestQuestions">
+                            <a href="@Url.Action("TestQuestions", "AspnetQuestions")" class="nav-link nav-toggle">
+                                <i class="fa fa-book"></i>
+                                <span class="title">Test Questions</span>
+                            </a>
+                        </li>*@
 
                     @*<li class="nav-item" id="studentQuiz">
-                    <a href="@Url.Action("Index", "AspnetQuizs")" class="nav-link nav-toggle">
-                        <i class="fa fa-pencil-square-o"></i>
-                        <span class="title">Quiz</span>
-                    </a>
-                </li>*@
+                            <a href="@Url.Action("Index", "AspnetQuizs")" class="nav-link nav-toggle">
+                                <i class="fa fa-pencil-square-o"></i>
+                                <span class="title">Quiz</span>
+                            </a>
+                        </li>*@
 
                     @*<li class="nav-item  ">
-                    <a href="@(Url.Action("Teacher_Announcement", "Teacher_Dashboard"))">
-                        <i class="fa fa-bullhorn"></i>
-                        <span class="title">Announcement</span>
-                    </a>
-                </li>
-
-                <li class="nav-item  ">
-                    <a href="@(Url.Action("Attendance", "Teacher_Dashboard"))">
-                        <i class="fa fa-list-ol"></i>
-                        <span class="title">Student Attendance</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="@(Url.Action("ParentTeacherMeeting", "Teacher_Dashboard"))">
-                        <i class="fa fa-users"></i>
-                        <span class="title">Parent Teacher Meeting</span>
-                    </a>
-                </li>
-
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link nav-toggle">
-                        <i class="fa fa-book"></i>
-                        <span class="title">Assessment</span>
-                    </a>
-
-                    <ul class="sub-menu">
-                        <li class="nav-item  ">
-                            <a href="@(Url.Action("Subject_Assessment","Teacher_Dashboard"))">
-                                <i class="fa fa-circle-o"></i>
-                                <span class="title">Subject Assessment</span>
+                            <a href="@(Url.Action("Teacher_Announcement", "Teacher_Dashboard"))">
+                                <i class="fa fa-bullhorn"></i>
+                                <span class="title">Announcement</span>
                             </a>
                         </li>
 
                         <li class="nav-item  ">
-                            <a href="@(Url.Action("Class_Assessment", "Teacher_Dashboard"))">
-                                <i class="fa fa-circle-o"></i>
-                                <span class="title">Class Assessment</span>
+                            <a href="@(Url.Action("Attendance", "Teacher_Dashboard"))">
+                                <i class="fa fa-list-ol"></i>
+                                <span class="title">Student Attendance</span>
                             </a>
                         </li>
-                    </ul>
-                </li>*@
+
+                        <li class="nav-item">
+                            <a href="@(Url.Action("ParentTeacherMeeting", "Teacher_Dashboard"))">
+                                <i class="fa fa-users"></i>
+                                <span class="title">Parent Teacher Meeting</span>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link nav-toggle">
+                                <i class="fa fa-book"></i>
+                                <span class="title">Assessment</span>
+                            </a>
+
+                            <ul class="sub-menu">
+                                <li class="nav-item  ">
+                                    <a href="@(Url.Action("Subject_Assessment","Teacher_Dashboard"))">
+                                        <i class="fa fa-circle-o"></i>
+                                        <span class="title">Subject Assessment</span>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item  ">
+                                    <a href="@(Url.Action("Class_Assessment", "Teacher_Dashboard"))">
+                                        <i class="fa fa-circle-o"></i>
+                                        <span class="title">Class Assessment</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
 
 
 
@@ -1744,7 +1744,7 @@
         }
 
         .fc-time-grid-event .fc-content .fc-title {
-	        word-wrap: normal !important;
+            word-wrap: normal !important;
         }
     </style>
 
@@ -1758,7 +1758,7 @@
     <script>
 
            function showNotification(from, align, msg, type) {
-            //type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];	
+            //type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];
             color = Math.floor((Math.random() * 6) + 1);
             $.notify({
                 icon: "add_alert",
@@ -1821,6 +1821,29 @@
 
 
         });//End of Document Ready
+
+
+        $(document).ready(function () {
+
+
+            $("#layout_navbar_toogle").on("click", "li", function () {
+
+
+
+                localStorage.ElementToActiveAfterPageLoad = $(this).attr('id');
+
+                //  alert(localStorage.ElementToActiveAfterPageLoad);
+            });
+
+
+            $("#" + localStorage.ElementToActiveAfterPageLoad).addClass('active');
+
+
+
+
+        });
+
+
         $(document).ready(function () {
 
 

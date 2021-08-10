@@ -1,56 +1,56 @@
 ﻿@model IEnumerable<SEA_Application.Controllers.AspNetNotesController.OrderDetails>
-@{
+    @{
     ViewBag.Title = "PendingOrdersDetails";
     //Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
-}
+    }
 
-<link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
+    <link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
 
 
-@if (User.IsInRole("Admin"))
-{
+    @if (User.IsInRole("Admin"))
+    {
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
-}
-else if (User.IsInRole("Staff"))
-{
+    }
+    else if (User.IsInRole("Staff"))
+    {
     Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
-}
-else if (User.IsInRole("PhotoCopier"))
-{
+    }
+    else if (User.IsInRole("PhotoCopier"))
+    {
     Layout = "~/Views/Shared/PhotoCopierDashboardLayout.cshtml";
 
-}
-else if (User.IsInRole("Receptionist"))
-{
+    }
+    else if (User.IsInRole("Receptionist"))
+    {
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
-}
-
-
-
-<style>
-    .page-header.navbar.navbar-fixed-top {
-        padding-right: 0px;
     }
 
-    .modal-content {
-        position: relative;
-        background-color: #fff;
-        margin-top: 102px;
-        background-clip: padding-box;
-        border: 1px solid #999;
-        border: 1px solid rgba(0,0,0,.2);
-        border-radius: 6px;
-        -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
-        box-shadow: 0 3px 9px rgba(0,0,0,.5);
-        outline: 0;
-    }
 
-    .white {
-        color: white !important;
-    }
 
-    /*input[type=search] {
+    <style>
+        .page-header.navbar.navbar-fixed-top {
+            padding-right: 0px;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin-top: 102px;
+            background-clip: padding-box;
+            border: 1px solid #999;
+            border: 1px solid rgba(0,0,0,.2);
+            border-radius: 6px;
+            -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+            box-shadow: 0 3px 9px rgba(0,0,0,.5);
+            outline: 0;
+        }
+
+        .white {
+            color: white !important;
+        }
+
+        /*input[type=search] {
             border: 1px solid rgb(221, 221, 221);
             border-radius: 40px;
             height: 30px;
@@ -60,45 +60,48 @@ else if (User.IsInRole("Receptionist"))
             margin-top: 0px;
         }*/
 
-    /*element.style {
+        /*element.style {
             padding: 10px 0px 0px 0px;
         }*/
-</style>
+    </style>
 
-<div class="card">
-    <div class="card-body p-4">
+    <div class="card">
+        <div class="card-body p-4">
 
-        <input type="hidden" name="" id="OrderType" value="@ViewBag.OrderType" />
-        <input type="hidden" name="name" id="OrderId" value="@ViewBag.OrderId" />
-        <input type="hidden" name="" value="@ViewBag.OrderStatus" id="OrderStatus" />
-        <input type="hidden" name="" value="@ViewBag.ApprovedId" id="ApprovedId" />
-        <table class="table table-bordered table-striped table-hover">
-            <thead>
+            <input type="hidden" name="" id="OrderType" value="@ViewBag.OrderType" />
+            <input type="hidden" name="name" id="OrderId" value="@ViewBag.OrderId" />
+            <input type="hidden" name="" value="@ViewBag.OrderStatus" id="OrderStatus" />
 
-                <tr>
-                    <th style="display:none">NoteOrderId</th>
-                    <th>Title</th>
-                    <th>Quantity </th>
-                    <th>OA Unit Price </th>
-                    <th>PhotoCopier Unit Price</th>
-                    <th>OA Total  </th>
-                    <th>PhotoCopier Total </th>
-                    <th> Total</th>
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
 
-                </tr>
-            </thead>
+                    <tr>
+                        <th style="display:none">NoteOrderId</th>
+                        <th>Code No</th>
 
-            <tbody>
-                @{
+                        <th>Title</th>
+                        <th>Quantity </th>
+                        <th>OA Unit Price </th>
+                        <th>PhotoCopier Unit Price</th>
+                        <th>OA Total  </th>
+                        <th>PhotoCopier Total </th>
+                        <th> Total</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
                     double TotalAmount = 0;
                     double DiscountedPrice = 0;
-                }
+                    }
 
-                @foreach (var item in Model)
-                {
+                    @foreach (var item in Model)
+                    {
                     <tr class="RowsRecords">
 
                         <td id="NotesOrderId" style="display:none"> @item.NotesOrderId</td>
+                        <td id="CodeNo">@item.CodeNo</td>
                         <td id="Title">@item.OrderTitle</td>
                         <td id="Quanity">@item.Quantity</td>
                         <td> <input class="OAPriceClass" id="OAPrice" onkeyup="CalculateTotal(this)" type="number" name="OAPrice" value="@item.OAPrice" /> </td>
@@ -110,490 +113,507 @@ else if (User.IsInRole("Receptionist"))
 
                         @{
 
-                            TotalAmount = TotalAmount + item.Total;
+                        TotalAmount = TotalAmount + item.Total;
                         }
 
                     </tr>
 
-                }
+                    }
 
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Total Price</td>
-                    <td id="TotalPrice">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total Price</td>
+                        <td id="TotalPrice">
 
-                        @TotalAmount
+                            @TotalAmount
 
-                    </td>
+                        </td>
 
-                </tr>
-
-
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Discount</td>
-                    <td id="Discount"> <input id="DiscountField" onkeyup="CalculateDiscocunt(this)" type="number" name="name" value="@ViewBag.Discount" /> </td>
-
-                </tr>
-
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Discounted Price </td>
-                    <td id="DiscountedPrice">
-                        @{ DiscountedPrice = TotalAmount - ViewBag.Discount;}
-
-                        @DiscountedPrice
+                    </tr>
 
 
-                    </td>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Discount</td>
+                        <td id="Discount"> <input id="DiscountField" onkeyup="CalculateDiscocunt(this)" type="number" name="name" value="@ViewBag.Discount" /> </td>
 
-                </tr>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Discounted Price </td>
+                        <td id="DiscountedPrice">
+                            @{ DiscountedPrice = TotalAmount - ViewBag.Discount;}
+
+                            @DiscountedPrice
 
 
-            </tbody>
+                        </td>
 
-        </table><!--end of table-->
+                    </tr>
+
+
+                </tbody>
+
+            </table><!--end of table-->
 
 
 
-        <div class="col-md-8 pl-5 pr-5 ">
-            @*<button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>*@
+            <div class="col-md-8 pl-5 pr-5 ">
+                @*<button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>*@
 
-            @if (!(User.IsInRole("PhotoCopier")))
-            {
-                <button id="ApprovedBtn" class='btn btn-success white approveBtn'>Approve</button>
+                @if (!(User.IsInRole("PhotoCopier")))
+                {
+                <button id="ApprovedBtn" class='btn btn-success white approveBtn'> Receipt</button>
 
                 <button type="button" id="cancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                     <i class="material-icons mr-2">cached</i>  Back
                 </button>
-            }
-            else
-            {
+                }
+                else
+                {
                 <button type="button" id="PhotoCopierCancelBtn" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                     <i class="material-icons mr-2">cached</i>  Back
                 </button>
+                }
+
+
+
+            </div>
+
+
+
+            <div id="bill" style="display:none">
+
+                <div class="ticket" id="ticket">
+
+                    <center>
+                        <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
+                        @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
+                    </center>
+
+                    <div style="clear:both">
+
+                    </div>
+                    <p class="centered">
+                        @*Officers Academy*@
+                        <b> <span id="OrderNo"></span></b>
+                        <br />
+                        <b>  <span id="ApprovedNo"></span></b>
+                        <br>  <b> <span id="DateTime"></span></b>
+                    </p>
+
+                    <br><b>Cashier:</b><b> @ViewBag.UserNameOfCashier</b> <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Admin Copy</b>
+                    </span>
+
+                    <br><b>Student Name:</b><b> @ViewBag.StudentName (@ViewBag.UserName)</b>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="description">Title</th>
+                                <th class="quantity">Qty</th>
+                                <th class="price">Price</th>
+                                <th class="Amount">Total</th>
+
+                            </tr>
+
+
+                        </thead>
+                        <tbody id="billbody" style="border: 1px solid black"></tbody>
+                    </table>
+                    <p class="centered">
+                        <b style="font-weight:bold">  Website: https://officersacademy.pk/</b>
+                        <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore</b>
+                    </p>
+                </div>
+
+            </div>
+            <br />
+
+            <div id="bill1" style="margin-left:10px;display:none">
+
+                <div class="ticket" id="ticket">
+
+                    <center>
+
+                        @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
+                        <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
+                    </center>
+                    <div style="clear:both">
+
+                    </div>
+
+                    <p class="centered">
+
+                        <b>  <span id="OrderNo1"></span></b>
+                        <br />
+                        <b>  <span id="ApprovedNo1"></span></b>
+                        <br>   <b> <span id="DateTime1"></span></b>
+                    </p>
+
+
+                    <br><b>Cashier:</b> <b> @ViewBag.UserNameOfCashier</b> <span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Student Copy</b>
+                    </span>
+
+                    <br><b>Student Name:</b><b> @ViewBag.StudentName (@ViewBag.UserName)</b>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="description">Title</th>
+                                <th class="quantity">Qty</th>
+                                <th class="price">Price</th>
+                                <th class="Amount">Total</th>
+                            </tr>
+
+
+                        </thead>
+                        <tbody id="billbody1" style="border: 1px solid black"></tbody>
+                    </table>
+                    <p class="centered">
+                        <b style="font-weight:bold">  Website: https://officersacademy.pk/</b>
+                        <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore</b>
+                    </p>
+                </div>
+
+            </div>
+
+
+            
+        </div>
+    </div>
+    <script>
+
+        $(document).ready(function () {
+
+            $("#PageHeader").html("Order Details ");
+
+            $("#cancel").click(function () {
+
+                window.location.href = "/AspNetNotes/Index";
+            })
+            //PhotoCopierCancelBtn
+
+            $("#PhotoCopierCancelBtn").click(function () {
+
+                window.location.href = "/PhotoCopier_Dashboard/StudentsNotesSummary";
+            })
+
+            var OrderStatus = $("#OrderStatus").val();
+
+            if (OrderStatus == "Paid" || OrderStatus == "Returned") {
+
+                //OAPrice
+                // $("#ApprovedBtn").prop("disabled", true);
+                $(".OAPriceClass").prop("disabled", true);
+
+                //OAPriceClass
+            }
+            else {
+
+                $(".OAPriceClass").prop("disabled", false);
+                $("#ApprovedBtn").prop("disabled", false);
+
             }
 
 
+            //$("#ApprovedBtn").click(function () {
 
-        </div>
 
+            //    event.stopPropagation();
+            //    var Total = 0.0;
+            //    var OrderId = $("#OrderId").val();
+            //    //clickedOrderId = OrderId;
 
+            //    $('#btnPrint').attr('name', OrderId);
 
-        <div id="bill" style="display:none">
+            //    var OrderType = $("#OrderType").val();
 
-            <div class="ticket" id="ticket">
+            //    //  $("#OrderType").val(OrderType);
 
-                <center>
-                    <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
-                    @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
-                </center>
 
-                <div style="clear:both">
+            //    //alert(OrderType);
+            //    $("#btnPrint").attr('class', OrderId);
 
-                </div>
-                <p class="centered">
-                    @*Officers Academy*@
-                    <b> <span id="OrderNo"></span></b>
-                    <br />
-                    <b>  <span id="ApprovedNo"></span></b>
-                    <br>  <b> <span id="DateTime"></span></b>
-                </p>
+            //    $.ajax({
+            //        type: "POST",
+            //        url: "/AspNetNotes/RecentOrdersDetails",
+            //        data: { "OrderId": OrderId },
 
-                <br><b>Cashier:</b><b> @ViewBag.UserNameOfCashier</b> <span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Admin Copy</b>
-                </span>
+            //        success: function (data) {
+            //            $('#billbody').html("");
+            //            $('#billbody1').html("");
 
-                <br><b>Student Name:</b><b> @ViewBag.StudentName (@ViewBag.UserName)</b>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="description">Title</th>
-                            <th class="quantity">Qty</th>
-                            <th class="price">Price</th>
-                            <th class="Amount">Total</th>
+            //            $.each(data, function (index) {
+            //                var TableRow = "<tr>  <td class='description'>" + data[index].Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + data[index].Quantity + "</td> <td  class='price'>" + data[index].Price + "</td>  <td   class='Amount' >&nbsp; " + data[index].Total + "</td>"
+            //                $('#billbody').append(TableRow);
+            //                $('#billbody1').append(TableRow);
 
-                        </tr>
+            //                Total = Total + data[index].Total;
+            //            });
+            //            var d = new Date($.now());
 
+            //            $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+            //            $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
 
-                    </thead>
-                    <tbody id="billbody" style="border: 1px solid black"></tbody>
-                </table>
-                <p class="centered">
-                    <b style="font-weight:bold">  Website: https://officersacademy.pk/</b>
-                    <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore</b>
-                </p>
-            </div>
+            //            $("#OrderNo").html('Order#' + OrderId);
+            //            $("#OrderNo1").html('Order#' + OrderId);
+            //            $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
+            //            $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
 
-        </div>
-        <br />
+            //            $("#bill").css('display', 'block');
+            //            $("#bill1").css('display', 'block');
+            //            $("#btnPrint").css('display', 'block');
 
-        <div id="bill1" style="margin-left:10px;display:none">
+            //        }//end of success function
+            //    })
 
-            <div class="ticket" id="ticket">
+            //})
 
-                <center>
 
-                    @*<img src="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/logo.PNG" />*@
-                    <img style="width:150px;" src="~/Content/assets/assets/img/orignal.png" alt="Alternate Text" />
-                </center>
-                <div style="clear:both">
+            $("#ApprovedBtn").click(function () {
 
-                </div>
 
-                <p class="centered">
+                event.stopPropagation();
 
-                    <b>  <span id="OrderNo1"></span></b>
-                    <br />
-                    <b>  <span id="ApprovedNo1"></span></b>
-                    <br>   <b> <span id="DateTime1"></span></b>
-                </p>
 
+                var OrderId = $("#OrderId").val();
+                var OrderType = $("#OrderType").val();
 
-                <br><b>Cashier:</b> <b> @ViewBag.UserNameOfCashier</b> <span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Student Copy</b>
-                </span>
+                var DiscountedPrice = parseFloat($("#DiscountedPrice").html());
+                var Discount = parseFloat($("#DiscountField").val());
 
-                <br><b>Student Name:</b><b> @ViewBag.StudentName (@ViewBag.UserName)</b>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="description">Title</th>
-                            <th class="quantity">Qty</th>
-                            <th class="price">Price</th>
-                            <th class="Amount">Total</th>
-                        </tr>
+                var FeeTypeAmount =
+                {
+                    OrderNotesId: '',
+                    PhotoCopierPrice: '',
+                    OAPrice: '',
+                };
 
+                ChangeNotesPrice = [
 
-                    </thead>
-                    <tbody id="billbody1" style="border: 1px solid black"></tbody>
-                </table>
-                <p class="centered">
-                    <b style="font-weight:bold">  Website: https://officersacademy.pk/</b>
-                    <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore</b>
-                </p>
-            </div>
+                    // { TypeId: '1', Amount: '123' },
+                    // { TypeId: '1', Amount: '456' },
+                ];
 
-        </div>
 
 
-        <button id="btnPrint" style="display:none;margin-left:30px;" class="hidden-print">Print</button>
-    </div>
-</div>
-<script>
-
-    $(document).ready(function () {
-
-        $("#PageHeader").html("Order Details ");
-
-        $("#cancel").click(function () {
-
-            window.location.href = "/AspNetNotes/Index";
-        })
-        //PhotoCopierCancelBtn
-        
-        $("#PhotoCopierCancelBtn").click(function () {
-
-            window.location.href = "/PhotoCopier_Dashboard/StudentsNotesSummary";
-        })
-
-        var OrderStatus = $("#OrderStatus").val();
-
-        if (OrderStatus == "Paid" || OrderStatus == "Returned") {
-
-            //OAPrice
-            // $("#ApprovedBtn").prop("disabled", true);
-            $(".OAPriceClass").prop("disabled", true);
-
-            //OAPriceClass
-        }
-        else {
-
-            $(".OAPriceClass").prop("disabled", false);
-            $("#ApprovedBtn").prop("disabled", false);
-
-        }
-
-
-        //$("#ApprovedBtn").click(function () {
-
-
-        //    event.stopPropagation();
-        //    var Total = 0.0;
-        //    var OrderId = $("#OrderId").val();
-        //    //clickedOrderId = OrderId;
-
-        //    $('#btnPrint').attr('name', OrderId);
-
-        //    var OrderType = $("#OrderType").val();
-
-        //    //  $("#OrderType").val(OrderType);
-
-
-        //    //alert(OrderType);
-        //    $("#btnPrint").attr('class', OrderId);
-
-        //    $.ajax({
-        //        type: "POST",
-        //        url: "/AspNetNotes/RecentOrdersDetails",
-        //        data: { "OrderId": OrderId },
-
-        //        success: function (data) {
-        //            $('#billbody').html("");
-        //            $('#billbody1').html("");
-
-
-        //            $.each(data, function (index) {
-        //                var TableRow = "<tr>  <td class='description'>" + data[index].Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + data[index].Quantity + "</td> <td  class='price'>" + data[index].Price + "</td>  <td   class='Amount' >&nbsp; " + data[index].Total + "</td>"
-        //                $('#billbody').append(TableRow);
-        //                $('#billbody1').append(TableRow);
-
-        //                Total = Total + data[index].Total;
-        //            });
-        //            var d = new Date($.now());
-
-        //            $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-        //            $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-
-        //            $("#OrderNo").html('Order#' + OrderId);
-        //            $("#OrderNo1").html('Order#' + OrderId);
-        //            $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
-        //            $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + Total + "</td> </tr>");
-
-        //            $("#bill").css('display', 'block');
-        //            $("#bill1").css('display', 'block');
-        //            $("#btnPrint").css('display', 'block');
-
-        //        }//end of success function
-        //    })
-
-        //})
-
-
-        $("#ApprovedBtn").click(function () {
-
-
-            event.stopPropagation();
-            var Total = 0.0;
-            var OrderId = $("#OrderId").val();
-            var ApprovedId = $("#ApprovedId").val();
-            //clickedOrderId = OrderId;
-           // alert(ApprovedId);
-
-            $('#btnPrint').attr('name', OrderId);
-
-            var OrderType = $("#OrderType").val();
-
-            //  $("#OrderType").val(OrderType);
-
-
-            //alert(OrderType);
-            $("#btnPrint").attr('class', OrderId);
-
-            $('#billbody').html("");
-            $('#billbody1').html("");
-
-
-            $(".RowsRecords").each(function () {
-
-
-                var Title = $(this).find("#Title").html();
-                var Quantity = $(this).find("#Quanity").html();
-                var OAPrice = $(this).find("#OAPrice").val();
-                var PhotoCopierPrice = $(this).find("#PhotoCopierPrice").html();
-
-                var TotalPhotoCopierAndOA = parseFloat(OAPrice) + parseFloat(PhotoCopierPrice);
-                var Total = $(this).find("#Total").html();
-                var TableRow = "<tr>  <td class='description'>" + Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + Quantity + "</td> <td  class='price'>" + TotalPhotoCopierAndOA + "</td>  <td   class='Amount' >&nbsp; " + Total + "</td>"
-                $('#billbody').append(TableRow);
-                $('#billbody1').append(TableRow);
-
-                //Total = Total + data[index].Total;
-
-            });
-            var d = new Date($.now());
-
-            $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-            $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
-
-            var Discount = parseInt($("#DiscountField").val());
-            var DiscountedPrice = $("#DiscountedPrice").html();
-
-            $("#OrderNo").html('Order#' + OrderId);
-            $("#OrderNo1").html('Order#' + OrderId);
-
-            
-            $("#ApprovedNo").html('Approved#' + ApprovedId);
-            $("#ApprovedNo1").html('Approved#' + ApprovedId);
-
-            $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>");
-            $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>");
-
-
-            $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>");
-            $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>");
-
-            $("#bill").css('display', 'block');
-            $("#bill1").css('display', 'block');
-            $("#btnPrint").css('display', 'block');
-
-        })
-
-        
-
-        $("#btnPrint").click(function () {
-
-            $("#btnPrint").css('display', 'none');
-
-            var OrderId = $('#btnPrint').attr('name');
-            var OrderType = $("#OrderType").val();
-            var ApprovedId = $("#ApprovedId").val();
-            // alert(OrderType);
-
-            var mywindow = window.open('', '', '');
-            mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
-            mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
-            mywindow.document.write('</head><body >');
-            // mywindow.document.write('<h1>' + document.title + '</h1>');
-            mywindow.document.write(document.getElementById('bill').innerHTML);
-            mywindow.document.write(document.getElementById('bill1').innerHTML);
-            mywindow.document.write('</body></html>');
-            mywindow.document.close(); // necessary for IE >= 10
-            mywindow.focus(); // necessary for IE >= 10*/
-
-            mywindow.print();
-            mywindow.close();
-
-            var DiscountedPrice = parseFloat($("#DiscountedPrice").html());
-            var Discount = parseFloat($("#DiscountField").val());
-
-
-            var FeeTypeAmount =
-            {
-                OrderNotesId: '',
-                PhotoCopierPrice: '',
-                OAPrice: '',
-            };
-
-            ChangeNotesPrice = [
-
-                // { TypeId: '1', Amount: '123' },
-                // { TypeId: '1', Amount: '456' },
-            ];
-
-
-
-            $(".RowsRecords").each(function () {
-                debugger
-
-                var Id = $(this).find("#NotesOrderId").html();
-                var Title = $(this).find("#Title").html();
-                var Quantity = $(this).find("#Quanity").html();
-                var OAPrice = $(this).find("#OAPrice").val();
-                var PhotoCopierPrice = $(this).find("#PhotoCopierPrice").html();
-
-                var TotalPhotoCopierAndOA = parseFloat(OAPrice) + parseFloat(PhotoCopierPrice);
-
-                var obj = {};
-
-                obj['OrderNotesId'] = Id;
-                obj['PhotoCopierPrice'] = PhotoCopierPrice;
-                obj['OAPrice'] = OAPrice;
-                ChangeNotesPrice.push(obj);
-
-            });
-
-
-            $.ajax({
-
-                type: "POST",
-                url: "/AspNetNotes/ApproveOrders",
-                data: { "OrderId": OrderId, "OrderType": OrderType, "DiscountedPrice": DiscountedPrice, "Discount": Discount, 'ChangeNotesPrice': ChangeNotesPrice, 'ApprovedId':ApprovedId },
-                success: function (data) {
-
+                $(".RowsRecords").each(function () {
                     debugger
-                    window.location.href = '/AspNetNotes/Index/';
-                }
+
+                    var Id = $(this).find("#NotesOrderId").html();
+                    var Title = $(this).find("#Title").html();
+                    var Quantity = $(this).find("#Quanity").html();
+                    var OAPrice = $(this).find("#OAPrice").val();
+                    var PhotoCopierPrice = $(this).find("#PhotoCopierPrice").html();
+
+                    var TotalPhotoCopierAndOA = parseFloat(OAPrice) + parseFloat(PhotoCopierPrice);
+
+                    var obj = {};
+
+                    obj['OrderNotesId'] = Id;
+                    obj['PhotoCopierPrice'] = PhotoCopierPrice;
+                    obj['OAPrice'] = OAPrice;
+                    ChangeNotesPrice.push(obj);
+
+                });
+
+
+                $.ajax({
+
+                    type: "POST",
+                    url: "/AspNetNotes/ApproveOrders",
+                    data: { "OrderId": OrderId, "OrderType": OrderType, "DiscountedPrice": DiscountedPrice, "Discount": Discount, 'ChangeNotesPrice': ChangeNotesPrice },
+                    success: function (data) {
+
+                        debugger
+
+                        if (data.Msg = "Created") {
+
+                           // window.location.href = '/AspNetNotes/Index/';
+
+                            var Total = 0.0;
+
+                            var ApprovedId = data.ApprovedId;
+
+                            $('#billbody').html("");
+                            $('#billbody1').html("");
+
+
+                            $(".RowsRecords").each(function () {
+
+
+                                var Title = $(this).find("#Title").html();
+                                var Quantity = $(this).find("#Quanity").html();
+                                var OAPrice = $(this).find("#OAPrice").val();
+                                var PhotoCopierPrice = $(this).find("#PhotoCopierPrice").html();
+
+                                var TotalPhotoCopierAndOA = parseFloat(OAPrice) + parseFloat(PhotoCopierPrice);
+                                var Total = $(this).find("#Total").html();
+                                var TableRow = "<tr>  <td class='description'>" + Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + Quantity + "</td> <td  class='price'>" + TotalPhotoCopierAndOA + "</td>  <td   class='Amount' >&nbsp; " + Total + "</td>"
+                                $('#billbody').append(TableRow);
+                                $('#billbody1').append(TableRow);
+
+                                //Total = Total + data[index].Total;
+
+                            });
+
+                            var d = new Date($.now());
+
+                            $("#DateTime").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+                            $("#DateTime1").html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds());
+
+                            var Discount = parseInt($("#DiscountField").val());
+                            var DiscountedPrice = $("#DiscountedPrice").html();
+
+
+                            $("#OrderNo").html('Order#' + OrderId);
+                            $("#OrderNo1").html('Order#' + OrderId);
+
+                            $("#ApprovedNo").html('Approved#' + ApprovedId);
+                            $("#ApprovedNo1").html('Approved#' + ApprovedId);
+
+
+                            $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>");
+                            $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>");
+
+                            $('#billbody').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>");
+                            $('#billbody1').append("<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>");
+
+
+                            $("#bill").css('display', 'block');
+                            $("#bill1").css('display', 'block');
+
+                            Receipt();
+
+
+                        }
+
+                        
+                        //alert(ApprovedId);
+
+                    }
+
+                })
+
+
+
+            })//approve button click
+
+
+
+            //$("#btnPrint").click(function () {
+
+
+
+            //})
+
+        }) //end of document ready
+
+
+
+        function CalculateTotal(e) {
+
+            var InputElement = $(e);
+            var OAPrice = InputElement.val();
+
+            var TrParent = InputElement.parent().parent();
+
+            var PhotoCopierPrice = TrParent.children("#PhotoCopierPrice").html();
+            var Quantity = TrParent.children("#Quanity").html();
+            if (OAPrice == "") {
+                OAPrice = 0;
+
+            }
+            if (PhotoCopierPrice == "") {
+                PhotoCopierPrice = 0;
+            }
+            if (Quantity == "") {
+                Quantity = 0;
+            }
+            var OATotalPrice = 0.0;
+            var PhotoCopierTotalPrice = 0.0;
+
+            var OATotalPrice = parseFloat(OAPrice) * parseInt(Quantity);
+            //        var PhotoCopierTotalPrice = parseFloat(PhotoCopierPrice) * parseInt(Quantity);
+
+            var Total = (parseFloat(OAPrice) + parseFloat(PhotoCopierPrice)) * Quantity;
+
+            TrParent.children("#OATotalPrice").html(OATotalPrice);
+            //       TrParent.children("#PhotoCopierTotalPrice").html(PhotoCopierTotalPrice);
+            TrParent.children("#Total").html(Total);
+            var TotalPrice = 0;
+
+            $('.TotalClass').each(function () {
+
+                TotalPrice = TotalPrice + parseFloat($(this).html());
 
             })
+            debugger
+            var Discount = $("#DiscountField").val();
 
+            $("#TotalPrice").html(TotalPrice);
 
+            var DiscountedPrice = TotalPrice - parseFloat(Discount);
 
-        })
-
-    }) //end of document ready
-
-    function CalculateTotal(e) {
-
-        var InputElement = $(e);
-        var OAPrice = InputElement.val();
-
-        var TrParent = InputElement.parent().parent();
-
-        var PhotoCopierPrice = TrParent.children("#PhotoCopierPrice").html();
-        var Quantity = TrParent.children("#Quanity").html();
-        if (OAPrice == "") {
-            OAPrice = 0;
+            $("#DiscountedPrice").html(DiscountedPrice);
 
         }
-        if (PhotoCopierPrice == "") {
-            PhotoCopierPrice = 0;
+
+        function CalculateDiscocunt(e) {
+
+            var Discount = $(e).val();
+            var TotalPrice = $("#TotalPrice").html();
+            var DiscountedPrice = parseFloat(TotalPrice) - Discount;
+
+            $("#DiscountedPrice").html(DiscountedPrice);
+
         }
-        if (Quantity == "") {
-            Quantity = 0;
+
+
+        function Receipt() {
+
+            debugger
+
+            var popupWin = window.open('', '', '');
+            popupWin.document.write('<html><head><title></title>  ');
+            popupWin.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
+            popupWin.document.write('</head><body >');
+            // mywindow.document.write('<h1>' + document.title + '</h1>');
+            popupWin.document.write(document.getElementById('bill').innerHTML);
+            popupWin.document.write(document.getElementById('bill1').innerHTML);
+            popupWin.document.write('</body></html>');
+            popupWin.document.close(); // necessary for IE >= 10
+            popupWin.focus(); // necessary for IE >= 10*/
+
+            popupWin.print();
+            popupWin.close();
+
+
+            window.location.href = "/AspnetNotes/Index";
+
         }
-        var OATotalPrice = 0.0;
-        var PhotoCopierTotalPrice = 0.0;
 
-        var OATotalPrice = parseFloat(OAPrice) * parseInt(Quantity);
-        //        var PhotoCopierTotalPrice = parseFloat(PhotoCopierPrice) * parseInt(Quantity);
-
-        var Total = (parseFloat(OAPrice) + parseFloat(PhotoCopierPrice)) * Quantity;
-
-        TrParent.children("#OATotalPrice").html(OATotalPrice);
-        //       TrParent.children("#PhotoCopierTotalPrice").html(PhotoCopierTotalPrice);
-        TrParent.children("#Total").html(Total);
-        var TotalPrice = 0;
-
-        $('.TotalClass').each(function () {
-
-            TotalPrice = TotalPrice + parseFloat($(this).html());
-
-        })
-        debugger
-        var Discount = $("#DiscountField").val();
-
-        $("#TotalPrice").html(TotalPrice);
-
-        var DiscountedPrice = TotalPrice - parseFloat(Discount);
-
-        $("#DiscountedPrice").html(DiscountedPrice);
-
-    }
-
-    function CalculateDiscocunt(e) {
-
-        var Discount = $(e).val();
-        var TotalPrice = $("#TotalPrice").html();
-        var DiscountedPrice = parseFloat(TotalPrice) - Discount;
-
-        $("#DiscountedPrice").html(DiscountedPrice);
-
-    }
-</script>
+    </script>

@@ -22,7 +22,7 @@ namespace SEA_Application.Controllers
 
             ViewBag.OrderMsg = OrderMsg;
 
-            var aspNetNotes = db.AspNetNotes.Include(a => a.AspNetSubject);
+            var aspNetNotes = db.AspNetNotes.Where(x=>x.IsVisible == true || x.IsVisible == null).Include(a => a.AspNetSubject);
             return View(aspNetNotes.ToList());
         }
         public ActionResult PrepaidNotesIndex()
@@ -249,6 +249,7 @@ namespace SEA_Application.Controllers
                          {
                              OrderId = Order.Id,
                              // Id = OrderNotes.Id,
+                             Codeno = Notes.NotesNo,
                              Title = Notes.Title,
                              Discription = Notes.Description,
                              CourseType = Notes.CourseType,

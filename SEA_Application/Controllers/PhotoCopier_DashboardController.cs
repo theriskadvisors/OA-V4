@@ -53,7 +53,7 @@ namespace SEA_Application.Controllers
                 double PhotoCopierUnitPrice = 0.0;
                 PhotoCopierSummary photoCopierSummary = new PhotoCopierSummary();
                 photoCopierSummary.NotesName = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.Title).FirstOrDefault();
-
+                photoCopierSummary.CodeNo = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.NotesNo).FirstOrDefault();
                 foreach (var OrderNote in OrderNotesList)
                 {
                     if (item == OrderNote.NotesID)
@@ -83,7 +83,7 @@ namespace SEA_Application.Controllers
                 double PhotoCopierUnitPrice = 0.0;
                 PhotoCopierSummary photoCopierSummary = new PhotoCopierSummary();
                 photoCopierSummary.NotesName = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.Title).FirstOrDefault();
-
+                photoCopierSummary.CodeNo = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.NotesNo).FirstOrDefault();
 
                 foreach (var OrderNote in ReturnedOrderNotesList)
                 {
@@ -111,6 +111,7 @@ namespace SEA_Application.Controllers
         //PhotoCopier Summary Class
         public class PhotoCopierSummary
         {
+            public int? CodeNo { get; set; }
             public string NotesName { get; set; }
             public string NotesType { get; set; }
             public int Quantity { get; set; }
@@ -139,6 +140,7 @@ namespace SEA_Application.Controllers
                 double PhotoCopierUnitPrice = 0.0;
                 PhotoCopierSummary photoCopierSummary = new PhotoCopierSummary();
                 photoCopierSummary.NotesName = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.Title).FirstOrDefault();
+                photoCopierSummary.CodeNo = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.NotesNo).FirstOrDefault();
 
 
                 foreach (var OrderNote in OrderNotesList)
@@ -172,6 +174,7 @@ namespace SEA_Application.Controllers
                 double PhotoCopierUnitPrice = 0.0;
                 PhotoCopierSummary photoCopierSummary = new PhotoCopierSummary();
                 photoCopierSummary.NotesName = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.Title).FirstOrDefault();
+                photoCopierSummary.CodeNo = db.AspNetNotes.Where(x => x.Id == item).Select(x => x.NotesNo).FirstOrDefault();
 
 
                 foreach (var OrderNote in ReturnedOrderNotesList)

@@ -34,7 +34,24 @@ else if (User.IsInRole("Receptionist"))
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="col-md-8 pl-5 pr-5 ">
-                        <h2 class="column-heading mb-4">Notes</h2>
+
+                        <div class="form-group bmd-form-group is-filled">
+
+                            @*@Html.LabelFor(model => model.NotesNo, htmlAttributes: new { @class = "bmd-label-floating" })*@
+
+                            <label class="control-label">Code No</label>
+
+
+                            @*@Html.EditorFor(model => model.NotesNo, new { htmlAttributes = new { @class = "form-control", @required = true } })*@
+
+                            <input required class="form-control" type="number" name="NotesNo" id="NotesNo" value="@ViewBag.NotesNo" />
+
+                            @Html.ValidationMessageFor(model => model.NotesNo, "", new { @class = "text-danger" })
+
+                            <span class="text-danger" id="NoteNoError"></span>
+
+                        </div>
+
                         <div class="form-group bmd-form-group is-filled">
 
                             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
@@ -191,9 +208,6 @@ else if (User.IsInRole("Receptionist"))
                         </div>
 
 
-
-
-
                     </div> <!--End of Col 8-->
                     <br>
                     <div class="col-md-8 pl-5 pr-5 ">
@@ -216,6 +230,9 @@ else if (User.IsInRole("Receptionist"))
     </div>
 </div>
 <script>
+
+    var NotesNoExist = "No";
+    var id = 0;
     $(document).ready(function () {
 
 
@@ -232,14 +249,58 @@ else if (User.IsInRole("Receptionist"))
 
         });
 
+        var NotesNo = $("#NotesNo").val();
+
+        
+
+        $.ajax({
+
+            type: "POST",
+            url: "/AspnetNotes/CheckNotesNoExist",
+            data: { "id": id,"NotesNo": NotesNo },
+            success: function (response) {
+
+                if (response == "Yes") {
+                    NotesNoExist = "Yes";
+                    $("#NoteNoError").html("Selected code no already exist.");
+                }
+
+            }
 
 
-        //$('input[type=submit]').on('click', function (e) {
 
-        //    e.preventDefault();
+        })
 
 
-        //});
+        $("#NotesNo").keyup(function () {
+
+            var NotesNo = $(this).val();
+            $("#NoteNoError").html("");
+            NotesNoExist = "No";
+
+
+            $.ajax({
+
+                type: "POST",
+                url: "/AspnetNotes/CheckNotesNoExist",
+                data: { "id": id, "NotesNo": NotesNo },
+                success: function (response) {
+
+                    if (response == "Yes") {
+
+                        NotesNoExist = "Yes";
+                        $("#NoteNoError").html("Selected code no already exist.");
+                    }
+
+                }
+
+
+
+            })
+
+        })
+
+
 
 
         $("#Notestype").click(function () {
@@ -430,6 +491,45 @@ else if (User.IsInRole("Receptionist"))
 
         }// end of Calculation Function
 
+
+
+        $("form").submit(function () {
+
+           // alert(NotesNoExist);
+            debugger
+
+            if (NotesNoExist == "Yes") {
+
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        });
     })
+
+    //function CheckNotesNoExist(NotesNo) {
+
+
+    //    $.ajax({
+
+    //        type: "POST",
+    //        url: "/AspnetNotes/CheckNotesNoExist",
+    //        data: { "NotesNo": NotesNo },
+    //        success: function (response) {
+
+    //            if (response == "Yes") {
+
+
+    //                $("#NoteNoError").html("Selected notes no already exist.");
+    //            }
+
+    //            return response;
+
+    //        }
+
+    //    })
+    //}
 
 </script>

@@ -89,8 +89,8 @@
             -->
           
             <div class="sidebar-wrapper">
-                <ul class="nav">
-                    <li class="nav-item active">
+                <ul class="nav" id="layout_navbar_toogle">
+                    <li id="PhotoCopierHome" class="nav-item">
                         <a href="@Url.Action("Dashboard", "PhotoCopier_Dashboard")" class="nav-link nav-toggle">
                             <i class="sea-dash">
                                 <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-home.png" alt="">
@@ -99,11 +99,11 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    <li id="StudentNotesSummary" class="nav-item">
 
                         <a href="@Url.Action("StudentsNotesSummary", "PhotoCopier_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="fal fa-books"></i>
-                            <p>Student Notes Summary</p>
+                            <i class="fal fa-abacus"></i>
+                                <p>Student Notes Summary</p>
                         </a>
                     </li>
 
@@ -1643,6 +1643,27 @@
                 $('#global_smart').prop('checked')*/
             ).draw();
         }
+
+        $(document).ready(function () {
+
+
+            $("#layout_navbar_toogle").on("click", "li", function () {
+
+
+
+                localStorage.ElementToActiveAfterPageLoad = $(this).attr('id');
+
+                //  alert(localStorage.ElementToActiveAfterPageLoad);
+            });
+
+
+            $("#" + localStorage.ElementToActiveAfterPageLoad).addClass('active');
+
+
+
+
+        });
+
         $(document).ready(function () {
 
             $.get('@Url.Action("GetNotifications","AspNetPushNotifications")', function (data) {
