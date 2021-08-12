@@ -139,8 +139,18 @@
                     TotalRemainingBalance = TotalRemainingBalance + data[index].Amount;
 
 
-                    if (data[index].TranscationName == "Purchase Order") {
+                    if (data[index].TranscationName == "Purchase Order (Paid)") {
                         table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='PurchaseOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
+
+                    }
+
+
+                    //Purchase Order (Returned)
+                    else if (data[index].TranscationName == "Purchase Order (Returned)")
+                    {
+
+                        table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;color:red !important">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='PurchaseOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
+
 
                     }
                     else if (data[index].TranscationName == "Sale Order (Paid)") {
