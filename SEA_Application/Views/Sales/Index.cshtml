@@ -8,7 +8,6 @@
     #datatable_filter {
         display: block !important;
     }
-   
 </style>
 
 <div class="card">
@@ -23,7 +22,10 @@
                     <th>
                         Date
                     </th>
-                   
+                    <th>
+                        Description
+                    </th>
+
                     <th>
                         Status
                     </th>
@@ -33,18 +35,15 @@
                     <th>
                         Total
                     </th>
-                   <th>
-                     Action
-                   </th>
-                  
+                    <th>
+                        Action
+                    </th>
+
                 </tr>
 
             </thead>
 
             <tbody id="tbody">
-
-             
-
             </tbody>
         </table>
     </div>
@@ -62,7 +61,7 @@
                     text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
                 },
 
-                
+
                 {
                     text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Sale Order</span>',
                     action: function (e, dt, button, config) {
@@ -124,13 +123,13 @@
                         "/" +
                         value.getFullYear();
 
-                        table.fnAddData([data[index].OrderNo, dat, data[index].Status, data[index].Discount, data[index].DiscountedPrice, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> " ]);
+                    table.fnAddData([data[index].OrderNo, dat,data[index].Description, data[index].Status, data[index].Discount, data[index].DiscountedPrice, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> "]);
 
 
                 });
                 table.fnDraw();
 
-                var AllTds = $("tr td:nth-child(4),td:nth-child(5)");
+                var AllTds = $("tr td:nth-child(5),td:nth-child(6)");
 
                 for (var i = 0; i < AllTds.length; i++) {
 

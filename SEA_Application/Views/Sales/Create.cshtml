@@ -47,14 +47,14 @@
 
                 @*<div class="form-group">
 
-                <div class="col-md-12">
+            <div class="col-md-12">
 
-                    <label class="control-label">Order No</label>
+                <label class="control-label">Order No</label>
 
-                    <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+                <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
 
-                </div>
-            </div>*@
+            </div>
+        </div>*@
                 <div class="col-md-12">
 
                     <label class="control-label">Date</label>
@@ -62,17 +62,31 @@
                     <input type="date" id="Date" name="Date" class="form-control" required />
 
                 </div>
-                <!--<br />
-        <div class="form-group">
-            <div class="col-md-12">
 
-                <label class="control-label"> Customer Name</label>-->
+                <br />
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label">Description</label>
+
+                        <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
+
+
+                    </div>
+                </div>
+                <!--<br />
+    <div class="form-group">
+        <div class="col-md-12">
+
+            <label class="control-label"> Customer Name</label>-->
                 @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
 
                 <!--<input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
 
-            </div>
-        </div>-->
+        </div>
+    </div>-->
 
             </div><!--end of column 6-->
 
@@ -561,6 +575,7 @@
                 var DiscountedPrice = $("#DiscountedPrice").val();
                 var GrandTotal = $("#GrandTotal").val();
 
+                var Description = $("#Description").val();
                 //alert(CustomerName);
 
                
@@ -568,7 +583,7 @@
                 $.ajax({
                     type: "post",
                     url: "/Sales/SaveSaleOrders",
-                    data: { 'Date': Date, 'GrandTotal': GrandTotal, 'Discount': Discount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
+                    data: { 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'Discount': Discount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
                     datatype: "json",
                     cache: false,
                     success: function (data) {
@@ -609,11 +624,6 @@
                                 '</thead>' +
                                 '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
                                 '</table>' +
-                                '<p class="centered">' +
-                                '<b style="font-weight:bold">  Website: https://officersacademy.pk/ </b>' +
-                                ' <b style="font-weight:bold"> <br>Facebook Page: https://www.facebook.com/officersacademylahore </b>' +
-                                ' </p>' +
-
                                 '</div>');
 
 

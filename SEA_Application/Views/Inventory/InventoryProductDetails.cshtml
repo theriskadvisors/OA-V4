@@ -139,7 +139,7 @@
                     TotalRemainingBalance = TotalRemainingBalance + data[index].Amount;
 
 
-                    if (data[index].TranscationName == "Purchase Order (Paid)") {
+                    if (data[index].TranscationName == "Purchased Order") {
                         table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='PurchaseOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
 
                     }

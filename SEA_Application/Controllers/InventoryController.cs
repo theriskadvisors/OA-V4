@@ -367,8 +367,6 @@ namespace SEA_Application.Controllers
         {
 
             DateTime dateTimeFrom = Convert.ToDateTime(FromDate);
-
-
             DateTime dateTimeTo = Convert.ToDateTime(ToDate);
 
             dateTimeTo = dateTimeTo.AddDays(1);
@@ -379,12 +377,8 @@ namespace SEA_Application.Controllers
             List<PurchaseSummary> PurchaseListReturned = new List<PurchaseSummary>();
             List<StockPurchase> StockPurchaseList = db.StockPurchases.Where(x => x.StockOrder.PurchaseDate >= dateTimeFrom && x.StockOrder.PurchaseDate <= dateTimeTo).ToList();
 
-
-
             var AllPaidPurchaedList = StockPurchaseList.Where(x => x.StockOrder.Status == "Paid").ToList();
-
             var AllReturnedPurchaedList = StockPurchaseList.Where(x => x.StockOrder.Status == "Returned").ToList();
-
 
             var PaidIds = AllPaidPurchaedList.Select(x => x.InventoryId).Distinct();
             var ReturnedIds = AllReturnedPurchaedList.Select(x => x.InventoryId).Distinct();
@@ -404,19 +398,15 @@ namespace SEA_Application.Controllers
 
                 obj.Quantity = AllPaidPurchaedList.Where(x => x.InventoryId == item).Sum(x => x.Quantity.Value);
 
-
                 PurchaseListPaid.Add(obj);
 
             }
-
-
 
             foreach (var item in ReturnedIds)
             {
                 PurchaseSummary obj = new PurchaseSummary();
 
                 var inventory = db.Inventories.Where(x => x.Id == item).FirstOrDefault();
-
 
                 obj.ProductNo = inventory.ItemNo.Value;
                 obj.ProductName = inventory.Name;
@@ -450,12 +440,7 @@ namespace SEA_Application.Controllers
             public string Status { get; set; }
             public int Quantity { get; set; }
             public DateTime DateTime { get; set; }
-
-
         }
-
-
-
 
         public ActionResult GetAllSuppliers()
         {
@@ -531,7 +516,6 @@ namespace SEA_Application.Controllers
         {
             public int Id { get; set; }
             public DateTime PurchaseDate { get; set; }
-
             public string Notes { set; get; }
             public int OrderNo { set; get; }
             public string Status { set; get; }
@@ -671,7 +655,7 @@ namespace SEA_Application.Controllers
 
         public ActionResult InventoryProductDetailsList(int InventoryId)
         {
-            var AllStockPaidOrder = db.StockPurchases.Where(x => x.InventoryId == InventoryId && x.StockOrder.Status == "Paid").Select(x => new { x.StockOrder.Id, x.Quantity, x.StockOrder.OrderDate, SupplierName = x.Supplier.Name, Transcataions = "Purchase Order (Paid)", x.StockOrder.PurchaseDate, InventoryName = x.Inventory.Name, PurchasePrice = x.PurchasePrice, x.Inventory.AverageCost }).ToList();
+            var AllStockPaidOrder = db.StockPurchases.Where(x => x.InventoryId == InventoryId && x.StockOrder.Status == "Paid").Select(x => new { x.StockOrder.Id, x.Quantity, x.StockOrder.OrderDate, SupplierName = x.Supplier.Name, Transcataions = "Purchased Order", x.StockOrder.PurchaseDate, InventoryName = x.Inventory.Name, PurchasePrice = x.PurchasePrice, x.Inventory.AverageCost }).ToList();
             //var AllStockReturnedOrder = db.StockPurchases.Where(x => x.InventoryId == InventoryId && x.StockOrder.Status == "Returned").Select(x => new { x.StockOrder.Id, x.Quantity, x.StockOrder.OrderDate, SupplierName = x.Supplier.Name, Transcataions = "Purchase Order (Returned)", x.StockOrder.PurchaseDate, InventoryName = x.Inventory.Name, PurchasePrice = x.PurchasePrice, x.Inventory.AverageCost }).ToList();
             var AllStockReturnedOrder = db.StockPurchases.Where(x => x.InventoryId == InventoryId && x.StockOrder.Status == "Returned").Select(x => new { x.StockOrder.Id, x.Quantity, x.StockOrder.OrderDate, SupplierName = x.Supplier.Name, Transcataions = "Purchase Order (Returned)", x.StockOrder.PurchaseDate, InventoryName = x.Inventory.Name, PurchasePrice = x.PurchasePrice, x.Inventory.AverageCost }).ToList();
 
@@ -783,7 +767,7 @@ namespace SEA_Application.Controllers
             {
                 item.Order = count;
 
-                if (item.TranscationName == "Purchase Order (Paid)")
+                if (item.TranscationName == "Purchased Order")
                 {
                     item.Balance = item.QuantityOnHand + RememberQuantity;
                     RememberQuantity = item.Balance;

@@ -53,9 +53,6 @@
                 <br />
             </div>
 
-
-
-
             <div class="pull-right">
                 <button id="PrintNotes" class="btn btn-primary btn-sm" style="font-size:14px;">Print</button>
 
@@ -130,7 +127,6 @@
    //             var DiscountTotal = 0;
      //           var GrandTotalDiscounted = 0;
 
-
                 $.each(data, function (index) {
 
 
@@ -146,12 +142,20 @@
          //           DiscountTotal = DiscountTotal + data[index].Discount;
            //         GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
 
-                    $("#PurchaseReport").append("<tr><td>" + data[index].ProductNo + "</td><td>" + data[index].ProductName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Quantity + "</td></tr>");
+
+                    var Status = data[index].Status;
+
+                    if (Status == "Paid") {
+
+                        Status = "Purchased";
+                    }
+
+
+                    $("#PurchaseReport").append("<tr><td>" + data[index].ProductNo + "</td><td>" + data[index].ProductName + "</td><td>" + Status + "</td><td>" + data[index].Quantity + "</td></tr>");
 
                 })
 
 //                $("#SaleReport").append("<tr> <td >Grand Total</td><td></td>   <td></td> <td>" + GrandTotal + "</td><td>-" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
-
 
             }
         })
@@ -185,7 +189,6 @@
 
             });
         });
-
 
 
         $("#FromDate").change(function () {

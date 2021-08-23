@@ -20,7 +20,7 @@ namespace SEA_Application.Controllers
         public ActionResult AllSaleOrdersList()
         {
             //TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(x.PurchaseDate.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local) 
-            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount,Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
+            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo,x.Description, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount,Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
 
             List<SaleOrderCustom> CustomModelList = new List<SaleOrderCustom>();
 
@@ -39,7 +39,7 @@ namespace SEA_Application.Controllers
                 obj.Discount = item.Discount.Value;
                 obj.Total = item.Total;
                 obj.DiscountedPrice = item.DiscountedPrice.Value;
-
+                obj.Description = item.Description;
 
                 CustomModelList.Add(obj);
             }
@@ -205,7 +205,28 @@ namespace SEA_Application.Controllers
             return View();
 
         }
-        public ActionResult SaveSaleOrders(string Date,  double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
+        //static
+        public string base64Decode()     
+        {
+            string sData = "AO51H2R6FJkWJaUh/P+4aG1ry/s5mPLF7AkXSfY/uQFMznWfxx+m52F+ftSl7JZI3Q==";
+            try
+            {
+                var encoder = new System.Text.UTF8Encoding();
+                System.Text.Decoder utf8Decode = encoder.GetDecoder();
+                byte[] todecodeByte = Convert.FromBase64String(sData);
+                int charCount = utf8Decode.GetCharCount(todecodeByte, 0, todecodeByte.Length);
+                char[] decodedChar = new char[charCount];
+                utf8Decode.GetChars(todecodeByte, 0, todecodeByte.Length, decodedChar, 0);
+                string result = new String(decodedChar);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error in base64Decode" + ex.Message);
+            }
+        }
+
+        public ActionResult SaveSaleOrders(string Date, string Description,  double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
         {
             // return Json(new { OrderNo = 1000, data = "Created" }, JsonRequestBehavior.AllowGet);
 
@@ -236,6 +257,7 @@ namespace SEA_Application.Controllers
             saleorder.DiscountedPrice = DiscountedPrice;
             saleorder.OrderNo = MaxId;
             saleorder.Status = "Paid";
+            saleorder.Description = Description;
 
             db.SaleOrders.Add(saleorder);
             db.SaveChanges();
@@ -334,7 +356,8 @@ namespace SEA_Application.Controllers
             public double Total { get; set; }
             public double Discount { get; set; }
             public double DiscountedPrice { get; set; }
-
+            public string Description { get; set; }
+            
             public List<SaleOrdersList> SaleOrderList = new List<SaleOrdersList>();
         }
 

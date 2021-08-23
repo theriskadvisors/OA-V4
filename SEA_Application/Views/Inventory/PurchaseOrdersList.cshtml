@@ -57,7 +57,7 @@
 
             buttons: [
 
-               
+
                 //{
                 //    text: '<span class="datatableButtonsEdit"> Place Order</span>',
                 //    action: function (e, dt, button, config) {
@@ -152,7 +152,13 @@
                         "/" +
                         value.getFullYear();
 
-                    table.fnAddData([data[index].OrderNo + "<input  type=hidden value=" + data[index].Id + ">", data[index].Notes, data[index].Status, dat, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> "]);
+                    var Status = data[index].Status;
+                    if (Status == "Paid") {
+
+                        Status = "Purchased";
+                    }
+
+                    table.fnAddData([data[index].OrderNo + "<input  type=hidden value=" + data[index].Id + ">", data[index].Notes, Status, dat, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> "]);
 
                 });
                 table.fnDraw();
