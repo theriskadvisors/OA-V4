@@ -164,10 +164,8 @@ else if (User.IsInRole("Cashier"))
                     '</tr>' +
                     '</thead>' +
                     '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
-                    '</table>' +
+                    '</table><br><br><br><hr>' +
                     '</div></div>');
-
-
 
 
                 //  table.fnDraw();
@@ -188,7 +186,7 @@ else if (User.IsInRole("Cashier"))
 
         var mywindow = window.open('', '', '');
         mywindow.document.write('<html><head><title>' + document.title + '</title>  ');
-        mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
+        mywindow.document.write('<style>td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;}  </style>');
         mywindow.document.write('</head><body >');
 
         mywindow.document.write(document.getElementById('bill').innerHTML);

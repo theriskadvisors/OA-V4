@@ -5,32 +5,32 @@
 }
 
 <style>
-    th, td {
-        padding: 5px;
-    }
+        th, td {
+            padding: 5px;
+        }
 
-    /*@@media print {
-        * {
-            -webkit-print-color-adjust: exact !important;*/ /* Chrome, Safari, Edge */
-            
+        /*@@media print {
+            * {
+                -webkit-print-color-adjust: exact !important;*/ /* Chrome, Safari, Edge */
+
         /*}
-}*/
+    }*/
 
-    #SaleOrderTable tr, th, td {
-        border: 0px !important;
-    }
+        #SaleOrderTable tr, th, td {
+            border: 0px !important;
+        }
 
-    .error {
-        color: red !important;
-    }
+        .error {
+            color: red !important;
+        }
 
-    #table1 td {
-        width: 50%;
-    }
+        #table1 td {
+            width: 50%;
+        }
 
-    .description, .card-description, .footer-big p {
-        color: black !important;
-    }
+        .description, .card-description, .footer-big p {
+            color: black !important;
+        }
 </style>
 
 <link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
@@ -47,14 +47,15 @@
 
                 @*<div class="form-group">
 
-            <div class="col-md-12">
+                        <div class="col-md-12">
 
-                <label class="control-label">Order No</label>
+                            <label class="control-label">Order No</label>
 
-                <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+                            <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
 
-            </div>
-        </div>*@
+                        </div>
+                    </div>*@
+
                 <div class="col-md-12">
 
                     <label class="control-label">Date</label>
@@ -77,16 +78,16 @@
                     </div>
                 </div>
                 <!--<br />
-    <div class="form-group">
-        <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
 
-            <label class="control-label"> Customer Name</label>-->
+                        <label class="control-label"> Customer Name</label>-->
                 @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
 
                 <!--<input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
 
-        </div>
-    </div>-->
+                    </div>
+                </div>-->
 
             </div><!--end of column 6-->
 
@@ -220,26 +221,22 @@
             </div><!--end of col 8 -->
 
             <br />
-            <div id="ReceiptBlock" style="display:none">
+            <div id="ReceiptBlock" style="display:none;">
 
-                <div id="bill" style="display:none">
+                <div id="bill" style="display: none;">
                     <div class="ticket" id="ticket">
                         <center>
-
                             <img style="width: 150px;" src="/Content/assets/assets/img/Bis.png" alt="Alternate Text" />
                         </center>
 
                         <div id="ReceiptInner">
 
-                        </div>
 
+                        </div>
 
 
                     </div>
                 </div>
-
-
-
 
             </div>
 
@@ -306,7 +303,7 @@
 
         $("#PageHeader").html("Sale Order");
 
-    
+
         $(document).keyup(function (e) {
 
             // $("SPAN INPUT BUTTON").css('border-bottom', 'none');
@@ -421,7 +418,7 @@
             });
 
             $("#SaleUnitPrice" + myArr[1] + "").val(UnitSalePriceOfProduct);
-           // $("#StockQuantity" + myArr[1]).prop('max', QuantityOnHand);
+            // $("#StockQuantity" + myArr[1]).prop('max', QuantityOnHand);
             $("#StockQuantity" + myArr[1]).val(1);
             $("#UnitName" + myArr[1]).val(UnitName);
             $("#AvailableQuantity" + myArr[1]).val(QuantityOnHand);
@@ -473,9 +470,9 @@
             let str = Id;
             const myArr = str.split("Price");
 
-           // alert(myArr[1]);
+            // alert(myArr[1]);
 
-             Total(myArr[1]);
+            Total(myArr[1]);
         })
 
         $('#SaleForm').validate({ // initialize the plugin
@@ -570,7 +567,7 @@
 
                 var Date = $("#Date").val();
 
-               // var CustomerName = $("#CustomerName").val();
+                // var CustomerName = $("#CustomerName").val();
                 var Discount = $("#Discount").val();
                 var DiscountedPrice = $("#DiscountedPrice").val();
                 var GrandTotal = $("#GrandTotal").val();
@@ -578,7 +575,7 @@
                 var Description = $("#Description").val();
                 //alert(CustomerName);
 
-               
+
 
                 $.ajax({
                     type: "post",
@@ -596,7 +593,7 @@
                             var DateAndTime = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
                             // window.location.href = "/Inventory/Inventory";
 
-                           // var CustomerName = $("#CustomerName").val();
+                            // var CustomerName = $("#CustomerName").val();
 
                             var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>";
                             var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
@@ -610,7 +607,7 @@
                                 ' <br><b>Cashier:</b><b>Bismarck </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                                 ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
                                 ' </span>' +
-                               
+
 
                                 '<table>' +
                                 '<thead>' +
@@ -623,18 +620,15 @@
                                 '</tr>' +
                                 '</thead>' +
                                 '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
-                                '</table>' +
+                                '</table><br><br><br><hr>' +
                                 '</div>');
 
-
-
                             //setTimeout(function () {
-                            //    // Do something after 1 second 
+                            //    // Do something after 1 second
 
                             //}, 1000);
 
                             $("#bill").css('display', 'block');
-
                             Receipt();
 
                         }
@@ -655,10 +649,6 @@
             }
 
         })
-
-
-
-
 
     })//end of document ready
 
@@ -757,12 +747,12 @@
     function Receipt() {
 
         var mywindow = window.open('', '', '');
-        mywindow.document.write('<html><head><title>' + ""+ '</title>  ');
+        mywindow.document.write('<html><head><title>' + "" + '</title>  ');
         mywindow.document.write('<style> img {-webkit-print-color-adjust: exact !important;}  td,th,tr,table{border-top: 1px solid black;} td.description,th.description {width: 90px; max-width: 90px;word-break: break-word;}  td.quantity,th.quantity{ width: 40px;max-width: 40px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} td.Amount,th.Amount {  width: 60px;max-width: 60px;word-break: break-all;} .centered {text-align: center;align-content: center;} .ticket{width: 230px;max-width:230px;font-size: 12px}  img {  max-width: inherit;  width: inherit;} </style>');
         mywindow.document.write('</head><body >');
 
         mywindow.document.write(document.getElementById('bill').innerHTML);
-       // mywindow.document.write(document.getElementById('bill1').innerHTML);
+        // mywindow.document.write(document.getElementById('bill1').innerHTML);
 
         mywindow.document.write('</body></html>');
         mywindow.document.close(); // necessary for IE >= 10
@@ -771,7 +761,7 @@
         mywindow.print();
         mywindow.close();
 
-     
+
         window.location.href = "/Sales/Create";
     }
 
