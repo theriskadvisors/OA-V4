@@ -1,8 +1,19 @@
 ﻿@model IEnumerable<SEA_Application.Models.Supplier>
 
-@{
-    //  Layout = null;
+@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
 }
 
 <div class="card">
@@ -56,10 +67,10 @@
                             @Html.DisplayFor(modelItem => item.Notes)
                         </td>
                         @*<td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                        </td>*@
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>*@
                     </tr>
                 }
             </tbody>

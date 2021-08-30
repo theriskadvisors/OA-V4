@@ -1,9 +1,20 @@
 ﻿
-@{
-    ViewBag.Title = "Inventory";
+
+@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
 @*<h2>Inventory</h2>*@
 
 
@@ -48,7 +59,7 @@
                                 Unit Name
                             </th>
                             <th>
-                               Category
+                                Category
                             </th>
                             <th>
                                 Description
@@ -57,18 +68,18 @@
                                 Unit Sale Price
                             </th>
                             @*<th>
-            Unit Purchase Price
-        </th>*@
+                                    Unit Purchase Price
+                                </th>*@
                             <th>
                                 Quantity On Hand
                             </th>
 
                             @*<th>
-            Average Cost
-        </th>
-        <th>
-            Total Cost
-        </th>*@
+                                    Average Cost
+                                </th>
+                                <th>
+                                    Total Cost
+                                </th>*@
 
                             <th style="width:50px !important;">
                                 Actions
@@ -107,7 +118,7 @@
         $("#PageHeader").html("Inventory");
 
 
-       
+
 
 
 
@@ -137,7 +148,7 @@
                 },
                 {
                     text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/print.png" width="20" alt=""> Print</span>',
-                     action: function (e, dt, button, config) {
+                    action: function (e, dt, button, config) {
                         window.location.href = "/Inventory/PrintAllInventoryByCategory";
                     }
                 }
@@ -162,11 +173,11 @@
                 "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
         });
 
-    
 
 
 
-      
+
+
 
         $.ajax({
             type: "POST",
@@ -194,7 +205,7 @@
 
             }
         });
-      
+
 
         $("tr td:nth-child(7)").css('width', '200px');
 
@@ -209,7 +220,7 @@
             // alert(Id);
             window.location.href = "/Inventory/Edit?id=" + Id;
         });
-       
+
 
 
     }) //end  of document ready

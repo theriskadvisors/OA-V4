@@ -1,4 +1,5 @@
-﻿using SEA_Application.Models;
+﻿using Microsoft.AspNet.Identity;
+using SEA_Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -307,6 +308,12 @@ namespace SEA_Application.Controllers
         public ActionResult ViewSaleOrderDetails(int id)
         {
             ViewBag.SaleOrderID = id;
+
+            var UserId = User.Identity.GetUserId();
+
+            var UserRole = db.GetUserRoleById(UserId).FirstOrDefault();
+
+            ViewBag.UserRole = UserRole;
 
             return View();
         }

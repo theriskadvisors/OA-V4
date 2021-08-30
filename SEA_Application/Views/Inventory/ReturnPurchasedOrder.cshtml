@@ -1,8 +1,17 @@
-﻿
-
-@{
-    ViewBag.Title = "ReturnPurchasedOrder";
+﻿@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
 }
 
 <style>
@@ -457,7 +466,7 @@
                     var InventorStocks = "InventoryStocks" + arr[i];
                     InventorStocks = document.getElementById(InventorStocks).value;
 
-                   // var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
+                    // var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
                     //PurchaseUnitPrice = document.getElementById(PurchaseUnitPrice).value;
 
                     var Quantity = "StockQuantity" + arr[i];
@@ -467,7 +476,7 @@
                     VendorId = document.getElementById(VendorId).value;
 
                     obj['InventoryId'] = InventorStocks;
-                  //  obj['UnitPrice'] = PurchaseUnitPrice;
+                    //  obj['UnitPrice'] = PurchaseUnitPrice;
                     obj['Quantity'] = Quantity;
                     obj['VendorId'] = VendorId;
 

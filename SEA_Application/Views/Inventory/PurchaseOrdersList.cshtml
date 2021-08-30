@@ -1,9 +1,18 @@
-﻿
-@{
-    ViewBag.Title = "ViewStockDeatils";
+﻿@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
 <style>
     #datatable_filter {
         display: block !important;

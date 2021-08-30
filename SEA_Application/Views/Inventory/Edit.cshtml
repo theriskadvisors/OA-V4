@@ -1,9 +1,19 @@
 ﻿@model  SEA_Application.Models.Inventory
-@{
-    ViewBag.Title = "Edit";
+@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+} 
 
 <div class="card">
     <div class="card-body p-4">
@@ -12,136 +22,136 @@
         {
             @Html.AntiForgeryToken()
 
-        <div class="col-md-8">
+            <div class="col-md-8">
 
-            <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Id" value="@Model.Id" />
 
-            <input type="hidden" name="Type" value="@Model.Type" />
+                <input type="hidden" name="Type" value="@Model.Type" />
 
-            <input type="hidden" name="CategoryIdHidden" id="CategoryIdHidden" value="@Model.CategoryId" />
+                <input type="hidden" name="CategoryIdHidden" id="CategoryIdHidden" value="@Model.CategoryId" />
 
-            <div class="form-group">
-                <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
 
-                    <label class="control-label">Product No</label>
+                        <label class="control-label">Product No</label>
 
-                    <input readonly type="number" min="1" name="ItemNo" value="@Model.ItemNo" class="form-control" />
+                        <input readonly type="number" min="1" name="ItemNo" value="@Model.ItemNo" class="form-control" />
 
 
-                    @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
 
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
 
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
 
-                    <label class="control-label">Unit Name</label>
+                        <label class="control-label">Unit Name</label>
 
-                    @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
 
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
 
-                    <label class="control-label">Unit Sale Price </label>
+                        <label class="control-label">Unit Sale Price </label>
 
 
-                    <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="@Model.UnitSalePrice" min="0" class="form-control" />
+                        <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="@Model.UnitSalePrice" min="0" class="form-control" />
 
-                    @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { type = "number", min = "0", @class = "form-control" } })*@
+                        @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { type = "number", min = "0", @class = "form-control" } })*@
 
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
+                <div class="form-group">
+                    <div class="col-md-12">
 
-                    <label class="control-label">Select Category</label>
+                        <label class="control-label">Select Category</label>
 
-                    <select class="form-control" id="CategoryId" name="CategoryId" required></select>
+                        <select class="form-control" id="CategoryId" name="CategoryId" required></select>
 
 
+                    </div>
                 </div>
-            </div>
 
-            @*<div class="form-group">
-                <div class="col-md-12">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+                @*<div class="form-group">
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
 
-                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
 
+                        </div>
+                    </div>*@
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+
+                        <textarea class="form-control" name="Description" id="Description" rows="5">@Model.Description</textarea>
+
+
+
+
+                    </div>
                 </div>
-            </div>*@
 
 
-            <div class="form-group">
-                <div class="col-md-12">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+                @*<div class="form-group">
+                        <div class="col-md-12">
 
-                    <textarea class="form-control" name="Description" id="Description" rows="5">@Model.Description</textarea>
-                            
-                    
+                            <label class="control-label">Unit Purchase Price </label>
+
+                            @Html.EditorFor(model => model.UnitPurchasePrice, new { htmlAttributes = new { type="number", min="0",@class = "form-control", @required = true } })
+
+                        </div>
+                    </div>*@
 
 
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label">Quantity on Hand </label>
+
+                        @Html.EditorFor(model => model.QuantityOnHand, new { htmlAttributes = new { @readonly = "readonly", type = "number", min = "0", @class = "form-control", @required = true } })
+
+                    </div>
                 </div>
-            </div>
 
 
-            @*<div class="form-group">
-            <div class="col-md-12">
+                <div class="form-group">
+                    <div class=" col-md-12">
+                        <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
 
-                <label class="control-label">Unit Purchase Price </label>
-
-                @Html.EditorFor(model => model.UnitPurchasePrice, new { htmlAttributes = new { type="number", min="0",@class = "form-control", @required = true } })
-
-            </div>
-        </div>*@
-
-
-
-
-            <div class="form-group">
-                <div class="col-md-12">
-
-                    <label class="control-label">Quantity on Hand </label>
-
-                    @Html.EditorFor(model => model.QuantityOnHand, new { htmlAttributes = new { @readonly = "readonly", type = "number", min = "0", @class = "form-control", @required = true } })
-
+                        <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+                    </div>
                 </div>
+
+
+
             </div>
-
-
-            <div class="form-group">
-                <div class=" col-md-12">
-                    <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
-
-                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                        <i class="material-icons mr-2">cached</i>  Cancel
-                    </button>
-                </div>
-            </div>
-
-
-
-        </div>
 
         }
-        </div>
     </div>
+</div>
 
 <script>
 
@@ -149,7 +159,7 @@
 
         $("#PageHeader").html("Edit Product");
 
-       var CategoryId =  $("#CategoryIdHidden").val();
+        var CategoryId = $("#CategoryIdHidden").val();
 
 
         $.ajax({
@@ -173,7 +183,7 @@
                         $el.append($("<option></option>")
                             .attr("value", sch[i].Id).text(sch[i].Name));
 
-                        
+
 
                     }
 

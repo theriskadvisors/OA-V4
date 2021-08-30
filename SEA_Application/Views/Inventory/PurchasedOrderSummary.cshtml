@@ -1,8 +1,16 @@
-﻿
-@{
-    Layout = null;
-
+﻿@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
 
 }
 
@@ -75,7 +83,7 @@
                 <thead>
 
                     <tr>
-                      
+
                         <th>Product No</th>
                         <th>Product Name </th>
                         <th>Status</th>
@@ -123,9 +131,9 @@
 
                 $("#PurchaseReport").html("");
 
- //               var GrandTotal = 0;
-   //             var DiscountTotal = 0;
-     //           var GrandTotalDiscounted = 0;
+                //               var GrandTotal = 0;
+                //             var DiscountTotal = 0;
+                //           var GrandTotalDiscounted = 0;
 
                 $.each(data, function (index) {
 
@@ -138,9 +146,9 @@
                     //    "/" +
                     //    value.getFullYear();
 
-       //             GrandTotal = GrandTotal + data[index].Total;
-         //           DiscountTotal = DiscountTotal + data[index].Discount;
-           //         GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
+                    //             GrandTotal = GrandTotal + data[index].Total;
+                    //           DiscountTotal = DiscountTotal + data[index].Discount;
+                    //         GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
 
 
                     var Status = data[index].Status;
@@ -155,7 +163,7 @@
 
                 })
 
-//                $("#SaleReport").append("<tr> <td >Grand Total</td><td></td>   <td></td> <td>" + GrandTotal + "</td><td>-" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+                //                $("#SaleReport").append("<tr> <td >Grand Total</td><td></td>   <td></td> <td>" + GrandTotal + "</td><td>-" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
 
             }
         })
@@ -318,13 +326,13 @@
                     //DiscountTotal = DiscountTotal + data[index].Discount;
                     //GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
 
-  //                  $("#PurchaseReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+                    //                  $("#PurchaseReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
 
                     $("#PurchaseReport").append("<tr><td>" + data[index].ProductNo + "</td><td>" + data[index].ProductName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Quantity + "</td></tr>");
 
                 })
 
-//                $("#PurchaseReport").append("<tr> <td >Grand Total</td> <td></td>  <td></td> <td>" + GrandTotal + "</td><td>" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+                //                $("#PurchaseReport").append("<tr> <td >Grand Total</td> <td></td>  <td></td> <td>" + GrandTotal + "</td><td>" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
 
 
 

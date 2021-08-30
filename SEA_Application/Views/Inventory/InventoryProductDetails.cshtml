@@ -1,9 +1,19 @@
 ﻿
-@{
-    ViewBag.Title = "InventoryProductDetails";
+@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
 
 <div class="card">
     <div class="card-body p-4">
@@ -28,7 +38,7 @@
                     <th>
                         Supplier
                     </th>
-                  
+
                     <th>
                         Quantity On Hand
                     </th>
@@ -146,8 +156,7 @@
 
 
                     //Purchase Order (Returned)
-                    else if (data[index].TranscationName == "Purchase Order (Returned)")
-                    {
+                    else if (data[index].TranscationName == "Purchase Order (Returned)") {
 
                         table.fnAddData([data[index].Order, dat, data[index].TranscationName, data[index].SupplierName, '<span style="font-weight:bold !important;color:red !important">' + data[index].QuantityOnHand + '</span>', data[index].Balance, "<input  onclick='PurchaseOrder(" + data[index].Id + ")'  style='color:white !important' class='btn btn-sm btn-primary' type ='button' value ='View Details' />"]);
 

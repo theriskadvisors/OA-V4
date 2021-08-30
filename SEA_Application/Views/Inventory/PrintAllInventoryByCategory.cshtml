@@ -1,6 +1,18 @@
 ﻿@model IEnumerable<IGrouping<string, SEA_Application.Models.Inventory>>
-@{
+@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
 }
 
 

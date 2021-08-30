@@ -1,10 +1,20 @@
 ﻿@model IEnumerable<SEA_Application.Models.InventoryCategory>
 
-@{
-    ViewBag.Title = "Index";
+@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
 <style>
 
     #datatable_filter {
@@ -114,7 +124,7 @@
 
             var IdToInt = parseInt(Id);
 
-           // alert(IdToInt);
+            // alert(IdToInt);
             window.location.href = "/InventoryCategories/Edit?id=" + IdToInt;
         });
 

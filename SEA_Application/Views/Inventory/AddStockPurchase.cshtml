@@ -1,9 +1,18 @@
-﻿
-@{
-    ViewBag.Title = "Create";
+﻿@if (User.IsInRole("Admin"))
+{
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
 <style>
     th, td {
         padding: 5px;
@@ -54,7 +63,7 @@
 
                         <label class="control-label">Description</label>
 
-                        <textarea class="form-control" name="Note" id="Note" rows="5" ></textarea>
+                        <textarea class="form-control" name="Note" id="Note" rows="5"></textarea>
 
 
                     </div>
@@ -102,9 +111,9 @@
 
                                 @*<td style="width:15%">
 
-                                    <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" />
+                                        <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" />
 
-                                </td>*@
+                                    </td>*@
 
 
                                 <td style="width:15%">
@@ -115,8 +124,8 @@
 
                                 @*<td style="width:15%">
 
-                                    <input readonly class="form-control InventoryTotal" id="Total0" value="0" min="0" type="number" name="Total0" />
-                                </td>*@
+                                        <input readonly class="form-control InventoryTotal" id="Total0" value="0" min="0" type="number" name="Total0" />
+                                    </td>*@
 
                                 <td style="width:15%">
 
@@ -128,14 +137,14 @@
 
 
                             @*<tr id="GrandTotalRow">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td align="center" valign="bottom"></td>
-                                <td><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="GrandTotal" name="GrandTotal" required></td>
-                                <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td align="center" valign="bottom"></td>
+                                    <td><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="GrandTotal" name="GrandTotal" required></td>
+                                    <td></td>
 
-                            </tr>*@
+                                </tr>*@
 
                         </tbody>
 
@@ -279,7 +288,7 @@
 
 
         //$("#StockTable").on('keyup mouseup', ".InventoryUnitPrice", function () {
-                
+
         //    var Id = $(this).attr('id');
 
         //    let str = Id;
@@ -293,14 +302,14 @@
         $("#StockTable").on('change', ".InventoryDropDown", function () {
 
 
-             var Id = $(this).attr('id');
+            var Id = $(this).attr('id');
 
-           let str = Id;
+            let str = Id;
             const myArr = str.split("Stocks");
 
 
             $("#StockQuantity" + myArr[1]).val(1);
-            
+
 
         })
 
@@ -318,7 +327,7 @@
                 var NewStocksList =
                 {
                     InventoryId: '',
-                   // UnitPrice: '',
+                    // UnitPrice: '',
                     Quantity: '',
                     SupplierId: '',
 
@@ -380,7 +389,7 @@
                     VendorId = document.getElementById(VendorId).value;
 
                     obj['InventoryId'] = InventorStocks;
-                   // obj['UnitPrice'] = PurchaseUnitPrice;
+                    // obj['UnitPrice'] = PurchaseUnitPrice;
                     obj['Quantity'] = Quantity;
                     obj['VendorId'] = VendorId;
 
@@ -458,7 +467,7 @@
 
         arr.splice($.inArray(e, arr), 1);
 
-     
+
     }
 
 

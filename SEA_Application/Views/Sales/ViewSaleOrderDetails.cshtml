@@ -9,6 +9,16 @@ else if (User.IsInRole("Cashier"))
     Layout = "~/Views/Shared/_CashierDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
 
 <style>
 
@@ -32,8 +42,11 @@ else if (User.IsInRole("Cashier"))
 <div class="card">
     <div class="card-body p-4">
 
+        <input type="hidden" name="name" value="" />
         <input type="hidden" name="name" id="SaleOrderId" value="@ViewBag.SaleOrderID" />
 
+        <input type="hidden" name="name" id="UserRole" value="@ViewBag.UserRole" />
+        
         <table class="table table-bordered table-striped table-hover">
 
             <thead>
@@ -58,11 +71,7 @@ else if (User.IsInRole("Cashier"))
         <div id="ReceiptBlock" style="display:none">
 
 
-
-
         </div>
-
-
 
 
     </div>
@@ -77,6 +86,10 @@ else if (User.IsInRole("Cashier"))
         var SaleOrderId = $("#SaleOrderId").val();
 
         $("#PageHeader").html("Order Details");
+
+
+        var UserRole = $("#UserRole").val();
+       // alert(UserRole);
 
         $.ajax({
             type: "POST",
@@ -199,8 +212,18 @@ else if (User.IsInRole("Cashier"))
         mywindow.print();
         mywindow.close();
 
+        var UserRole = $("#UserRole").val();
+
         //window.location.reload(true);
-        window.location.href = "/Sales/Index";
+
+        if (UserRole =="Cashier") {
+          //  Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+             window.location.href = "/Sales/Index";
+        }
+
+
+
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
