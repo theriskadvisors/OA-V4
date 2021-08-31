@@ -21,12 +21,12 @@ namespace SEA_Application.Controllers
         public ActionResult AllSaleOrdersList()
         {
             //TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(x.PurchaseDate.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local) 
-            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo,x.Description, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount,Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
+            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo, x.Description, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount, Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
 
             List<SaleOrderCustom> CustomModelList = new List<SaleOrderCustom>();
 
 
-            foreach(var item in SaleOrdersList)
+            foreach (var item in SaleOrdersList)
             {
                 SaleOrderCustom obj = new SaleOrderCustom();
 
@@ -35,7 +35,7 @@ namespace SEA_Application.Controllers
                 obj.Status = item.Status;
                 obj.CustomerName = item.CustomerName;
                 obj.Discount = item.Discount.Value;
-             
+
                 obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
                 obj.Discount = item.Discount.Value;
                 obj.Total = item.Total;
@@ -69,8 +69,8 @@ namespace SEA_Application.Controllers
 
             return View();
         }
-        public ActionResult SaveReturnSaleOrder(string Date,double GrandTotal, List<SaleOrdersList> SaleOrdersList)
-            {
+        public ActionResult SaveReturnSaleOrder(string Date, double GrandTotal, List<SaleOrdersList> SaleOrdersList)
+        {
             int? MaxId = 1000;
             int? GetID = db.SaleOrders.Select(x => x.OrderNo).Max();
 
@@ -115,10 +115,10 @@ namespace SEA_Application.Controllers
                 InventoryToUpdate.QuantityOnHand = InventoryToUpdate.QuantityOnHand + item.Quantity;
 
 
-             //   var TotalCost = saleDetail.Quantity * InventoryToUpdate.AverageCost;
+                //   var TotalCost = saleDetail.Quantity * InventoryToUpdate.AverageCost;
 
                 ////update average cost and total cost 
-               // InventoryToUpdate.TotalCost = InventoryToUpdate.TotalCost + TotalCost;
+                // InventoryToUpdate.TotalCost = InventoryToUpdate.TotalCost + TotalCost;
                 //InventoryToUpdate.AverageCost = Math.Round((InventoryToUpdate.TotalCost.Value / InventoryToUpdate.QuantityOnHand.Value), 2);
 
                 db.SaveChanges();
@@ -131,7 +131,6 @@ namespace SEA_Application.Controllers
 
         public ActionResult Summary()
         {
-
             return View();
         }
 
@@ -147,9 +146,9 @@ namespace SEA_Application.Controllers
             string toDateInString = dateTimeTo.ToString();
 
             List<SaleOrderCustom> SalesList = new List<SaleOrderCustom>();
-            List<SaleOrder> SaleOrdersList= db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
+            List<SaleOrder> SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
 
-            foreach(var item in SaleOrdersList)
+            foreach (var item in SaleOrdersList)
             {
                 SaleOrderCustom obj = new SaleOrderCustom();
                 obj.Id = item.Id;
@@ -167,6 +166,77 @@ namespace SEA_Application.Controllers
             return Json(SalesList, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult SaleByQuantity()
+        {
+            return View();
+        }
+
+        public ActionResult GetSaleByQuantity(string FromDate, string ToDate)
+        {
+            DateTime dateTimeFrom = Convert.ToDateTime(FromDate);
+            DateTime dateTimeTo = Convert.ToDateTime(ToDate);
+
+            dateTimeTo = dateTimeTo.AddDays(1);
+            string toDateInString = dateTimeTo.ToString();
+
+            List<SaleOrderCustom> SalesList = new List<SaleOrderCustom>();
+
+            List<SaleOrder> SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
+           
+            
+            var AllSaleDetails = db.SaleDetails.Where(x => x.SaleOrder.Date >= dateTimeFrom && x.SaleOrder.Date <= dateTimeTo && x.SaleOrder.Status == "Paid").ToList();
+            var SaleDistinctIds = AllSaleDetails.Select(x => x.InventoryId).Distinct();
+            List<SaleDetailByQuantity> saleDetailByQuantity = new List<SaleDetailByQuantity>();
+
+            foreach (var InventoryId in SaleDistinctIds)
+            {
+                SaleDetailByQuantity obj = new SaleDetailByQuantity();
+
+                var SaleDetails = AllSaleDetails.Where(x => x.InventoryId == InventoryId).ToList();
+
+
+                obj.InventoryId = InventoryId.Value;
+                obj.ProductNo = SaleDetails.FirstOrDefault().Inventory.ItemNo.Value;
+                obj.InventoryName = SaleDetails.FirstOrDefault().Inventory.Name;
+               // obj.UnitSalePrice = SaleDetails.FirstOrDefault().UnitSalePrice.Value;
+                obj.Quantity = SaleDetails.Select(x => x.Quantity.Value).Sum();
+
+                obj.Total = SaleDetails.Select(x => x.TotalPrice.Value).Sum();
+
+                saleDetailByQuantity.Add(obj);
+            }
+
+
+
+            var AllSaleReturnedDetails = db.SaleDetails.Where(x => x.SaleOrder.Date >= dateTimeFrom && x.SaleOrder.Date <= dateTimeTo && x.SaleOrder.Status == "Returned").ToList();
+           
+            var SaleDistinctReturnedIds = AllSaleReturnedDetails.Select(x => x.InventoryId).Distinct();
+      
+            foreach (var InventoryId in SaleDistinctReturnedIds)
+            {
+                SaleDetailByQuantity obj = new SaleDetailByQuantity();
+
+                var SaleDetails = AllSaleReturnedDetails.Where(x => x.InventoryId == InventoryId).ToList();
+
+
+                obj.InventoryId = InventoryId.Value;
+                obj.ProductNo = SaleDetails.FirstOrDefault().Inventory.ItemNo.Value;
+                obj.InventoryName = SaleDetails.FirstOrDefault().Inventory.Name;
+                //obj.UnitSalePrice = SaleDetails.FirstOrDefault().UnitSalePrice.Value;
+                obj.Quantity = -(SaleDetails.Select(x => x.Quantity.Value).Sum());
+
+                obj.Total = SaleDetails.Select(x => x.TotalPrice.Value).Sum();
+
+                saleDetailByQuantity.Add(obj);
+            }
+
+
+            var TotalDiscount = SaleOrdersList.Select(x => x.Discount.Value).Sum();
+            var TotalDiscountedPrice = SaleOrdersList.Select(x => x.DiscountedPrice.Value).Sum();
+
+
+            return Json(new { SaleDetailByQuantity = saleDetailByQuantity, TotalDiscount = TotalDiscount, TotalDiscountedPrice = TotalDiscountedPrice }, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpGet]
         public ActionResult Create()
@@ -207,7 +277,7 @@ namespace SEA_Application.Controllers
 
         }
         //static
-        public string base64Decode()     
+        public string base64Decode()
         {
             string sData = "AO51H2R6FJkWJaUh/P+4aG1ry/s5mPLF7AkXSfY/uQFMznWfxx+m52F+ftSl7JZI3Q==";
             try
@@ -227,7 +297,7 @@ namespace SEA_Application.Controllers
             }
         }
 
-        public ActionResult SaveSaleOrders(string Date, string Description,  double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
+        public ActionResult SaveSaleOrders(string Date, string Description, double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
         {
             // return Json(new { OrderNo = 1000, data = "Created" }, JsonRequestBehavior.AllowGet);
 
@@ -305,6 +375,20 @@ namespace SEA_Application.Controllers
             return Json(new { Msg = "Created", OrderNo = MaxId }, JsonRequestBehavior.AllowGet);
         }
 
+        public class SaleDetailByQuantity
+        {
+            public int Id { get; set; }
+            public DateTime DateTime { get; set; }
+            public int ProductNo { get; set; }
+            public int InventoryId { get; set; }
+            public string InventoryName { get; set; }
+            public double UnitSalePrice { get; set; }
+            public int Quantity { get; set; }
+            public double Total { get; set; }
+
+
+        }
+
         public ActionResult ViewSaleOrderDetails(int id)
         {
             ViewBag.SaleOrderID = id;
@@ -364,7 +448,7 @@ namespace SEA_Application.Controllers
             public double Discount { get; set; }
             public double DiscountedPrice { get; set; }
             public string Description { get; set; }
-            
+
             public List<SaleOrdersList> SaleOrderList = new List<SaleOrdersList>();
         }
 

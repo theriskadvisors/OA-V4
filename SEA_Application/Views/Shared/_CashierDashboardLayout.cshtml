@@ -121,126 +121,134 @@
                             <p>Sales</p>
                         </a>
                     </li>
+                    <li id="SaleByQuantitySummaryCashier" class="nav-item">
+                        <a href="@Url.Action("SaleByQuantity", "Sales" )" class="nav-link nav-toggle">
+                            <i class="fal fa-abacus">
+                                @*<img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">*@
+                            </i>
+                            <p>Product Sale Summary </p>
+                        </a>
+                    </li>
 
                     @*<li id="ReceptionStudentFee" class="nav-item">
-                        <a href="@Url.Action("StudentFee", "GrandTotal" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-teacher.png" alt="">
-                            </i>
-                            <p>Student Fee</p>
-                        </a>
-                    </li>*@
+            <a href="@Url.Action("StudentFee", "GrandTotal" )" class="nav-link nav-toggle">
+                <i class="sea-dash">
+                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-teacher.png" alt="">
+                </i>
+                <p>Student Fee</p>
+            </a>
+        </li>*@
 
                     @*<li id="ReceptionPhotoCopierSummary" class="nav-item">
 
-                        <a href="@Url.Action("Dashboard", "PhotoCopier_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="fal fa-books"></i>
-                            <p>PhotoCopier Summary</p>
-                        </a>
-                    </li>*@
+            <a href="@Url.Action("Dashboard", "PhotoCopier_Dashboard" )" class="nav-link nav-toggle">
+                <i class="fal fa-books"></i>
+                <p>PhotoCopier Summary</p>
+            </a>
+        </li>*@
 
 
                     @*
-                        <li class="nav-item">
-                            <a href="@(Url.Action("Index", "AspNetFeeDetail" ))" class="nav-link nav-toggle">
-                                <i class="sea-dash">
-                                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                                </i>
-                                <p>Online Courses</p>
-                            </a>
-                        </li>*@
+        <li class="nav-item">
+            <a href="@(Url.Action("Index", "AspNetFeeDetail" ))" class="nav-link nav-toggle">
+                <i class="sea-dash">
+                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
+                </i>
+                <p>Online Courses</p>
+            </a>
+        </li>*@
 
                     @*@if (Session == "Online Session")
-                        {*@
+        {*@
 
 
 
 
 
                     @*
-                        <li class="nav-item" id="studenttopic">
-                            <a href="@Url.Action(" Index", "AspnetSubjectTopics" )" class="nav-link nav-toggle">
-                                <i class="fa fa-list-ul"></i>
-                                <span class="title">Topic</span>
-                            </a>
-                        </li>
-                        <li class="nav-item" id="studentlesson">
-                            <a href="@Url.Action(" Index", "AspnetLessons" )" class="nav-link nav-toggle">
-                                <i class="fa fa-leaf"></i>
-                                <span class="title">Lesson</span>
-                            </a>
-                        </li>*@
+        <li class="nav-item" id="studenttopic">
+            <a href="@Url.Action(" Index", "AspnetSubjectTopics" )" class="nav-link nav-toggle">
+                <i class="fa fa-list-ul"></i>
+                <span class="title">Topic</span>
+            </a>
+        </li>
+        <li class="nav-item" id="studentlesson">
+            <a href="@Url.Action(" Index", "AspnetLessons" )" class="nav-link nav-toggle">
+                <i class="fa fa-leaf"></i>
+                <span class="title">Lesson</span>
+            </a>
+        </li>*@
 
                     @*
-                        <li class="nav-item" id="studentQuestionAnswer">
-                            <a href="@Url.Action(" Index", "AspnetQuestions" )" class="nav-link nav-toggle">
-                                <i class="fa fa-book"></i>
-                                <span class="title">Questions Answers</span>
-                            </a>
-                        </li>
+        <li class="nav-item" id="studentQuestionAnswer">
+            <a href="@Url.Action(" Index", "AspnetQuestions" )" class="nav-link nav-toggle">
+                <i class="fa fa-book"></i>
+                <span class="title">Questions Answers</span>
+            </a>
+        </li>
 
 
 
-                        <li class="nav-item" id="TestQuestions">
-                            <a href="@Url.Action(" TestQuestions", "AspnetQuestions" )" class="nav-link nav-toggle">
-                                <i class="fa fa-book"></i>
-                                <span class="title">Test Questions</span>
-                            </a>
-                        </li>*@
-
-                    @*
-                        <li class="nav-item" id="studentQuiz">
-                            <a href="@Url.Action(" Index", "AspnetQuizs" )" class="nav-link nav-toggle">
-                                <i class="fa fa-pencil-square-o"></i>
-                                <span class="title">Quiz</span>
-                            </a>
-                        </li>*@
+        <li class="nav-item" id="TestQuestions">
+            <a href="@Url.Action(" TestQuestions", "AspnetQuestions" )" class="nav-link nav-toggle">
+                <i class="fa fa-book"></i>
+                <span class="title">Test Questions</span>
+            </a>
+        </li>*@
 
                     @*
-                        <li class="nav-item  ">
-                            <a href="@(Url.Action(" Teacher_Announcement", "Teacher_Dashboard" ))">
-                                <i class="fa fa-bullhorn"></i>
-                                <span class="title">Announcement</span>
-                            </a>
-                        </li>
+        <li class="nav-item" id="studentQuiz">
+            <a href="@Url.Action(" Index", "AspnetQuizs" )" class="nav-link nav-toggle">
+                <i class="fa fa-pencil-square-o"></i>
+                <span class="title">Quiz</span>
+            </a>
+        </li>*@
 
-                        <li class="nav-item  ">
-                            <a href="@(Url.Action(" Attendance", "Teacher_Dashboard" ))">
-                                <i class="fa fa-list-ol"></i>
-                                <span class="title">Student Attendance</span>
-                            </a>
-                        </li>
+                    @*
+        <li class="nav-item  ">
+            <a href="@(Url.Action(" Teacher_Announcement", "Teacher_Dashboard" ))">
+                <i class="fa fa-bullhorn"></i>
+                <span class="title">Announcement</span>
+            </a>
+        </li>
 
-                        <li class="nav-item">
-                            <a href="@(Url.Action(" ParentTeacherMeeting", "Teacher_Dashboard" ))">
-                                <i class="fa fa-users"></i>
-                                <span class="title">Parent Teacher Meeting</span>
-                            </a>
-                        </li>
+        <li class="nav-item  ">
+            <a href="@(Url.Action(" Attendance", "Teacher_Dashboard" ))">
+                <i class="fa fa-list-ol"></i>
+                <span class="title">Student Attendance</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="@(Url.Action(" ParentTeacherMeeting", "Teacher_Dashboard" ))">
+                <i class="fa fa-users"></i>
+                <span class="title">Parent Teacher Meeting</span>
+            </a>
+        </li>
 
 
-                        <li class="nav-item">
-                            <a href="#" class="nav-link nav-toggle">
-                                <i class="fa fa-book"></i>
-                                <span class="title">Assessment</span>
-                            </a>
+        <li class="nav-item">
+            <a href="#" class="nav-link nav-toggle">
+                <i class="fa fa-book"></i>
+                <span class="title">Assessment</span>
+            </a>
 
-                            <ul class="sub-menu">
-                                <li class="nav-item  ">
-                                    <a href="@(Url.Action(" Subject_Assessment","Teacher_Dashboard"))">
-                                        <i class="fa fa-circle-o"></i>
-                                        <span class="title">Subject Assessment</span>
-                                    </a>
-                                </li>
+            <ul class="sub-menu">
+                <li class="nav-item  ">
+                    <a href="@(Url.Action(" Subject_Assessment","Teacher_Dashboard"))">
+                        <i class="fa fa-circle-o"></i>
+                        <span class="title">Subject Assessment</span>
+                    </a>
+                </li>
 
-                                <li class="nav-item  ">
-                                    <a href="@(Url.Action(" Class_Assessment", "Teacher_Dashboard" ))">
-                                        <i class="fa fa-circle-o"></i>
-                                        <span class="title">Class Assessment</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>*@
+                <li class="nav-item  ">
+                    <a href="@(Url.Action(" Class_Assessment", "Teacher_Dashboard" ))">
+                        <i class="fa fa-circle-o"></i>
+                        <span class="title">Class Assessment</span>
+                    </a>
+                </li>
+            </ul>
+        </li>*@
 
 
 

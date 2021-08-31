@@ -1,6 +1,4 @@
 ﻿
-
-
 @if (User.IsInRole("Admin"))
 {
     Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
@@ -33,6 +31,7 @@ else if (User.IsInRole("Cashier"))
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 
 <div class="card">
     <div class="card-body p-4">
@@ -68,7 +67,7 @@ else if (User.IsInRole("Cashier"))
         <br />
         <div class="table-responsive" id="DivToPrint">
 
-            <h2 style="text-align: center; color: #053f89">Product Order Summary</h2>
+            <h2 style="text-align: center; color: #053f89">Product Sale Summary</h2>
             <div id="DateToView">
 
             </div>
@@ -79,15 +78,13 @@ else if (User.IsInRole("Cashier"))
                 <thead>
 
                     <tr>
-                        <th>Date</th>
-                        <th>Order No </th>
-                        <th>Status </th>
-                        <th>Total</th>
-                        <th>Discount</th>
-                        <th>Total Discounted </th>
+                        <th>Product No</th>
+                        <th>Product Name</th>
 
-                        <th class="detailscolumn">Action</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
                     </tr>
+
                 </thead>
 
                 <tbody id="SaleReport">
@@ -99,7 +96,6 @@ else if (User.IsInRole("Cashier"))
 
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
 
@@ -122,40 +118,46 @@ else if (User.IsInRole("Cashier"))
 
         $.ajax({
             type: "POST",
-            url: "/Sales/GetSaleSummary",
+            url: "/Sales/GetSaleByQuantity",
             data: { "FromDate": FullDateInYYYYMMDD, "ToDate": FullDateInYYYYMMDD },
 
             success: function (data) {
 
                 $("#SaleReport").html("");
 
+                var TotalQuantity = 0;
                 var GrandTotal = 0;
-                var DiscountTotal = 0;
-                var GrandTotalDiscounted = 0;
 
 
-                $.each(data, function (index) {
+                var TotalDiscount = data.TotalDiscount;
+                var TotalDiscountedAmount = data.TotalDiscountedPrice;
 
 
-                    var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
-                    var dat = value.getMonth() +
-                        1 +
-                        "/" +
-                        value.getDate() +
-                        "/" +
-                        value.getFullYear();
+                var SaleDetailByQuantity = data.SaleDetailByQuantity;
 
-                    GrandTotal = GrandTotal + data[index].Total;
-                    DiscountTotal = DiscountTotal + data[index].Discount;
-                    GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
+                $.each(SaleDetailByQuantity, function (index) {
 
-                    $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+                    $("#SaleReport").append("<tr><td>" + SaleDetailByQuantity[index].ProductNo + "</td><td>" + SaleDetailByQuantity[index].InventoryName + "</td><td>" + SaleDetailByQuantity[index].Quantity + "</td><td>" + SaleDetailByQuantity[index].Total + "</td> </tr>");
 
+                    TotalQuantity = TotalQuantity + SaleDetailByQuantity[index].Quantity;
+                    GrandTotal = GrandTotal + SaleDetailByQuantity[index].Total;
                 })
 
-                $("#SaleReport").append("<tr> <td >Grand Total</td><td></td>   <td></td> <td>" + GrandTotal + "</td><td>-" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+                //$("#SaleReport").append("<tr><td>Grand Total</td><td></td><td> " + TotalQuantity + "</td><td>" + GrandTotal + "</td></tr>");
 
-                var AllTds = $("td:nth-child(4),td:nth-child(5),td:nth-child(6)");
+
+
+                $("#SaleReport").append("<tr><td> </td><td></td><td>Total </td><td>" + GrandTotal + "</td></tr>");
+                $("#SaleReport").append("<tr><td></td><td></td><td>Discount</td><td>-" + TotalDiscount + "</td></tr>");
+                $("#SaleReport").append("<tr><td></td><td></td><td>Grand Total</td><td>" + TotalDiscountedAmount + "</td></tr>");
+
+
+
+
+
+                // $("#SaleReport").append("");
+
+                var AllTds = $("td:nth-child(3),td:nth-child(4)");
 
                 for (var i = 0; i < AllTds.length; i++) {
 
@@ -232,6 +234,7 @@ else if (User.IsInRole("Cashier"))
                 $("#DateToView").html('<h3><span id="FromDateView"> Summary From: ' + FromDateFormat + ' </span><span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
 
 
+
                 SaleSummary(FromDate, ToDate);
 
 
@@ -299,42 +302,37 @@ else if (User.IsInRole("Cashier"))
 
         $.ajax({
             type: "POST",
-            url: "/Sales/GetSaleSummary",
+            url: "/Sales/GetSaleByQuantity",
             data: { "FromDate": FromDate, "ToDate": ToDate },
 
             success: function (data) {
 
                 $("#SaleReport").html("");
 
+
+                var TotalQuantity = 0;
                 var GrandTotal = 0;
-                var DiscountTotal = 0;
-                var GrandTotalDiscounted = 0;
 
+                var TotalDiscount = data.TotalDiscount;
+                var TotalDiscountedAmount = data.TotalDiscountedPrice;
+                var SaleDetailByQuantity = data.SaleDetailByQuantity;
 
-                $.each(data, function (index) {
+                $.each(SaleDetailByQuantity, function (index) {
 
+                    $("#SaleReport").append("<tr><td>" + SaleDetailByQuantity[index].ProductNo + "</td><td>" + SaleDetailByQuantity[index].InventoryName + "</td><td>" + SaleDetailByQuantity[index].Quantity + "</td><td>" + SaleDetailByQuantity[index].Total + "</td> </tr>");
 
-                    var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
-                    var dat = value.getMonth() +
-                        1 +
-                        "/" +
-                        value.getDate() +
-                        "/" +
-                        value.getFullYear();
-
-                    GrandTotal = GrandTotal + data[index].Total;
-                    DiscountTotal = DiscountTotal + data[index].Discount;
-                    GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
-
-                    $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
-
+                    TotalQuantity = TotalQuantity + SaleDetailByQuantity[index].Quantity;
+                    GrandTotal = GrandTotal + SaleDetailByQuantity[index].Total;
                 })
 
-                $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td>  <td></td> <td>" + GrandTotal + "</td><td>" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+
+                $("#SaleReport").append("<tr><td> </td><td></td><td>Total </td><td>" + GrandTotal + "</td></tr>");
+                $("#SaleReport").append("<tr><td></td><td></td><td>Discount</td><td>-" + TotalDiscount + "</td></tr>");
+                $("#SaleReport").append("<tr><td></td><td></td><td>Grand Total</td><td>" + TotalDiscountedAmount + "</td></tr>");
 
 
 
-                var AllTds = $("td:nth-child(4),td:nth-child(5),td:nth-child(6)");
+                var AllTds = $("td:nth-child(3),td:nth-child(4)");
 
                 for (var i = 0; i < AllTds.length; i++) {
 
@@ -365,3 +363,6 @@ else if (User.IsInRole("Cashier"))
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
+
+
+
