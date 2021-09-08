@@ -173,10 +173,22 @@
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
-                                <td style="width:15%"> <label class="control-label">Discount</label></td>
+                                <td style="width:15%"> <label class="control-label">Discount Percentage (%)</label></td>
                                 <td style="width:15%"><input style="text-align:right" class="form-control" value="0" min="0" type="number" id="Discount" name="Discount" required></td>
                                 <td style="width:15%"></td>
                             </tr>
+
+                            <tr id="DiscountRow">
+
+                                <td style="width:20%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"> <label class="control-label">Discount Amount</label></td>
+                                <td style="width:15%"><input style="text-align:right" class="form-control" value="0" min="0" readonly type="number" id="DiscountAmount" name="DiscountAmount" required></td>
+                                <td style="width:15%"></td>
+                            </tr>
+
 
                             <tr id="DiscountedPriceRow">
 
@@ -569,6 +581,7 @@
 
                 // var CustomerName = $("#CustomerName").val();
                 var Discount = $("#Discount").val();
+                var DiscountAmount = $("#DiscountAmount").val();
                 var DiscountedPrice = $("#DiscountedPrice").val();
                 var GrandTotal = $("#GrandTotal").val();
 
@@ -580,7 +593,7 @@
                 $.ajax({
                     type: "post",
                     url: "/Sales/SaveSaleOrders",
-                    data: { 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'Discount': Discount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
+                    data: { 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
                     datatype: "json",
                     cache: false,
                     success: function (data) {
@@ -595,7 +608,7 @@
 
                             // var CustomerName = $("#CustomerName").val();
 
-                            var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>";
+                            var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + DiscountAmount + "</td> </tr>";
                             var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
 
                             $("#ReceiptInner").append('' +
@@ -736,11 +749,20 @@
     }
     function CalculateDiscount(Discount) {
 
+
         var GrandTotal = $("#GrandTotal").val();
 
-        var DiscountedPrice = parseFloat(GrandTotal) - parseFloat(Discount);
+        var DiscountAmount = parseFloat(GrandTotal) * Discount;
 
-        $("#DiscountedPrice").val(DiscountedPrice);
+        DiscountAmount = DiscountAmount / 100;
+    
+        var DiscountedPrice = parseFloat(GrandTotal) - parseFloat(DiscountAmount);
+
+
+        $("#DiscountAmount").val(parseFloat(DiscountAmount.toFixed(2)));
+        $("#DiscountedPrice").val(parseFloat(DiscountedPrice.toFixed(2)));
+
+
 
     }
 
