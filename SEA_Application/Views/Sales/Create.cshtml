@@ -5,32 +5,32 @@
 }
 
 <style>
-        th, td {
-            padding: 5px;
-        }
+    th, td {
+        padding: 5px;
+    }
 
-        /*@@media print {
+    /*@@media print {
             * {
                 -webkit-print-color-adjust: exact !important;*/ /* Chrome, Safari, Edge */
 
-        /*}
+    /*}
     }*/
 
-        #SaleOrderTable tr, th, td {
-            border: 0px !important;
-        }
+    #SaleOrderTable tr, th, td {
+        border: 0px !important;
+    }
 
-        .error {
-            color: red !important;
-        }
+    .error {
+        color: red !important;
+    }
 
-        #table1 td {
-            width: 50%;
-        }
+    #table1 td {
+        width: 50%;
+    }
 
-        .description, .card-description, .footer-big p {
-            color: black !important;
-        }
+    .description, .card-description, .footer-big p {
+        color: black !important;
+    }
 </style>
 
 <link href="~/Content/print-receipt-thermal-printer-master/print-receipt-thermal-printer-master/style.css" media="screen" rel="stylesheet" />
@@ -71,9 +71,7 @@
                     <div class="col-md-12">
 
                         <label class="control-label">Description</label>
-
                         <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
-
 
                     </div>
                 </div>
@@ -755,12 +753,16 @@
         var DiscountAmount = parseFloat(GrandTotal) * Discount;
 
         DiscountAmount = DiscountAmount / 100;
-    
+
+      //  alert(parseFloat(DiscountAmount.toFixed(2)));
+
+        DiscountAmount = parseInt(DiscountAmount);
+
         var DiscountedPrice = parseFloat(GrandTotal) - parseFloat(DiscountAmount);
-
-
-        $("#DiscountAmount").val(parseFloat(DiscountAmount.toFixed(2)));
-        $("#DiscountedPrice").val(parseFloat(DiscountedPrice.toFixed(2)));
+        $("#DiscountAmount").val(parseFloat(DiscountAmount));
+        //  $("#DiscountedPrice").val(parseFloat( DiscountedPrice.toFixed(2)));
+        //alert(DiscountAmount.toFixed(2)+" "+DiscountedPrice.toFixed(2));
+        $("#DiscountedPrice").val(Math.round(DiscountedPrice));
 
 
 
