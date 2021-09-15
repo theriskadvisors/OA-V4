@@ -199,7 +199,6 @@
                                 <td style="width:15%"></td>
                             </tr>
 
-
                         </tbody>
 
                     </table>
@@ -219,7 +218,6 @@
                 <div class="form-group">
                     <div class="col-md-12">
                         <button tabindex="99" type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
-
 
                         <button tabindex="100" type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                             <i class="material-icons mr-2">cached</i>  Cancel
@@ -480,7 +478,6 @@
             let str = Id;
             const myArr = str.split("Price");
 
-            // alert(myArr[1]);
 
             Total(myArr[1]);
         })
@@ -498,6 +495,8 @@
             },
             submitHandler: function (form) {
                 debugger;
+
+               $("#SaveButton").prop('disabled', true);
 
                 $("#Error").html("");
                 var SalesList =
@@ -538,7 +537,9 @@
                 if (result) {
 
                     $("#Error").html("Inventroy Raw Items cannot repeat");
+                    $("#SaveButton").prop('disabled', false);
                     return false;
+                    //SaveButton
                 }
                 var TableRow = "";
                 for (var i in arr) {
@@ -568,7 +569,6 @@
 
                     var ProductName = $("#" + IventoryStocksId + " option:selected").text();
 
-
                     TableRow = TableRow + "<tr>  <td class='description'>" + ProductName + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + Quantity + "</td> <td  class='price'>" + SaleUnitPrice + "</td>  <td   class='Amount' >&nbsp; " + Cost + "</td>";
 
                     SalesList.push(obj);
@@ -576,17 +576,12 @@
                 }//end of for loop
 
                 var Date = $("#Date").val();
-
                 // var CustomerName = $("#CustomerName").val();
                 var Discount = $("#Discount").val();
                 var DiscountAmount = $("#DiscountAmount").val();
                 var DiscountedPrice = $("#DiscountedPrice").val();
                 var GrandTotal = $("#GrandTotal").val();
-
                 var Description = $("#Description").val();
-                //alert(CustomerName);
-
-
 
                 $.ajax({
                     type: "post",
@@ -618,7 +613,6 @@
                                 ' <br><b>Cashier:</b><b>Bismarck </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                                 ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
                                 ' </span>' +
-
 
                                 '<table>' +
                                 '<thead>' +
@@ -656,7 +650,6 @@
                     }
                 })
 
-
             }
 
         })
@@ -677,7 +670,6 @@
         row[count] = count;
         arr[count] = count;
         count = count + 1;
-
 
         tabindex1 = tabindex1 + 4;
         tabindex2 = tabindex2 + 4;
@@ -754,7 +746,7 @@
 
         DiscountAmount = DiscountAmount / 100;
 
-      //  alert(parseFloat(DiscountAmount.toFixed(2)));
+        //  alert(parseFloat(DiscountAmount.toFixed(2)));
 
         DiscountAmount = parseInt(DiscountAmount);
 

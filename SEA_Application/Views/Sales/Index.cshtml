@@ -56,12 +56,12 @@
         $("#PageHeader").html("Sale Orders");
 
         var table = $('#datatable').dataTable({
+            "order": [[0, "desc"]],
             buttons: [
                 {
                     text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
                 },
-
-
+               
                 {
                     text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Sale Order</span>',
                     action: function (e, dt, button, config) {
@@ -106,7 +106,6 @@
                 "<'row'<'col-sm-12 datatablesData'tr>>" +
                 "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
         });
-
         $.ajax({
             type: "POST",
             url: "/Sales/AllSaleOrdersList",
@@ -137,8 +136,10 @@
 
                     AllTds[i].innerHTML = CommaSeparatedValue;
                 }
+
             }
         });
+
 
 
         //$('.table').on('click', 'tbody tr', function () {
