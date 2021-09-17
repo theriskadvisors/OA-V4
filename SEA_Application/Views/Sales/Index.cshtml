@@ -105,40 +105,101 @@
             dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
                 "<'row'<'col-sm-12 datatablesData'tr>>" +
                 "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+
+
+            "bServerSide": true,
+            "sAjaxSource": "/Sales/AllSaleOrdersList",
+            "fnServerData": function (sSource, aoData, fnCallback) {
+
+
+                $.ajax({
+
+                    type: "POST",
+                    data: aoData,
+                    url: sSource,
+                    success: fnCallback
+                })
+
+            },
+
+            "aoColumns": [
+
+               
+                { "mData": "OrderNo" },
+                {
+
+
+                    "mData": "DateTime", "name": "DateTime",
+                    "render": function (jsonDate) {
+
+                        var value = new Date(parseInt(jsonDate.replace(/(^.*\()|([+-].*$)/g, '')));
+                        var dat = value.getMonth() +
+                            1 +
+                            "/" +
+                            value.getDate() +
+                            "/" +
+                            value.getFullYear();
+
+
+                        return dat;
+                    }
+                },
+
+                { "mData": "Description" },
+                { "mData": "Status" },
+                { "mData": "Discount" },
+                { "mData": "DiscountedPrice" },
+                {
+                    "mData": "Id", "name": "Id",
+
+
+                    "render": function (Id) {
+
+                        return '<button name ="' + Id + '" onclick="OrderDetails(' + Id + ')" class="btn btn-sm btn-primary deleteButton" style="cursor:;color:white !important"  >View Details</button>';
+
+                    }
+
+
+                },
+                //Discount
+
+            ],
+
+
         });
-        $.ajax({
-            type: "POST",
-            url: "/Sales/AllSaleOrdersList",
-            data: {},
-            success: function (data) {
-                table.fnClearTable();
-                $.each(data, function (index) {
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/Sales/AllSaleOrdersList",
+        //    data: {},
+        //    success: function (data) {
+        //        table.fnClearTable();
+        //        $.each(data, function (index) {
 
-                    var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
-                    var dat = value.getMonth() +
-                        1 +
-                        "/" +
-                        value.getDate() +
-                        "/" +
-                        value.getFullYear();
+        //            var value = new Date(parseInt(data[index].DateTime.replace(/(^.*\()|([+-].*$)/g, '')));
+        //            var dat = value.getMonth() +
+        //                1 +
+        //                "/" +
+        //                value.getDate() +
+        //                "/" +
+        //                value.getFullYear();
 
-                    table.fnAddData([data[index].OrderNo, dat,data[index].Description, data[index].Status, data[index].Discount, data[index].DiscountedPrice, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> "]);
+        //            table.fnAddData([data[index].OrderNo, dat,data[index].Description, data[index].Status, data[index].Discount, data[index].DiscountedPrice, "<input type='button' class='btn btn-sm btn-primary' style='color:white !important' value='View Details' onclick='OrderDetails(" + data[index].Id + ")'> "]);
 
 
-                });
-                table.fnDraw();
+        //        });
+        //        table.fnDraw();
 
-                var AllTds = $("tr td:nth-child(5),td:nth-child(6)");
+        //        var AllTds = $("tr td:nth-child(5),td:nth-child(6)");
 
-                for (var i = 0; i < AllTds.length; i++) {
+        //        for (var i = 0; i < AllTds.length; i++) {
 
-                    var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
+        //            var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
 
-                    AllTds[i].innerHTML = CommaSeparatedValue;
-                }
+        //            AllTds[i].innerHTML = CommaSeparatedValue;
+        //        }
 
-            }
-        });
+        //    }
+        //});
 
 
 

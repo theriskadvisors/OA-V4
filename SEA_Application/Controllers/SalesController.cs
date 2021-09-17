@@ -18,37 +18,128 @@ namespace SEA_Application.Controllers
 
             return View();
         }
-        public ActionResult AllSaleOrdersList()
+        public ActionResult AllSaleOrdersList(DataTablesParam param)
         {
-            //TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(x.PurchaseDate.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local) 
-            var SaleOrdersList = db.SaleOrders.Select(x => new { x.Id, x.OrderNo, x.Description, x.Status, CustomerName = x.CustomerName, /*StudentName = x.AspNetStudent.AspNetUser.Name,*/ x.Discount, Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value }).ToList();
-
-            List<SaleOrderCustom> CustomModelList = new List<SaleOrderCustom>();
-
-
-            foreach (var item in SaleOrdersList)
+            try
             {
-                SaleOrderCustom obj = new SaleOrderCustom();
 
-                obj.Id = item.Id;
-                obj.OrderNo = item.OrderNo.Value;
-                obj.Status = item.Status;
-                obj.CustomerName = item.CustomerName;
-                obj.Discount = item.Discount.Value;
+                int pageNo = 1;
 
-                obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
-                obj.Discount = item.Discount.Value;
-                obj.Total = item.Total;
-                obj.DiscountedPrice = item.DiscountedPrice.Value;
-                obj.Description = item.Description;
+                if (param.iDisplayStart >= param.iDisplayLength)
+                {
+                    pageNo = (param.iDisplayStart / param.iDisplayLength) + 1;
+                }
+                int totalCount = 0;
 
-                CustomModelList.Add(obj);
+
+                if (param.sSearch != null)
+                {
+                    totalCount = db.SaleOrders
+                                         .Select(x => new { x.Id, x.OrderNo, x.Description, x.Status, CustomerName = x.CustomerName,  x.Discount, Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value })
+                                         .Where(x=>x.OrderNo.Value.ToString().Contains(param.sSearch) || x.Description.ToLower().ToLower().Contains(param.sSearch.ToLower()) || x.Status.ToLower().ToLower().Contains(param.sSearch.ToLower())  || x.Discount.Value.ToString().Contains(param.sSearch) 
+                                          || string.Concat(x.Date.Month.ToString() + "/" + x.Date.Day.ToString() + "/" + x.Date.Year.ToString()).Contains(param.sSearch) || x.DiscountedPrice.Value.ToString().Contains(param.sSearch) || x.Total.ToString().Contains(param.sSearch))
+                                         .OrderByDescending(x=>x.OrderNo).ToList().Count();
+                    // totalCount = 
+
+                    var SaleOrdersList = db.SaleOrders
+                                         .Select(x => new { x.Id, x.OrderNo, x.Description, x.Status, CustomerName = x.CustomerName, x.Discount, Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value })
+                                         .Where(x => x.OrderNo.Value.ToString().Contains(param.sSearch) || x.Description.ToLower().ToLower().Contains(param.sSearch.ToLower()) || x.Status.ToLower().ToLower().Contains(param.sSearch.ToLower()) || x.Discount.Value.ToString().Contains(param.sSearch)
+                                          || string.Concat(x.Date.Month.ToString() + "/" + x.Date.Day.ToString() + "/" + x.Date.Year.ToString()).Contains(param.sSearch) || x.DiscountedPrice.Value.ToString().Contains(param.sSearch) || x.Total.ToString().Contains(param.sSearch)).OrderByDescending(x => x.OrderNo).Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength)
+                                         .ToList();
+ 
+
+                    List<SaleOrderCustom> CustomModelList = new List<SaleOrderCustom>();
+
+                    foreach (var item in SaleOrdersList)
+                    {
+                        SaleOrderCustom obj = new SaleOrderCustom();
+
+                        obj.Id = item.Id;
+                        obj.OrderNo = item.OrderNo.Value;
+                        obj.Status = item.Status;
+                        obj.CustomerName = item.CustomerName;
+                        obj.Discount = item.Discount.Value;
+
+                        obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
+                        obj.Discount = item.Discount.Value;
+                        obj.Total = item.Total;
+                        obj.DiscountedPrice = item.DiscountedPrice.Value;
+                        obj.Description = item.Description;
+
+                        CustomModelList.Add(obj);
+
+                    }
+
+                    // return Json(CustomModelList, JsonRequestBehavior.AllowGet);
+
+
+                    return Json(new
+                    {
+                        aaData = CustomModelList,
+                        sEcho = param.sEcho,
+                        iTotalDisplayRecords = totalCount,
+                        iTotalRecords = totalCount
+
+                    }, JsonRequestBehavior.AllowGet);
+
+
+                }//end of if block
+                else
+                {
+
+                    totalCount = db.SaleOrders
+                                        .Select(x => new { x.Id, x.OrderNo, x.Description, x.Status, CustomerName = x.CustomerName, x.Discount, Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value })
+                                         .OrderByDescending(x => x.OrderNo).ToList().Count();
+                    
+                    var SaleOrdersList = db.SaleOrders
+                                         .Select(x => new { x.Id, x.OrderNo, x.Description, x.Status, CustomerName = x.CustomerName, x.Discount, Date = x.Date.Value, DiscountedPrice = x.DiscountedPrice, Total = x.Total.Value })
+                                         .OrderByDescending(x => x.OrderNo).Skip((pageNo - 1) * param.iDisplayLength).Take(param.iDisplayLength).ToList();
+
+
+                    List<SaleOrderCustom> CustomModelList = new List<SaleOrderCustom>();
+                    foreach (var item in SaleOrdersList)
+                    {
+                        SaleOrderCustom obj = new SaleOrderCustom();
+
+                        obj.Id = item.Id;
+                        obj.OrderNo = item.OrderNo.Value;
+                        obj.Status = item.Status;
+                        obj.CustomerName = item.CustomerName;
+                        obj.Discount = item.Discount.Value;
+                        obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
+                        obj.Discount = item.Discount.Value;
+                        obj.Total = item.Total;
+                        obj.DiscountedPrice = item.DiscountedPrice.Value;
+                        obj.Description = item.Description;
+
+                        CustomModelList.Add(obj);
+
+                    }
+
+
+                    return Json(new
+                    {
+                        aaData = CustomModelList,
+                        sEcho = param.sEcho,
+                        iTotalDisplayRecords = totalCount,
+                        iTotalRecords = totalCount
+
+                    }, JsonRequestBehavior.AllowGet);
+
+
+                }
+
+                // CustomModelList= CustomModelList.OrderByDescending(x => x.OrderNo).ToList();
+
+            }//end of try block
+            catch (Exception ex)
+            {
+                var Msg = ex.Message;
+                var inner = ex.InnerException.Message;
             }
 
+            return Json("", JsonRequestBehavior.AllowGet);
 
-           // CustomModelList= CustomModelList.OrderByDescending(x => x.OrderNo).ToList();
-
-            return Json(CustomModelList, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ReturnSaleOrder()
@@ -182,8 +273,8 @@ namespace SEA_Application.Controllers
             List<SaleOrderCustom> SalesList = new List<SaleOrderCustom>();
 
             List<SaleOrder> SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
-           
-            
+
+
             var AllSaleDetails = db.SaleDetails.Where(x => x.SaleOrder.Date >= dateTimeFrom && x.SaleOrder.Date <= dateTimeTo && x.SaleOrder.Status == "Paid").ToList();
             var SaleDistinctIds = AllSaleDetails.Select(x => x.InventoryId).Distinct();
             List<SaleDetailByQuantity> saleDetailByQuantity = new List<SaleDetailByQuantity>();
@@ -198,7 +289,7 @@ namespace SEA_Application.Controllers
                 obj.InventoryId = InventoryId.Value;
                 obj.ProductNo = SaleDetails.FirstOrDefault().Inventory.ItemNo.Value;
                 obj.InventoryName = SaleDetails.FirstOrDefault().Inventory.Name;
-               // obj.UnitSalePrice = SaleDetails.FirstOrDefault().UnitSalePrice.Value;
+                // obj.UnitSalePrice = SaleDetails.FirstOrDefault().UnitSalePrice.Value;
                 obj.Quantity = SaleDetails.Select(x => x.Quantity.Value).Sum();
 
                 obj.Total = SaleDetails.Select(x => x.TotalPrice.Value).Sum();
@@ -209,9 +300,9 @@ namespace SEA_Application.Controllers
 
 
             var AllSaleReturnedDetails = db.SaleDetails.Where(x => x.SaleOrder.Date >= dateTimeFrom && x.SaleOrder.Date <= dateTimeTo && x.SaleOrder.Status == "Returned").ToList();
-           
+
             var SaleDistinctReturnedIds = AllSaleReturnedDetails.Select(x => x.InventoryId).Distinct();
-      
+
             foreach (var InventoryId in SaleDistinctReturnedIds)
             {
                 SaleDetailByQuantity obj = new SaleDetailByQuantity();
