@@ -469,10 +469,16 @@
                                 var Quantity = $(this).find("#Quanity").html();
                                 var OAPrice = $(this).find("#OAPrice").val();
                                 var PhotoCopierPrice = $(this).find("#PhotoCopierPrice").html();
-
                                 var TotalPhotoCopierAndOA = parseFloat(OAPrice) + parseFloat(PhotoCopierPrice);
                                 var Total = $(this).find("#Total").html();
-                                var TableRow = "<tr>  <td class='description'>" + Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + Quantity + "</td> <td  class='price'>" + TotalPhotoCopierAndOA + "</td>  <td   class='Amount' >&nbsp; " + Total + "</td>"
+                                var CodeNo = $(this).find("#CodeNo").html();
+
+                                if (CodeNo != "") {
+                                    CodeNo = "(" + CodeNo + ")";
+                                }
+
+                                var TableRow = "<tr>  <td class='description'>" + CodeNo +" "+ Title + "</td> <td class='quantity' > &nbsp;&nbsp;&nbsp;&nbsp; " + Quantity + "</td> <td  class='price'>" + TotalPhotoCopierAndOA + "</td>  <td   class='Amount' >&nbsp; " + Total + "</td>"
+
                                 $('#billbody').append(TableRow);
                                 $('#billbody1').append(TableRow);
 
@@ -487,7 +493,6 @@
 
                             var Discount = parseInt($("#DiscountField").val());
                             var DiscountedPrice = $("#DiscountedPrice").html();
-
 
                             $("#OrderNo").html('Order#' + OrderId);
                             $("#OrderNo1").html('Order#' + OrderId);

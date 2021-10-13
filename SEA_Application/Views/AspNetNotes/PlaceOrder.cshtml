@@ -328,6 +328,7 @@ else if (User.IsInRole("Receptionist"))
     function GetAllNotes(rowNumber) {
         var id = "#Notes" + rowNumber;
         var node = $(id);
+        var FullName = "";
         $.ajax({
             type: "POST",
             url: "/AspnetNotes/GetAllNotes",
@@ -336,8 +337,14 @@ else if (User.IsInRole("Receptionist"))
 
                 node.append("<option value='' >Select Note</option>")
                 $.each(data, function (i, item) {
-                    // console.log(data.Name);
-                    node.append("<option value=" + item.Id + " >" + item.Title + "</option>")
+
+                    Fullname = item.Title;
+                    if (item.NotesNo != "" && item.NotesNo != null) {
+
+                        Fullname = "(" + item.NotesNo + ")" + item.Title;
+                    }
+
+                    node.append("<option value=" + item.Id + " >" + Fullname + "</option>")
 
                 });
 

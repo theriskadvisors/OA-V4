@@ -304,7 +304,7 @@ namespace SEA_Application.Controllers
         }
         public ActionResult NotesPrint()
         {
-            List<string> CourseTypeList = new List<string>() { "CSS", "PMS" };
+            List<string> CourseTypeList = new List<string>() { "CSS", "PMS", "OnePaper" };
 
             List<Subject> SubjectList = new List<Subject>();
 
@@ -410,7 +410,7 @@ namespace SEA_Application.Controllers
         public ActionResult GetAllNotes()
         {
 
-            var AllNotesList = db.AspNetNotes.Select(x => new { x.Id, x.Title }).ToList();
+            var AllNotesList = db.AspNetNotes.Select(x => new { x.Id,x.NotesNo,x.Title }).ToList();
             return Json(AllNotesList, JsonRequestBehavior.AllowGet);
 
         }
