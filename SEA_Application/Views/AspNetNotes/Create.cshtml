@@ -283,7 +283,9 @@ else
         })
 
 
-        $("#NotesNo").keyup(function () {
+        $("#NotesNo").focusout(function () {
+
+           // alert("focus out function rendering ");
 
             var NotesNo = $(this).val();
             $("#NoteNoError").html("");
@@ -319,7 +321,6 @@ else
 
 
         })
-
 
 
 
@@ -409,8 +410,6 @@ else
         });
 
 
-
-
         $("#price").bind('keyup mouseup', function () {
 
 
@@ -419,8 +418,6 @@ else
 
 
         });
-
-
 
 
 
@@ -515,8 +512,9 @@ else
 
         $("form").submit(function () {
 
-           // alert(NotesNoExist);
             debugger
+
+           // $("#NotesNo").focusout();
 
             if (NotesNoExist == "Yes") {
 

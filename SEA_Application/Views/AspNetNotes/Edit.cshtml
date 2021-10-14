@@ -507,9 +507,9 @@ else if (User.IsInRole("Receptionist"))
         });
 
 
-        $("#NotesNo").keyup(function () {
+        $("#NotesNo").focusout(function () {
 
-            //alert("key up ");
+           // alert("on focus out rendering ");
             var NotesNo = $(this).val();
             $("#NoteNoError").html("");
             NotesNoExist = "No";
