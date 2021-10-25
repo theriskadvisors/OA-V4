@@ -223,14 +223,14 @@ else
                     </div> <!--End of Col 8-->
                     <br>
                     <div class="col-md-8 pl-5 pr-5 ">
-                        <button type="submit" class="btn btn-primary rounded rounded-lg"> Save </button>
+                        <button type="button" id="saveBtn" class="btn btn-primary rounded rounded-lg"> Save </button>
 
 
                         <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                             <i class="material-icons mr-2">cached</i>  Cancel
                         </button>
 
-
+                        <input type="submit" id="btnSubmit" class="hidden" name="name" value="Submit" />
 
                     </div>
 
@@ -267,7 +267,7 @@ else
 
             type: "POST",
             url: "/AspnetNotes/CheckNotesNoExist",
-            data: { "id": id,"NotesNo": NotesNo },
+            data: { "id": id, "NotesNo": NotesNo },
             success: function (response) {
                 $("#NoteNoError").html("");
 
@@ -285,44 +285,38 @@ else
 
         $("#NotesNo").focusout(function () {
 
-           // alert("focus out function rendering ");
-
             var NotesNo = $(this).val();
             $("#NoteNoError").html("");
             NotesNoExist = "No";
 
-           // alert(NotesNo);
-         //   alert(id);
             debugger
 
-            if (id != null && NotesNo != null && NotesNo !="") {
+            if (id != null && NotesNo != null && NotesNo != "") {
 
                 $("#NoteNoError").html("");
 
-            $.ajax({
+                $.ajax({
 
-                type: "POST",
-                url: "/AspnetNotes/CheckNotesNoExist",
-                data: { "id": id, "NotesNo": NotesNo },
-                success: function (response) {
-                    $("#NoteNoError").html("");
+                    type: "POST",
+                    url: "/AspnetNotes/CheckNotesNoExist",
+                    data: { "id": id, "NotesNo": NotesNo },
+                    success: function (response) {
+                        $("#NoteNoError").html("");
 
-                    if (response == "Yes") {
+                        if (response == "Yes") {
 
-                        NotesNoExist = "Yes";
-                        $("#NoteNoError").html("Selected code no already exist.");
+                            NotesNoExist = "Yes";
+                            $("#NoteNoError").html("Selected code no already exist.");
+                        }
+
                     }
 
-                }
-
-            })
+                })
 
             }
 
 
         })
-
-
 
         $("#Notestype").click(function () {
 
@@ -510,22 +504,49 @@ else
 
 
 
-        $("form").submit(function () {
+        $("#saveBtn").click(function () {
 
             debugger
 
-           // $("#NotesNo").focusout();
+            var NotesNoExist = "No";
+            var id = 0;
+            var NotesNo = $("#NotesNo").val();
 
-            if (NotesNoExist == "Yes") {
+            if (id != null && NotesNo != null && NotesNo != "") {
+                $.ajax({
 
-                return false;
+                    type: "POST",
+                    url: "/AspnetNotes/CheckNotesNoExist",
+                    data: { "id": id, "NotesNo": NotesNo },
+                    success: function (response) {
+                        debugger
+                        $("#NoteNoError").html("");
+
+                        if (response == "Yes") {
+
+                            $("#NoteNoError").html("Selected code no already exist.");
+
+                            // return false;
+                        }
+                        else {
+
+                            $("#btnSubmit").click();
+                            // return true;
+                        }
+
+                    }
+
+
+                })
+
+
             }
-            else {
-                return true;
-            }
 
-        });
-    })
+        })
+
+
+
+    })//end of document ready
 
     //function CheckNotesNoExist(NotesNo) {
 
