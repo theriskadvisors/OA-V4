@@ -56,9 +56,67 @@ namespace SEA_Application.Controllers
             AspNetAdvertise Ad = db.AspNetAdvertises.FirstOrDefault();
             ViewBag.AdLink = Ad.VideoURL;
             //return RedirectToAction("Index", "StudentCourses");
-            return View("BlankPage");
+
+            var Student =  db.AspNetStudents.Where(x => x.StudentID == ID).FirstOrDefault();
+
+           
+            if(Student.StudentIMG != null)
+            {
+                return View("BlankPage");
+            }
+
+            else
+            {
+                return View("UploadImage");
+            }
+
         }
 
+        public ActionResult UploadStudentImage(HttpPostedFileBase image)
+        {
+            var ID = User.Identity.GetUserId();
+            var studentToUpdate = db.AspNetStudents.Where(x => x.StudentID == ID).FirstOrDefault();
+
+            if (image != null)
+            {
+                var fileName = Path.GetFileName(image.FileName);
+                var extension = Path.GetExtension(image.FileName);
+                image.SaveAs(Server.MapPath("~/Content/Images/StudentImages/") + image.FileName);
+                //    file.SaveAs(Server.MapPath("/Upload/") + file.FileName);
+
+                studentToUpdate.StudentIMG = image.FileName;
+                db.SaveChanges();
+            }
+
+            if(studentToUpdate.StudentIMG != null)
+            {
+
+
+            var Classes1 = db.AspNetStudent_Subject.Where(x => x.StudentID == ID).Select(x => x.AspNetSubject.SubjectName).Distinct().ToList();
+            List<string> classes = new List<string>();
+
+            foreach (var clas in Classes1)
+            {
+                classes.Add(clas);
+            }
+
+            //classes.Add("Not Published");
+            ViewBag.AllClasses = classes;
+            AspNetAdvertise Ad = db.AspNetAdvertises.FirstOrDefault();
+            ViewBag.AdLink = Ad.VideoURL;
+
+                return View("BlankPage");
+
+            }
+            else
+            {
+                return View("UploadImage");
+
+            }
+
+
+
+        }
         public ActionResult SubjectsBlogs()
         {
 
