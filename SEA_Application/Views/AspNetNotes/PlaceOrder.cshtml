@@ -1,10 +1,13 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "PlaceOrder";
   //  Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
 }
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <style>
+
+    .error {
+        color: red !important;
+    }
 
     .color:hover {
         background-color: #0e72af !important;
@@ -43,35 +46,39 @@ else if (User.IsInRole("Receptionist"))
             <div class="col-md-12">
 
                 <form id="myForm">
+                   
 
-                    <div class="col-md-6 pl-5 pr-5 ">
+                        <div class="col-md-3 ">
 
-                        <div class="form-row mt-4">
-                            <div class="form-group col-md-12 bmd-form-group">
-                                <label> Select Student</label>
+                            <div class="form-row mt-5">
+                                <div class="form-group col-md-12 bmd-form-group">
+                                    <label> Select Student</label>
 
-                                @Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID" })
+                                    @Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID" })
+                                </div>
                             </div>
-                        </div>
-                    </div> <!-- end of column 6 -->
+                        </div> <!-- end of column 6 -->
+                   
+
                     <br />
+
                     <div class="row" style="margin:0">
 
                         <div class="col-md-3">
 
                             <label class="control-label"> </label>
-                            <select class="form-control code NotesClass" id="Notes0" name="Notes" required> </select>
+                            <select class="form-control code NotesClass drop" id="Notes0" name="Notes" required> </select>
 
                         </div>
 
-                        <div class="col-md-1" style="padding-left:0px">
+                        <div class="col-md-1" ">
 
                             <label class="control-label"> </label>
                             <input readonly placeholder="Notes Type" type="text" name="Name" id="NotesType0" class="form-control" />
 
                         </div>
 
-                        <div class="col-md-1" style="padding-left:0px">
+                        <div class="col-md-1">
 
                             <label class="control-label"> </label>
                             <input readonly placeholder="" type="text" name="" id="Price0" class="form-control" />
@@ -96,7 +103,7 @@ else if (User.IsInRole("Receptionist"))
 
                         </div>
 
-                        <div class="col-md-1" style="padding-left:0px">
+                        <div class="col-md-1">
 
                             <label class="control-label"> </label>
                             <input readonly value="0" placeholder="Total" type="text" name="" id="Total0" class="form-control TotalClass" />
@@ -104,14 +111,21 @@ else if (User.IsInRole("Receptionist"))
                         </div>
                         <div class="col-md-1">
                             <br />
-                            <button style="background:#32CD32" class="btn btn-sm btn-default plusbutton" onclick="NotesNewRow()"> <i class="fa fa-plus" style="font-size:12px"> </i> </button>
+                            <button type="button" style="background:#32CD32" class="btn btn-sm btn-default plusbutton" onclick="NotesNewRow()"> <i class="fa fa-plus" style="font-size:12px"> </i> </button>
                         </div>
 
 
                     </div><!-- end of row margin 0 -->
-                    <div id="NotesNewRow">
 
+
+                    <div class="col-md-12">
+
+                        <div id="NotesNewRow">
+
+                        </div>
                     </div>
+
+
 
                     <div class="row">
                         <div class="col-md-7">
@@ -119,16 +133,16 @@ else if (User.IsInRole("Receptionist"))
                         </div>
                         <!-- html col-md-offset-8 -->
                         <div class="col-md-1  totaldiv" style="padding:0px">
-                            <input value="0" style="background-color:white;" type="text" name="GrandTotal" id="GrandTotal" class="form-control" readonly />
+                            <input value="0" style="background-color:white;margin-left:15px;" type="text" name="GrandTotal" id="GrandTotal" class="form-control" readonly />
                         </div>
-                        <span id="zero_Error" style="color:red;margin-top:5px !important;margin-left:20px"> </span>
+                        <span id="zero_Error" style="color:red;margin-top:5px !important;margin-left:24px"> </span>
                     </div>
                     <br />
 
                     <div class="col-md-12">
                         <hr />
                         @*<button class="col-md-2 form-control color2" onclick="window.location.href = '/FinanceSummary/BankIndex'" style="border-radius:35px;border:hidden;margin-right:10px;background-color:red;color:white;font-size:11px;width:98px;height:38px;font-family:Montserrat" id="return"><i class="fa fa-arrow-left"></i> &nbsp;&nbsp; Return</button>
-                            <input class="col-md-2 form-control color" id="submit" onclick="SaveVoucher()" type="submit" value="Save" style="border-radius:35px;color:white;border:hidden;background-color:#128edb;font-size:11px;width:98px;height:38px;font-family:Montserrat" />*@
+                        <input class="col-md-2 form-control color" id="submit" onclick="SaveVoucher()" type="submit" value="Save" style="border-radius:35px;color:white;border:hidden;background-color:#128edb;font-size:11px;width:98px;height:38px;font-family:Montserrat" />*@
                         <button type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
                             <i class="material-icons mr-2"> cached</i> Cancel
                         </button>
@@ -449,26 +463,26 @@ else if (User.IsInRole("Receptionist"))
     function NotesNewRow() {
 
 
-        $("#NotesNewRow").append('<div class="row" style="margin:0px" id="' + count + '">' +
+        $("#NotesNewRow").append('<div class="row" style="" id="' + count + '">' +
             '<div class="col-md-3">' +
-            '<label class="control-label"></label><select  name = "Notes" onchange = "GetNoteDetail(' + count + ')"  id="Notes' + count + '" class="form-control  NotesClass" required  ></select>' +
+            '<label class="control-label"></label><select  name = "Notes" onchange = "GetNoteDetail(' + count + ')"  id="Notes' + count + '" class="form-control  NotesClass drop" required  ></select>' +
             '</div>' +
 
-            '<div class="col-md-1" style="padding-left:0px">' +
+            '<div class="col-md-1" style=" margin-top: -21px; ">' +
             '<label class="control-label"></label>   <input  id="NotesType' + count + '"  readonly placeholder="Notes Type" type="text"  class="form-control" /></select>' +
             '</div>' +
-
-            '<div class="col-md-1" style="padding-left:0px">' +
+            
+            '<div class="col-md-1" style=" margin-top: -21px; ">' +
             ' <label class="control-label"></label>  <input readonly placeholder="" type="text" name="" id="Price' + count + '" class="form-control" />' +
             '</div>' +
-            '<div class="col-md-2">' +
+            '<div class="col-md-2" style=" margin-top: -21px;">' +
             ' <label class="control-label"></label>  <select name = "Quantity" onchange = "GetNotesTotal(' + count + ')" class="form-control code  QuantityClass"  id="Quantity' + count + '" required>  <option value="">Select Quantity</option><option value ="1">1</option><option value="2">2</option><option value="3">3</option> <option value="4">4</option> <option value="5">5</option> </select>' +
             '</div>' +
-            '<div class="col-md-1" style="padding-left:0px">' +
+            '<div class="col-md-1" style=" margin-top: -21px;" >' +
             '<label class="control-label"></label><input value = "0"  readonly placeholder="Total" type="text" name="" id="Total' + count + '" class="form-control TotalClass" />' +
             '</div>' +
 
-            '<div class="col-md-1"> <br />' +
+            '<div class="col-md-1"  style=" margin-top: -21px;"> <br />' +
             '<button class="btn btn-sm btn-danger minusbutton"  onclick="Remove(' + count + ')"><i class="fa fa-times" aria-hidden="true" style="font-size:12px"></i></button>' +
             '</div>' +
             '</div>')
@@ -482,7 +496,7 @@ else if (User.IsInRole("Receptionist"))
         GetAllNotes(count);
 
         count = count + 1;
-        //$(".drop").select2();
+        $(".drop").select2();
 
 
     }

@@ -59,7 +59,9 @@ namespace SEA_Application.Controllers
 
         public ActionResult Password()
         {
-            return View(db.ruffdatas.Include(x =>x.AspNetSession.AspNetClasses).ToList());
+            var ruffData = db.ruffdatas.Include(x => x.AspNetSession.AspNetClasses).ToList();
+
+            return View(ruffData);
         }
 
         // POST: AspNetSession/Create

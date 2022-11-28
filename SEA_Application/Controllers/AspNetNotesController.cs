@@ -71,7 +71,7 @@ namespace SEA_Application.Controllers
 
                 int ApprovedId = MaxId.Value;
 
-                
+
 
                 AspNetOrder OrderToModify = db.AspNetOrders.Where(x => x.Id == OrderId).FirstOrDefault();
 
@@ -269,7 +269,7 @@ namespace SEA_Application.Controllers
 
                 else
                 {
-                   MaxId  = db.AspNetOrders.Where(x => x.Id == OrderId).Select(x=>x.ApproveId.Value).FirstOrDefault();
+                    MaxId = db.AspNetOrders.Where(x => x.Id == OrderId).Select(x => x.ApproveId.Value).FirstOrDefault();
                 }
 
                 dbTransaction.Commit();
@@ -410,7 +410,7 @@ namespace SEA_Application.Controllers
         public ActionResult GetAllNotes()
         {
 
-            var AllNotesList = db.AspNetNotes.Select(x => new { x.Id,x.NotesNo,x.Title }).ToList();
+            var AllNotesList = db.AspNetNotes.Select(x => new { x.Id, x.NotesNo, x.Title }).ToList();
             return Json(AllNotesList, JsonRequestBehavior.AllowGet);
 
         }
@@ -493,8 +493,24 @@ namespace SEA_Application.Controllers
 
             //             };
 
-            var result = db.StudentOrderDetails().Where(x => x.OrderStatus == "Pending").ToList();
 
+                    DateTime[] last7Days = Enumerable.Range(0, 15)
+                    .Select(i => DateTime.Now.Date.AddDays(-i))
+                    .ToArray();
+
+                    DateTime lastDate = last7Days.LastOrDefault();
+                    var FromDate = lastDate.ToString("yyyy/MM/dd");
+                    DateTime FirstDate = last7Days.FirstOrDefault();
+                    var ToDate = FirstDate.ToString("yyyy/MM/dd");
+
+                    var FromDateInDateTime = Convert.ToDateTime(FromDate);
+                    var ToDateInDateTime = Convert.ToDateTime(ToDate);
+
+
+            //where Order.Status == "Paid" && Order.ApproveDate >= FromDateInDateTime && Order.ApproveDate <= ToDateInDateTime
+
+
+            var result = db.StudentOrderDetails().Where(x => x.OrderStatus == "Pending" && x.PublishDate >= FromDateInDateTime && x.PublishDate <= ToDateInDateTime).ToList();
 
 
             return Json(result, JsonRequestBehavior.AllowGet);
