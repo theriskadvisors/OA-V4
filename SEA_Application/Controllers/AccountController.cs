@@ -22,7 +22,7 @@ using System.Net.Sockets;
 
 namespace SEA_Application.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -140,7 +140,7 @@ namespace SEA_Application.Controllers
             {
                 if (userID != null)
                 {
-                        SessionIDStaticController.GlobalSessionID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id.ToString();
+                     SessionIDStaticController.GlobalSessionID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id.ToString();
 
                     if (UserManager.IsInRole(userID, "Teacher"))
                     {
@@ -167,6 +167,21 @@ namespace SEA_Application.Controllers
                     {
                         System.Web.HttpContext.Current.Session["AdminID"] = userID;
                         return RedirectToAction("Dashboard", "Admin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "BakeryAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "RawAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["RawAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "RawProduct_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "ProductionAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["ProductionAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "ProductProduction_Dashboard");
                     }
                     else if (UserManager.IsInRole(userID, "Principal"))
                     {
@@ -254,6 +269,21 @@ namespace SEA_Application.Controllers
                 System.Web.HttpContext.Current.Session["ReceptionistID"] = userID;
                 return RedirectToAction("Dashboard", "Receptionist_Dashboard");
 
+            }
+            else if (UserManager.IsInRole(userID, "BakeryAdmin"))
+            {
+                System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
+                return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
+            }
+            else if (UserManager.IsInRole(userID, "RawAdmin"))
+            {
+                System.Web.HttpContext.Current.Session["RawAdminID"] = userID;
+                return RedirectToAction("Dashboard", "RawProduct_Dashboard");
+            }
+            else if (UserManager.IsInRole(userID, "ProductionAdmin"))
+            {
+                System.Web.HttpContext.Current.Session["ProductionAdminID"] = userID;
+                return RedirectToAction("Dashboard", "ProductProduction_Dashboard");
             }
             else if (UserManager.IsInRole(userID, "Cashier"))
             {
@@ -361,6 +391,21 @@ namespace SEA_Application.Controllers
                         System.Web.HttpContext.Current.Session["ReceptionistID"] = userID;
                         return RedirectToAction("Dashboard", "Receptionist_Dashboard");
 
+                    }
+                    else if (UserManager.IsInRole(userID, "BakeryAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "RawAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["RawAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "RawProduct_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "ProductionAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["ProductionAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "ProductProduction_Dashboard");
                     }
                     else if (UserManager.IsInRole(userID, "Cashier"))
                     {
@@ -640,6 +685,21 @@ namespace SEA_Application.Controllers
                         return RedirectToAction("Dashboard", "Receptionist_Dashboard");
 
                     }
+                    else if (UserManager.IsInRole(userID, "BakeryAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "RawAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["RawAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "RawProduct_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "ProductionAdmin"))
+                    {
+                        System.Web.HttpContext.Current.Session["ProductionAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "ProductProduction_Dashboard");
+                    }
                     else if (UserManager.IsInRole(userID, "Cashier"))
                     {
                         System.Web.HttpContext.Current.Session["CashierID"] = userID;
@@ -864,6 +924,105 @@ namespace SEA_Application.Controllers
             }
             return Json(logindetails.OrderBy(x=>x.Name).ToList(), JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpPost]
+        // [AllowAnonymous]
+        // [ValidateAntiForgeryToken]
+        public async Task<ActionResult> LoginAPI(string UserName, string Password)
+        {
+            string Msg = "Error";
+
+            string Error = "";
+
+
+
+            SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+
+            var result = await SignInManager.PasswordSignInAsync(UserName, Password, false, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+
+                    var userID = SignInManager.AuthenticationManager.AuthenticationResponseGrant.Identity.GetUserId();
+                    AspNetUser res = db.AspNetUsers.Where(x => x.Id == userID).Select(x => x).FirstOrDefault();
+                    if (res.Status == "False")
+                    {
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        // return RedirectToAction("Index", "Home");
+                        SessionIDStaticController.GlobalSessionID = "1";//end of session id ;
+
+
+                        ViewBag.SessionID = db.AspNetSessions.ToList().Select(x => new SelectListItem
+                        {
+                            Value = x.Id.ToString(),
+                            Text = x.SessionName,
+                            Selected = (x.Status == "Active")
+                        });
+                        // ModelState.AddModelError("", "Admin has disabled your account.");
+
+                        Error = "Admin has disabled your account.";
+
+                        // return View("Admin has disabled your account.");
+                    }
+                    var startdate = DateTime.Now;
+                    LogTime(startdate, userID);
+                    SessionIDStaticController.GlobalSessionID = "1"; //SessionID;
+
+                    //else { 
+                    //    }
+                    if (UserManager.IsInRole(userID, "Admin"))
+                    {
+                        Msg = "Error";
+                        //System.Web.HttpContext.Current.Session["AdminID"] = userID;
+                        // return RedirectToAction("Dashboard", "Admin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "BakeryAdmin"))
+                    {
+                        Msg = "Success";
+
+                        var user = db.AspNetUsers.Where(x => x.Id == userID).Select(x => new { x.Id, x.Name, x.UserName, x.Email }).FirstOrDefault();
+
+                        return Json(new { msg = Msg, user = user }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        Msg = "Error";
+                    }
+
+
+                    break;
+                //return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    // return View("Lockout");
+                    break;
+                case SignInStatus.RequiresVerification:
+                    //  return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false});
+                    // return RedirectToAction("SendCode", new { ReturnUrl = "", RememberMe = false });
+                    break;
+                case SignInStatus.Failure:
+                default:
+                    //ViewBag.SessionID = db.AspNetSessions.ToList().Select(x => new SelectListItem
+                    //{
+                    //    Value = x.Id.ToString(),
+                    //    Text = x.SessionName,
+                    //    Selected = (x.Status == "Active")
+                    //});
+                    //ModelState.AddModelError("", "Invalid login attempt.");
+
+                    //       return View(model);
+                    //  return View();
+                    break;
+            } //end of switch
+
+
+            return Json(Msg, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         public JsonResult UserLoginDateFilter(string type, DateTime start, DateTime end)
         {
@@ -1769,6 +1928,7 @@ namespace SEA_Application.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
+
 
         //
         // POST: /Account/LogOff
