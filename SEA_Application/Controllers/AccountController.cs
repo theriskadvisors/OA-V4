@@ -984,9 +984,17 @@ namespace SEA_Application.Controllers
                     {
                         Msg = "Success";
 
-                        var user = db.AspNetUsers.Where(x => x.Id == userID).Select(x => new { x.Id, x.Name, x.UserName, x.Email }).FirstOrDefault();
+                        var user = db.AspNetUsers.Where(x => x.Id == userID).Select(x => new { x.Id, x.Name, x.UserName, x.Email, Role = "BakeryAdmin" }).FirstOrDefault();
 
                         return Json(new { msg = Msg, user = user }, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (UserManager.IsInRole(userID, "Cashier"))
+                    {
+                        Msg = "Success";
+                      
+                        var user = db.AspNetUsers.Where(x => x.Id == userID).Select(x => new { x.Id, x.Name, x.UserName, x.Email,Role = "Cashier" }).FirstOrDefault();
+                        return Json(new { msg = Msg, user = user }, JsonRequestBehavior.AllowGet);
+
                     }
                     else
                     {
