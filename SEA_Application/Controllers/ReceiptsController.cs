@@ -17,16 +17,11 @@ namespace SEA_Application.Controllers
         public ActionResult Index()
         {
 
-            return View(db.CashReceipts.Include(x=>x.AspNetSession).ToList());
+            return View(db.CashReceipts.ToList());
         }
         public ActionResult Create()
         {
-            ViewBag.SessionID = db.AspNetSessions.OrderByDescending(x => x.Id).ToList().Select(x => new SelectListItem
-            {
-                Value = x.Id.ToString(),
-                Text = x.SessionName,
-                Selected = (x.Status == "Active")
-            });
+         
 
             var StudentList = (from user in db.AspNetUsers
                                join student in db.AspNetStudents on user.Id equals student.StudentID
@@ -108,7 +103,6 @@ namespace SEA_Application.Controllers
         public ActionResult Edit(int id )
         {
             var cashReceiptToEdit  =   db.CashReceipts.Where(x => x.Id == id).FirstOrDefault();
-            ViewBag.SessionID = new SelectList(db.AspNetSessions.OrderByDescending(x => x.Id), "Id", "SessionName", cashReceiptToEdit.SessionId);
 
 
 
