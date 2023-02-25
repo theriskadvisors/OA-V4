@@ -119,12 +119,12 @@ namespace SEA_Application.Controllers
         {
             var cashReceiptToUpdate =  db.CashReceipts.Where(x => x.Id == cashReceipt.Id).FirstOrDefault();
             cashReceiptToUpdate.UserId = cashReceipt.UserId;
-            cashReceiptToUpdate.SessionId = cashReceipt.SessionId;
+            //cashReceiptToUpdate.SessionId = cashReceipt.SessionId;
             cashReceiptToUpdate.ReceivedFrom = cashReceipt.ReceivedFrom;
             cashReceiptToUpdate.Description = cashReceipt.Description;
             cashReceiptToUpdate.Amount = cashReceipt.Amount;
             cashReceiptToUpdate.Dated = cashReceipt.Dated;
-            cashReceiptToUpdate.Course = cashReceipt.Course;
+          ///  cashReceiptToUpdate.Course = cashReceipt.Course;
             cashReceiptToUpdate.ReceiptNo = cashReceipt.ReceiptNo;
 
             db.SaveChanges();
