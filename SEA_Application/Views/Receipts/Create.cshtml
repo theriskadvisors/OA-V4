@@ -1,0 +1,387 @@
+@model SEA_Application.Models.CashReceipt
+
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("BakeryAdmin"))
+{
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+}
+
+else
+{
+    Layout = null;
+
+}
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    #UserId {
+      
+        width: 250px;
+    }
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<div class="card">
+    <div class="card-body p-4">
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+
+                <div class="col-md-2">
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.Dated, htmlAttributes: new { @class = "control-label" })
+                            <input type="date" id="Dated" name="Dated" class="form-control" required />
+                            @Html.ValidationMessageFor(model => model.Dated, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <div class="col-md-12">
+
+                            <label class="control-label">Receipt No</label>
+                            <input type="text" id="ReceiptNo" name="ReceiptNo" class="form-control" required readonly />
+                            @Html.ValidationMessageFor(model => model.ReceiptNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Received From</label>
+                                    <div class="input-group">
+                                        <input type="text"  readonly class="form-control" value="Contact" style="margin-top:10px;" aria-label="Text input with dropdown button">
+                                                                    @*<div class="input-group-append">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-family: sans-serif">Dropdown</button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#" style="font-family: sans-serif">Other</a>
+                                            <a class="dropdown-item" href="#" style="font-family: sans-serif">Student</a>
+
+                                        </div>
+                                    </div>*@
+                                        <div style="margin-top:15px;width:120px;" >
+                                            <select class="form-control drop" id="ReceivedFromDropDown">
+                                                <option value="Other">Other</option>
+                                                <option value="Student">Student</option>
+                                            </select>
+                                        </div>
+
+
+                                        <label class="control-label" style="visibility:hidden">text </label>
+                                        <div style="margin-top: 15px; width:250px ; display:none" id="StudentsDropdownDiv">
+                                            @*<select name="course" style="width:250px;" class="form-control drop">
+                                        <option value="">select one</option>
+                                        <option value="css">css</option>
+                                        <option value="pms">pms</option>
+                                        <option value="one paper mcqs">one paper mcqs</option>
+                                    </select>*@
+                                            @*@Html.DropDownList("UserId", null, " Select One", htmlAttributes: new { required = "required",@class = "form-control drop", @id = "StudentDropDown" })*@
+
+                                            <select class="form-control drop" id="UserId" name="UserId" ></select>
+
+
+                                        </div>
+
+                                        <div style="margin-top: 15px; width: 250px;" id="ReceivedFromInput">
+                                            <input type="text" class="form-control" name="ReceivedFrom" id="ReceivedFrom" value=""   />
+                                        </div>
+
+                                    </div>
+                                      
+                                   
+
+
+
+                                </div>
+
+                            </div>
+
+
+
+                        </div> <!--end of col 3-->
+
+                        @*<div class="col-md-2">
+
+                          
+
+                        </div>*@
+
+
+                    </div>
+
+                </div>
+
+                @*<div class="col-md-2">
+
+
+                    </div>*@
+
+
+
+
+
+
+
+            <div class="col-md-8">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @*<div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Dated, htmlAttributes: new { @class = "control-label" })
+
+
+                @Html.ValidationMessageFor(model => model.Dated, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+
+
+
+
+
+                @*<div class="form-group">
+            <div class="col-md-12">
+                <span> <label>Session</label></span>
+
+                @Html.DropDownList("SessionId", null, "Select One", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SessionId, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+                @*<div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Course, htmlAttributes: new { @class = "control-label" })
+
+                <select name="Course" class="form-control">
+                    <option value="">Select One</option>
+                    <option value="CSS">CSS</option>
+                    <option value="PMS">PMS</option>
+                    <option value="One Paper MCQs">One Paper MCQs</option>
+                </select>
+
+                @Html.ValidationMessageFor(model => model.Course, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+
+
+
+
+
+                @*<div class="form-group">
+            <div class="col-md-12">
+
+                <label class="control-label">Received From</label>
+
+                @Html.EditorFor(model => model.ReceivedFrom, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                @Html.ValidationMessageFor(model => model.ReceivedFrom, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+
+
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-5">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
+
+                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+
+
+
+                <br />
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <input id="FormSubmit" type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
+
+                        <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">close</i>  Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Add Receipt");
+
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        //  document.getElementById('Date').valueAsDate = output;
+
+        $("#Dated").val(today);
+        $("#ReceivedFrom").prop('required', true);
+
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Receipts/getStudentList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+               
+                var sch = data;
+                console.log(sch);
+                var $el = $("#UserId");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Student'));
+                    debugger
+              
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].UserId).text(sch[i].StudentName));
+
+                    
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+        $(".drop").select2();
+
+
+
+
+        $("#ReceivedFromDropDown").change(function () {
+
+            var dropdownValue = $(this).val();
+
+            if (dropdownValue == "Student") {
+
+                $("#ReceivedFrom").val("");
+                $("#ReceivedFromInput").css('display', "none");
+                $("#StudentsDropdownDiv").css('display', "block");
+                $("#UserId").prop('required', true);
+                $("#ReceivedFrom").prop('required', false);
+                
+            }
+            else if (dropdownValue == "Other") {
+
+             
+                $('#UserId').val("").trigger('change');
+                $("#ReceivedFromInput").css('display', "block");
+                $("#StudentsDropdownDiv").css('display', "none");
+                $("#UserId").prop('required', false);
+                $("#ReceivedFrom").prop('required', true);
+
+            }
+
+
+        })
+
+
+
+        $.ajax({
+
+            type: "POST",
+            url: '/Receipts/GetReceiptNo',
+            data: {},
+            success: function (data) {
+
+
+                $("#ReceiptNo").val(data);
+
+                //if (data.TopicExist == "Yes") {
+
+
+                //    // $("#CreateBtn").attr("disabled", true);
+                //    $("#ErrorOrderBy").html(data.Msg);
+                //    //  $("#ErrorOrderBy").html("Selected order is already assigned to a lesson of same topic.");
+                //}
+                //else {
+
+                //    $("#CreateBtn").attr("disabled", false);
+                //    $("#ErrorOrderBy").html("");
+
+                //}
+
+            }
+        })
+
+    });
+
+    function redirect() {
+
+        window.location.href = "/Receipts/Index";
+    }
+
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
