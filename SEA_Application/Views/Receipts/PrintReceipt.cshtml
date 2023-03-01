@@ -17,11 +17,13 @@ else
 
 <style type="text/css">
     .container {
-        padding: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        
         width: 700px;
-     border: 2px solid gray;
+        border: 2px solid gray;
         border-radius: 5px;
-        font-family:Arial;
+        font-family: Arial;
     }
 
     #heading {
@@ -43,21 +45,37 @@ else
         <span style="float:left"></span>
         <input style="float:right" class="btn btn-primary hidden" type='button' id='btn' value='Print' onclick='printDiv();'>
         <div style="clear:both"></div>
-        <br />
+
         <div id="PrintDiv" style="display:none">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <div class="container" id="container">
 
-            <div class="container">
 
-                <br>
-                <center>
+                <table width="100%">
+                    <tr>
+                        <td valign="top" width="100">
+                            <img src="/Content/assets/assets/img/orignal.png" width=100" alt="Alternate Text" />
+                        </td>
+                        <td align="center">
+                            <br />
 
-                    <h2 id="heading">OFFICERS ACADEMY</h2>
-                    <p id="headingpara">Main Road Garden Town, Lahore. Tel: 35830550, 0321-1333358</p>
+                            <h2 id="heading" class="heading">OFFICERS ACADEMY</h2>
+                            <p id="headingpara" class="headingpara">Main Road Garden Town, Lahore. <br> Tel: 35830550, 0321-1333358, 0324-5449157, 0321-4032120</p>
 
-                    <br>
+                            <br>
 
-                    <h4 style="text-decoration: underline;margin: 0;"><b>Receipt Voucher</b></h4>
-                </center>
+                            <h4 style="text-decoration: underline;margin: 0;"><b>Receipt Voucher</b></h4>
+                            <h4 style="text-decoration: underline;margin: 0;"><b>Student Copy</b></h4>
+                        </td>
+                    </tr>
+                </table>
+
+
+
 
                 <br>
 
@@ -66,63 +84,22 @@ else
                     <b>
                         &nbsp; Receipt No:
                     </b>
-                        @if (Model.ReceiptNo != null)
-                        {
-                            <u>@Model.ReceiptNo</u>
-                        }
-                        else
-                        {
-                            <span>____________</span>
-                        }
+                    @if (Model.ReceiptNo != null)
+                    {
+                        <u>@Model.ReceiptNo</u>
+                    }
+                    else
+                    {
+                        <span>____________</span>
+                    }
 
-                  
+
                 </div>
                 <br>
 
-                @*<div style="float:left" class="customfont">
-                    <b>
-                        Course:
-                    </b>
-                        @if (Model.Course != null)
-                        {
-                            <u>@Model.Course</u>
-                        }
-                        else
-                        {
-                            <span>____________</span>
-                        }
-
-                   
-                </div>
-
-
-                <div style="float: right;" class="customfont">
-                    <b>
-                        Session:
-                    </b>
-
-                        @if (Model.AspNetSession != null)
-                        {
-                            <u>@Model.AspNetSession.SessionName</u>
-                        }
-                        else
-                        {
-                            <span>____________</span>
-                        }
-                   
-                </div>
-
-
-                <div style="clear: both;">
-
-                </div>*@
-                <!--
-    <p><b>Received with thanks from </b></p>
-    <p><b>Rupees </b></p>
-    -->
                 <br>
 
-                <table width="100%" id="secondtable">
+                <table width="100%" id="secondtable" class="secondtable">
 
                     <tr class="customfont">
                         <td width="240" valign="top"><b>Received with thanks from</b></td>
@@ -132,6 +109,12 @@ else
 
 
                                 <u>@Model.ReceivedFrom</u>
+                            }
+                            else if (Model.UserId != null)
+                            {
+
+                                <u>@Model.AspNetUser.Name</u>
+
                             }
                             else
                             {
@@ -164,11 +147,11 @@ else
                     </tr>
 
 
-                    <tr class="customfont">
-                        <td><b>On account of</b></td>
-                        <td> <span>____________________</span></td>
+                    @*<tr class="customfont">
+                    <td><b>On account of</b></td>
+                    <td> <span>____________________</span></td>
 
-                    </tr>
+                </tr>*@
 
                 </table>
 
@@ -201,7 +184,9 @@ else
 
 
                         <td></td>
-                        <td align="center">
+                        <td align="center" valign="top">
+                            @*<img style=" opacity: 0.3;" src="/Content/assets/assets/img/orignal.png" width=100" alt="Alternate Text" />*@
+
                             <br>
                             __________________
                             <br>
@@ -215,7 +200,164 @@ else
                 </table>
 
             </div>
-        </div>
+            <br>
+            <br>
+            <br>
+
+            <div class="container" id="container">
+
+
+                <table width="100%">
+                    <tr>
+                        <td valign="top" width="100">
+                            <img src="/Content/assets/assets/img/orignal.png" width=100" alt="Alternate Text" />
+                        </td>
+                        <td align="center">
+                            <br />
+                            <h2 id="heading" class="heading">OFFICERS ACADEMY</h2>
+                            <p id="headingpara" class="headingpara">Main Road Garden Town, Lahore. <br> Tel: 35830550, 0321-1333358, 0324-5449157, 0321-4032120</p>
+
+                            <br>
+
+                            <h4 style="text-decoration: underline;margin: 0;"><b>Receipt Voucher</b></h4>
+                            <h4 style="text-decoration: underline;margin: 0;"><b>Admin Copy</b></h4>
+                        </td>
+                    </tr>
+                </table>
+
+
+
+
+                <br>
+
+
+                <div class="customfont">
+                    <b>
+                        &nbsp; Receipt No:
+                    </b>
+                    @if (Model.ReceiptNo != null)
+                    {
+                        <u>@Model.ReceiptNo</u>
+                    }
+                    else
+                    {
+                        <span>____________</span>
+                    }
+
+
+                </div>
+                <br>
+
+
+                <br>
+
+                <table width="100%" id="secondtable" class="secondtable">
+
+                    <tr class="customfont">
+                        <td width="240" valign="top"><b>Received with thanks from</b></td>
+                        <td>
+                            @if (Model.ReceivedFrom != null)
+                            {
+
+
+                                <u>@Model.ReceivedFrom</u>
+                            }
+                            else if (Model.UserId != null)
+                            {
+
+                                <u>@Model.AspNetUser.Name</u>
+
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+                    </tr>
+
+                    <tr class="customfont">
+                        <td><b>Rupees</b></td>
+                        <td>
+
+
+                            @if (Model.Amount != null)
+                            {
+
+
+                                <u id="Amount2">  @Model.Amount.Value.ToString("#,##0")</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
+
+
+                    @*<tr class="customfont">
+                    <td><b>On account of</b></td>
+                    <td> <span>____________________</span></td>
+
+                </tr>*@
+
+                </table>
+
+                <br>
+
+                <table width="100%">
+
+                    <tr>
+                        <td class="customfont"><b>Rs:</b></td>
+                        <td class="customfont" width="200">
+
+
+
+
+                            @if (Model.Amount != null)
+                            {
+
+
+                                <u id="Amount1">  @Model.Amount.Value.ToString("#,##0") </u>
+                            }
+                            else
+                            {
+                                <span>____________</span>
+                            }
+
+                        </td>
+
+                        <td class="customfont"><b>Dated:</b></td>
+                        <td class="customfont" width="210"><u>@Model.Dated.Value.ToString(string.Format("dd/MM/yyyy"))</u></td>
+
+
+                        <td></td>
+                        <td align="center" valign="top">
+                            @*<img style=" opacity: 0.3;" src="/Content/assets/assets/img/orignal.png" width=100" alt="Alternate Text" />*@
+
+                            <br>
+                            __________________
+                            <br>
+                            Signature
+
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+            </div>
+        </div> <!--end of print div-->
+
+
+
+
+
     </div>
 </div>
 
@@ -226,7 +368,7 @@ else
 
         $("#PageHeader").html("Cash Receipt");
         $("#btn").click();
-
+       
    
 
     })
@@ -239,16 +381,35 @@ else
 
         newWin.document.open();
 
-        newWin.document.write('<html><style>  #secondtable tr td {padding-bottom:5px;} .container {   font-family:Arial; padding: 20px; width: 700px; border: 2px solid gray;border - radius: 5px;}#heading {margin: 0;} #headingpara {margin: 0;}  .customfont {font-family: arial; font-style: italic;}  </style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html><style>  .container {  background-image: linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)), url("/Content/assets/assets/img/orignal.png");   background-position: center; background-size: 400px ; background-repeat: no-repeat;} .secondtable tr td {padding-bottom:5px;} .container {   font-family:Arial; padding-left:20px;padding-right:20px;padding-bottom: 20px; width: 700px; border: 2px solid gray;border - radius: 5px;} .heading {margin: 0;} .headingpara {margin: 0;}  .customfont {font-family: arial; font-style: italic;}     </style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 
-        newWin.document.close();
+        newWin.document.close();    
 
-        setTimeout(function () { newWin.close(); window.location.href = "/Receipts/Index"; }, 10);
-
-     
-    
+        setTimeout(function () { newWin.close(); window.location.href = "/Receipts/Index";  }, 10);
 
     }
+
+    //printDiv1()
+    //function printDiv1() {
+
+    //    var divToPrint = document.getElementById('PrintDiv1');
+
+    //    var newWin = window.open('', 'Print-Window');
+
+    //    newWin.document.open();
+
+    //    newWin.document.write('<html><style>  .container { background-image:linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)),  url("/Content/assets/assets/img/orignal.png");  background-position: center; background-size: 400px ; background-repeat: no-repeat;} #secondtable tr td {padding-bottom:5px;} .container {   font-family:Arial; padding-left:20px;padding-right:20px;padding-bottom: 20px; width: 700px; border: 2px solid gray;border - radius: 5px;}#heading {margin: 0;} #headingpara {margin: 0;}  .customfont {font-family: arial; font-style: italic;}     </style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+    //    newWin.document.close();
+
+    //    setTimeout(function () { newWin.close();  window.location.href = "/Receipts/Index"; }, 10);
+       
+
+
+    //}
+
+
+
     function numberWithCommas(x) {
         debugger
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

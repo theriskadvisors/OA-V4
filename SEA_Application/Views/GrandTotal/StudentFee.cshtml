@@ -277,9 +277,21 @@ else if (User.IsInRole("Receptionist"))
 
 
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Select  Session</label>
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Select  Session</label>
+                    <input type="hidden" name="FeeTypeHidden" value="" id="FeeTypeHidden" />
+                    @Html.DropDownList("ClassId", null, " Select One", htmlAttributes: new { @class = "form-control", @id = "ClassId" })
+                    @Html.ValidationMessageFor(model => model.ClassId, "", new { @class = "text-danger" })
+
+                </div>
+            </div>*@
+                            <br />
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Select Session </label>
                                     <input type="hidden" name="FeeTypeHidden" value="" id="FeeTypeHidden" />
                                     @Html.DropDownList("ClassId", null, " Select One", htmlAttributes: new { @class = "form-control", @id = "ClassId" })
                                     @Html.ValidationMessageFor(model => model.ClassId, "", new { @class = "text-danger" })
@@ -287,115 +299,200 @@ else if (User.IsInRole("Receptionist"))
                                 </div>
                             </div>
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Students*</label>
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Students*</label>
+                    <select class="form-control" id="students" name="students" required></select>
+
+                </div>
+            </div>*@
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Students*</label>
+
                                     <select class="form-control" id="students" name="students" required></select>
 
                                 </div>
                             </div>
 
+
                             @*<div class="form-group bmd-form-group is-filled">
 
-                                    <label class="bmd-label-floating">Total Fee: <span class="red-mark">*</span></label>
+                <label class="bmd-label-floating">Total Fee: <span class="red-mark">*</span></label>
 
-                                    <input type="number" name="TotalFee" class="form-control" value="" id="TotalFee" readonly />
-                                </div>*@
+                <input type="number" name="TotalFee" class="form-control" value="" id="TotalFee" readonly />
+            </div>*@
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Total Fee</label>
-                                    <input type="number" name="TotalFee" class="form-control" value="" id="TotalFee" readonly />
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Total Fee</label>
+                    <input type="number" name="TotalFee" class="form-control" value="" id="TotalFee" readonly />
+
+                </div>
+            </div>*@
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Total Fee</label>
+
+                                    <input class="form-control" name="TotalFee" id="TotalFee" type="number" readonly value="" />
 
                                 </div>
                             </div>
 
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Payable Fee</label>
-                                    <input type="number" name="PayableFee" class="form-control" value="" id="PayableFee" readonly />
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Payable Fee</label>
+                    <input type="number" name="PayableFee" class="form-control" value="" id="PayableFee" readonly />
+
+                </div>
+            </div>*@
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Payable Fee</label>
+
+                                    <input class="form-control" name="PayableFee" id="PayableFee" type="number" readonly value="" />
 
                                 </div>
                             </div>
 
 
 
+
+
                             @*<div class="form-group bmd-form-group is-filled">
 
-                                    <label class="bmd-label-floating">Payable Fee : <span class="red-mark">*</span></label>
+                <label class="bmd-label-floating">Payable Fee : <span class="red-mark">*</span></label>
 
-                                    <input type="number" name="PayableFee" class="form-control" value="" id="PayableFee" readonly />
-                                </div>*@
+                <input type="number" name="PayableFee" class="form-control" value="" id="PayableFee" readonly />
+            </div>*@
 
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Fee Type</label>
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Fee Type</label>
-                                    <input type="text" name="FeeType" class="form-control" value="" id="FeeType" readonly />
+                                    <input class="form-control" name="FeeType" id="FeeType" type="text" readonly value="" />
 
                                 </div>
                             </div>
 
+
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Fee Type</label>
+                    <input type="text" name="FeeType" class="form-control" value="" id="FeeType" readonly />
+
+                </div>
+            </div>*@
+
                             @*<div class="form-group bmd-form-group is-filled">
 
-                                    <label class="bmd-label-floating"> Fee Type : <span class="red-mark">*</span></label>
+                <label class="bmd-label-floating"> Fee Type : <span class="red-mark">*</span></label>
 
-                                    <input type="text" name="FeeType" class="form-control" value="" id="FeeType" readonly />
-                                </div>*@
+                <input type="text" name="FeeType" class="form-control" value="" id="FeeType" readonly />
+            </div>*@
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                                    <label class="bmd-label-floating"> Cash Received : <span class="red-mark">*</span></label>
+                <label class="bmd-label-floating"> Cash Received : <span class="red-mark">*</span></label>
+
+                <input required type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="CashReceived" class="form-control" value="" id="CashReceived" />
+
+            </div>*@
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Cash Received*</label>
 
                                     <input required type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="CashReceived" class="form-control" value="" id="CashReceived" />
 
-                                </div>*@
-
-
-
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Cash Received*</label>
-                                    <input required type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="CashReceived" class="form-control" value="" id="CashReceived" />
-
                                 </div>
                             </div>
 
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Discount*</label>
-                                    <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
 
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Cash Received*</label>
+                    <input required type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="CashReceived" class="form-control" value="" id="CashReceived" />
+
+                </div>
+            </div
+
+
+
+
+            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Discount*</label>
+                    <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
+
+                </div>
+            </div>*@
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Discount*</label>
+
+                                    <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
                                 </div>
                             </div>
 
                             @*<div class="form-group bmd-form-group is-filled">
 
-                                    <label class="bmd-label-floating">Dicount: <span class="red-mark">*</span></label>
+                <label class="bmd-label-floating">Dicount: <span class="red-mark">*</span></label>
 
-                                    <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
-                                </div>*@
+                <input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />
+            </div>*@
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Remaining Balance*</label>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Remaining Balance*</label>
+
+                                    @*<input type="number" name="Discount" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" value="" id="Discount" />*@
                                     <input type="number" name="RemainingBalance" min="0" class="form-control" value="" id="RemainingBalance" readonly />
 
                                 </div>
                             </div>
 
+
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Remaining Balance*</label>
+                    <input type="number" name="RemainingBalance" min="0" class="form-control" value="" id="RemainingBalance" readonly />
+
+                </div>
+            </div>*@
+
                             @*<div class="form-group bmd-form-group is-filled">
 
-                                    <label class="bmd-label-floating"> Remaining Balance : <span class="red-mark">*</span></label>
+                <label class="bmd-label-floating"> Remaining Balance : <span class="red-mark">*</span></label>
 
-                                    <input type="number" name="RemainingBalance" min="0" class="form-control" value="" id="RemainingBalance" readonly />
-                                </div>*@
+                <input type="number" name="RemainingBalance" min="0" class="form-control" value="" id="RemainingBalance" readonly />
+            </div>*@
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Due Date</label>
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Due Date</label>
+                    <input type="date" id="DueDate" name="DueDate" class="form-control" required>
+                    <span id="DueDateError" class="text-danger"></span>
+
+                </div>
+            </div>*@
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label class="control-label">Due Date</label>
+
                                     <input type="date" id="DueDate" name="DueDate" class="form-control" required>
                                     <span id="DueDateError" class="text-danger"></span>
 
@@ -403,9 +500,11 @@ else if (User.IsInRole("Receptionist"))
                             </div>
 
 
-                            <div class="form-row mt-4">
-                                <div class="form-group col-md-12 bmd-form-group">
-                                    <label for="" class="bmd-label-static pl-2">Issue Date</label>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <label class="control-label">Issue Date</label>
                                     <input type="date" id="IssueDate" name="IssueDate" class="form-control" required>
                                     <span id="IssueDateError" class="text-danger"></span>
 
@@ -413,7 +512,27 @@ else if (User.IsInRole("Receptionist"))
                             </div>
 
 
-                            <input class="btn btn-primary" type="button" id="ChallanForm" value="Get challan" />
+
+
+                            @*<div class="form-row mt-4">
+                <div class="form-group col-md-12 bmd-form-group">
+                    <label for="" class="bmd-label-static pl-2">Issue Date</label>
+                    <input type="date" id="IssueDate" name="IssueDate" class="form-control" required>
+                    <span id="IssueDateError" class="text-danger"></span>
+
+                </div>
+            </div>*@
+
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+
+                                    <input class="btn btn-primary" type="button" id="ChallanForm" value="Get challan" />
+
+                                </div>
+                            </div>
+
+                         
                         }
 
                         <br />
@@ -429,7 +548,7 @@ else if (User.IsInRole("Receptionist"))
 
                                 @*<div style="clear:both">
 
-                                    </div>*@
+                </div>*@
 
                                 <p class="centered">
 
@@ -477,7 +596,7 @@ else if (User.IsInRole("Receptionist"))
 
                                 @*<div style="clear:both">
 
-                                    </div>*@
+                </div>*@
 
 
                                 <p class="centered">
@@ -516,7 +635,7 @@ else if (User.IsInRole("Receptionist"))
 
 
                         @*</div>
-                            </div>*@
+        </div>*@
 
 
                     </div>
