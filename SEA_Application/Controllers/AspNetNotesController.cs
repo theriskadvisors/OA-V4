@@ -494,17 +494,31 @@ namespace SEA_Application.Controllers
             //             };
 
 
-                    DateTime[] last7Days = Enumerable.Range(0, 15)
-                    .Select(i => DateTime.Now.Date.AddDays(-i))
-                    .ToArray();
+            //DateTime[] last7Days = Enumerable.Range(0, 15)
+            //.Select(i => DateTime.Now.Date.AddDays(-i))
+            //.ToArray();
 
-                    DateTime lastDate = last7Days.LastOrDefault();
-                    var FromDate = lastDate.ToString("yyyy/MM/dd");
-                    DateTime FirstDate = last7Days.FirstOrDefault();
-                    var ToDate = FirstDate.ToString("yyyy/MM/dd");
+            //DateTime lastDate = last7Days.LastOrDefault();
+            //var FromDate = lastDate.ToString("yyyy/MM/dd");
+            //DateTime FirstDate = last7Days.FirstOrDefault();
+            //var ToDate = FirstDate.ToString("yyyy/MM/dd");
 
-                    var FromDateInDateTime = Convert.ToDateTime(FromDate);
-                    var ToDateInDateTime = Convert.ToDateTime(ToDate);
+            //var FromDateInDateTime = Convert.ToDateTime(FromDate);
+            //var ToDateInDateTime = Convert.ToDateTime(ToDate);
+
+
+            DateTime[] last7Days = Enumerable.Range(0, 15)
+            .Select(i => GetLocalDateTime.GetLocalDateTimeFunction().Value.Date.AddDays(-i))
+            .ToArray();
+
+            DateTime lastDate = last7Days.LastOrDefault();
+            var FromDate = lastDate.ToString("yyyy/MM/dd");
+            DateTime FirstDate = last7Days.FirstOrDefault();
+            var ToDate = FirstDate.ToString("yyyy/MM/dd");
+
+            var FromDateInDateTime = Convert.ToDateTime(FromDate);
+            var ToDateInDateTime = Convert.ToDateTime(ToDate);
+
 
 
             //where Order.Status == "Paid" && Order.ApproveDate >= FromDateInDateTime && Order.ApproveDate <= ToDateInDateTime
@@ -521,9 +535,22 @@ namespace SEA_Application.Controllers
         {
             //  var result = db.StudentOrderDetails().Where(x => x.OrderStatus == "Paid").ToList();
 
+            //DateTime[] last7Days = Enumerable.Range(0, 7)
+            //.Select(i => DateTime.Now.Date.AddDays(-i))
+            //.ToArray();
+
+            //DateTime lastDate = last7Days.LastOrDefault();
+            //var FromDate = lastDate.ToString("yyyy/MM/dd");
+            //DateTime FirstDate = last7Days.FirstOrDefault();
+            //var ToDate = FirstDate.ToString("yyyy/MM/dd");
+
+            //var FromDateInDateTime = Convert.ToDateTime(FromDate);
+            //var ToDateInDateTime = Convert.ToDateTime(ToDate
+            //
+
             DateTime[] last7Days = Enumerable.Range(0, 7)
-            .Select(i => DateTime.Now.Date.AddDays(-i))
-            .ToArray();
+             .Select(i => GetLocalDateTime.GetLocalDateTimeFunction().Value.Date.AddDays(-i))
+             .ToArray();
 
             DateTime lastDate = last7Days.LastOrDefault();
             var FromDate = lastDate.ToString("yyyy/MM/dd");
