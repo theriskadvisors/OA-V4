@@ -95,6 +95,10 @@ namespace SEA_Application.Models
         
         public int ClassID { get; set; }
 
+        public int ReceiptNo { get; set;  }
+        
+
+
 
     }
 
