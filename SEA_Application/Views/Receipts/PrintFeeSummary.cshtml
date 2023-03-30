@@ -1,0 +1,188 @@
+@model IEnumerable<SEA_Application.Models.CashReceipt>
+@{
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style type="text/css">
+
+        .container {
+            width: 800px;
+            margin: auto;
+            font-family: arial;
+            padding: 20px;
+            padding-top: 0px;
+        }
+
+        td, table {
+            border-collapse: collapse;
+        }
+
+        #table2 td, th {
+            border: 1px solid;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
+        .headLeft {
+            text-align: left;
+        }
+
+        .headCenter {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <input type="button" name="name" id="btn" value="Print" onclick='printDiv();' style="height:40px;width:100px;" />
+   
+    <div class="container">
+        <div id="PrintDiv">
+
+            <table width="100%">
+                <tr>
+
+                    <td valign="top" width="100">
+                        <img src="/Content/assets/assets/img/orignal.png" width="125" alt="Alternate Text" />
+                    </td>
+
+                    <td align="center">
+                        <br />
+
+                        <h2 id="heading" style="margin: 0;" class="heading">OFFICERS ACADEMY</h2>
+                        <p id="headingpara" class="headingpara">Main Road Garden Town, Lahore. <br> Tel: 35830550, 0321-1333358, 0324-5449157, 0321-4032120</p>
+
+                        <br>
+
+                        <h4 style="text-decoration: underline;margin: 0;"><b>Fee Details</b></h4>
+                        <h4 style="text-decoration: underline;margin: 0;"><b>Date: <span id="todayDate"></span></b></h4>
+                    </td>
+
+                </tr>
+            </table>
+
+            <br />
+
+            <div id="studentInfo">
+
+                <p><b>@ViewBag.StudentName (@ViewBag.RollNo)</b></p>
+                <p><b>@ViewBag.StudentClass </b></p>
+                <p><b>@ViewBag.FeeType - @ViewBag.TotalFee</b></p>
+
+            </div> <!--Student Info-->
+
+            <br>
+
+            <table id="table2" width="100%">
+                <thead>
+                    <tr>
+                        <th>Sr</th>
+                        <th clas>Receipt No</th>
+                        <th class="headLeft">Description</th>
+                        <th class="headCenter">Date</th>
+                        <th class="headCenter">Discount</th>
+                        <th>Amount</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+                    @{int i = 1;}
+                    @foreach (var item in Model)
+                    {
+
+
+                        <tr>
+                            <td align="center">@i</td>
+                            <td align="center">@item.ReceiptNo</td>
+                            <td>@item.Description</td>
+                            @*<td class="headCenter"></td>*@
+                            <td class="headCenter"> @item.Dated.Value.ToString(string.Format("dd/MM/yyyy"))</td>
+                            <td align="center">
+
+                                @if (item.Discount != null)
+                                {
+                                    @item.Discount.Value.ToString("#,##0")
+
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+
+                            </td>
+
+                            <td align="center">@item.Amount.Value.ToString("#,##0")</td>
+                        </tr>
+
+                        i++;
+
+                    }
+
+
+                <tr>
+
+                    <td colspan="4" style="border:0" align="right"><b>Total</b></td>
+                    <td align="center"><b>@Model.Sum(x => x.Discount).Value.ToString("#,##0")</b></td>
+
+                    <td align="center"><b>@Model.Sum(x => x.Amount).Value.ToString("#,##0")</b></td>
+                </tr>
+                </tbody>
+
+
+
+            </table>
+        </div>  <!--print div-->
+    </div> <!--container-->
+
+</body>
+
+</html>
+<script type="text/javascript">
+
+    window.onload = function () {
+
+
+       
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = dd + '/' + mm + '/' + yyyy;
+
+        // document.getElementById("todayDate").innerHTML =  today;
+
+        document.getElementById("todayDate").innerHTML = today;
+
+        document.getElementById("btn").click();
+    }
+   
+
+
+    function printDiv() {
+
+        var divToPrint = document.getElementById('PrintDiv');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><style>  .container {width: 800px;margin: auto;font-family: arial;padding: 20px;padding-top: 0px;}td, table {border-collapse: collapse;}  #table2 td, th {  border: 1px solid; }th, td { padding: 10px;}.headLeft { text-align: left;}.headCenter { text-align: center;}</style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); window.location.href = "/Receipts/FeeSummary"; }, 10);
+
+    }
+</script>

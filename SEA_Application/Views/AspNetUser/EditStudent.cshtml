@@ -63,9 +63,10 @@ else if (User.IsInRole("Staff"))
 </style>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script type="text/javascript">
+
     var selectedClass;
-    //  var SelectedClassValueFirst;
-      var SelectedClassValueFirst;
+    var SelectedClassValueFirst;
+
     $(document).ready(function () {
 
 
@@ -76,140 +77,13 @@ else if (User.IsInRole("Staff"))
         $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Edit</a></li>');
 
        debugger
-        var VoucherExist = $("#VoucherExist").val();
-
-        if (VoucherExist == "1") {
-
-            $("#FeeDetailDiv").css("display", 'block');
-
-
-        }
-
-        else {
-
-
-            $("#FeeDetailDiv").css("display", 'none');
-
-        }
-
-
-        var FeeTypeOfStudent = $("#FeeTypeOfStudent").val();
-
-      //  alert(FeeTypeOfStudent);
-        if (FeeTypeOfStudent != "") {
-
-         $("#FeeType option[value='" + FeeTypeOfStudent + "']").prop('selected', true);
-
-
-        }
-
-
-        var NotesFeeOfStudent = $("#NotesAmount").val();
-
-        if (NotesFeeOfStudent == "") {
-
-                 $("#NotesCategoryDiv input[value='WithOutNotes']").prop('checked', true);
-
-        }
-        else {
-
-
-                   $("#NotesCategoryDiv input[value='WithNotes']").prop('checked', true);
-                   // $('#WithNotes').click();
-
-                    var NotesAmountHidden  =   $("#NotesAmountHidden").val();
-
-                    $("#NotesAmount").val(NotesAmountHidden);
-
-
-                  //  $("#FeeType  option[value='PerMonth']").remove();
-                   $("#NotesAmount").prop('required', true);
-
-                    $('#NotesID').show();
-
-
-
-        }
-
-
-
-           $("#FeeType").change(function () {
-            debugger
-
-            $("#Fee").val(0);
-         //   $("#FeeType").val(0);
-            $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-
-            $(".totalfeeclass").val("");
-
-
-           })
-
-         $("#DiscountPercentage").bind('keyup mouseup', function () {
-
-             $('#FormSubmit').prop('disabled', false);
-
-          //  Calculations();
-             $("#RemainingAmount").val("");
-             $("#Discount").val(0);
-             $("#TotalFee").val("");
-              var FeeType = $("#FeeType").val();
-             var SessionFee = $("#SessionFee").val();
-             var FeeAfterFeeType = $("#Fee").val();
-
-             var DiscountPercentage = $("#DiscountPercentage").val();
-                var NotesAmount = $("#NotesAmount").val();
-             var DiscountedAmount;
-             var TotalFee;
-
-             debugger
-             if (NotesAmount == "")
-                 NotesAmount = 0;
-
-             if ( FeeType !="" &&  FeeAfterFeeType != 0 && DiscountPercentage != 0 && DiscountPercentage>0 ) {
-
-                 DiscountedAmount = parseFloat(FeeAfterFeeType) * (parseFloat(DiscountPercentage) / 100);
-
-                 var RemainingFeeAfterFeeType = parseFloat(FeeAfterFeeType) - parseFloat(DiscountedAmount);
-
-
-                 var RoundRemainingFeeAfterFeeType = Math.round(RemainingFeeAfterFeeType);
-                 $("#Discount").val(Math.round( DiscountedAmount));
-
-
-                 $("#RemainingAmount").val(RoundRemainingFeeAfterFeeType);
-
-                 TotalFee = parseFloat(RoundRemainingFeeAfterFeeType) + parseFloat(NotesAmount);
-
-                 $("#TotalFee").val(TotalFee);
-
-                 if (RoundRemainingFeeAfterFeeType < 0) {
-
-                    $('#FormSubmit').prop('disabled', true);
-                 }
-
-
-             }
-
-         });
+      
 
         $("#ClassID").change(function () {
 
-           // $('#CalculateFee').click();
-            $("#TotalFee").val("");
+         
             $("#MandatorySubjects").removeAttr('checked');
 
-
-            $("#Discount").val(0);
-            $("#DiscountPercentage").val(0);
-          //  $("#RemainingAmount").val("");
-
-
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Fee").val(0);
 
             var ClassId = $(this).val();
 
@@ -253,140 +127,7 @@ else if (User.IsInRole("Staff"))
 
         });
 
-                //old
-        //$('#WithOutNotes').click(function () {
-        //    $('#NotesID').hide();
-        //    $('#NotesAmount').val("");
-        //    $("#TotalFee").val("");
-        //    //alert("Without note");
-        //    //$('#FeeType').append('<option value="PerMonth">PerMonth</option>');
-        //   $("#NotesAmount").prop('required', false);
-        //});
-        //$('#WithNotes').click(function () {
-
-        //    //$("#FeeType  option[value='PerMonth']").remove();
-        //   $("#NotesAmount").prop('required', true);
-        //    $('#NotesAmount').val(16000);
-        //    $('#NotesID').show();
-        //    $("#TotalFee").val("");
-
-
-        //});
-
-
-            $('#WithOutNotes').click(function () {
-            $('#NotesID').hide();
-            $('#NotesAmount').val("");
-            $("#TotalFee").val("");
-            //alert("Without note");
-            //$('#FeeType').append('<option value="PerMonth">PerMonth</option>');
-            $("#NotesAmount").prop('required', false);
-
-               $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Fee").val(0);
-        });
-        $('#WithNotes').click(function () {
-
-            //$("#FeeType  option[value='PerMonth']").remove();
-            $("#NotesAmount").prop('required', true);
-            $('#NotesID').show();
-            $("#TotalFee").val("");
-            $('#NotesAmount').val(16000);
-            $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Fee").val(0);
-
-        });
-
-
-
-
-
-
-
-
-
-    //    $("#ClassID").change(function () {
-
-    //        $("#MandatorySubjects").removeAttr('checked');
-
-    //    })
-    //     var MandatorySub;
-    //    var AllSub;
-    //     $('#MandatorySubjects').change(function() {
-    //      if (this.checked) {
-
-    //          var ClassId = $("#ClassID").val();
-
-    //          if (ClassId != "") {
-
-    //              $.ajax({
-
-    //                 type: "POST",
-    //                 url: "/Admin_Dashboard/GetMandatorySubjects",
-    //                 data: { "ClassId":ClassId},
-    //                  success: function (data) {
-
-    //                      var MandatorySubjects = data.MandatorySubjects;
-    //                      var AllSubjects = data.AllSubjects;
-
-    //                       MandatorySub = data.MandatorySubjects;
-    //                        AllSub=data.AllSubjects;
-    //                      $.each( MandatorySubjects, function( key, value1 ) {
-
-    //                          $.each( AllSubjects, function( key, value2 ) {
-
-
-    //                              if (value1 == value2) {
-
-
-    //                                     $("#" + value1).prop("checked", true);
-    //                              }
-
-
-
-    //                          });
-
-
-    //                      });
-
-
-    //                  }
-    //              })
-
-
-    //          }
-
-
-
-
-
-    //      }
-    //      else {
-    //          $.each( MandatorySub, function( key, value1 ) {
-
-    //                $.each(AllSub, function (key, value2) {
-
-
-    //                              if (value1 == value2) {
-
-
-    //                                     $("#" + value1).removeAttr('checked');
-    //                              }
-
-
-
-    //                          });
-
-
-    //                      });
-
-    //      }
-    //   // $('#textbox1').val(this.checked);
-    //});
+       
 
 
         $("#Email").bind('blur', function () {
@@ -673,18 +414,15 @@ else if (User.IsInRole("Staff"))
 
                         $.get('@Url.Action("SubjectsByStudent")',
                             { id: selectedStudent, coursetype: $("input[name='CourseType']:checked").val() }, function (data) {
-                            //  $('#subjects').prop('disabled', false);
                                  var MandatorySubjectsList = data.MandatorySubjectsList;
                                    var OptionalSubjecsList = data.OptionalSubjectsList;
 
                                           debugger
 
-                               // alert(CourseType1);
                                 if (CourseType1 == "CSS") {
 
 
                                     $.each(MandatorySubjectsList, function (key, value1) {
-                                        //  $("#SubjectsList input[value='" + item.Id + "']").prop("checked", true);
                                         $("#MandatorySubjectsCSSTableBody input[value='" + value1.Id + "']").prop("checked", true);
 
 
@@ -692,7 +430,6 @@ else if (User.IsInRole("Staff"))
 
 
                                     $.each(OptionalSubjecsList, function (key, value1) {
-                                        //  $("#SubjectsList input[value='" + item.Id + "']").prop("checked", true);
 
 
                                         $("#MandatorySubjectsCSSTableBody input[value='" + value1.Id + "']").prop("checked", true);
@@ -731,7 +468,6 @@ else if (User.IsInRole("Staff"))
                                 else if (CourseType1 == "PMS") {
 
                                       $.each(MandatorySubjectsList, function (key, value1) {
-                                        //  $("#SubjectsList input[value='" + item.Id + "']").prop("checked", true);
                                         $("#MandatorySubjectsPMSTableBody input[value='" + value1.Id + "']").prop("checked", true);
 
                                       })
@@ -775,7 +511,6 @@ else if (User.IsInRole("Staff"))
                                 {
 
                                     $.each(MandatorySubjectsList, function (key, value1) {
-                                        //  $("#SubjectsList input[value='" + item.Id + "']").prop("checked", true);
                                         $("#MandatorySubjectsOnePaperTableBody input[value='" + value1.Id + "']").prop("checked", true);
 
 
@@ -1019,20 +754,6 @@ else if (User.IsInRole("Staff"))
       });
 
 
-          $("#NotesAmount").bind('keyup mouseup', function () {
-
-
-             $("#DiscountInAmount").val(0);
-             $("#RemainingAmount").val(0);
-             $("#Discount").val(0);
-             $("#TotalFee").val("");
-             $("#DiscountPercentage").val(0);
-
-        })
-
-
-
-
         $("#BirthDate").bind('blur', function () {
             var dob = $("#birthDate").val();
             var dob = dob.split("-");
@@ -1107,74 +828,8 @@ else if (User.IsInRole("Staff"))
     }
 
 
-      function Calc() {
-
-           //   $("#Fee").val(0);
-         //   $("#FeeType").val(0);
-
-
-            $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-
-          //  $("#TotalFee").val("");
-
-
-        var SessionFee = $("#SessionFee").val();
-        var FeeType = $("#FeeType").val();
-      //  var Discount = $("#Discount").val();
-        var NotesAmount = $("#NotesAmount").val();
-        if (SessionFee == "")
-            SessionFee = 0;
-
-        //if (Discount == "")
-        //       Discount = 0;
-
-        if (NotesAmount == "")
-               NotesAmount = 0;
-            debugger
-
-                if (FeeType == "Installment" && FeeType != "")
-                {
-                    $('#Fee').val(parseInt(SessionFee) + 6000 /*+ parseInt(NotesAmount) - parseInt(Discount)*/);
-                    $('#TotalFee').val(parseInt(SessionFee) + 6000 + parseInt(NotesAmount));
-
-                  }
-                else if (FeeType == "PerMonth" && FeeType != "")
-                {
-                    $('#Fee').val(parseInt(SessionFee) + 12000 /*+ parseInt(NotesAmount) - parseInt(Discount)*/);
-                    $('#TotalFee').val(parseInt(SessionFee) + 12000 + parseInt(NotesAmount));
-                }
-                else if (FeeType == "FullFee" && FeeType != "")
-                {
-                    $('#Fee').val(parseInt(SessionFee)  /*+ parseInt(NotesAmount) - parseInt(Discount)*/);
-                    $('#TotalFee').val(parseInt(SessionFee) + parseInt(NotesAmount) );
-                }
-
-                else
-                {
-                    return false;
-                }
-
-
-
-        $("#DiscountDiv").css('display', 'block');
-    }
-
 
 </script>
-
-
-@*<div class="row" style="padding-bottom: 10px; padding-top: 10px; padding-left: 20px; padding-right: 20px;">
-        <button class="btn btn-default pull-left btn-sm" onclick="onCancel()">
-            Cancel
-        </button>
-        <button class="pull-right" style="background-color: transparent; border: none; outline: none; font-size: 20px; color: rgb(89, 89, 89) !important" onclick="onSave()">
-            <i class="fa fa-floppy-o"></i>
-        </button>
-    </div>*@
-
-
 
 
 <div class="row">
@@ -1286,209 +941,133 @@ else if (User.IsInRole("Staff"))
                             <br />
                             <br />
 
-                            <div id="FeeDetailDiv" style="display:none">
-                                <h2 class="column-heading mb-4">Fee Details</h2>
-
-                                <div class="form-group bmd-form-group my-3">
-                                    <label class="">Notes Category <span class="red-mark">*</span> </label>
-                                    <div id="NotesCategoryDiv">
-
-                                        <div class="radio RadioButtonsInline">
-                                            <label><input type="radio" name="NotesCategory" id="WithOutNotes" value="WithOutNotes"> Without Notes</label>
-                                        </div>
-
-                                        <div class="radio RadioButtonsInline">
-                                            <label><input type="radio" name="NotesCategory" id="WithNotes" value="WithNotes"> With Notes </label>
-                                        </div>
-                                    </div>
 
 
-                                </div>
+                            <div id="FeeDetailsTable">
+                                <h2 class="column-heading mb-4">Fee History</h2>
+                                
+                                <table border="1" class="table" style="width:100%;max-width:100%">
 
-                                <div class="form-group bmd-form-group my-3" style="display:none" id="NotesID">
-                                    <label class="bmd-label-floating">Notes Amount <span class="red-mark">*</span></label>
+                                    <tr>
+                                        <td colspan="1" align="center">   Total Fee </td>
+                                        <td colspan="2" align="center">   @ViewBag.TotalFeeForHistoryTable.ToString("#,##0") </td>
+                                    </tr>
 
-                                    @if (ViewBag.NotesFee != null)
+
+
+
+                                    @if (ViewBag.CashReceiptList.Count > 0)
                                     {
-                                        <input type="hidden" value="@ViewBag.NotesFee" id="NotesAmountHidden" />
 
-                                        <input value="@ViewBag.NotesFee" type="number" class="form-control round-border" name="NotesAmount" id="NotesAmount" />
-
-                                    }
-                                    else
-                                    {
-                                        <input type="number" class="form-control round-border" name="NotesAmount" id="NotesAmount" />
-                                    }
+                                        <tr>
+                                            <th style="text-align:center">Receipt Id</th>
+                                            <th style="text-align:center">Date</th>
+                                            <th align="center" style="text-align:center">Amount</th>
+                                        </tr>
 
 
-
-                                </div>
-
-                                <div class="form-group bmd-form-group my-3">
-                                    <label class="">Session Fee</label>
-                                    <input type="text" class="form-control round-border" name="SessionFee" id="SessionFee" value="0" readonly />
-                                </div>
-
-
-
-                                <div class="form-group bmd-form-group my-3 is-filled">
-                                    <label class="bmd-label-floating">Fee Type <span class="red-mark">*</span> </label>
-
-                                    <input type="hidden" id="FeeTypeOfStudent" name="name" value="@ViewBag.FeeType" />
-
-                                    <select name="FeeType" id="FeeType" class="form-control" style="color: #b9cbe1;">
-                                        <option value="" selected>   Select One</option>
-                                        <option value="FullFee">Full Fee</option>
-                                        <option value="Installment">Installment</option>
-                                        <option value="PerMonth">Per Month</option>
-
-                                    </select>
-                                </div>
-
-
-                                <div class="form-group bmd-form-group my-3">
-                                    <button id="CalculateFee" type="button" onclick="Calc()" class="btn btn-primary ">Calculate Fee</button>
-                                </div>
-
-
-
-
-
-                                <div class="form-group bmd-form-group my-3">
-                                    <label class="">Fee</label>
-                                    <input type="text" value="@ViewBag.StudentFeeOfFeeType" required class="form-control text_box_style" name="Fee" id="Fee" readonly />
-                                </div>
-                                <div id="DiscountDiv">
-                                    <div class="form-group bmd-form-group my-3" id="DiscountPercentageDiv">
-                                        <label class="">Discount Percentage</label>
-                                        <input type="text" value="@ViewBag.DiscountPercentage" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control round-border" name="DiscountPercentage" id="DiscountPercentage" />
-                                    </div>
-
-                                    <div id="DiscountAmountDiv" class="form-group bmd-form-group my-3" style="display:none">
-                                        <label class="">Discount Amount</label>
-                                        @if (ViewBag.Discount != null)
+                                        foreach (var item in ViewBag.CashReceiptList)
                                         {
-                                            <input type="number" readonly value="@ViewBag.Discount" class="form-control round-border" name="Discount" id="Discount" />
-
-                                        }
-                                        else
-                                        {
-
-                                            <input type="number" readonly value="0" class="form-control round-border" name="Discount" id="Discount" />
+                                            <tr>
+                                                <td style="text-align:center">@item.ReceiptNo</td>
+                                                @*<td>@item.CreationDate.ToShortDateString()</td>*@
+                                                <td style="text-align:center">
+                                                    @item.Dated.ToString(string.Format("dd/MM/yyyy"))
+                                                </td>
+                                                <td align="center">@item.Amount.ToString("#,##0")</td>
+                                            </tr>
 
                                         }
 
-                                    </div>
+
+                                    }
+
+                                </table>
+
+                                </div> <!--Fee Details Listing Table-->
+
+                            </div> <!--end of column-->
+
+                            <div class="col-md-5 pl-5 pr-5 ">
 
 
-                                    <div class="form-group bmd-form-group my-3">
-                                        <label class="">Remaining Amount</label>
-                                        <input type="number" value="@ViewBag.RemainingAmount" class="form-control round-border" name="RemainingAmount" id="RemainingAmount" readonly />
-                                    </div>
-                                </div>
+                                <h2 class="column-heading mb-4">Subject Details</h2>
 
                                 <div class="form-group bmd-form-group my-3">
-                                    <label class="">Total Fee</label>
-                                    @if (ViewBag.FeePayAbleAsTotalFee != null)
-                                    {
-                                        <input type="text" value="@ViewBag.FeePayAbleAsTotalFee" required class="form-control text_box_style totalfeeclass" name="TotalFee" id="TotalFee" readonly />
+                                    <label class="control-label">Section <span class="red-mark">*</span></label>
+                                    @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control dropdownstyle" })
+                                    <br />
+                                    <span style="color:red"> @ViewBag.SubjectsErrorMsg</span>
+                                </div>
 
-                                    }
-                                    else
+                                <!--css subjects-->
 
-                                    {
+                                <div class="form-group SubjectsBoxesCSS" id="MandatorySubjectCss">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsCSS"></div>
+                                </div>
+                                <div class="form-group bmd-form-group my-3" id="Group1CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup1"></div>
+                                </div>
 
-                                        <input type="text" required class="form-control text_box_style totalfeeclass" name="TotalFee" id="TotalFee" readonly />
+                                <div class="form-group SubjectsBoxesCSS" id="Group2CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup2"></div>
+                                </div>
+                                <div class="form-group SubjectsBoxesCSS" id="Group3CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup3"></div>
+                                </div>
+                                <div class="form-group SubjectsBoxesCSS" id="Group4CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup4"></div>
+                                </div>
 
-                                    }
+                                <div class="form-group SubjectsBoxesCSS" id="Group5CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup5"></div>
+                                </div>
 
+                                <div class="form-group SubjectsBoxesCSS" id="Group6CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup6"></div>
                                 </div>
 
 
-
-                            </div><!--end fee detail div-->
-                        </div> <!--end of column-->
-
-                        <div class="col-md-5 pl-5 pr-5 ">
+                                <div class="form-group SubjectsBoxesCSS" id="Group7CSS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup7"></div>
+                                </div>
 
 
-                            <h2 class="column-heading mb-4">Subject Details</h2>
+                                <!--PMS-->
 
-                            <div class="form-group bmd-form-group my-3">
-                                <label class="control-label">Section <span class="red-mark">*</span></label>
-                                @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control dropdownstyle" })
-                                <br />
-                                <span style="color:red"> @ViewBag.SubjectsErrorMsg</span>
+                                <div class="form-group SubjectsBoxesPMS" id="MandatorySubjectPMS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsPMS"></div>
+                                </div>
+
+                                <div class="form-group SubjectsBoxesPMS" id="Group1PMS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup1"></div>
+                                </div>
+
+                                <div class="form-group SubjectsBoxesPMS" id="Group2PMS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup2"></div>
+                                </div>
+
+                                <div class="form-group SubjectsBoxesPMS" id="Group3PMS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup3"></div>
+                                </div>
+                                <div class="form-group SubjectsBoxesPMS" id="Group4PMS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup4"></div>
+                                </div>
+
+
+                                <div class="form-group SubjectsBoxesPMS" id="Group5PMS">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup5"></div>
+                                </div>
+
+
+                                <!--OnePaper-->
+                                <div class="form-group SubjectsBoxesOnePaper" id="MandatorySubjectOnePaper">
+                                    <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsOnePaper"></div>
+                                </div>
+
+
                             </div>
-
-                            <!--css subjects-->
-
-                            <div class="form-group SubjectsBoxesCSS" id="MandatorySubjectCss">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsCSS"></div>
-                            </div>
-                            <div class="form-group bmd-form-group my-3" id="Group1CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup1"></div>
-                            </div>
-
-                            <div class="form-group SubjectsBoxesCSS" id="Group2CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup2"></div>
-                            </div>
-                            <div class="form-group SubjectsBoxesCSS" id="Group3CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup3"></div>
-                            </div>
-                            <div class="form-group SubjectsBoxesCSS" id="Group4CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup4"></div>
-                            </div>
-
-                            <div class="form-group SubjectsBoxesCSS" id="Group5CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup5"></div>
-                            </div>
-
-                            <div class="form-group SubjectsBoxesCSS" id="Group6CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup6"></div>
-                            </div>
-
-
-                            <div class="form-group SubjectsBoxesCSS" id="Group7CSS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectCSSGroup7"></div>
-                            </div>
-
-
-                            <!--PMS-->
-
-                            <div class="form-group SubjectsBoxesPMS" id="MandatorySubjectPMS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsPMS"></div>
-                            </div>
-
-                            <div class="form-group SubjectsBoxesPMS" id="Group1PMS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup1"></div>
-                            </div>
-
-                            <div class="form-group SubjectsBoxesPMS" id="Group2PMS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup2"></div>
-                            </div>
-
-                            <div class="form-group SubjectsBoxesPMS" id="Group3PMS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup3"></div>
-                            </div>
-                            <div class="form-group SubjectsBoxesPMS" id="Group4PMS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup4"></div>
-                            </div>
-
-
-                            <div class="form-group SubjectsBoxesPMS" id="Group5PMS">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="SubjectPMSGroup5"></div>
-                            </div>
-
-
-                            <!--OnePaper-->
-                            <div class="form-group SubjectsBoxesOnePaper" id="MandatorySubjectOnePaper">
-                                <div class="col-md-12 col-md-offset-1 col-lg-offset-1" id="MandatorySubjectsOnePaper"></div>
-                            </div>
-
-
                         </div>
-                    </div>
                     <!--end of column-->
 
                     <br />
@@ -1582,7 +1161,6 @@ else if (User.IsInRole("Staff"))
 
            window.open("/AspNetUser/Print?id=" + id, "_blank");
 
-       //  window.open("/AspNetUser/StudentPrint2?id=" + id, "_blank");
 
 
         });
@@ -1611,7 +1189,7 @@ else if (User.IsInRole("Staff"))
 
         $("form").submit(function () {
             debugger
-            // alert("usama");
+           
             var TotalFee = $("#TotalFee").val();
 
             if (TotalFee == "" && TotalFee < 0) {
@@ -1675,15 +1253,12 @@ else if (User.IsInRole("Staff"))
             var CourseType = $("input[name='CourseType']").val();
             event.stopPropagation();
 
-            // alert("alert");
 
             if ($(this).is(':checked')) {
                 $("input[name='OnePaperSubjects0']").prop("checked", true);
-                //alert("check");
             }
             else {
                 $("input[name='OnePaperSubjects0']").prop("checked", false);
-                // alert("uncheck");
 
             }
         })

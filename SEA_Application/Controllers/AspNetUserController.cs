@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using Newtonsoft.Json;
 using System.IO;
+using static SEA_Application.Controllers.TermAssessmentControllers.TermAssessmentController;
 
 namespace SEA_Application.Controllers
 {
@@ -592,82 +593,20 @@ namespace SEA_Application.Controllers
             ViewBag.employee = employee;
 
 
-            //ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            
             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            
+            var CashReceiptList = db.CashReceipts.Where(x => x.UserId == id).OrderBy(x => x.Id).ToList();
+           
+            ViewBag.CashReceiptList = CashReceiptList;
+            ViewBag.TotalFeeForHistoryTable = 0;
 
-            int VoucherExist = 0;
-            int TotalVoucher = db.Vouchers.Where(x => x.StudentId == employee.Id).Count();
-            string FeeType = "";
-            double? Discount = 0;
-            double StudentFeeOfFeeType = 0;
-            double? RemainingAmount = 0;
-            double? DiscountPercentage = 0;
-
-            if (TotalVoucher == 1)
+            var StudentFeeFirst = db.StudentFeeMonths.Where(x => x.StudentId == employee.Id).OrderBy(x => x.Id).FirstOrDefault(); //CashReceiptList.FirstOrDefault();
+            if (StudentFeeFirst != null)
             {
-                StudentFeeMonth StudentFeeMonth = db.StudentFeeMonths.Where(x => x.StudentId == employee.Id).Select(x => x).FirstOrDefault();
-                var voucherId = db.Vouchers.Where(x => x.StudentId == employee.Id).FirstOrDefault().Id;
-
-                if (StudentFeeMonth != null)
-                {
-
-                    FeeType = StudentFeeMonth.FeeType;
-                    Discount = StudentFeeMonth.Discount;
-
-                    int? SessionFee = db.AspNetSessions.Where(x => x.Id == StudentFeeMonth.SessionId).FirstOrDefault().Total_Fee;
-                    double SessionFeeOfTypeDouble = Convert.ToDouble(SessionFee);
-
-                    if (FeeType == "PerMonth")
-                    {
-                        StudentFeeOfFeeType = SessionFeeOfTypeDouble + 12000;
-                    }
-                    else if (FeeType == "Installment")
-                    {
-                        StudentFeeOfFeeType = SessionFeeOfTypeDouble + 6000;
-                    }
-                    else
-                    {
-                        StudentFeeOfFeeType = SessionFeeOfTypeDouble + 0;
-
-                    }
-
-                    if (Discount != 0)
-                    {
-                        RemainingAmount = StudentFeeOfFeeType - Discount;
-                        DiscountPercentage = Discount * (100 / StudentFeeOfFeeType);
-
-                    }
-
-                    ViewBag.DiscountPercentage = DiscountPercentage;
-                    ViewBag.StudentFeeOfFeeType = StudentFeeOfFeeType;
-
-                    ViewBag.RemainingAmount = RemainingAmount;
-                    ViewBag.VoucherId = voucherId;
-                    ViewBag.FeePayAbleAsTotalFee = StudentFeeMonth.FeePayable;
-                    ViewBag.Discount = Discount;
-                    ViewBag.NotesFee = StudentFeeMonth.NotesFee;
-                    ViewBag.FeeType = StudentFeeMonth.FeeType;
-
-                    VoucherExist = 1;
-
-                }
+                ViewBag.TotalFeeForHistoryTable = StudentFeeFirst.FeePayable;
             }
-
-            else
-            {
-                ViewBag.VoucherId = null;
-                ViewBag.FeePayAbleAsTotalFee = null;
-                ViewBag.Discount = null;
-                ViewBag.NotesFee = null;
-                ViewBag.FeeType = null;
-                ViewBag.StudentFeeOfFeeType = null;
-                ViewBag.DiscountPercentage = null;
-                ViewBag.RemainingAmount = null;
-
-                //   ViewBag.StudentFeeOfFeeType = null;
-            }
-
-            ViewBag.VoucherExist = VoucherExist;
+        
 
             if (aspNetUser == null)
             {
@@ -1033,6 +972,19 @@ namespace SEA_Application.Controllers
 
 
                     ApplicationDbContext context = new ApplicationDbContext();
+
+                    var CashReceiptList = db.CashReceipts.Where(x => x.UserId == aspNetUser.Id).OrderBy(x => x.Id).ToList();
+                    var findStudent = db.AspNetStudents.Where(x => x.StudentID == aspNetUser.Id).Select(x => x).FirstOrDefault();
+
+                    ViewBag.CashReceiptList = CashReceiptList;
+                    ViewBag.TotalFeeForHistoryTable = 0;
+
+                    var StudentFeeFirst = db.StudentFeeMonths.Where(x => x.StudentId == findStudent.Id).OrderBy(x => x.Id).FirstOrDefault(); //CashReceiptList.FirstOrDefault();
+                    if (StudentFeeFirst != null)
+                    {
+                        ViewBag.TotalFeeForHistoryTable = StudentFeeFirst.FeePayable;
+                    }
+
                     //IEnumerable<string> selectedsubjects;
                     //if (Request.Form["subjects"] != null)
                     // { 
@@ -1051,79 +1003,79 @@ namespace SEA_Application.Controllers
                     //}
 
                     //This Block
-                    int VoucherExist1 = 0;
-                    int TotalVoucher1 = db.Vouchers.Where(x => x.StudentId == StudentId).Count();
-                    string FeeType1 = "";
-                    double? Discount1 = 0;
-                    double StudentFeeOfFeeType1 = 0;
-                    double? RemainingAmount1 = 0;
-                    double? DiscountPercentage1 = 0;
+                    //  int VoucherExist1 = 0;
+                    // int TotalVoucher1 = db.Vouchers.Where(x => x.StudentId == StudentId).Count();
+                    //string FeeType1 = "";
+                    //double? Discount1 = 0;
+                    //double StudentFeeOfFeeType1 = 0;
+                    //double? RemainingAmount1 = 0;
+                    //double? DiscountPercentage1 = 0;
 
-                    if (TotalVoucher1 == 1)
-                    {
-                        StudentFeeMonth StudentFeeMonth = db.StudentFeeMonths.Where(x => x.StudentId == StudentId).Select(x => x).FirstOrDefault();
-                        var voucherId = db.Vouchers.Where(x => x.StudentId == StudentId).FirstOrDefault().Id;
+                    //if (TotalVoucher1 == 1)
+                    //{
+                    //    StudentFeeMonth StudentFeeMonth = db.StudentFeeMonths.Where(x => x.StudentId == StudentId).Select(x => x).FirstOrDefault();
+                    //    var voucherId = db.Vouchers.Where(x => x.StudentId == StudentId).FirstOrDefault().Id;
 
-                        if (StudentFeeMonth != null)
-                        {
+                    //    if (StudentFeeMonth != null)
+                    //    {
 
-                            FeeType1 = StudentFeeMonth.FeeType;
-                            Discount1 = StudentFeeMonth.Discount;
+                    //        FeeType1 = StudentFeeMonth.FeeType;
+                    //        Discount1 = StudentFeeMonth.Discount;
 
-                            int? SessionFee = db.AspNetSessions.Where(x => x.Id == StudentFeeMonth.SessionId).FirstOrDefault().Total_Fee;
-                            double SessionFeeOfTypeDouble = Convert.ToDouble(SessionFee);
+                    //        int? SessionFee = db.AspNetSessions.Where(x => x.Id == StudentFeeMonth.SessionId).FirstOrDefault().Total_Fee;
+                    //        double SessionFeeOfTypeDouble = Convert.ToDouble(SessionFee);
 
-                            if (FeeType1 == "PerMonth")
-                            {
-                                StudentFeeOfFeeType1 = SessionFeeOfTypeDouble + 12000;
-                            }
-                            else if (FeeType1 == "Installment")
-                            {
-                                StudentFeeOfFeeType1 = SessionFeeOfTypeDouble + 6000;
-                            }
-                            else
-                            {
-                                StudentFeeOfFeeType1 = SessionFeeOfTypeDouble + 0;
+                    //        if (FeeType1 == "PerMonth")
+                    //        {
+                    //            StudentFeeOfFeeType1 = SessionFeeOfTypeDouble + 12000;
+                    //        }
+                    //        else if (FeeType1 == "Installment")
+                    //        {
+                    //            StudentFeeOfFeeType1 = SessionFeeOfTypeDouble + 6000;
+                    //        }
+                    //        else
+                    //        {
+                    //            StudentFeeOfFeeType1 = SessionFeeOfTypeDouble + 0;
 
-                            }
+                    //        }
 
-                            if (Discount1 != 0)
-                            {
-                                RemainingAmount1 = StudentFeeOfFeeType1 - Discount1;
-                                DiscountPercentage1 = Discount1 * (100 / StudentFeeOfFeeType1);
+                    //        if (Discount1 != 0)
+                    //        {
+                    //            RemainingAmount1 = StudentFeeOfFeeType1 - Discount1;
+                    //            DiscountPercentage1 = Discount1 * (100 / StudentFeeOfFeeType1);
 
-                            }
+                    //        }
 
-                            ViewBag.DiscountPercentage = DiscountPercentage1;
-                            ViewBag.StudentFeeOfFeeType = StudentFeeOfFeeType1;
+                    //        ViewBag.DiscountPercentage = DiscountPercentage1;
+                    //        ViewBag.StudentFeeOfFeeType = StudentFeeOfFeeType1;
 
-                            ViewBag.RemainingAmount = RemainingAmount1;
-                            ViewBag.VoucherId = voucherId;
-                            ViewBag.FeePayAbleAsTotalFee = StudentFeeMonth.FeePayable;
-                            ViewBag.Discount = Discount1;
-                            ViewBag.NotesFee = StudentFeeMonth.NotesFee;
-                            ViewBag.FeeType = StudentFeeMonth.FeeType;
-                            VoucherExist1 = 1;
+                    //        ViewBag.RemainingAmount = RemainingAmount1;
+                    //        ViewBag.VoucherId = voucherId;
+                    //        ViewBag.FeePayAbleAsTotalFee = StudentFeeMonth.FeePayable;
+                    //        ViewBag.Discount = Discount1;
+                    //        ViewBag.NotesFee = StudentFeeMonth.NotesFee;
+                    //        ViewBag.FeeType = StudentFeeMonth.FeeType;
+                    //        VoucherExist1 = 1;
 
-                        }
-                    }
+                    //    }
+                    //}
 
-                    else
-                    {
-                        ViewBag.VoucherId = null;
-                        ViewBag.FeePayAbleAsTotalFee = null;
-                        ViewBag.Discount = null;
-                        ViewBag.NotesFee = null;
-                        ViewBag.FeeType = null;
-                        ViewBag.StudentFeeOfFeeType = null;
-                        ViewBag.DiscountPercentage = null;
-                        ViewBag.RemainingAmount = null;
+                    //else
+                    //{
+                    //    ViewBag.VoucherId = null;
+                    //    ViewBag.FeePayAbleAsTotalFee = null;
+                    //    ViewBag.Discount = null;
+                    //    ViewBag.NotesFee = null;
+                    //    ViewBag.FeeType = null;
+                    //    ViewBag.StudentFeeOfFeeType = null;
+                    //    ViewBag.DiscountPercentage = null;
+                    //    ViewBag.RemainingAmount = null;
 
-                        //   ViewBag.StudentFeeOfFeeType = null;
-                    }
+                    //    //   ViewBag.StudentFeeOfFeeType = null;
+                    //}
 
 
-                    ViewBag.VoucherExist = VoucherExist1;
+                    //ViewBag.VoucherExist = VoucherExist1;
 
 
                     //if(ChecktotalFee == "")
@@ -1269,11 +1221,8 @@ namespace SEA_Application.Controllers
                     var student = db.AspNetStudents.Where(x => x.StudentID == aspNetUser.Id).Select(x => x).FirstOrDefault();
 
                     student.ClassID = Convert.ToInt32(selectedClass);
-                    //  student.Nationality = Request.Form["Nationality"];
                     student.CourseType = Request.Form["CourseType"];
-                    //  student.BirthDate = Request.Form["BirthDate"];
                     student.Religion = Request.Form["Religion"];
-                    //student.Gender = Request.Form["Gender"];
                     student.SchoolName = Request.Form["SchoolName"];
                     student.ClassTimings = Request.Form["ClassTimings"];
 
@@ -1364,240 +1313,240 @@ namespace SEA_Application.Controllers
                     db1.SaveChanges();
 
 
-                    var VoucherExist = Request.Form["VoucherExist"];
+                  //  var VoucherExist = Request.Form["VoucherExist"];
 
 
-                    if (VoucherExist == "1")
-                    {
+                    //if (VoucherExist == "1")
+                    //{
 
-                        var VoucherId = Request.Form["VoucherId"];
+                    //    var VoucherId = Request.Form["VoucherId"];
 
-                        int VoucherIdToInt = Convert.ToInt32(VoucherId);
+                    //    int VoucherIdToInt = Convert.ToInt32(VoucherId);
 
-                        List<VoucherRecord> VoucherRecordExists = db.VoucherRecords.Where(x => x.VoucherId == VoucherIdToInt).ToList();
+                    //    List<VoucherRecord> VoucherRecordExists = db.VoucherRecords.Where(x => x.VoucherId == VoucherIdToInt).ToList();
 
-                        foreach (var VoucherRecord in VoucherRecordExists)
-                        {
+                    //    foreach (var VoucherRecord in VoucherRecordExists)
+                    //    {
 
-                            var VoucherRecordAmount = VoucherRecord.Amount;
-                            var VoucherRecordLedgerId = VoucherRecord.LedgerId;
-                            var Ledger = db.Ledgers.Where(x => x.Id == VoucherRecordLedgerId).FirstOrDefault();
-                            var CurrentBalanceofLedger = Ledger.CurrentBalance;
+                    //        var VoucherRecordAmount = VoucherRecord.Amount;
+                    //        var VoucherRecordLedgerId = VoucherRecord.LedgerId;
+                    //        var Ledger = db.Ledgers.Where(x => x.Id == VoucherRecordLedgerId).FirstOrDefault();
+                    //        var CurrentBalanceofLedger = Ledger.CurrentBalance;
 
-                            Ledger.CurrentBalance = CurrentBalanceofLedger - VoucherRecordAmount;
+                    //        Ledger.CurrentBalance = CurrentBalanceofLedger - VoucherRecordAmount;
 
-                            db.SaveChanges();
+                    //        db.SaveChanges();
 
-                        }
+                    //    }
 
-                        db.VoucherRecords.RemoveRange(VoucherRecordExists);
-                        db.SaveChanges();
+                    //    db.VoucherRecords.RemoveRange(VoucherRecordExists);
+                    //    db.SaveChanges();
 
 
-                        var VoucherToDelete = db.Vouchers.Where(x => x.Id == VoucherIdToInt).FirstOrDefault();
+                    //    var VoucherToDelete = db.Vouchers.Where(x => x.Id == VoucherIdToInt).FirstOrDefault();
 
-                        db.Vouchers.Remove(VoucherToDelete);
-                        db.SaveChanges();
+                    //    db.Vouchers.Remove(VoucherToDelete);
+                    //    db.SaveChanges();
 
-                        var StudentFeeMonthToDelete = db.StudentFeeMonths.Where(x => x.StudentId == student.Id).FirstOrDefault();
+                    //    var StudentFeeMonthToDelete = db.StudentFeeMonths.Where(x => x.StudentId == student.Id).FirstOrDefault();
 
-                        DateTime? DueDateOfStudent = StudentFeeMonthToDelete.DueDate;
+                    //    DateTime? DueDateOfStudent = StudentFeeMonthToDelete.DueDate;
 
-                        db.StudentFeeMonths.Remove(StudentFeeMonthToDelete);
-                        db.SaveChanges();
+                    //    db.StudentFeeMonths.Remove(StudentFeeMonthToDelete);
+                    //    db.SaveChanges();
 
 
-                        //Ledgers Manipulation//
+                    //    //Ledgers Manipulation//
 
-                        var Discount = Request.Form["Discount"];
+                    //    var Discount = Request.Form["Discount"];
 
-                        double discount = 0;
-                        if (Request.Form["Discount"] == "")
-                        {
-                            discount = 0;
-                        }
-                        else
-                        {
-                            discount = Convert.ToDouble(Request.Form["Discount"]);
-                        }
+                    //    double discount = 0;
+                    //    if (Request.Form["Discount"] == "")
+                    //    {
+                    //        discount = 0;
+                    //    }
+                    //    else
+                    //    {
+                    //        discount = Convert.ToDouble(Request.Form["Discount"]);
+                    //    }
 
 
 
-                        StudentFeeMonth studentFeeMonth = new StudentFeeMonth();
+                    //    StudentFeeMonth studentFeeMonth = new StudentFeeMonth();
 
-                        string NotesCategory = Request.Form["NotesCategory"];
-                        string FeeType = Request.Form["FeeType"];
-                        double NotesFee = 0;
+                    //    string NotesCategory = Request.Form["NotesCategory"];
+                    //    string FeeType = Request.Form["FeeType"];
+                    //    double NotesFee = 0;
 
-                        double Total = Convert.ToDouble(Request.Form["SessionFee"]);
-                        double studentFee = Convert.ToDouble(Request.Form["SessionFee"]);
+                    //    double Total = Convert.ToDouble(Request.Form["SessionFee"]);
+                    //    double studentFee = Convert.ToDouble(Request.Form["SessionFee"]);
 
-                        if (FeeType == "Installment")
-                        {
+                    //    if (FeeType == "Installment")
+                    //    {
 
-                            Total = Total + 6000;
-                            studentFee = studentFee + 6000;
-                        }
-                        else if (FeeType == "PerMonth")
-                        {
-                            Total = Total + 12000;
+                    //        Total = Total + 6000;
+                    //        studentFee = studentFee + 6000;
+                    //    }
+                    //    else if (FeeType == "PerMonth")
+                    //    {
+                    //        Total = Total + 12000;
 
-                            studentFee = studentFee + 12000;
-                        }
-                        else
-                        {
-                            Total = Total + 0;
-                            studentFee = studentFee + 0;
-                        }
+                    //        studentFee = studentFee + 12000;
+                    //    }
+                    //    else
+                    //    {
+                    //        Total = Total + 0;
+                    //        studentFee = studentFee + 0;
+                    //    }
 
-                        if (NotesCategory == "WithNotes")
-                        {
+                    //    if (NotesCategory == "WithNotes")
+                    //    {
 
-                            NotesFee = Convert.ToDouble(Request.Form["NotesAmount"]);
-                            studentFeeMonth.TotalFee = Total + Convert.ToDouble(Request.Form["NotesAmount"]);
-                            studentFeeMonth.NotesFee = Convert.ToDouble(Request.Form["NotesAmount"]);
-                        }
-                        else
-                        {
-                            studentFeeMonth.TotalFee = Total;
-                        }
+                    //        NotesFee = Convert.ToDouble(Request.Form["NotesAmount"]);
+                    //        studentFeeMonth.TotalFee = Total + Convert.ToDouble(Request.Form["NotesAmount"]);
+                    //        studentFeeMonth.NotesFee = Convert.ToDouble(Request.Form["NotesAmount"]);
+                    //    }
+                    //    else
+                    //    {
+                    //        studentFeeMonth.TotalFee = Total;
+                    //    }
 
-                        var Month = DateTime.Now.ToString("MMMM");
-                        studentFeeMonth.Months = Month;
-                        studentFeeMonth.IssueDate = DateTime.Now;
-                        studentFeeMonth.FeePayable = Convert.ToDouble(Request.Form["TotalFee"]);
-                        studentFeeMonth.Discount = discount;
-                        studentFeeMonth.FeeType = Request.Form["FeeType"];
-                        studentFeeMonth.SessionId = SessionIdOfSelectedStudent;
-                        studentFeeMonth.StudentId = student.Id;
-                        studentFeeMonth.Status = "Pending";
-                        studentFeeMonth.DueDate = DueDateOfStudent;
-
-                        db.StudentFeeMonths.Add(studentFeeMonth);
-                        db.SaveChanges();
+                    //    var Month = DateTime.Now.ToString("MMMM");
+                    //    studentFeeMonth.Months = Month;
+                    //    studentFeeMonth.IssueDate = DateTime.Now;
+                    //    studentFeeMonth.FeePayable = Convert.ToDouble(Request.Form["TotalFee"]);
+                    //    studentFeeMonth.Discount = discount;
+                    //    studentFeeMonth.FeeType = Request.Form["FeeType"];
+                    //    studentFeeMonth.SessionId = SessionIdOfSelectedStudent;
+                    //    studentFeeMonth.StudentId = student.Id;
+                    //    studentFeeMonth.Status = "Pending";
+                    //    studentFeeMonth.DueDate = DueDateOfStudent;
+
+                    //    db.StudentFeeMonths.Add(studentFeeMonth);
+                    //    db.SaveChanges();
 
 
 
-                        var id = User.Identity.GetUserId();
-                        var username = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
-                        Voucher voucher = new Voucher();
-                        var SessionName = db.AspNetSessions.Where(x => x.Id == SessionIdOfSelectedStudent).FirstOrDefault().SessionName;
-                        voucher.Name = "Student Fee Creation of student " + aspNetUser.Name + " Session Name " + SessionName;
-                        voucher.Notes = "Account Receiveable, discount, and revenue is updated";
-                        voucher.Date = GetLocalDateTime.GetLocalDateTimeFunction();
-                        voucher.StudentId = student.Id;
-
-                        voucher.CreatedBy = username;
-                        voucher.SessionID = SessionIdOfSelectedStudent;
-                        int? VoucherObj = db.Vouchers.Max(x => x.VoucherNo);
-
-                        voucher.VoucherNo = Convert.ToInt32(VoucherObj) + 1;
-                        db.Vouchers.Add(voucher);
-                        db.SaveChanges();
-
-                        //Voucher Record
-
-                        var Leadger = db.Ledgers.Where(x => x.Name == "Account Receiveable").FirstOrDefault();
-                        int AdminDrawerId = Leadger.Id;
-                        decimal? CurrentBalance = Leadger.CurrentBalance;
-
-                        VoucherRecord voucherRecord = new VoucherRecord();
-                        decimal? AfterBalance = CurrentBalance + Convert.ToDecimal(studentFeeMonth.FeePayable);
-                        voucherRecord.LedgerId = AdminDrawerId;
-                        voucherRecord.Type = "Dr";
-                        voucherRecord.Amount = Convert.ToDecimal(studentFeeMonth.FeePayable);
-                        voucherRecord.CurrentBalance = CurrentBalance;
-
-                        voucherRecord.AfterBalance = AfterBalance;
-                        voucherRecord.VoucherId = voucher.Id;
-
-                        voucherRecord.Description = "Fee added of student (" + aspNetUser.Name + ") (" + SessionName + ")";
-
-
-                        Leadger.CurrentBalance = AfterBalance;
-                        db.VoucherRecords.Add(voucherRecord);
-                        db.SaveChanges();
-
-
-
-                        if (NotesCategory == "WithNotes")
-                        {
-
-
-                            VoucherRecord voucherRecord1 = new VoucherRecord();
-
-                            var LeadgerNotes = db.Ledgers.Where(x => x.Name == "Notes").FirstOrDefault();
-
-                            decimal? CurrentBalanceOfNotes = LeadgerNotes.CurrentBalance;
-                            decimal? AfterBalanceOfNotes = CurrentBalanceOfNotes + Convert.ToDecimal(NotesFee);
-                            voucherRecord1.LedgerId = LeadgerNotes.Id;
-                            voucherRecord1.Type = "Cr";
-                            voucherRecord1.Amount = Convert.ToDecimal(NotesFee);
-                            voucherRecord1.CurrentBalance = CurrentBalanceOfNotes;
-                            voucherRecord1.AfterBalance = AfterBalanceOfNotes;
-                            voucherRecord1.VoucherId = voucher.Id;
-                            voucherRecord1.Description = "Notes against student with notes of (" + aspNetUser.Name + ") (" + SessionName + ")";
-                            LeadgerNotes.CurrentBalance = AfterBalanceOfNotes;
-
-                            db.VoucherRecords.Add(voucherRecord1);
-                            db.SaveChanges();
-                        }
-                        VoucherRecord voucherRecord2 = new VoucherRecord();
-
-                        var IdofLedger = from Ledger in db.Ledgers
-                                         join LedgerHd in db.LedgerHeads on Ledger.LedgerHeadId equals LedgerHd.Id
-                                         where LedgerHd.Name == "Income" && Ledger.Name == "Student Fee"
-                                         select new
-                                         {
-                                             Ledger.Id
-
-                                         };
-
-                        int studentFeeId = Convert.ToInt32(IdofLedger.FirstOrDefault().Id);
-                        var studentFeeL = db.Ledgers.Where(x => x.Id == studentFeeId).FirstOrDefault();
-
-                        decimal? CurrentBalanceOfStudentFee = studentFeeL.CurrentBalance;
-                        decimal? AfterBalanceOfStudentFee = CurrentBalanceOfStudentFee + Convert.ToDecimal(studentFee);
-                        voucherRecord2.LedgerId = studentFeeL.Id;
-                        voucherRecord2.Type = "Cr";
-                        voucherRecord2.Amount = Convert.ToDecimal(studentFee);
-                        voucherRecord2.CurrentBalance = CurrentBalanceOfStudentFee;
-                        voucherRecord2.AfterBalance = AfterBalanceOfStudentFee;
-                        voucherRecord2.VoucherId = voucher.Id;
-                        // voucherRecord2.Description = "Credit in Student Fee(income)";
-                        voucherRecord2.Description = "Fee added of student (" + aspNetUser.Name + ") (" + SessionName + ")";
-                        studentFeeL.CurrentBalance = AfterBalanceOfStudentFee;
-                        db.VoucherRecords.Add(voucherRecord2);
-
-                        db.SaveChanges();
-                        if (discount != 0)
-                        {
-
-                            VoucherRecord voucherRecord3 = new VoucherRecord();
-
-                            var LeadgerDiscount = db.Ledgers.Where(x => x.Name == "Discount").FirstOrDefault();
-
-                            decimal? CurrentBalanceOfDiscount = LeadgerDiscount.CurrentBalance;
-                            decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Convert.ToDecimal(discount);
-                            voucherRecord3.LedgerId = LeadgerDiscount.Id;
-                            voucherRecord3.Type = "Dr";
-                            voucherRecord3.Amount = Convert.ToDecimal(discount);
-                            voucherRecord3.CurrentBalance = CurrentBalanceOfDiscount;
-                            voucherRecord3.AfterBalance = AfterBalanceOfDiscount;
-                            voucherRecord3.VoucherId = voucher.Id;
-                            voucherRecord3.Description = "Discount given to student  (" + aspNetUser.Name + ") (" + SessionName + ") on payable fee " + Convert.ToDouble(Request.Form["TotalFee"]);
-                            LeadgerDiscount.CurrentBalance = AfterBalanceOfDiscount;
-
-                            db.VoucherRecords.Add(voucherRecord3);
-                            db.SaveChanges();
-                        }
-
-                    }
-
-                    else
-                    {
-
-                    }
+                    //    var id = User.Identity.GetUserId();
+                    //    var username = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
+                    //    Voucher voucher = new Voucher();
+                    //    var SessionName = db.AspNetSessions.Where(x => x.Id == SessionIdOfSelectedStudent).FirstOrDefault().SessionName;
+                    //    voucher.Name = "Student Fee Creation of student " + aspNetUser.Name + " Session Name " + SessionName;
+                    //    voucher.Notes = "Account Receiveable, discount, and revenue is updated";
+                    //    voucher.Date = GetLocalDateTime.GetLocalDateTimeFunction();
+                    //    voucher.StudentId = student.Id;
+
+                    //    voucher.CreatedBy = username;
+                    //    voucher.SessionID = SessionIdOfSelectedStudent;
+                    //    int? VoucherObj = db.Vouchers.Max(x => x.VoucherNo);
+
+                    //    voucher.VoucherNo = Convert.ToInt32(VoucherObj) + 1;
+                    //    db.Vouchers.Add(voucher);
+                    //    db.SaveChanges();
+
+                    //    //Voucher Record
+
+                    //    var Leadger = db.Ledgers.Where(x => x.Name == "Account Receiveable").FirstOrDefault();
+                    //    int AdminDrawerId = Leadger.Id;
+                    //    decimal? CurrentBalance = Leadger.CurrentBalance;
+
+                    //    VoucherRecord voucherRecord = new VoucherRecord();
+                    //    decimal? AfterBalance = CurrentBalance + Convert.ToDecimal(studentFeeMonth.FeePayable);
+                    //    voucherRecord.LedgerId = AdminDrawerId;
+                    //    voucherRecord.Type = "Dr";
+                    //    voucherRecord.Amount = Convert.ToDecimal(studentFeeMonth.FeePayable);
+                    //    voucherRecord.CurrentBalance = CurrentBalance;
+
+                    //    voucherRecord.AfterBalance = AfterBalance;
+                    //    voucherRecord.VoucherId = voucher.Id;
+
+                    //    voucherRecord.Description = "Fee added of student (" + aspNetUser.Name + ") (" + SessionName + ")";
+
+
+                    //    Leadger.CurrentBalance = AfterBalance;
+                    //    db.VoucherRecords.Add(voucherRecord);
+                    //    db.SaveChanges();
+
+
+
+                    //    if (NotesCategory == "WithNotes")
+                    //    {
+
+
+                    //        VoucherRecord voucherRecord1 = new VoucherRecord();
+
+                    //        var LeadgerNotes = db.Ledgers.Where(x => x.Name == "Notes").FirstOrDefault();
+
+                    //        decimal? CurrentBalanceOfNotes = LeadgerNotes.CurrentBalance;
+                    //        decimal? AfterBalanceOfNotes = CurrentBalanceOfNotes + Convert.ToDecimal(NotesFee);
+                    //        voucherRecord1.LedgerId = LeadgerNotes.Id;
+                    //        voucherRecord1.Type = "Cr";
+                    //        voucherRecord1.Amount = Convert.ToDecimal(NotesFee);
+                    //        voucherRecord1.CurrentBalance = CurrentBalanceOfNotes;
+                    //        voucherRecord1.AfterBalance = AfterBalanceOfNotes;
+                    //        voucherRecord1.VoucherId = voucher.Id;
+                    //        voucherRecord1.Description = "Notes against student with notes of (" + aspNetUser.Name + ") (" + SessionName + ")";
+                    //        LeadgerNotes.CurrentBalance = AfterBalanceOfNotes;
+
+                    //        db.VoucherRecords.Add(voucherRecord1);
+                    //        db.SaveChanges();
+                    //    }
+                    //    VoucherRecord voucherRecord2 = new VoucherRecord();
+
+                    //    var IdofLedger = from Ledger in db.Ledgers
+                    //                     join LedgerHd in db.LedgerHeads on Ledger.LedgerHeadId equals LedgerHd.Id
+                    //                     where LedgerHd.Name == "Income" && Ledger.Name == "Student Fee"
+                    //                     select new
+                    //                     {
+                    //                         Ledger.Id
+
+                    //                     };
+
+                    //    int studentFeeId = Convert.ToInt32(IdofLedger.FirstOrDefault().Id);
+                    //    var studentFeeL = db.Ledgers.Where(x => x.Id == studentFeeId).FirstOrDefault();
+
+                    //    decimal? CurrentBalanceOfStudentFee = studentFeeL.CurrentBalance;
+                    //    decimal? AfterBalanceOfStudentFee = CurrentBalanceOfStudentFee + Convert.ToDecimal(studentFee);
+                    //    voucherRecord2.LedgerId = studentFeeL.Id;
+                    //    voucherRecord2.Type = "Cr";
+                    //    voucherRecord2.Amount = Convert.ToDecimal(studentFee);
+                    //    voucherRecord2.CurrentBalance = CurrentBalanceOfStudentFee;
+                    //    voucherRecord2.AfterBalance = AfterBalanceOfStudentFee;
+                    //    voucherRecord2.VoucherId = voucher.Id;
+                    //    // voucherRecord2.Description = "Credit in Student Fee(income)";
+                    //    voucherRecord2.Description = "Fee added of student (" + aspNetUser.Name + ") (" + SessionName + ")";
+                    //    studentFeeL.CurrentBalance = AfterBalanceOfStudentFee;
+                    //    db.VoucherRecords.Add(voucherRecord2);
+
+                    //    db.SaveChanges();
+                    //    if (discount != 0)
+                    //    {
+
+                    //        VoucherRecord voucherRecord3 = new VoucherRecord();
+
+                    //        var LeadgerDiscount = db.Ledgers.Where(x => x.Name == "Discount").FirstOrDefault();
+
+                    //        decimal? CurrentBalanceOfDiscount = LeadgerDiscount.CurrentBalance;
+                    //        decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Convert.ToDecimal(discount);
+                    //        voucherRecord3.LedgerId = LeadgerDiscount.Id;
+                    //        voucherRecord3.Type = "Dr";
+                    //        voucherRecord3.Amount = Convert.ToDecimal(discount);
+                    //        voucherRecord3.CurrentBalance = CurrentBalanceOfDiscount;
+                    //        voucherRecord3.AfterBalance = AfterBalanceOfDiscount;
+                    //        voucherRecord3.VoucherId = voucher.Id;
+                    //        voucherRecord3.Description = "Discount given to student  (" + aspNetUser.Name + ") (" + SessionName + ") on payable fee " + Convert.ToDouble(Request.Form["TotalFee"]);
+                    //        LeadgerDiscount.CurrentBalance = AfterBalanceOfDiscount;
+
+                    //        db.VoucherRecords.Add(voucherRecord3);
+                    //        db.SaveChanges();
+                    //    }
+
+                    //}
+
+                    //else
+                    //{
+
+                    //}
 
 
 

@@ -2415,8 +2415,18 @@ namespace SEA_Application.Controllers
                             AS.SessionID = SessionIdOfSelectedStudent;
                             db.AspNetUsers_Session.Add(AS);
                             db.SaveChanges();
-                        }
 
+
+                        }
+                        var CashReceiptToUpdate =   db.CashReceipts.Where(x => x.ReceiptNo == model.ReceiptNo).FirstOrDefault();
+
+                        if (CashReceiptToUpdate != null)
+                        {
+                            CashReceiptToUpdate.ReceivedFrom = null;
+                            CashReceiptToUpdate.UserId = student.StudentID;
+                            db.SaveChanges();
+                        }
+                      
                         // var subID = selectedsubjects.First();
                         //  var classID = db.AspNetSubjects.Where(x=> x.Id == int.Parse(subID)).Select(x=> x.ClassID).FirstOrDefault();
                         //  int id = Int32.Parse(subID);
@@ -2547,7 +2557,7 @@ namespace SEA_Application.Controllers
                         studentFeeMonth.SessionId = SessionIdOfSelectedStudent;
                         studentFeeMonth.StudentId = student.Id;
                         studentFeeMonth.Status = "Pending";
-                        studentFeeMonth.DueDate = Convert.ToDateTime(Request.Form["DueDate"]);
+                        studentFeeMonth.DueDate = null;//Convert.ToDateTime(Request.Form["DueDate"]);
 
                         db.StudentFeeMonths.Add(studentFeeMonth);
                         db.SaveChanges();
@@ -2690,6 +2700,44 @@ namespace SEA_Application.Controllers
 
         //    return Json(new { MandatorySubjects = MandatorySubjectsList , AllSubjects = AllSubjectList }, JsonRequestBehavior.AllowGet);
         //}
+
+
+        public JsonResult ReceiptNoValidation (int ReceiptNo)
+        {
+            var msg = "";
+            var StudentName = "";
+            double Amount = 0;
+            double Discount = 0;
+
+
+            var ReceiptNoValidation =   db.CashReceipts.Where(x => x.ReceiptNo == ReceiptNo).FirstOrDefault();
+
+
+            if(ReceiptNoValidation == null)
+            {
+                msg = "Receipt no is not valid";
+
+            }
+            else
+            {
+                var ReceiptNoStudent = db.CashReceipts.Where(x => x.ReceiptNo == ReceiptNo && x.UserId != null).FirstOrDefault();
+
+                if (ReceiptNoStudent != null)
+                {
+                    msg = "Receipt no is already tagged with another user";
+                }
+                else
+                {
+                   
+                    StudentName = ReceiptNoValidation.ReceivedFrom;
+                    Amount = ReceiptNoValidation.Amount.Value;
+                    Discount = ReceiptNoValidation.Discount.Value;
+                }
+
+            }
+
+            return Json(new { msg = msg , Amount = Amount, Discount= Discount, StudentName = StudentName }, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult GetSessionFee(int SelectedClassId)
         {

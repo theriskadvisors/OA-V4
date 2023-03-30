@@ -28,28 +28,26 @@ else if (User.IsInRole("Staff"))
         $("#BreadCrumbs").append(' <li> <a href="/AspNetUser/StudentsIndex"> Student </a> <span>&gt;</span></li>');
         $("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Create</a></li>');
 
-        document.getElementById('DueDate').valueAsDate = new Date();
+       // document.getElementById('DueDate').valueAsDate = new Date();
 
         $('#cancel').click(function () {
             window.location.href = '@Url.Action("StudentsIndex", "AspNetUser")';
         });
 
-        $("#ClassID").click(function () {
+        $("#ClassID").change(function () {
 
-            $("#DiscountInAmount").val(0);
+            //$("#DiscountInAmount").val(0);
 
-            $("#TotalFee").val("");
-            $("#Discount").val(0);
-            $("#DiscountPercentage").val(0);
-            //  $("#RemainingAmount").val("");
-
-
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Fee").val(0);
+            //$("#TotalFee").val("");
+            //$("#Discount").val(0);
+            //$("#DiscountPercentage").val(0);
+            
+            //$("#Discount").val(0);
+            //$("#RemainingAmount").val(0);
+            //$("#Fee").val(0);
 
 
-            //  $('#CalculateFee').click();
+          
             $("#MandatorySubjects").removeAttr('checked');
 
             var ClassId = $(this).val();
@@ -64,11 +62,18 @@ else if (User.IsInRole("Staff"))
 
 
                         $("#SessionFee").val(data);
-
+                        CalculateFee();
                     }
 
+
                 })
+
             }
+            else {
+                $("#SessionFee").val(0);
+                CalculateFee();
+            }
+          
 
             var selectedClass = $("#ClassID").val();
             var CourseType = $("input[name='CourseType']:checked").val();
@@ -409,40 +414,41 @@ else if (User.IsInRole("Staff"))
         $("#subjects option[value='']").remove();
 
         $('#WithOutNotes').click(function () {
+
             $('#NotesID').hide();
             $('#NotesAmount').val("");
-            $("#TotalFee").val("");
-            //alert("Without note");
-            //$('#FeeType').append('<option value="PerMonth">PerMonth</option>');
+           // $("#TotalFee").val("");
             $("#NotesAmount").prop('required', false);
+           // $("#DiscountPercentage").val(0);
+           // $("#Discount").val(0);
+           // $("#RemainingAmount").val(0);
+          //  $("#Fee").val(0);
+          //  $("#DiscountInAmount").val(0);
+            CalculateFee();
 
-            $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Fee").val(0);
-            $("#DiscountInAmount").val(0);
         });
 
         $('#WithNotes').click(function () {
 
-            //$("#FeeType  option[value='PerMonth']").remove();
             $("#NotesAmount").prop('required', true);
             $('#NotesID').show();
-            $("#TotalFee").val("");
+           // $("#TotalFee").val("");
             $('#NotesAmount').val(16000);
-            $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Fee").val(0);
-            $("#DiscountInAmount").val(0);
+
+            //$("#DiscountPercentage").val(0);
+           // $("#Discount").val(0);
+            //$("#RemainingAmount").val(0);
+            CalculateFee();
+          //  $("#Fee").val(0);
+         //   $("#DiscountInAmount").val(0);
 
         });
 
 
-        $("#DueDate").bind('blur', function () {
+        //$("#DueDate").bind('blur', function () {
 
-            ValidateDueDate();
-        });
+        //    ValidateDueDate();
+        //});
 
         function ValidateDueDate() {
 
@@ -544,155 +550,63 @@ else if (User.IsInRole("Staff"))
         $("#FeeType").change(function () {
             debugger
 
-            $("#DiscountInAmount").val(0);
+            CalculateFee();
 
-            $("#Fee").val(0);
-            // $("#FeeType").val(0);
-            $("#DiscountPercentage").val(0);
-            $("#Discount").val(0);
-            $("#RemainingAmount").val(0);
-
-            $("#TotalFee").val("");
-
-
-        })
-
-        $("#DiscountInPercentageRadio").click(function () {
-
-            $("#DiscountAmountDiv").css('display', 'none');
-            $("#DiscountPercentageDiv").css('display', 'block');
-
-            $("#RemainingAmount").val(0);
-            $("#TotalFee").val("");
-            $("#Discount").val(0);
-
-            $("#DiscountReadOnlyDiv").css('display', 'block');
-
-            $("#DiscountInAmount").val(0);
-        })
-
-        $("#DiscountAmountRadio").click(function () {
-
-            $("#DiscountPercentageDiv").css('display', 'none');
-            $("#DiscountAmountDiv").css('display', 'block');
-            $("#RemainingAmount").val(0);
-            $("#TotalFee").val("");
-            $("#Discount").val(0);
-
-
-            $("#DiscountReadOnlyDiv").css('display', 'none');
-            $("#DiscountPercentage").val(0);
-
-        })
+      })
 
 
         $("#NotesAmount").bind('keyup mouseup', function () {
-            $("#DiscountInAmount").val(0);
-            $("#RemainingAmount").val(0);
-            $("#Discount").val(0);
-            $("#TotalFee").val("");
-            $("#DiscountPercentage").val(0);
+        
+            CalculateFee();
 
         })
 
 
-        $("#DiscountPercentage").bind('keyup mouseup', function () {
 
-            $('#FormSubmit').prop('disabled', false);
+        $("#ReceiptNo").bind('keyup mouseup', function () {
 
-            $("#DiscountInAmount").val(0);
-            $("#RemainingAmount").val("");
-            $("#Discount").val(0);
-            $("#TotalFee").val("");
+            var receiptNo = $("#ReceiptNo").val();
+
+            if (receiptNo != "") {
 
 
-            var FeeType = $("#FeeType").val();
-            var SessionFee = $("#SessionFee").val();
-            var FeeAfterFeeType = $("#Fee").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin_Dashboard/ReceiptNoValidation",
+                    data: { "ReceiptNo": receiptNo },
+                    success: function (data) {
+                       
+                        if (data.msg == "") {
+                            $('#FormSubmit').prop('disabled', false);
+                            $('#ReceiptError').html("");
+                            $("#Name").val(data.StudentName);
+                            $("#ReceivedReadOnly").val(data.Amount);
+                            $("#DiscountReadOnly").val(data.Discount);
 
-            var DiscountPercentage = $("#DiscountPercentage").val();
-            var NotesAmount = $("#NotesAmount").val();
-            var DiscountedAmount;
-            var TotalFee;
+                        }
+                        else {
+                            $("#Name").val("");
+                            $('#ReceiptError').html(data.msg);
+                            $("#DiscountReadOnly").val(0);
+                            $("#ReceivedReadOnly").val(0);
 
-            debugger
-            if (NotesAmount == "")
-                NotesAmount = 0;
+                            $('#FormSubmit').prop('disabled', true);
+                        }
+                        CalculateFee();
 
-            if ( FeeType !="" &&  FeeAfterFeeType != 0 && DiscountPercentage != 0 && DiscountPercentage>0 ) {
+                    }
 
-                DiscountedAmount = parseFloat(FeeAfterFeeType) * (parseFloat(DiscountPercentage) / 100);
+                });
 
-                var RemainingFeeAfterFeeType = parseFloat(FeeAfterFeeType) - parseFloat(DiscountedAmount);
 
-                var RoundRemainingFeeAfterFeeType = Math.round(RemainingFeeAfterFeeType);
 
-                $("#Discount").val(Math.round( DiscountedAmount));
 
-                $("#RemainingAmount").val(RoundRemainingFeeAfterFeeType);
-
-                TotalFee = parseFloat(RoundRemainingFeeAfterFeeType) + parseFloat(NotesAmount);
-
-                $("#TotalFee").val(TotalFee);
-
-                if (RoundRemainingFeeAfterFeeType < 0) {
-
-                    $('#FormSubmit').prop('disabled', true);
-                }
+            } //end of if receipt no
+            else {
+                    CalculateFee();
             }
+
         });
-
-
-        $("#DiscountInAmount").bind('keyup mouseup', function () {
-
-            $('#FormSubmit').prop('disabled', false);
-
-            $("#RemainingAmount").val(0);
-            $("#Discount").val(0);
-            $("#TotalFee").val("");
-            $("#DiscountPercentage").val(0);
-
-            var FeeType = $("#FeeType").val();
-            var SessionFee = $("#SessionFee").val();
-            var FeeAfterFeeType = $("#Fee").val();
-
-            //  var DiscountPercentage = $("#DiscountPercentage").val();
-
-            var DiscountInAmount = $("#DiscountInAmount").val();
-            var NotesAmount = $("#NotesAmount").val();
-
-            var DiscountedAmount;
-            var TotalFee;
-
-            debugger
-            if (NotesAmount == "")
-                NotesAmount = 0;
-
-
-
-            if ( FeeType !="" &&  FeeAfterFeeType != 0 && DiscountInAmount != 0 && DiscountInAmount>0 ) {
-
-
-                DiscountedAmount = parseFloat(DiscountInAmount);
-                var RemainingFeeAfterFeeType = parseFloat(FeeAfterFeeType) - parseFloat(DiscountInAmount);
-
-                var RoundRemainingFeeAfterFeeType = Math.round(RemainingFeeAfterFeeType);
-
-                $("#Discount").val(DiscountedAmount);
-
-                $("#RemainingAmount").val(RoundRemainingFeeAfterFeeType);
-
-                TotalFee = parseFloat(RoundRemainingFeeAfterFeeType) + parseFloat(NotesAmount);
-
-                $("#TotalFee").val(TotalFee);
-
-                if (RoundRemainingFeeAfterFeeType < 0) {
-
-                    $('#FormSubmit').prop('disabled', true);
-                }
-            }
-
-        })
 
         $("#UploadImg").change(function () {
             readURL(this);
@@ -791,26 +705,18 @@ else if (User.IsInRole("Staff"))
      function Calc() {
 
 
-         //   $("#Fee").val(0);
-         //   $("#FeeType").val(0);
-
          $("#DiscountInAmount").val(0);
          $("#DiscountPercentage").val(0);
          $("#Discount").val(0);
          $("#RemainingAmount").val(0);
 
-         //  $("#TotalFee").val("");
-
 
          var SessionFee = $("#SessionFee").val();
          var FeeType = $("#FeeType").val();
-         //  var Discount = $("#Discount").val();
+     
          var NotesAmount = $("#NotesAmount").val();
          if (SessionFee == "")
              SessionFee = 0;
-
-         //if (Discount == "")
-         //       Discount = 0;
 
          if (NotesAmount == "")
              NotesAmount = 0;
@@ -833,12 +739,68 @@ else if (User.IsInRole("Staff"))
          else {
              return false;
          }
-         $("#DiscountDiv").css('display', 'block');
+         
      }
 
 
      function group(a, y) {
          $(y).prop('checked', true);
+    }
+
+    function CalculateFee() {
+        debugger
+        var SessionFee = $("#SessionFee").val();
+        var FeeType = $("#FeeType").val();
+        var NotesAmount = $("#NotesAmount").val();
+        var Received = $("#ReceivedReadOnly").val();
+        var Discount = $("#DiscountReadOnly").val();
+
+
+        if (SessionFee == "")
+            SessionFee = 0;
+
+        if (NotesAmount == "")
+            NotesAmount = 0;
+
+        if (FeeType == "") {
+            $('#TotalFee').val(0);
+            $("#RemainingReadOnly").val(0);
+
+        }
+
+        if (FeeType == "Installment" && FeeType != "") {
+
+            var TotalFee = parseInt(SessionFee) + 6000 + parseInt(NotesAmount);
+            $('#TotalFee').val(TotalFee);
+
+            var RemainingAmount = parseInt(TotalFee) - parseInt(Received) - parseInt(Discount);
+            $("#RemainingReadOnly").val(RemainingAmount);
+
+        }
+        else if (FeeType == "PerMonth" && FeeType != "") {
+
+            var TotalFee = parseInt(SessionFee) + 12000 + parseInt(NotesAmount);
+            $('#TotalFee').val(TotalFee);
+
+            var RemainingAmount = parseInt(TotalFee) - parseInt(Received) - parseInt(Discount);
+            $("#RemainingReadOnly").val(RemainingAmount);
+
+
+        }
+        else if (FeeType == "FullFee" && FeeType != "") {
+
+            var TotalFee = parseInt(SessionFee) + parseInt(NotesAmount);
+            $('#TotalFee').val(TotalFee);
+
+            var RemainingAmount = parseInt(TotalFee) - parseInt(Received) - parseInt(Discount);
+            $("#RemainingReadOnly").val(RemainingAmount);
+
+
+        }
+
+        else {
+            return false;
+        }
     }
 
 
@@ -890,10 +852,16 @@ else if (User.IsInRole("Staff"))
                                     <div class="col-md-5 pl-5 pr-5 border-right border-color-sea">
                                         <h2 class="column-heading mb-4">User Information</h2>
 
+                                        <div class="form-group bmd-form-group my-3 is-filled">
+                                            <label class="bmd-label-floating">Receipt No <span class="red-mark">*</span> </label>
+                                            <input type="number" id="ReceiptNo" name="ReceiptNo" class="form-control" required>
+                                            <span class="text-danger" id="ReceiptError"></span>
+                                        </div>
+
                                         <div class="form-group bmd-form-group is-filled">
                                             <label class="bmd-label-floating">Name <span class="red-mark">*</span></label>
-                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control round-border", @required = "true" })
-                                       </div>
+                                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control round-border", @readonly = "readonly", @required = "true" })
+                                        </div>
 
                                         <div class="form-group bmd-form-group my-3">
                                             <label class="bmd-label-floating">Father Name *</label>
@@ -992,57 +960,29 @@ else if (User.IsInRole("Staff"))
                                         </div>
 
                                         <div class="form-group bmd-form-group my-3">
-                                            <button id="CalculateFee" type="button" onclick="Calc()" class="btn btn-primary ">Calculate Fee</button>
+                                            <button id="CalculateFee" type="button" onclick="Calc()" class="btn btn-primary hidden">Calculate Fee</button>
                                         </div>
 
                                         <div class="form-group bmd-form-group my-3">
-                                            <label class="bmd-label-floating">Discount</label>
-
-                                            <div class="radio RadioButtonsInline">
-                                                <label><input type="radio" name="DiscountRadioGroup" id="DiscountInPercentageRadio" value="DiscountInPercentageRadio" checked> Discount Percentage</label>
-                                            </div>
-
-                                            <div class="radio RadioButtonsInline">
-                                                <label><input type="radio" name="DiscountRadioGroup" id="DiscountAmountRadio" value="DiscountAmount"> Discount Amount </label>
-                                            </div>
+                                            <label class="bmd-label-floating">Total Fee</label>
+                                            <input type="text" required class="form-control round-border" value="0" name="TotalFee" id="TotalFee" readonly />
                                         </div>
 
                                         <div class="form-group bmd-form-group my-3">
-                                            <label class="bmd-label-floating">Fee</label>
-                                            <input type="text" required class="form-control round-border" name="Fee" value="0" id="Fee" readonly />
+                                            <label class="bmd-label-floating">Received </label>
+                                            <input type="number" class="form-control round-border" name="ReceivedReadOnly" value="0" id="ReceivedReadOnly" readonly />
                                         </div>
-                                        <div id="DiscountDiv">
-                                            <div class="form-group bmd-form-group my-3" id="DiscountPercentageDiv">
-                                                <label class="bmd-label-floating">Discount Percentage</label>
-                                                <input type="number" value="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control round-border" name="DiscountPercentage" id="DiscountPercentage" />
-                                            </div>
-
-                                            <div id="DiscountAmountDiv" class="form-group bmd-form-group my-3" style="display:none">
-                                                <label class="bmd-label-floating">Discount Amount</label>
-                                                <input type="number" value="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control round-border" name="DiscountInAmount" id="DiscountInAmount" />
-                                            </div>
-
-                                            <div class="form-group bmd-form-group my-3">
-                                                <label class="bmd-label-floating">Discounted Amount</label>
-                                                <input type="number" value="0" class="form-control round-border" name="Discount" id="Discount" readonly />
-                                            </div>
-
-                                            <div class="form-group bmd-form-group my-3">
-                                                <label class="bmd-label-floating">Remaining Amount</label>
-                                                <input type="number" value="0" class="form-control round-border" name="RemainingAmount" id="RemainingAmount" readonly />
-                                            </div>
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating">Discount </label>
+                                            <input type="number" class="form-control round-border" name="DiscountReadOnly" value="0" id="DiscountReadOnly" readonly />
                                         </div>
+
 
                                         <div class="form-group bmd-form-group my-3">
-                                            <label class="control-label">Total Fee</label>
-                                            <input type="text" required class="form-control round-border" name="TotalFee" id="TotalFee" readonly />
+                                            <label class="bmd-label-floating">Remaining </label>
+                                            <input type="number" class="form-control round-border" name="   " value="0" id="RemainingReadOnly" readonly />
                                         </div>
-
-                                        <div class="form-group bmd-form-group my-3 is-filled">
-                                            <label class="bmd-label-floating">Due Date <span class="red-mark">*</span> </label>
-                                            <input type="date" id="DueDate" name="DueDate" class="form-control" required>
-                                        </div>
-
+                                        
 
                                     </div>
 

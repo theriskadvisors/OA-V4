@@ -99,7 +99,7 @@ else
                                                 </div>
                                             </div>*@
                                         <div style="margin-top:15px;width:120px;">
-                                            <select class="form-control drop" id="ReceivedFromDropDown">
+                                            <select class="form-control drop" id="ReceivedFromDropDown" disabled>
                                                 <option value="Other">Other</option>
                                                 <option value="Student">Student</option>
                                             </select>
@@ -116,8 +116,8 @@ else
                                                 </select>*@
                                             @*@Html.DropDownList("UserId", null, " Select One", htmlAttributes: new { required = "required",@class = "form-control drop", @id = "StudentDropDown" })*@
 
-                                            <select class="form-control drop" id="UserId" name="UserId"></select>
-
+                                            <select class="form-control drop" id="UserId" name="UserId" disabled></select>
+                                          
 
                                         </div>
 
@@ -187,15 +187,78 @@ else
                         </div>
                     </div>
 
+                    @*<div class="form-group">
+            <div class="col-md-5">
+                @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
+
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+                    <div class="form-group" id="TotalFeeBlock" style="display:none">
+                        <div class="col-md-5">
+
+                            <label class="control-label">Total Fee</label>
+                            <input type="text" id="TotalFee" readonly class="form-control" value="" style="margin-top:10px;" aria-label="Text input with dropdown button">
+                            <input type="hidden" id="TotalFeeHidden" name="name" value="0" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="TotalFeeCollectedBlock" style="display:none">
+                        <div class="col-md-5">
+                            <label class="control-label">Total Fee Collected</label>
+                            <input type="text" id="TotalFeeCollected" readonly class="form-control" value="0" style="margin-top:10px;" aria-label="Text input with dropdown button">
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" id="RemainingFeeBlock" style="display:none">
+                        <div class="col-md-5">
+                            <label class="control-label">Remaining Amount</label>
+                            <input type="text" id="RemainingAmount" readonly class="form-control" value="0" style="margin-top:10px;" aria-label="Text input with dropdown button">
+
+
+                        </div>
+                    </div>
+
+
                     <div class="form-group">
                         <div class="col-md-5">
                             @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
 
-                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
-                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "number", @min = "50", @required = true, @class = "form-control" } })
+                            @*@Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })*@
+                            <span id="error" style="color:red"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label" })
+
+                            @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
+                            @*@Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })*@
+                            <span id="discountError" style="color:red"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            @Html.LabelFor(model => model.DueDate, htmlAttributes: new { @class = "control-label" })
+                            <input type="date" id="DueDate" value="@Model.DueDate.Value.ToString("yyyy-MM-dd")" name="DueDate" class="form-control" />
+                            @*@Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })*@
+
+                            <span id="dueDateError" style="color:red"></span>
 
                         </div>
                     </div>
+
+
 
 
 
@@ -224,17 +287,16 @@ else
 <script>
     $(document).ready(function () {
 
-        $("#PageHeader").html("Edit Receipt");
-
-        var CourseTypeHiddenValue = $("#CourseTypeHidden").val();
-        $("#CourseType").val(CourseTypeHiddenValue)
+        $("#PageHeader").html("Edit Receipt"); 
+       
+        
         $(".drop").select2();
         $("#ReceivedFrom").prop('required', true);
 
         var hiddenReceivedFrom = $("#HiddenValueReceivedFrom").val();
         var hiddenUserId = $("#HiddenValueUserId").val();
 
-        if (hiddenReceivedFrom != "") {
+        if (hiddenReceivedFrom != "") { //Other
 
          
             $("#ReceivedFromDropDown").val("Other").trigger('change');
@@ -245,22 +307,83 @@ else
             $("#StudentsDropdownDiv").css('display', "none");
             $("#UserId").prop('required', false);
             $("#ReceivedFrom").prop('required', true);
+
+            $("#TotalFeeBlock").css('display', "none");
+            $("#TotalFeeCollectedBlock").css('display', "none");
+            $("#RemainingFeeBlock").css('display', "none");
+            $("#TotalFee").val("");
+            $("#TotalFeeCollected").val(0);
+            $("#TotalFeeHidden").val(0);
+            $("#RemainingAmount").val(0);
+
+            //$("#FormSubmit").prop('disabled', false);
+            $("#error").html("");
            
            
         }
-        if (hiddenUserId != "") {
+        if (hiddenUserId != "") { //Student
 
             $("#ReceivedFromDropDown").val("Student").trigger('change');
-         
-          
             
             $("#ReceivedFromInput").css('display', "none");
             $("#StudentsDropdownDiv").css('display', "block");
             $("#UserId").prop('required', true);
             $("#ReceivedFrom").prop('required', false);
+            $("#TotalFeeBlock").css('display', "block");
+            $("#TotalFeeCollectedBlock").css('display', "block");
+            $("#RemainingFeeBlock").css('display', "block");
 
+
+            StudentFeeDetails(hiddenUserId);
         }
 
+
+        $("#DueDate").bind('change', function () {
+
+            //debugger
+            var dob = $("#DueDate").val();
+            var dob = dob.split("-");
+            var date = new Date();
+
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (dob[0] >= year) {
+                //$('#ChallanForm').prop('disabled', false);
+
+
+
+                $('#dueDateError').html("");
+                if (dob[0] == year) {
+                    if (dob[1] >= month) {
+                        // $('#ChallanForm').prop('disabled', false);
+                        $('#dueDateError').html("");
+                        if (dob[1] == month) {
+                            if (dob[2] >= day) {
+                                //  $('#ChallanForm').prop('disabled', false);
+                                $('#dueDateError').html("");
+                            } else {
+                                // $('#ChallanForm').prop('disabled', true);
+                                $('#dueDateError').html("DueDate Should greater than today");
+                            }
+                        } else if (dob[1] < month) {
+                            // $('#ChallanForm').prop('disabled', true);
+                            $('#dueDateError').html("DueDate Should greater than today");
+                        }
+                    } else {
+                        // $('#ChallanForm').prop('disabled', true);
+                        $('#dueDateError').html("DueDate Should greater than today");
+                    }
+                }
+            } else {
+                // $('#ChallanForm').prop('disabled', true);
+                $('#DueDate').html("DueDate Should greater than today");
+            }
+
+            // disableButton();
+
+        });
 
         $.ajax({
             type: "POST",
@@ -285,16 +408,14 @@ else
                         $el.append($("<option></option>")
                             .attr("value", sch[i].UserId).text(sch[i].StudentName));
 
-
-
                     }
                 }
                 else {
                     $el.append($("<option></option>")
                         .attr("value", '').text('Select'));
                 }
-                $('#UserId').val(hiddenUserId).trigger('change');
-            }
+                $('#UserId').val('' + hiddenUserId +'').trigger('change');
+            } //end of success 
         });//end of ajax
 
         //var now = new Date();
@@ -308,32 +429,166 @@ else
 
         //$("#Dated").val(today);
 
-        $("#ReceivedFromDropDown").change(function () {
+        //$("#ReceivedFromDropDown").change(function () {
 
-            var dropdownValue = $(this).val();
+        //    alert("Now Its Called");
+        //    var dropdownValue = $(this).val();
+        //    $("#Amount").val(0);
+        //    $("#Discount").val(0);
+        //    //   $("#FormSubmit").prop('disabled', false);
+        //    $("#error").html("");
+        //    $("#discountError").html("");
 
-            if (dropdownValue == "Student") {
+        //    if (dropdownValue == "Student") {
 
-                $("#ReceivedFrom").val("");
-                $("#ReceivedFromInput").css('display', "none");
-                $("#StudentsDropdownDiv").css('display', "block");
-                $("#UserId").prop('required', true);
-                $("#ReceivedFrom").prop('required', false);
+        //        $("#ReceivedFrom").val("");
+        //        $("#ReceivedFromInput").css('display', "none");
+        //        $("#StudentsDropdownDiv").css('display', "block");
+        //        $("#UserId").prop('required', true);
+        //        $("#ReceivedFrom").prop('required', false);
+        //        $("#TotalFeeBlock").css('display', "block");
+        //        $("#TotalFeeCollectedBlock").css('display', "block");
+        //        $("#RemainingFeeBlock").css('display', "block");
+
+
+        //    }
+        //    else if (dropdownValue == "Other") {
+
+
+        //        $('#UserId').val("").trigger('change');
+        //        $("#ReceivedFromInput").css('display', "block");
+        //        $("#StudentsDropdownDiv").css('display', "none");
+        //        $("#UserId").prop('required', false);
+        //        $("#ReceivedFrom").prop('required', true);
+        //        $("#TotalFeeBlock").css('display', "none");
+        //        $("#TotalFeeCollectedBlock").css('display', "none");
+        //        $("#RemainingFeeBlock").css('display', "none");
+        //        $("#TotalFee").val("");
+        //        $("#TotalFeeCollected").val(0);
+        //        $("#TotalFeeHidden").val(0);
+        //        $("#RemainingAmount").val(0);
+
+        //        //$("#FormSubmit").prop('disabled', false);
+        //        $("#error").html("");
+
+
+        //    }
+
+
+        //})
+
+        //$("#UserId").change(function () {
+          
+        //    var userId = $(this).val();
+        //    //$("#TotalFeeHidden").val(0);
+        //    //$("#TotalFee").val("");
+        //    //$("#TotalFeeCollected").val(0);
+        //    //$("#Amount").val(0);
+        //    //$("#RemainingAmount").val(0);
+        //    //$("#error").html("");
+
+        //    if (userId != "") {
+              
+
+        //        $.ajax({
+
+        //            type: "POST",
+        //            url: '/Receipts/GetStudentFeeDetails',
+        //            data: { "StudentId": userId },
+        //            success: function (data) {
+        //                console.log(data)
+        //                $("#TotalFee").val(data.TotalFee);
+        //                $("#TotalFeeCollected").val(data.TotalFeeCollected);
+        //                $("#TotalFeeHidden").val(data.TotalFeeAmount);
+        //                var TotalDiscount = data.TotalDiscount;
+
+        //                var RemainingAmount = parseFloat(data.TotalFeeAmount) - parseFloat(data.TotalFeeCollected) - parseFloat(TotalDiscount);
+        //                $("#RemainingAmount").val(RemainingAmount);
+
+        //                //if (data.TopicExist == "Yes") {
+
+
+        //                //    // $("#CreateBtn").attr("disabled", true);
+        //                //    $("#ErrorOrderBy").html(data.Msg);
+        //                //    //  $("#ErrorOrderBy").html("Selected order is already assigned to a lesson of same topic.");
+        //                //}
+        //                //else {
+
+        //                //    $("#CreateBtn").attr("disabled", false);
+        //                //    $("#ErrorOrderBy").html("");
+
+        //                //}
+
+        //            }
+        //        })
+
+        //    }
+
+        //})
+
+        $("#Amount").bind('keyup mouseup', function () {
+
+            var Amount = $(this).val();
+            var RemainingAmount = $("#RemainingAmount").val();
+            //  $("#FormSubmit").prop('disabled', false);
+            $("#error").html("");
+
+            var ReceivedFromDropDown = $("#ReceivedFromDropDown").val();
+
+
+            if (Amount == "") {
+                Amount = 0
+            }
+
+            if (ReceivedFromDropDown == "Student") {
+
+
+                if (parseFloat(Amount) > parseFloat(RemainingAmount)) {
+
+                    //$("error")
+                    //  $('#FormSubmit').prop('disabled', false);
+
+                    $("#error").html("Entered amount cannot greater than remaining amount")
+                    //$("#FormSubmit").prop('disabled', true);
+                }
 
             }
-            else if (dropdownValue == "Other") {
+
+            DiscountValidation();
+            //  disableButton();
 
 
-                $('#UserId').val("").trigger('change');
-                $("#ReceivedFromInput").css('display', "block");
-                $("#StudentsDropdownDiv").css('display', "none");
-                $("#UserId").prop('required', false);
-                $("#ReceivedFrom").prop('required', true);
+        }) //Amount
 
-            }
+        $("#Discount").bind('keyup mouseup', function () {
+
+            DiscountValidation();
 
 
         })
+
+        $("form").submit(function () {
+            //  $("#FormSubmit").prop('disabled', false);
+            var error = $("#error").html();
+            var discountError = $("#discountError").html();
+            var dueDateError = $("#dueDateError").html();
+
+            console.log("disable button");
+            if (error != "" || discountError != "" || dueDateError != "") {
+                // alert("called");
+
+                // $("#FormSubmit").prop('disabled', true);
+                return false;
+
+            }
+            else {
+                // $("#FormSubmit").prop('disabled', false);
+                return true;
+            }
+
+        });
+
+
 
 
 
@@ -368,6 +623,85 @@ else
         //    })
 
     });
+
+
+    function DiscountValidation() {
+
+        var Discount = $("#Discount").val();
+        var Amount = $("#Amount").val();
+        //  $("#FormSubmit").prop('disabled', false);
+        $("#discountError").html("");
+
+        if (Discount == "") {
+            Discount = 0
+        }
+        if (Amount == "") {
+            Amount = 0;
+        }
+
+        if (parseFloat(Discount) > parseFloat(Amount)) {
+            $("#discountError").html("Discount cannot greater than entered amount")
+            //     $("#FormSubmit").prop('disabled', true);
+        }
+        // disableButton();
+    }
+    function StudentFeeDetails(userId) {
+
+        var Amount = $("#Amount").val();
+        var Discount = $("#Discount").val();
+
+        $.ajax({
+
+            type: "POST",
+            url: '/Receipts/GetStudentFeeDetails',
+            data: { "StudentId": userId },
+            success: function (data) {
+                console.log(data)
+                $("#TotalFee").val(data.TotalFee);
+                var TotalFeeCollected = parseFloat(data.TotalFeeCollected) - parseFloat(Amount);
+                $("#TotalFeeCollected").val(TotalFeeCollected);
+
+                $("#TotalFeeHidden").val(data.TotalFeeAmount);
+                var TotalDiscount = parseFloat(data.TotalDiscount) - parseFloat(Discount);
+
+             //   var RemainingAmountCalculate = parseFloat(data.TotalFeeAmount) - parseFloat(TotalFeeCollected) - parseFloat(TotalDiscount);
+              //  alert(TotalFeeCollected);
+                var RemainingAmount = parseFloat(data.TotalFeeAmount) - parseFloat(TotalFeeCollected) - parseFloat(TotalDiscount);
+                
+                $("#RemainingAmount").val(RemainingAmount);
+
+                //if (data.TopicExist == "Yes") {
+
+
+                //    // $("#CreateBtn").attr("disabled", true);
+                //    $("#ErrorOrderBy").html(data.Msg);
+                //    //  $("#ErrorOrderBy").html("Selected order is already assigned to a lesson of same topic.");
+                //}
+                //else {
+
+                //    $("#CreateBtn").attr("disabled", false);
+                //    $("#ErrorOrderBy").html("");
+
+                //}
+
+            }
+        })
+    }
+    function disableButton() {
+        var error = $("#error").html();
+        var discountError = $("#discountError").html();
+        var dueDateError = $("#dueDateError").html();
+
+        console.log("disable button");
+        if (error != "" || discountError != "" || dueDateError != "") {
+            //       $("#FormSubmit").prop('disabled', true);
+
+        }
+        else {
+            //    $("#FormSubmit").prop('disabled', false);
+
+        }
+    }
 
     function redirect() {
 

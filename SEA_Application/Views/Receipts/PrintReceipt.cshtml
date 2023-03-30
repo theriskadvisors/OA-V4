@@ -50,8 +50,7 @@ else
             <br />
             <br />
             <br />
-            <br />
-            <br />
+
             <div class="container" id="container">
 
 
@@ -146,6 +145,27 @@ else
 
                     </tr>
 
+                    <tr class="customfont">
+                        <td><b>Discount</b></td>
+                        <td>
+
+
+                            @if (Model.Discount != null)
+                            {
+
+
+                                <u id="Amount2">  @Model.Discount.Value.ToString("#,##0")</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
+
 
                     @*<tr class="customfont">
                     <td><b>On account of</b></td>
@@ -200,9 +220,8 @@ else
                 </table>
 
             </div>
-            <br>
-            <br>
-            <br>
+            <br />
+            <br />
 
             <div class="container" id="container">
 
@@ -214,6 +233,7 @@ else
                         </td>
                         <td align="center">
                             <br />
+
                             <h2 id="heading" class="heading">OFFICERS ACADEMY</h2>
                             <p id="headingpara" class="headingpara">Main Road Garden Town, Lahore. <br> Tel: 35830550, 0321-1333358, 0324-5449157, 0321-4032120</p>
 
@@ -247,7 +267,6 @@ else
 
                 </div>
                 <br>
-
 
                 <br>
 
@@ -298,6 +317,27 @@ else
 
                     </tr>
 
+                    <tr class="customfont">
+                        <td><b>Discount</b></td>
+                        <td>
+
+
+                            @if (Model.Discount != null)
+                            {
+
+
+                                <u id="Amount2">  @Model.Discount.Value.ToString("#,##0")</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
+
 
                     @*<tr class="customfont">
                     <td><b>On account of</b></td>
@@ -352,6 +392,11 @@ else
                 </table>
 
             </div>
+            <br>
+            <br>
+            <br>
+
+
         </div> <!--end of print div-->
 
 
