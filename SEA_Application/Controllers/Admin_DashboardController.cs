@@ -2706,8 +2706,8 @@ namespace SEA_Application.Controllers
         {
             var msg = "";
             var StudentName = "";
-            double Amount = 0;
-            double Discount = 0;
+            double? Amount = 0;
+            double? Discount = 0;
 
 
             var ReceiptNoValidation =   db.CashReceipts.Where(x => x.ReceiptNo == ReceiptNo).FirstOrDefault();
@@ -2730,8 +2730,8 @@ namespace SEA_Application.Controllers
                 {
                    
                     StudentName = ReceiptNoValidation.ReceivedFrom;
-                    Amount = ReceiptNoValidation.Amount.Value;
-                    Discount = ReceiptNoValidation.Discount.Value;
+                    Amount = ReceiptNoValidation.Amount;
+                    Discount = ReceiptNoValidation.Discount;
                 }
 
             }

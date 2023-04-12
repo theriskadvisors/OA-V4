@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Microsoft.Office.Interop.Excel;
 using SEA_Application.Models;
 using static SEA_Application.Controllers.TermAssessmentControllers.TermAssessmentController;
@@ -15,6 +16,7 @@ namespace SEA_Application.Controllers
     public class ReceiptsController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         public ActionResult Index()
         {
@@ -59,9 +61,153 @@ namespace SEA_Application.Controllers
         {
             try
             {
+                if (cashReceipt.Discount == null)
+                {
+                    cashReceipt.Discount = 0;
+                }
+                if (cashReceipt.Amount == null)
+                {
+                    cashReceipt.Amount = 0;
+                }
+
                 cashReceipt.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
                 db.CashReceipts.Add(cashReceipt);
                 db.SaveChanges();
+
+                var VoucherMsg = "";
+                var AccRecDescription = "";
+                var AdminDrawerDescription = "";
+                var DiscountDescription = "";
+
+                int? StudentId = null;
+                string StudentName = null;
+                string SessionName = null;
+
+                if (cashReceipt.UserId != null)
+                {
+                  var Student = db.AspNetStudents.Where(x => x.StudentID == cashReceipt.UserId).FirstOrDefault();
+                  var ClassId = Student.ClassID;
+                  int? sessionId =  db.AspNetClasses.Where(x => x.Id == ClassId).FirstOrDefault().SessionID;
+                  
+                  SessionName = db.AspNetSessions.Where(x => x.Id == sessionId).FirstOrDefault().SessionName;
+
+                  StudentId =   Student.Id;
+                  StudentName = db.AspNetUsers.Where(x => x.Id == cashReceipt.UserId).FirstOrDefault().Name;
+                  VoucherMsg = "Fee Received by Admin of Student " + StudentName + " Session Name " + SessionName;
+                  AccRecDescription = "Fee Collected by student  (" + StudentName + ") (" + SessionName + ") ";
+                  AdminDrawerDescription = "Fee received of Student (" + StudentName + ") (" + SessionName + ") ";
+                  DiscountDescription = "Discount given to student (" + StudentName + ") (" + SessionName + ")  on payable fee ";
+
+                }
+                else
+                {
+                    VoucherMsg = cashReceipt.ReceivedFrom + " " + cashReceipt.Description;
+                    AccRecDescription = cashReceipt.ReceivedFrom + " " + cashReceipt.Description;
+                    AdminDrawerDescription = cashReceipt.ReceivedFrom + " " + cashReceipt.Description;
+                    DiscountDescription = cashReceipt.ReceivedFrom + " " + cashReceipt.Description;
+                }
+
+                var idd = User.Identity.GetUserId();
+
+                var username = db.AspNetUsers.Where(x => x.Id == idd).Select(x => x.Name).FirstOrDefault();
+                Voucher voucher = new Voucher();
+
+
+                voucher.Name = VoucherMsg;
+                voucher.Notes = VoucherMsg;
+
+                voucher.StudentId = StudentId;
+              
+                voucher.Date = GetLocalDateTime.GetLocalDateTimeFunction();
+                voucher.CreatedBy = username;
+                voucher.SessionID = SessionID;
+                int? VoucherObj = db.Vouchers.Max(x => x.VoucherNo);
+                voucher.VoucherNo = Convert.ToInt32(VoucherObj) + 1;
+                db.Vouchers.Add(voucher);
+
+                db.SaveChanges();
+
+
+                var Leadger = db.Ledgers.Where(x => x.Name == "Account Receiveable").FirstOrDefault();
+                int AccountReceiveableId = Leadger.Id;
+                decimal? CurrentBalance = Leadger.CurrentBalance;
+                decimal? AfterBalance = 0;
+                VoucherRecord voucherRecord = new VoucherRecord();
+                if (cashReceipt.Discount != 0)
+                {
+
+                    AfterBalance = CurrentBalance - Convert.ToDecimal(cashReceipt.Amount) - Math.Round(Convert.ToDecimal(cashReceipt.Discount));
+                }
+                else
+                {
+                    AfterBalance = CurrentBalance - Convert.ToDecimal(cashReceipt.Amount);
+                }
+                voucherRecord.LedgerId = AccountReceiveableId;
+                voucherRecord.Type = "Cr";
+                voucherRecord.Amount = Convert.ToDecimal(cashReceipt.Amount) + Math.Round(Convert.ToDecimal(cashReceipt.Discount));
+                voucherRecord.CurrentBalance = CurrentBalance;
+
+                voucherRecord.AfterBalance = AfterBalance;
+                voucherRecord.VoucherId = voucher.Id;
+                voucherRecord.Description = AccRecDescription;
+
+                Leadger.CurrentBalance = AfterBalance;
+                try
+                {
+                    db.VoucherRecords.Add(voucherRecord);
+                    db.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    var a = ex.Message;
+                }
+
+                var LeadgerAD = db.Ledgers.Where(x => x.Name == "Admin Drawer").FirstOrDefault();
+                int AdminDrawerId = LeadgerAD.Id;
+                decimal? CurrentBalanceAD = LeadgerAD.CurrentBalance;
+
+                VoucherRecord voucherRecord1 = new VoucherRecord();
+                decimal? AfterBalanceAD = CurrentBalanceAD + Convert.ToDecimal(cashReceipt.Amount);
+                voucherRecord1.LedgerId = AdminDrawerId;
+                voucherRecord1.Type = "Dr";
+                voucherRecord1.Amount = Convert.ToDecimal(cashReceipt.Amount);
+                voucherRecord1.CurrentBalance = CurrentBalanceAD;
+
+                voucherRecord1.AfterBalance = AfterBalanceAD;
+                voucherRecord1.VoucherId = voucher.Id;
+                voucherRecord1.Description = AdminDrawerDescription;
+
+                LeadgerAD.CurrentBalance = AfterBalanceAD;
+                db.VoucherRecords.Add(voucherRecord1);
+                db.SaveChanges();
+
+
+                if (cashReceipt.Discount != 0 && cashReceipt.Discount != null)
+                {
+                    VoucherRecord voucherRecord3 = new VoucherRecord();
+
+                    var LeadgerDiscount = db.Ledgers.Where(x => x.Name == "Discount").FirstOrDefault();
+
+                    decimal? CurrentBalanceOfDiscount = LeadgerDiscount.CurrentBalance;
+                    decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Math.Round(Convert.ToDecimal(cashReceipt.Discount));
+                    voucherRecord3.LedgerId = LeadgerDiscount.Id;
+                    voucherRecord3.Type = "Dr";
+                    voucherRecord3.Amount = Math.Round(Convert.ToDecimal(cashReceipt.Discount));
+                    voucherRecord3.CurrentBalance = CurrentBalanceOfDiscount;
+                    voucherRecord3.AfterBalance = AfterBalanceOfDiscount;
+                    voucherRecord3.VoucherId = voucher.Id;
+                    voucherRecord3.Description = DiscountDescription;  
+                    LeadgerDiscount.CurrentBalance = AfterBalanceOfDiscount;
+
+                    db.VoucherRecords.Add(voucherRecord3);
+                    db.SaveChanges();
+
+
+                }
+
+
+
             }
             catch (Exception ex)
             {

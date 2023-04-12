@@ -166,12 +166,54 @@ else
 
                     </tr>
 
+                    <tr class="customfont">
+                        <td><b>Description</b></td>
+                        <td>
+
+
+                            @if (Model.Description != null)
+                            {
+
+
+                                <u id="">  @Model.Description</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr class="customfont">
+                        <td><b>Due Date</b></td>
+                        <td>
+
+
+                            @if (Model.DueDate != null)
+                            {
+
+
+                                <u id="">@Model.DueDate.Value.ToString(string.Format("dd/MM/yyyy"))</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
 
                     @*<tr class="customfont">
-                    <td><b>On account of</b></td>
-                    <td> <span>____________________</span></td>
+            <td><b>On account of</b></td>
+            <td> <span>____________________</span></td>
 
-                </tr>*@
+        </tr>*@
 
                 </table>
 
@@ -337,13 +379,55 @@ else
                         </td>
 
                     </tr>
+                    <tr class="customfont">
+                        <td><b>Description</b></td>
+                        <td>
+
+
+                            @if (Model.Description != null)
+                            {
+
+
+                                <u id="">  @Model.Description</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr class="customfont">
+                        <td><b>Due Date</b></td>
+                        <td>
+
+
+                            @if (Model.DueDate != null)
+                            {
+
+
+                                <u id="">@Model.DueDate.Value.ToString(string.Format("dd/MM/yyyy"))</u>
+                            }
+                            else
+                            {
+                                <span>____________________</span>
+                            }
+
+
+                        </td>
+
+                    </tr>
 
 
                     @*<tr class="customfont">
-                    <td><b>On account of</b></td>
-                    <td> <span>____________________</span></td>
+            <td><b>On account of</b></td>
+            <td> <span>____________________</span></td>
 
-                </tr>*@
+        </tr>*@
 
                 </table>
 
