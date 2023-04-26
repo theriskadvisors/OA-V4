@@ -2426,7 +2426,21 @@ namespace SEA_Application.Controllers
                             CashReceiptToUpdate.UserId = student.StudentID;
                             db.SaveChanges();
                         }
-                      
+                       var Receipt =  db.CashReceipts.Where(x => x.ReceiptNo == model.ReceiptNo).FirstOrDefault();
+
+                        if (Receipt != null)
+                        {
+
+                            var VoucherToUpdate =  db.Vouchers.Where(x => x.ReceiptId == Receipt.Id).FirstOrDefault();
+
+                            if (VoucherToUpdate != null)
+                            {
+                                VoucherToUpdate.StudentId = student.Id;
+                                db.SaveChanges();
+                            }
+                        }
+
+
                         // var subID = selectedsubjects.First();
                         //  var classID = db.AspNetSubjects.Where(x=> x.Id == int.Parse(subID)).Select(x=> x.ClassID).FirstOrDefault();
                         //  int id = Int32.Parse(subID);
@@ -2526,20 +2540,15 @@ namespace SEA_Application.Controllers
 
                         if (NotesCategory == "WithNotes")
                         {
-
                             NotesFee = Convert.ToDouble(Request.Form["NotesAmount"]);
                             studentFeeMonth.TotalFee = Total + Convert.ToDouble(Request.Form["NotesAmount"]);
                             studentFeeMonth.NotesFee = Convert.ToDouble(Request.Form["NotesAmount"]);
-
                         }
 
                         else
                         {
                             studentFeeMonth.TotalFee = Total;
                         }
-
-
-
 
                         //DateTime ConvertIssueDate = Convert.ToDateTime(Request.Form["IssueDate"]);
                         //var Month = ConvertIssueDate.ToString("MMMM");
@@ -2552,6 +2561,7 @@ namespace SEA_Application.Controllers
                         studentFeeMonth.IssueDate = DateTime.Now;
                         var Month = DateTime.Now.ToString("MMMM");
                         studentFeeMonth.FeePayable = Convert.ToDouble(Request.Form["TotalFee"]);
+                       
                         studentFeeMonth.Discount = discount;
                         studentFeeMonth.FeeType = Request.Form["FeeType"];
                         studentFeeMonth.SessionId = SessionIdOfSelectedStudent;
@@ -2562,14 +2572,21 @@ namespace SEA_Application.Controllers
                         db.StudentFeeMonths.Add(studentFeeMonth);
                         db.SaveChanges();
 
+                        var RemainingAmount  = Convert.ToDouble(Request.Form["RemainingReadOnly"]);
+
                         var id = User.Identity.GetUserId();
                         var username = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
                         Voucher voucher = new Voucher();
                         var SessionName = db.AspNetSessions.Where(x => x.Id == SessionIdOfSelectedStudent).FirstOrDefault().SessionName;
-                        voucher.Name = "Student Fee Creation of student " + model.Name + " Session Name " + SessionName; ;
-                        voucher.Notes = "Account Receiveable, discount, and revenue is updated";
+                        //  voucher.Name = "Student Fee Creation of student " + model.Name + " Session Name " + SessionName; ;
+                        // voucher.Notes = "Account Receiveable, discount, and revenue is updated";
+                        //"Fee Received of Student  (" + StudentName + ")
+                        voucher.Name = "Fee Creation of Student  (" + model.Name + ")";
+                        voucher.Notes = "Fee Creation of Student  (" + model.Name + ")";
+
                         voucher.Date = GetLocalDateTime.GetLocalDateTimeFunction();
                         voucher.StudentId = student.Id;
+                        voucher.ReceiptId = null;
 
                         voucher.CreatedBy = username;
                         voucher.SessionID = SessionIdOfSelectedStudent;
@@ -2585,40 +2602,20 @@ namespace SEA_Application.Controllers
                         decimal? CurrentBalance = Leadger.CurrentBalance;
 
                         VoucherRecord voucherRecord = new VoucherRecord();
-                        decimal? AfterBalance = CurrentBalance + Convert.ToDecimal(studentFeeMonth.FeePayable);
+                        decimal? AfterBalance = CurrentBalance + Convert.ToDecimal(RemainingAmount);
                         voucherRecord.LedgerId = AdminDrawerId;
                         voucherRecord.Type = "Dr";
-                        voucherRecord.Amount = Convert.ToDecimal(studentFeeMonth.FeePayable);
+                        voucherRecord.Amount = Convert.ToDecimal(RemainingAmount); //Convert.ToDecimal(studentFeeMonth.FeePayable);
                         voucherRecord.CurrentBalance = CurrentBalance;
-
                         voucherRecord.AfterBalance = AfterBalance;
                         voucherRecord.VoucherId = voucher.Id;
-
-                        voucherRecord.Description = "Fee added of student (" + model.Name + ") (" + SessionName + ")";
+                        //"Fee Collected of Student  (" + cashReceipt.ReceivedFrom + ") Receipt No (" + cashReceipt.ReceiptNo + ") ";
+                        voucherRecord.Description = "Fee Collected of Student  (" + model.Name + ")";
+                        //  voucherRecord.Description = "Fee added of student (" + model.Name + ") (" + SessionName + ")";
                         Leadger.CurrentBalance = AfterBalance;
                         db.VoucherRecords.Add(voucherRecord);
                         db.SaveChanges();
 
-                        if (NotesCategory == "WithNotes")
-                        {
-                            VoucherRecord voucherRecord1 = new VoucherRecord();
-
-                            var LeadgerNotes = db.Ledgers.Where(x => x.Name == "Notes").FirstOrDefault();
-
-                            decimal? CurrentBalanceOfNotes = LeadgerNotes.CurrentBalance;
-                            decimal? AfterBalanceOfNotes = CurrentBalanceOfNotes + Convert.ToDecimal(NotesFee);
-                            voucherRecord1.LedgerId = LeadgerNotes.Id;
-                            voucherRecord1.Type = "Cr";
-                            voucherRecord1.Amount = Convert.ToDecimal(NotesFee);
-                            voucherRecord1.CurrentBalance = CurrentBalanceOfNotes;
-                            voucherRecord1.AfterBalance = AfterBalanceOfNotes;
-                            voucherRecord1.VoucherId = voucher.Id;
-                            voucherRecord1.Description = "Notes against student with notes of (" + model.Name + ") (" + SessionName + ")";
-                            LeadgerNotes.CurrentBalance = AfterBalanceOfNotes;
-
-                            db.VoucherRecords.Add(voucherRecord1);
-                            db.SaveChanges();
-                        }
 
                         VoucherRecord voucherRecord2 = new VoucherRecord();
 
@@ -2633,42 +2630,21 @@ namespace SEA_Application.Controllers
 
                         int studentFeeId = Convert.ToInt32(IdofLedger.FirstOrDefault().Id);
                         var studentFeeL = db.Ledgers.Where(x => x.Id == studentFeeId).FirstOrDefault();
-
+                        
                         decimal? CurrentBalanceOfStudentFee = studentFeeL.CurrentBalance;
-                        decimal? AfterBalanceOfStudentFee = CurrentBalanceOfStudentFee + Convert.ToDecimal(studentFee);
+                        decimal? AfterBalanceOfStudentFee = CurrentBalanceOfStudentFee + Convert.ToDecimal(RemainingAmount);
                         voucherRecord2.LedgerId = studentFeeL.Id;
                         voucherRecord2.Type = "Cr";
-                        voucherRecord2.Amount = Convert.ToDecimal(studentFee);
+                        voucherRecord2.Amount = Convert.ToDecimal(RemainingAmount);
                         voucherRecord2.CurrentBalance = CurrentBalanceOfStudentFee;
                         voucherRecord2.AfterBalance = AfterBalanceOfStudentFee;
                         voucherRecord2.VoucherId = voucher.Id;
                         // voucherRecord2.Description = "Credit in Student Fee(income)";
-                        voucherRecord2.Description = "Fee added of student (" + model.Name + ") (" + SessionName + ")";
+                        voucherRecord2.Description = "Income generated by Fee of Student(" + model.Name + ")";
                         studentFeeL.CurrentBalance = AfterBalanceOfStudentFee;
                         db.VoucherRecords.Add(voucherRecord2);
-
                         db.SaveChanges();
-                        if (discount != 0)
-                        {
-
-                            VoucherRecord voucherRecord3 = new VoucherRecord();
-
-                            var LeadgerDiscount = db.Ledgers.Where(x => x.Name == "Discount").FirstOrDefault();
-
-                            decimal? CurrentBalanceOfDiscount = LeadgerDiscount.CurrentBalance;
-                            decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Convert.ToDecimal(discount);
-                            voucherRecord3.LedgerId = LeadgerDiscount.Id;
-                            voucherRecord3.Type = "Dr";
-                            voucherRecord3.Amount = Convert.ToDecimal(discount);
-                            voucherRecord3.CurrentBalance = CurrentBalanceOfDiscount;
-                            voucherRecord3.AfterBalance = AfterBalanceOfDiscount;
-                            voucherRecord3.VoucherId = voucher.Id;
-                            voucherRecord3.Description = "Discount given to student  (" + model.Name + ") (" + SessionName + ") on payable fee " + Convert.ToDouble(Request.Form["TotalFee"]);
-                            LeadgerDiscount.CurrentBalance = AfterBalanceOfDiscount;
-
-                            db.VoucherRecords.Add(voucherRecord3);
-                            db.SaveChanges();
-                        }
+                      
 
                         //    return RedirectToAction("BiometricRegistration", "Admin_Dashboard", new { RollNo = model.UserName, Success = Error });
 
