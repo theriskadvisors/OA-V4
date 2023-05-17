@@ -64,7 +64,7 @@ else
                         <div class="col-md-12">
 
                             <label class="control-label">Receipt No</label>
-                            <input type="text" id="ReceiptNo" name="ReceiptNo" class="form-control" required readonly />
+                            <input type="text" id="ReceiptNo" name="ReceiptNo" class="form-control" required onkeydown="return false" />
                             @Html.ValidationMessageFor(model => model.ReceiptNo, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -616,11 +616,19 @@ else
 
             }
             else {
-               // $("#FormSubmit").prop('disabled', false);
+
+                $("#FormSubmit").prop('disabled', true);
                 return true;
             }
          
         });
+
+        $("input").click(function () {
+
+            
+            $("#FormSubmit").prop('disabled', false);
+
+        })
 
 
 
