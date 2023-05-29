@@ -13,8 +13,8 @@ else if (User.IsInRole("Staff"))
     Layout = "~/Views/Shared/_StaffDashboardLayout.cshtml";
 }
 
-<script src="~/Content/HtmlToPdf/html2canvas.min.js"></script>
-<script src="~/Content/HtmlToPdf/pdfmake.min.js"></script>
+
+
 
 
 <script type="text/javascript">
@@ -41,229 +41,341 @@ else if (User.IsInRole("Staff"))
     th {
         font-size: 20px;
     }
-    td,th {
-        padding:5px;
-      
+
+    td, th {
+        padding: 5px;
     }
-   
 </style>
 
 
 <br />
 <br />
+
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+
 <div class="card">
     <div class="card-body p-4">
+
+
+        <div>
+
+
+
+            <!--Date Filter Start-->
+
+            <h2 style="color:#00b8ec;font-size:15px;display:inline-block">Summary </h2>
+
+            <label>Date</label>
+            <input type="hidden" id="DateFilter">
+            <img src="~/Content/Images/calendar.png" id="DateFilterTrigger" width="25">
+
+
+            <div id="DateToView">
+
+            </div>
+
+
+            @*<div id="DateToView">
+
+                </div>*@
+
+
+        </div><!--Date Filter End-->
+
+
 
         <div class="col-md-12">
 
             <div id="ExpenseBody" style="border: 0px solid; height: auto;padding:20px;">
 
 
-                <h3 class="headings" align="center"> Daily Account Sheet @SEA_Application.Models.GetLocalDateTime.GetLocalDateTimeFunction() </h3>
+                @*<h3 class="headings" align="center"> Daily Account Sheet @SEA_Application.Models.GetLocalDateTime.GetLocalDateTimeFunction() </h3>*@
+                <h3 class="headings" align="center" id="DailyAccountSheetTitle">  </h3>
 
                 <br />
 
-              
 
-                  
+                <table id="DebitTable" border="1" style="float:left" width="50%">
 
+                    <thead>
+                        <tr>
+                            <th style="font-weight:bold;">Cash In</th>
+                            <th style="text-align:center;font-weight:bold">Amount</th>
 
-
-                        <table id="DebitTable" border="1" style="float:left" width="50%" >
-
-                            <thead>
-                                <tr>
-                                    <th style="font-weight:bold;" >Cash In</th>
-                                    <th style="text-align:center;font-weight:bold">Amount</th>
-
-                                </tr>
+                        </tr>
 
 
 
-                            </thead>
+                    </thead>
 
-                            <tbody id="DebitTableBody">
-                            </tbody>
+                    <tbody id="DebitTableBody">
+                    </tbody>
 
-                        </table>
-
-               
-
-                 
+                </table>
 
 
 
-                        <table id="ExpenseTable" border="1" style="float:right" width="49%" >
-                            <thead>
-
-                                <tr>
-                                    <th style="font-weight:bold">Expenditure</th>
-                                    <th style="text-align:center;font-weight:bold">Amount</th>
-
-                                </tr>
 
 
 
-                            </thead>
 
-                            <tbody id="ExpenseTableBody">
-                            </tbody>
+                <table id="ExpenseTable" border="1" style="float:right" width="49%">
+                    <thead>
 
-                        </table>
+                        <tr>
+                            <th style="font-weight:bold">Expenditure</th>
+                            <th style="text-align:center;font-weight:bold">Amount</th>
 
-                    <div style="clear:both"></div>
-
-                </div>
-                <br />
+                        </tr>
 
 
+
+                    </thead>
+
+                    <tbody id="ExpenseTableBody">
+                    </tbody>
+
+                </table>
+
+                <div style="clear:both"></div>
 
             </div>
-            <center>
-                <input onclick="Export()" type="button" id="btnExport" class="btn btn-primary" name="name" value="Print" />
-            </center>
             <br />
+
+
+
         </div>
+        <center>
+            <input onclick="Export()" type="button" id="btnExport" class="btn btn-primary" name="name" value="Print" />
+        </center>
+        <br />
+    </div>
 </div>
 
 
-        <script>
+<script>
 
-            $(document).ready(function () {
+    $(document).ready(function () {
 
-                $("#PageHeader").html("Daily Account Sheet");
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = GetMonthName(today.getMonth() + 1) //String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var monthInNumber = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
 
-                var TotalDebit = 0;
-                var TotalCredit = 0;
-
-
-                $.ajax({
-
-                    type: "POST",
-                    url: "/Expense/DebitRecords",
-                    data: {},
-                    success: function (result) {
-
-
-                        TotalDebit = 0;
-                        $.each(result, function (index) {
-
-                            var TableRow = "<tr class='blank_row'><td>" + result[index].VoucherDescription + "</td> <td align='right'>" + result[index].VoucherAmount + "&nbsp;&nbsp; </td></tr>"
-
-                            TotalDebit = TotalDebit + parseFloat(result[index].VoucherAmount);
-
-                            // TotalCredit = TotalCredit + parseFloat(result[index].VoucherAmount);
-
-
-                            // alert(result[index].Date);
-
-                            $('#DebitTableBody').append(TableRow);
+        today = dd + '-' + mm + '-' + yyyy;
+        var todayInNumber = yyyy + '-' + monthInNumber + '-' + dd;
+       
+       // DebitsRecords()
+        //GetMonthName
+        $("#DateToView").html('<h5> Date : <span > ' + today + ' </span></h5>');
+        //  alert(today)
+        $("#DailyAccountSheetTitle").html('Daily Account Sheet (' + today+')');
 
 
 
-                        });
-
-                        var Total = TotalDebit;
-                        $('#DebitTableBody').append("<tr id='total'><td  ><b>Total:</b></td>   <td align='right'><b>" + Total + "&nbsp;</b></td></tr>");
-
-                        ExpenseTable();
-
-                    }
+        $('#DateFilter').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
 
 
-                })//end of ajax
+        $(function () {
+            $('#DateFilter').datepicker();
+            $('#DateFilterTrigger').click(function () {
 
-                function ExpenseTable() {
+                $('#DateFilter').datepicker('show');
 
-                    $.ajax({
-
-                        type: "POST",
-                        url: "/Expense/ReportRecords",
-                        data: {},
-                        success: function (result) {
-
-                            TotalCredit = 0;
-
-                            $.each(result, function (index) {
+            });
+        });
 
 
-                                var ste = result[index].Date == Date.now;
+        $("#DateFilter").change(function () {
 
-                                var TableRow = "<tr class='blank_row'><td>" + result[index].VoucherDescription + "</td> <td align='right'>" + result[index].VoucherAmount + "&nbsp;&nbsp; </td></tr>"
+          
+            var DateFilter = $(this).val();
+           
 
-                                TotalCredit = TotalCredit + parseFloat(result[index].VoucherAmount);
-
-
-                                $('#ExpenseTableBody').append(TableRow);
-
-                            });
-                            var Total = TotalCredit;
-
-                            debugger
-                            var GrandTotal = TotalDebit - TotalCredit;
-                            $('#ExpenseTableBody').append("<tr id='total'><td  ><b>Total exp:</b></td>   <td align='right'><b> " + Total + "&nbsp;&nbsp;</b></td></tr>");
-
-                            $('#ExpenseTableBody').append("<tr><td ><b>Bal:</b></td>   <td align='right'> <b>" + GrandTotal + "&nbsp;&nbsp;</b></td></tr>");
+            if (DateFilter != "" ) {
 
 
-                            EmptyRows();
+                var d = new Date(DateFilter);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
 
-                        }
+                var monthName = GetMonthName(month);
+
+                var DateFilterFormat = day + "-" + monthName + "-" + year;
+
+                var dd = String(d.getDate()).padStart(2, '0');
+                var monthInNumber = String(d.getMonth() + 1).padStart(2, '0');
+
+                var DateInNum = year + "-" + monthInNumber + "-" + dd;
+              //  alert(DateInNum);
+                
+                $("#DateToView").html('<h5> Date : <span > ' + DateFilterFormat + ' </span></h5>');
+                $("#DailyAccountSheetTitle").html('Daily Account Sheet (' + DateFilterFormat + ')');
 
 
-                    })//end of ajax
+              //  alert(DateFilterFormat);
+
+                DebitsRecords(DateInNum);
+
+                //   SaleSummary(FromDate, ToDate);
+
+            }
+
+        })
+
+        $("#PageHeader").html("Daily Account Sheet");
+        DebitsRecords(todayInNumber);
+
+        var TotalDebit = 0;
+        var TotalCredit = 0;
+
+        function DebitsRecords(todayInNumber) {
+            $('#DebitTableBody').html("");
+        $.ajax({
+
+            type: "POST",
+            url: "/Expense/DebitRecords",
+            data: { "Date": todayInNumber },
+            success: function (result) {
+
+
+                TotalDebit = 0;
+                $.each(result, function (index) {
+
+                    var TableRow = "<tr class='blank_row'><td>" + result[index].VoucherDescription + "</td> <td align='right'>" + result[index].VoucherAmount + "&nbsp;&nbsp; </td></tr>"
+
+                    TotalDebit = TotalDebit + parseFloat(result[index].VoucherAmount);
+
+                    // TotalCredit = TotalCredit + parseFloat(result[index].VoucherAmount);
+
+
+                    // alert(result[index].Date);
+
+                    $('#DebitTableBody').append(TableRow);
+
+
+
+                });
+
+                var Total = TotalDebit;
+                $('#DebitTableBody').append("<tr id='total'><td  ><b>Total:</b></td>   <td align='right'><b>" + Total + "&nbsp;</b></td></tr>");
+
+                ExpenseTable(todayInNumber);
+
+            }
+
+
+        })//end of ajax
+
+        } //Debits Records
+
+
+        function ExpenseTable(todayInNumber) {
+            $('#ExpenseTableBody').html("");
+            $.ajax({
+
+                type: "POST",
+                url: "/Expense/ReportRecords",
+                data: { "Date": todayInNumber },
+                success: function (result) {
+
+                    TotalCredit = 0;
+
+                    $.each(result, function (index) {
+
+
+                        var ste = result[index].Date == Date.now;
+
+                        var TableRow = "<tr class='blank_row'><td>" + result[index].VoucherDescription + "</td> <td align='right'>" + result[index].VoucherAmount + "&nbsp;&nbsp; </td></tr>"
+
+                        TotalCredit = TotalCredit + parseFloat(result[index].VoucherAmount);
+
+
+                        $('#ExpenseTableBody').append(TableRow);
+
+                    });
+                    var Total = TotalCredit;
+
+                    debugger
+                    var GrandTotal = TotalDebit - TotalCredit;
+                    $('#ExpenseTableBody').append("<tr id='total'><td  ><b>Total exp:</b></td>   <td align='right'><b> " + Total + "&nbsp;&nbsp;</b></td></tr>");
+
+                    $('#ExpenseTableBody').append("<tr><td ><b>Bal:</b></td>   <td align='right'> <b>" + GrandTotal + "&nbsp;&nbsp;</b></td></tr>");
+
+
+                    EmptyRows();
 
                 }
-                function EmptyRows() {
 
 
-                    var ExpenseTableBody = $("#ExpenseTableBody");
-                    var DebitTableBody = $("#DebitTableBody");
+            })//end of ajax
+
+        }
+        function EmptyRows() {
 
 
-                    var DebitTableRows = $('#DebitTableBody tr').length;
-                    var ExpenseTableRows = $('#ExpenseTableBody tr').length;
-
-                    //alert(DebitTableRows);
-                    //alert(ExpenseTableRows);
-
-                    var RowsToAdd = 0;
-
-                    if (DebitTableRows > ExpenseTableRows) {
-                        debugger
-
-                        RowsToAdd = DebitTableRows - ExpenseTableRows;
-
-                        //aler(RowsToAdd);
+            var ExpenseTableBody = $("#ExpenseTableBody");
+            var DebitTableBody = $("#DebitTableBody");
 
 
-                        for (i = 1; i <= RowsToAdd; i++) {
+            var DebitTableRows = $('#DebitTableBody tr').length;
+            var ExpenseTableRows = $('#ExpenseTableBody tr').length;
 
-                            $("#ExpenseTableBody #total").before("<tr class='blank_row' style='height:21px'><td></td><td></td></tr>");
+            //alert(DebitTableRows);
+            //alert(ExpenseTableRows);
 
-                        }
+            var RowsToAdd = 0;
 
+            if (DebitTableRows > ExpenseTableRows) {
+                debugger
 
-                    }
-                    else if (DebitTableRows < ExpenseTableRows) {
-                        debugger
-                        RowsToAdd = ExpenseTableRows - DebitTableRows;
+                RowsToAdd = DebitTableRows - ExpenseTableRows;
 
-
-                        for (i = 1; i <= RowsToAdd; i++) {
-                            $("#DebitTableBody #total").before("<tr  class='blank_row' style='height:21px' ><td></td><td></td></tr>");
-
-                        }
+                //aler(RowsToAdd);
 
 
-                    }
+                for (i = 1; i <= RowsToAdd; i++) {
 
-                    else {
+                    $("#ExpenseTableBody #total").before("<tr class='blank_row' style='height:21px'><td></td><td></td></tr>");
 
-                    }
                 }
 
 
-            })
+            }
+            else if (DebitTableRows < ExpenseTableRows) {
+                debugger
+                RowsToAdd = ExpenseTableRows - DebitTableRows;
 
-        </script>
+
+                for (i = 1; i <= RowsToAdd; i++) {
+                    $("#DebitTableBody #total").before("<tr  class='blank_row' style='height:21px' ><td></td><td></td></tr>");
+
+                }
+
+
+            }
+
+            else {
+
+            }
+        }
+
+       
+
+        function GetMonthName(monthNumber) {
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return months[monthNumber - 1];
+        }
+
+
+    })
+
+</script>
+

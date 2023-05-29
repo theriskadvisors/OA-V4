@@ -639,7 +639,7 @@ namespace SEA_Application.Controllers
 
             return View();
         }
-        public ActionResult ReportRecords()
+        public ActionResult ReportRecords(string Date)
         {
 
             //var Date = DateTime.Now.ToString("d/M/yyyy");
@@ -658,14 +658,14 @@ namespace SEA_Application.Controllers
 
             //var x = 0;
 
-            var result = db.TodayExpense();
+            var result = db.TodayExpenseByDate(Date);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult DebitRecords()
+        public ActionResult DebitRecords(string Date)
         {
 
-            var result = db.TodayDebitList();
+            var result = db.TodayDebitListByDate(Date);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
