@@ -314,6 +314,131 @@ namespace SEA_Application.Controllers
 
             return View(cashReceipt);
         }
+
+        public ActionResult DeleteReceipt(int id)
+        {
+            var msg = "";
+            var isDelete = false;
+
+            var dbTransaction = db.Database.BeginTransaction();
+            try
+            {
+                var Receipt = db.CashReceipts.Where(x => x.Id == id).FirstOrDefault();
+
+               
+
+                if ( Receipt.UserId == null)
+                {
+                    isDelete = true;
+                } 
+                else
+                {
+                  var CashReceiptList =   db.CashReceipts.Where(x => x.AspNetUser.Id == Receipt.UserId).OrderByDescending(x => x.Id).ToList();
+
+                    if(CashReceiptList.Count() > 1)
+                    {
+                        var FirstCashReceipt = CashReceiptList.FirstOrDefault();
+
+                        if (FirstCashReceipt.Id == id)
+                        {
+                            isDelete = true;
+
+                        } else
+                        {
+                            msg = "Only the latest receipt can be deleted.";
+
+                        }
+
+
+                    } else
+                    {
+                        msg = "First receipt cannot be deleted.";
+                    }
+                }
+
+                if (isDelete)
+                {
+
+
+
+                List<VoucherRecord> VoucherRecordList = db.VoucherRecords.Where(x => x.Voucher.ReceiptId == id).ToList();
+                foreach (var voucherRecord in VoucherRecordList)
+                {
+                    var LedgerHeadName = db.Ledgers.Where(x => x.Id == voucherRecord.LedgerId).Select(x => x.LedgerHead.Name).FirstOrDefault();
+
+                    var LedgerType = voucherRecord.Type;
+                    if (LedgerHeadName == "Assets" || LedgerHeadName == "Expense")
+                    {
+                        var LedgerToModify = db.Ledgers.Where(x => x.Id == voucherRecord.LedgerId).FirstOrDefault();
+
+                        decimal LedgerAmountToModify = LedgerToModify.CurrentBalance.Value;
+
+                        if (LedgerType == "Dr")
+                        {
+                            LedgerToModify.CurrentBalance = LedgerAmountToModify - voucherRecord.Amount;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            LedgerToModify.CurrentBalance = LedgerAmountToModify + voucherRecord.Amount;
+                            db.SaveChanges();
+                        }
+
+                    }
+                    else if (LedgerHeadName == "Income" || LedgerHeadName == "Liabilities")
+                    {
+
+                        var LedgerToModify = db.Ledgers.Where(x => x.Id == voucherRecord.LedgerId).FirstOrDefault();
+
+                        decimal LedgerAmountToModify = LedgerToModify.CurrentBalance.Value;
+
+                        if (LedgerType == "Dr")
+                        {
+                            LedgerToModify.CurrentBalance = LedgerAmountToModify + voucherRecord.Amount;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            LedgerToModify.CurrentBalance = LedgerAmountToModify - voucherRecord.Amount;
+                            db.SaveChanges();
+                        }
+
+                    }
+                    else
+                    {
+                    }
+
+                }
+
+                db.VoucherRecords.RemoveRange(VoucherRecordList);
+                db.SaveChanges();
+
+                List<Voucher> VoucherList = db.Vouchers.Where(x => x.ReceiptId == id).ToList();
+                db.Vouchers.RemoveRange(VoucherList);
+                db.SaveChanges();
+
+
+                CashReceipt cash = db.CashReceipts.Where(x => x.Id == id).FirstOrDefault();
+                db.CashReceipts.Remove(cash);
+                db.SaveChanges();
+                dbTransaction.Commit();
+
+                msg = "Deleted";
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message;
+                dbTransaction.Dispose();
+                msg = "Error While Deleting";
+            }
+            //   return RedirectToAction("Index");
+            return Json(msg, JsonRequestBehavior.AllowGet);
+
+        }
         public ActionResult PrintFeeSummary(string id)
         {
             var cashReceiptsList = db.CashReceipts.Where(x => x.UserId == id).ToList();

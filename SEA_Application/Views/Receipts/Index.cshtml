@@ -27,12 +27,119 @@ else
         display: block !important;
     }
 
+    body {
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .modal-confirm {
+        color: #636363;
+        width: 400px;
+        margin: 30px auto;
+    }
+
+        .modal-confirm .modal-content {
+            padding: 20px;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .modal-confirm .modal-header {
+            border-bottom: none;
+            position: relative;
+        }
+
+        .modal-confirm h4 {
+            text-align: center;
+            font-size: 26px;
+            margin: 30px 0 -10px;
+        }
+
+        .modal-confirm .close {
+            position: absolute;
+            top: -5px;
+            right: -2px;
+        }
+
+        .modal-confirm .modal-body {
+            color: #999;
+        }
+
+        .modal-confirm .modal-footer {
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 13px;
+         
+            margin-right :23px;
+        }
+
+            .modal-confirm .modal-footer a {
+                color: #999;
+            }
+
+        .modal-confirm .icon-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            border-radius: 50%;
+            z-index: 9;
+            text-align: center;
+            border: 3px solid #f15e5e;
+        }
+
+            .modal-confirm .icon-box i {
+                color: #f15e5e;
+                font-size: 46px;
+                display: inline-block;
+                margin-top: 13px;
+            }
+
+        .modal-confirm .btn {
+            color: #fff;
+            border-radius: 4px;
+            background: #60c7c1;
+            text-decoration: none;
+            transition: all 0.4s;
+            line-height: normal;
+            min-width: 120px;
+            border: none;
+            min-height: 40px;
+            border-radius: 3px;
+            margin: 0 5px;
+            outline: none !important;
+        }
+
+        .modal-confirm .btn-info {
+            background: #c1c1c1;
+        }
+
+            .modal-confirm .btn-info:hover, .modal-confirm .btn-info:focus {
+                background: #a8a8a8;
+            }
+
+        .modal-confirm .btn-danger {
+            background: #f15e5e;
+        }
+
+            .modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+                background: #ee3535;
+            }
+
+    .trigger-btn {
+        display: inline-block;
+        margin: 100px auto;
+    }
 </style>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <div class="card">
     <div class="card-body p-4">
         <table class="table hover table-bordered table-striped" id="datatable">
-            <thead >
+            <thead>
                 <tr>
                     <th class="hidden">
                         Id
@@ -41,11 +148,11 @@ else
                         Receipt #
                     </th>
                     @*<th>
-            Session
-        </th>
-        <th>
-            Course
-        </th>*@
+                            Session
+                        </th>
+                        <th>
+                            Course
+                        </th>*@
                     <th>
                         Roll No
                     </th>
@@ -53,8 +160,8 @@ else
                         Received From
                     </th>
                     @*<th>
-            Description
-        </th>*@
+                            Description
+                        </th>*@
                     <th>
                         Amount
                     </th>
@@ -79,21 +186,21 @@ else
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="hidden" >
-                           @item.Id
-                          
+                        <td class="hidden">
+                            @item.Id
+
                         </td>
                         <td style="text-align:center">
                             @Html.DisplayFor(modelItem => item.ReceiptNo)
                             <input type="hidden" value="@item.Id" />
                         </td>
                         @*<td>
-            @Html.DisplayFor(modelItem => item.AspNetSession.SessionName)
+                                @Html.DisplayFor(modelItem => item.AspNetSession.SessionName)
 
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Course)
-        </td>*@
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Course)
+                            </td>*@
                         <td>
                             @if (item.UserId != null)
                             {
@@ -118,8 +225,8 @@ else
 
                         </td>
                         @*<td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>*@
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>*@
                         <td style="text-align:center !important">
 
                             @if (item.Amount != null)
@@ -153,8 +260,15 @@ else
                         </td>
 
                         <td>
-                            <input onclick='printReceipt(@item.Id)' style='color:white !important' class='btn btn-sm btn-primary' type='button' value='Print' />
+                            <button style='color:white !important' href="#myModal" onclick='setID(@item.Id)' data-toggle="modal" class='btn btn-sm btn-danger'>  <i style='color:white !important' class="fa fa-trash" aria-hidden="true"></i></button>
+                            @*onclick='deleteReceipt(@item.Id)'*@                            
+                            <button style='color:white !important' onclick='printReceipt(@item.Id)' class='btn btn-sm btn-primary'>    <i style='color:white !important' class="fa fa-print" aria-hidden="true"></i></button>
+
+                            @*<input onclick='deleteReceipt(@item.Id)' style='color:white !important' class='btn btn-sm btn-danger' type='button' value='Delete' />*@
+                            @*<input onclick='printReceipt(@item.Id)' style='color:white !important' class='btn btn-sm btn-primary' type='button' value='Print' />*@
+
                         </td>
+
 
                     </tr>
                 }
@@ -162,6 +276,58 @@ else
 
         </table>
 
+    </div>
+</div>
+
+<!--<div class="text-center">-->
+    <!-- Button HTML (to Trigger Modal) -->
+    <!--<a href="#myModal" class="trigger-btn" data-toggle="modal">Click to Open Confirm Modal</a>
+</div>-->
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>
+               
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <h3 style="font-weight:bold; color :black">Are you sure?</h3>
+                <p>Do you really want to delete the receipt? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"  data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger deleteButton" onclick="deleteReceipt()" >Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="RecipetErrorModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>
+
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body" id="ReceiptErrorBody">
+
+             
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" style="margin-right:80px">Cancel</button>
+               
+            </div>
+        </div>
     </div>
 </div>
 
@@ -175,7 +341,7 @@ else
 
         var table = $('#datatable').dataTable({
             buttons: [
-               
+
                 {
                     text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
                     action: function (e, dt, button, config) {
@@ -186,33 +352,33 @@ else
             ],
             order: [[0, 'desc']],
             columnDefs: [{
-              
+
                 targets: [3], className: 'numberColumn'
-             
+
             },
             {
 
                 targets: [0], className: 'numberColumn', width: 120
 
             },
-                {
+            {
 
-                    targets: [2]
+                targets: [2]
 
-                },
-                {
+            },
+            {
 
-                    targets: [1], width: 120
+                targets: [1], width: 120
 
-                },
-                {
+            },
+            {
 
-                    targets: [4], className: 'numberColumn'
+                targets: [4], className: 'numberColumn'
 
-                }
-              
+            }
+
             ],
-           
+
             "language": {
                 "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
                     "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
@@ -231,7 +397,7 @@ else
             dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
                 "<'row'<'col-sm-12 datatablesData'tr>>" +
                 "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>"
-          
+
         });
 
         //var AllTds = $("td:nth-child(3)");
@@ -249,11 +415,11 @@ else
             var td = $(this).parent().children("td");
             var InventoryID = $(td[0]).children("input").val();
 
-           // alert(InventoryID)
+            // alert(InventoryID)
             var Id = parseInt(InventoryID);
 
             // alert(Id);
-          //  window.location.href = "/Receipts/Edit?id=" + Id;
+            //  window.location.href = "/Receipts/Edit?id=" + Id;
         });
 
 
@@ -268,6 +434,50 @@ else
 
 
     })
+    function setID(id) {
+
+      var button =   document.getElementsByClassName("deleteButton")[0];
+
+        button.id = id;
+    }
+    function deleteReceipt() {
+
+       
+        var button = document.getElementsByClassName("deleteButton")[0];
+       // alert(button.id);
+     //   window.location.href = "/Receipts/DeleteReceipt?id=" + button.id;
+       
+        $.ajax({
+            type: "post",
+            url: "/Receipts/DeleteReceipt",
+            data: { id: button.id },
+            success: function (msg) {
+
+                if (msg == "Deleted") {
+
+                    window.location.href = "/Receipts/Index";
+
+                } else {
+                    $('#myModal').modal('toggle');
+
+                    $("#RecipetErrorModal").modal('toggle');
+
+                    $("#ReceiptErrorBody").html("<p>"+msg+"</p>");
+
+
+                    //alert(msg);
+
+                }
+             
+
+                console.log(msg);
+            },
+            error: function (msg) {
+
+                console.log(msg)
+            }
+        })
+    }
 
     function numberWithCommas(x) {
         debugger
@@ -277,6 +487,6 @@ else
     function printReceipt(id) {
 
         window.location.href = "/Receipts/PrintReceipt?id=" + id;
-        
+
     }
 </script>
