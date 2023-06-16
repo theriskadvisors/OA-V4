@@ -257,7 +257,8 @@ else
 
                 <div class="form-group">
                     <div class="col-md-5">
-                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
+                        @*@Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })*@
+                        <label class="control-label">Fee Received</label>
 
                         @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @type = "number", @min = "50", @Value = "0", @required = true, @class = "form-control" } })
                         @*@Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })*@
@@ -267,7 +268,10 @@ else
 
                 <div class="form-group">
                     <div class="col-md-5">
-                        @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label" })
+
+                        @*@Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label" })*@
+                        
+                        <label class="control-label" id="DiscountLabel">Discount</label>
 
                         @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @Value = "0", @class = "form-control" } })
                         @*@Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })*@
@@ -428,7 +432,7 @@ else
             $("#discountError").html("");
 
             if (dropdownValue == "Student") {
-
+                $("#DiscountLabel").html("Discount");
                 $("#ReceivedFrom").val("");
                 $("#ReceivedFromInput").css('display', "none");
                 $("#StudentsDropdownDiv").css('display', "block");
@@ -442,6 +446,7 @@ else
             }
             else if (dropdownValue == "Other") {
 
+                $("#DiscountLabel").html("Discount");
 
                 $('#UserId').val("").trigger('change');
                 $("#ReceivedFromInput").css('display', "block");
@@ -670,7 +675,7 @@ else
         else {
 
         if (parseFloat(Discount) > parseFloat(Amount)) {
-            $("#discountError").html("Discount cannot greater than  amount")
+           // $("#discountError").html("Discount cannot greater than  amount")
             }
         }
 

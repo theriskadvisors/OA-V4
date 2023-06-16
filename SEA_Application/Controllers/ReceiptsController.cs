@@ -310,7 +310,60 @@ namespace SEA_Application.Controllers
         }
         public ActionResult PrintReceipt(int id)
         {
+            var FeeAmount ="0";
+            var RemainigFee = "0";
+
             var cashReceipt = db.CashReceipts.Where(x => x.Id == id).FirstOrDefault();
+
+            if (cashReceipt.UserId != null)
+            {
+
+                var AllReceipts =      db.CashReceipts.Where(x => x.UserId == cashReceipt.UserId).OrderBy(x => x.Id).ToList();
+                var ReceiptsToSelect = AllReceipts.Where(x=>x.Id < cashReceipt.Id).ToList();
+
+                var StudentFeeDetails = db.StudentFeeMonths.Where(x => x.AspNetStudent.AspNetUser.Id == cashReceipt.UserId).OrderBy(x => x.Id).FirstOrDefault();
+                ViewBag.TotalFee = StudentFeeDetails.FeePayable;
+
+                // Calculate Fee Amount Part
+                var CalculateFee = ReceiptsToSelect.Select(x=>x.Amount).Sum();
+                var CalculateDiscount = ReceiptsToSelect.Select(x => x.Discount).Sum();
+
+                var TotalFeeAmount = CalculateFee + CalculateDiscount;
+
+                TotalFeeAmount =   StudentFeeDetails.FeePayable - TotalFeeAmount;
+
+               // FeeAmount = TotalFeeAmount.ToString();
+                  FeeAmount  = $"{TotalFeeAmount:n0}";
+                // Calculate Remaining Fee Part
+
+
+                CalculateFee = CalculateFee + cashReceipt.Amount;
+                CalculateDiscount = CalculateDiscount + cashReceipt.Discount;
+
+                var TotalRemainingAmount = CalculateFee + CalculateDiscount;
+
+
+                TotalRemainingAmount = StudentFeeDetails.FeePayable - TotalRemainingAmount;
+                //$"{1234:n0}";
+               // RemainigFee = TotalRemainingAmount.ToString();
+                RemainigFee = $"{TotalRemainingAmount:n0}";
+
+                ViewBag.FeeAmount = FeeAmount;
+                ViewBag.RemainigFee = RemainigFee;
+
+            }
+            else
+            {
+                FeeAmount = "_";
+                RemainigFee = "_";
+
+
+
+                ViewBag.FeeAmount = null;
+                ViewBag.RemainigFee = null;
+
+            }
+
 
             return View(cashReceipt);
         }

@@ -48,9 +48,7 @@ else
 
         <div id="PrintDiv" style="display:none">
             <br />
-            <br />
-            <br />
-
+          
             <div class="container" id="container">
 
 
@@ -123,9 +121,24 @@ else
 
                         </td>
                     </tr>
+                    @if (ViewBag.FeeAmount != null)
+                    {
+
+                        <tr class="customfont">
+                            <td><b>Fee Amount</b></td>
+                            <td>
+
+                                <u id="Amount2">  @ViewBag.FeeAmount</u>
+
+
+
+                            </td>
+
+                        </tr>
+                    }
 
                     <tr class="customfont">
-                        <td><b>Rupees</b></td>
+                        <td><b>Fee Received</b></td>
                         <td>
 
 
@@ -165,57 +178,71 @@ else
                         </td>
 
                     </tr>
+                    @if (ViewBag.RemainigFee != null)
+                    {
+                        <tr class="customfont">
+                            <td><b>Remaining Fee</b></td>
+                            <td>
 
-                    <tr class="customfont">
-                        <td><b>Description</b></td>
-                        <td>
-
-
-                            @if (Model.Description != null)
-                            {
-
-
-                                <u id="">  @Model.Description</u>
-                            }
-                            else
-                            {
-                                <span>____________________</span>
-                            }
+                                <u id="Amount2">  @ViewBag.RemainigFee</u>
 
 
-                        </td>
 
-                    </tr>
+                            </td>
 
+                        </tr>
+                    }
 
-                    <tr class="customfont">
-                        <td><b>Due Date</b></td>
-                        <td>
-
-
-                            @if (Model.DueDate != null)
-                            {
+                        <tr class="customfont">
+                            <td><b>Description</b></td>
+                            <td>
 
 
-                                <u id="">@Model.DueDate.Value.ToString(string.Format("dd/MM/yyyy"))</u>
-                            }
-                            else
-                            {
-                                <span>____________________</span>
-                            }
+                                @if (Model.Description != null)
+                                {
 
 
-                        </td>
+                                    <u id="">  @Model.Description</u>
+                                }
+                                else
+                                {
+                                    <span>____________________</span>
+                                }
 
-                    </tr>
 
-                    @*<tr class="customfont">
-            <td><b>On account of</b></td>
-            <td> <span>____________________</span></td>
+                            </td>
 
-        </tr>*@
+                        </tr>
 
-                </table>
+
+                        <tr class="customfont">
+                            <td><b>Due Date</b></td>
+                            <td>
+
+
+                                @if (Model.DueDate != null)
+                                {
+
+
+                                    <u id="">@Model.DueDate.Value.ToString(string.Format("dd/MM/yyyy"))</u>
+                                }
+                                else
+                                {
+                                    <span>____________________</span>
+                                }
+
+
+                            </td>
+
+                        </tr>
+
+                        @*<tr class="customfont">
+                <td><b>On account of</b></td>
+                <td> <span>____________________</span></td>
+
+            </tr>*@
+
+                    </table>
 
                 <br>
 
@@ -260,6 +287,9 @@ else
 
 
                 </table>
+
+                <p style="margin:0;text-align:center">This is a computerized receipt no stamp is required.</p>
+
 
             </div>
             <br />
@@ -337,9 +367,23 @@ else
 
                         </td>
                     </tr>
+                    @if (ViewBag.FeeAmount != null)
+                    {
+                        <tr class="customfont">
+                            <td><b>Fee Amount</b></td>
+                            <td>
+
+                                <u id="Amount2">  @ViewBag.FeeAmount</u>
+
+
+
+                            </td>
+
+                        </tr>
+                    }
 
                     <tr class="customfont">
-                        <td><b>Rupees</b></td>
+                        <td><b>Fee Received</b></td>
                         <td>
 
 
@@ -379,57 +423,72 @@ else
                         </td>
 
                     </tr>
-                    <tr class="customfont">
-                        <td><b>Description</b></td>
-                        <td>
+                    @if (ViewBag.RemainigFee != null)
+                    {
+                        <tr class="customfont">
+                            <td><b>Remaining Fee</b></td>
+                            <td>
+
+                                <u id="Amount2">  @ViewBag.RemainigFee</u>
 
 
-                            @if (Model.Description != null)
-                            {
+
+                            </td>
+
+                        </tr>
+                    }
+
+                        <tr class="customfont">
+                            <td><b>Description</b></td>
+                            <td>
 
 
-                                <u id="">  @Model.Description</u>
-                            }
-                            else
-                            {
-                                <span>____________________</span>
-                            }
+                                @if (Model.Description != null)
+                                {
 
 
-                        </td>
-
-                    </tr>
-
-
-                    <tr class="customfont">
-                        <td><b>Due Date</b></td>
-                        <td>
+                                    <u id="">  @Model.Description</u>
+                                }
+                                else
+                                {
+                                    <span>____________________</span>
+                                }
 
 
-                            @if (Model.DueDate != null)
-                            {
+                            </td>
+
+                        </tr>
 
 
-                                <u id="">@Model.DueDate.Value.ToString(string.Format("dd/MM/yyyy"))</u>
-                            }
-                            else
-                            {
-                                <span>____________________</span>
-                            }
+                        <tr class="customfont">
+                            <td><b>Due Date</b></td>
+                            <td>
 
 
-                        </td>
+                                @if (Model.DueDate != null)
+                                {
 
-                    </tr>
+
+                                    <u id="">@Model.DueDate.Value.ToString(string.Format("dd/MM/yyyy"))</u>
+                                }
+                                else
+                                {
+                                    <span>____________________</span>
+                                }
 
 
-                    @*<tr class="customfont">
-            <td><b>On account of</b></td>
-            <td> <span>____________________</span></td>
+                            </td>
 
-        </tr>*@
+                        </tr>
 
-                </table>
+
+                        @*<tr class="customfont">
+                <td><b>On account of</b></td>
+                <td> <span>____________________</span></td>
+
+            </tr>*@
+
+                    </table>
 
                 <br>
 
@@ -475,6 +534,8 @@ else
 
                 </table>
 
+                <p style="margin:0;text-align:center">This is a computerized receipt no stamp is required.</p>
+
             </div>
             <br>
             <br>
@@ -498,8 +559,6 @@ else
         $("#PageHeader").html("Cash Receipt");
         $("#btn").click();
        
-   
-
     })
 
     function printDiv() {
@@ -510,7 +569,7 @@ else
 
         newWin.document.open();
 
-        newWin.document.write('<html><style>  .container {  background-image: linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)), url("/Content/assets/assets/img/orignal.png");   background-position: center; background-size: 400px ; background-repeat: no-repeat;} .secondtable tr td {padding-bottom:5px;} .container {   font-family:Arial; padding-left:20px;padding-right:20px;padding-bottom: 20px; width: 700px; border: 2px solid gray;border - radius: 5px;} .heading {margin: 0;} .headingpara {margin: 0;}  .customfont {font-family: arial; font-style: italic;}     </style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html><style>  .container {  background-image: linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)), url("/Content/assets/assets/img/orignal.png");   background-position: center; background-size: 400px ; background-repeat: no-repeat;} .secondtable tr td {padding-bottom:5px;} .container {   font-family:Arial; padding-left:20px;padding-right:20px;padding-bottom: 5px; width: 700px; border: 2px solid gray;border - radius: 5px;} .heading {margin: 0;} .headingpara {margin: 0;}  .customfont {font-family: arial; font-style: italic;}     </style><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 
         newWin.document.close();    
 
