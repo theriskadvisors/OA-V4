@@ -109,6 +109,16 @@ else
                 var OrderNo = "Order#" + data.OrderNo;
                 var SaleOrderId = data.Id;
                 var CustomerName = data.CustomerName;
+                var CustomerPhoneNo = data.CustomerPhoneNo;
+               // console.log("empty space" + CustomerName);
+
+                var CustomerFields = '';
+                if (CustomerName.trim() != "") {
+
+                    CustomerFields = CustomerFields + ' <br><b>Customer Name:</b><b> ' + CustomerName + ' </b> <span> </span>' +
+                        ' <br><b>Phone No:</b><b> ' + CustomerPhoneNo + ' </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>';
+                }
+
                 var SaleDetailList = data.SaleOrderList;
                 //alert(SaleDetailList);
 
@@ -163,9 +173,9 @@ else
                     '<p class="centered">' +
                     '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
                     '<b> <span id="DateTime">' + dat + '</span></b> </p>' +
-                    ' <br><b>Cashier:</b><b>Bismarck </b> <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                    ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
-                    ' </span>' +
+                     ' <br><b>Cashier:</b><b>Bismarck </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
+                                ' </span>' +  CustomerFields +'<table>' +
                     '<table>' +
                     '<thead>' +
                     '<tr>' +

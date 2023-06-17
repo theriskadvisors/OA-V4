@@ -42,6 +42,39 @@
 
         <form method="post" id="SaleForm">
 
+
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <label class="control-label">Date</label>
+
+                            <input type="date" id="Date" name="Date" class="form-control" required />
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label class="control-label">Customer Name</label>
+
+                            <input type="text" id="CustomerName" name="CustomerName" class="form-control" />
+
+                        </div>
+                        <div class="col-md-4">
+
+                            <label class="control-label">Phone No</label>
+
+                            <input type="text" id="CustomerPhoneNo" name="CustomerPhoneNo" onblur="checkPhone(this)" class="form-control" />
+                            <span class="text-danger" id="Phone-Error"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
             <div class="col-md-5">
 
 
@@ -56,13 +89,7 @@
                         </div>
                     </div>*@
 
-                <div class="col-md-12">
 
-                    <label class="control-label">Date</label>
-
-                    <input type="date" id="Date" name="Date" class="form-control" required />
-
-                </div>
 
                 <br />
 
@@ -496,7 +523,7 @@
             submitHandler: function (form) {
                 debugger;
 
-               $("#SaveButton").prop('disabled', true);
+                $("#SaveButton").prop('disabled', true);
 
                 $("#Error").html("");
                 var SalesList =
@@ -582,11 +609,21 @@
                 var DiscountedPrice = $("#DiscountedPrice").val();
                 var GrandTotal = $("#GrandTotal").val();
                 var Description = $("#Description").val();
+                var CustomerName = $("#CustomerName").val();
+                var CustomerPhoneNo = $("#CustomerPhoneNo").val();
+
+                var CustomerFields = '';
+                if (CustomerName.trim() != "") {
+
+                CustomerFields = CustomerFields + ' <br><b>Customer Name:</b><b> ' + CustomerName + ' </b> <span> </span>' +
+                    ' <br><b>Phone No:</b><b> ' + CustomerPhoneNo + ' </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>';
+                }
+
 
                 $.ajax({
                     type: "post",
                     url: "/Sales/SaveSaleOrders",
-                    data: { 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
+                    data: { "CustomerName": CustomerName, "CustomerPhoneNo": CustomerPhoneNo,  'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
                     datatype: "json",
                     cache: false,
                     success: function (data) {
@@ -612,9 +649,7 @@
                                 '<b> <span id="DateTime">' + DateAndTime + '</span></b> </p>' +
                                 ' <br><b>Cashier:</b><b>Bismarck </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                                 ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
-                                ' </span>' +
-
-                                '<table>' +
+                                ' </span>' +  CustomerFields +'<table>' +
                                 '<thead>' +
                                 '<tr>' +
                                 '<th class="description">Item</th>' +
@@ -758,6 +793,24 @@
 
 
 
+    }
+
+    function checkPhone(phone) {
+        var length = phone.value.length;
+
+        if (length == 11) {
+            var patt = new RegExp("^[0]+[0-9]{10,}$");
+            var test = patt.test(phone.value);
+            console.log(test);
+            if (test == false) {
+                $('#Phone-Error').html("Phone number is not in correct formate");
+             
+            } else {
+                $('#Phone-Error').html(" ");
+            }
+        } else {
+            $('#Phone-Error').html("Phone number is not in correct formate");
+        }
     }
 
     function Receipt() {

@@ -388,7 +388,7 @@ namespace SEA_Application.Controllers
             }
         }
 
-        public ActionResult SaveSaleOrders(string Date, string Description, double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
+        public ActionResult SaveSaleOrders(string CustomerName, string CustomerPhoneNo, string Date, string Description, double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
         {
             // return Json(new { OrderNo = 1000, data = "Created" }, JsonRequestBehavior.AllowGet);
 
@@ -420,6 +420,8 @@ namespace SEA_Application.Controllers
             saleorder.OrderNo = MaxId;
             saleorder.Status = "Paid";
             saleorder.Description = Description;
+            saleorder.CustomerName = CustomerName;
+            saleorder.CustomerPhoneNo = CustomerPhoneNo;
 
             db.SaleOrders.Add(saleorder);
             db.SaveChanges();
@@ -505,6 +507,7 @@ namespace SEA_Application.Controllers
             SaleOrderVM.Status = SaleOrder.Status;
             //SaleOrderVM.StudentName = SaleOrder.AspNetStudent.AspNetUser.Name + "(" + SaleOrder.AspNetStudent.AspNetUser.UserName + ")";
             SaleOrderVM.CustomerName = SaleOrder.CustomerName;
+            SaleOrderVM.CustomerPhoneNo = SaleOrder.CustomerPhoneNo;
             SaleOrderVM.Total = SaleOrder.Total.Value;
             SaleOrderVM.DiscountedPrice = SaleOrder.DiscountedPrice.Value;
             SaleOrderVM.OrderNo = SaleOrder.OrderNo.Value;
@@ -535,6 +538,7 @@ namespace SEA_Application.Controllers
             public string StudentName { get; set; }
 
             public string CustomerName { get; set; }
+            public string CustomerPhoneNo { get; set; }
             public double Total { get; set; }
             public double Discount { get; set; }
             public double DiscountedPrice { get; set; }
