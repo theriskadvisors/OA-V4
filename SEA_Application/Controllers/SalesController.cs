@@ -225,7 +225,7 @@ namespace SEA_Application.Controllers
             return View();
         }
 
-        public ActionResult GetSaleSummary(string FromDate, string ToDate)
+        public ActionResult GetSaleSummary(string FromDate, string ToDate, string CustomerName)
         {
 
             DateTime dateTimeFrom = Convert.ToDateTime(FromDate);
@@ -237,7 +237,18 @@ namespace SEA_Application.Controllers
             string toDateInString = dateTimeTo.ToString();
 
             List<SaleOrderCustom> SalesList = new List<SaleOrderCustom>();
-            List<SaleOrder> SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
+
+            List<SaleOrder> SaleOrdersList = null;
+
+            if (CustomerName == "All")
+            {
+                SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
+            }
+            else
+            {
+                SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo && x.CustomerName == CustomerName).ToList();
+
+            }
 
             foreach (var item in SaleOrdersList)
             {
@@ -351,6 +362,15 @@ namespace SEA_Application.Controllers
             var AllExternalAndProdutionList = db.Inventories.Where(x => x.Type == "ExternalProduct" || x.Type == "ProductProduction").Select(x => new { x.Id, Name = x.Name + "  (" + x.ItemNo + ")", x.UnitName, x.UnitPurchasePrice, x.UnitSalePrice, x.QuantityOnHand }).ToList();
 
             string status = Newtonsoft.Json.JsonConvert.SerializeObject(AllExternalAndProdutionList);
+
+            return Content(status);
+        }
+
+        public ActionResult GetCustomerList()
+        {
+            var CustomersList = db.SaleOrders.Where(x=>x.CustomerName.ToString().Trim() != "").Select(x=>x.CustomerName).Distinct().ToList();
+
+            string status = Newtonsoft.Json.JsonConvert.SerializeObject(CustomersList);
 
             return Content(status);
         }
