@@ -322,7 +322,10 @@ namespace SEA_Application.Controllers
                 var ReceiptsToSelect = AllReceipts.Where(x=>x.Id < cashReceipt.Id).ToList();
 
                 var StudentFeeDetails = db.StudentFeeMonths.Where(x => x.AspNetStudent.AspNetUser.Id == cashReceipt.UserId).OrderBy(x => x.Id).FirstOrDefault();
-                ViewBag.TotalFee = StudentFeeDetails.FeePayable;
+
+                var FeePayableVar = StudentFeeDetails.TotalFee.Value - StudentFeeDetails.Discount.Value;
+
+                ViewBag.TotalFee = FeePayableVar;
 
                 // Calculate Fee Amount Part
                 var CalculateFee = ReceiptsToSelect.Select(x=>x.Amount).Sum();
@@ -330,7 +333,7 @@ namespace SEA_Application.Controllers
 
                 var TotalFeeAmount = CalculateFee + CalculateDiscount;
 
-                TotalFeeAmount =   StudentFeeDetails.FeePayable - TotalFeeAmount;
+                TotalFeeAmount = FeePayableVar - TotalFeeAmount;
 
                // FeeAmount = TotalFeeAmount.ToString();
                   FeeAmount  = $"{TotalFeeAmount:n0}";
@@ -343,7 +346,7 @@ namespace SEA_Application.Controllers
                 var TotalRemainingAmount = CalculateFee + CalculateDiscount;
 
 
-                TotalRemainingAmount = StudentFeeDetails.FeePayable - TotalRemainingAmount;
+                TotalRemainingAmount = FeePayableVar - TotalRemainingAmount;
                 //$"{1234:n0}";
                // RemainigFee = TotalRemainingAmount.ToString();
                 RemainigFee = $"{TotalRemainingAmount:n0}";
@@ -580,8 +583,14 @@ namespace SEA_Application.Controllers
             {
                 var StudentFeeDetails = db.StudentFeeMonths.Where(x => x.StudentId == Student.Id).OrderBy(x => x.Id).FirstOrDefault();
 
-                TotalFee = StudentFeeDetails.FeePayable + " - " + StudentFeeDetails.FeeType;
-                TotalFeeAmount = StudentFeeDetails.FeePayable.Value;
+                var TotalAfterDiscounted = StudentFeeDetails.TotalFee.Value - StudentFeeDetails.Discount.Value;
+                
+
+                TotalFee = TotalAfterDiscounted + " - " + StudentFeeDetails.FeeType;
+                TotalFeeAmount = TotalAfterDiscounted;
+
+                //TotalFee = StudentFeeDetails.FeePayable + " - " + StudentFeeDetails.FeeType;
+                //TotalFeeAmount = StudentFeeDetails.FeePayable.Value;
             }
 
 

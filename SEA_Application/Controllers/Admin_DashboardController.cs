@@ -2231,6 +2231,17 @@ namespace SEA_Application.Controllers
                 discount = Convert.ToDouble(Request.Form["Discount"]);
             }
 
+            var FutherDiscount = Request.Form["FutherDiscount"];
+            double fdiscount = 0;
+            if (Request.Form["FutherDiscount"] == "")
+            {
+                fdiscount = 0;
+            }
+            else
+            {
+                fdiscount = Convert.ToDouble(Request.Form["FutherDiscount"]);
+            }
+
             var age = 0;
             if (Request.Form["Age"] != "")
             {
@@ -2560,9 +2571,10 @@ namespace SEA_Application.Controllers
 
                         studentFeeMonth.IssueDate = DateTime.Now;
                         var Month = DateTime.Now.ToString("MMMM");
-                        studentFeeMonth.FeePayable = Convert.ToDouble(Request.Form["TotalFee"]);
+                     //   studentFeeMonth.FeePayable = Convert.ToDouble(Request.Form["TotalFee"]);
+                        studentFeeMonth.FeePayable = Convert.ToDouble(Request.Form["RemainingReadOnly"]);
                        
-                        studentFeeMonth.Discount = discount;
+                        studentFeeMonth.Discount = fdiscount;
                         studentFeeMonth.FeeType = Request.Form["FeeType"];
                         studentFeeMonth.SessionId = SessionIdOfSelectedStudent;
                         studentFeeMonth.StudentId = student.Id;
@@ -2573,6 +2585,9 @@ namespace SEA_Application.Controllers
                         db.SaveChanges();
 
                         var RemainingAmount  = Convert.ToDouble(Request.Form["RemainingReadOnly"]);
+                       // var FutherDiscount  = Convert.ToDouble(Request.Form["FutherDiscount"]);
+
+                      
 
                         var id = User.Identity.GetUserId();
                         var username = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
@@ -2644,7 +2659,31 @@ namespace SEA_Application.Controllers
                         studentFeeL.CurrentBalance = AfterBalanceOfStudentFee;
                         db.VoucherRecords.Add(voucherRecord2);
                         db.SaveChanges();
-                      
+
+
+                        if (fdiscount != 0)
+                        {
+                            VoucherRecord voucherRecord3 = new VoucherRecord();
+
+                            var LeadgerDiscount = db.Ledgers.Where(x => x.Name == "Discount").FirstOrDefault();
+
+                            decimal? CurrentBalanceOfDiscount = LeadgerDiscount.CurrentBalance;
+                            decimal? AfterBalanceOfDiscount = CurrentBalanceOfDiscount + Math.Round(Convert.ToDecimal(FutherDiscount));
+                            voucherRecord3.LedgerId = LeadgerDiscount.Id;
+                            voucherRecord3.Type = "Dr";
+                            voucherRecord3.Amount = Math.Round(Convert.ToDecimal(FutherDiscount));
+                            voucherRecord3.CurrentBalance = CurrentBalanceOfDiscount;
+                            voucherRecord3.AfterBalance = AfterBalanceOfDiscount;
+                            voucherRecord3.VoucherId = voucher.Id;
+                            voucherRecord3.Description = "Further Discount given to student(" + model.Name + ")";
+                            LeadgerDiscount.CurrentBalance = AfterBalanceOfDiscount;
+
+                            db.VoucherRecords.Add(voucherRecord3);
+                            db.SaveChanges();
+
+
+                        }
+
 
                         //    return RedirectToAction("BiometricRegistration", "Admin_Dashboard", new { RollNo = model.UserName, Success = Error });
 

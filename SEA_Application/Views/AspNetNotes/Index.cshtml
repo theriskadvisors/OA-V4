@@ -68,6 +68,7 @@ else if (User.IsInRole("Receptionist"))
     /*element.style {
         padding: 10px 0px 0px 0px;
     }*/
+   
 </style>
 
 <div class="modal fade" id="myModal" role="dialog">
@@ -145,6 +146,9 @@ else if (User.IsInRole("Receptionist"))
                                                 @Html.DisplayNameFor(model => model.Title)
                                             </th>
                                             <th>
+                                                @Html.DisplayNameFor(model => model.Quantity)
+                                            </th>
+                                            <th>
                                                 @Html.DisplayNameFor(model => model.Description)
                                             </th>
                                             <th>Is Active</th>
@@ -183,49 +187,66 @@ else if (User.IsInRole("Receptionist"))
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Title)
                                             </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Description)
-                                            </td>
+                                            <td align="center">
+                                                @*@Html.DisplayFor(modelItem => item.Quantity)*@
 
 
-                                            @if (item.IsVisible == false)
-                                            {
+                                                @if (item.Quantity == null)
+                                                {
 
-                                                <td> <span>No</span></td>
-                                            }
-                                            else
-                                            {
-                                                <td> <span>Yes</span></td>
-
-
-                                            }
+                                              <span >0</span>
+                                                }
+                                                else
+                                                {
+                                                  <span>@item.Quantity</span>
 
 
+                                                }
 
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.CourseType)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.NotesType)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.GrandTotal)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.OAPrice)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.CreationDate)
-                                            </td>
-                                            <td>
-                                                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                                                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id })*@
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Description)
+                                                </td>
+
+
+                                                @if (item.IsVisible == false)
+                                                {
+
+                                                    <td> <span>No</span></td>
+                                                }
+                                                else
+                                                {
+                                                    <td> <span>Yes</span></td>
+
+
+                                                }
+
+
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CourseType)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.AspNetSubject.SubjectName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.NotesType)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.GrandTotal)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.OAPrice)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CreationDate)
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id })*@
+                                                </td>
+                                            </tr>
                                         }
                                     </tbody>
 
@@ -236,6 +257,9 @@ else if (User.IsInRole("Receptionist"))
                                             </th>
                                             <th>
                                                 Title
+                                            </th>
+                                            <th>
+                                                Quantity
                                             </th>
                                             <th>
                                                 Description
@@ -780,8 +804,6 @@ else if (User.IsInRole("Receptionist"))
 
         })
 
-
-
         $('#datatable tfoot th').each(function () {
             var title = $(this).text();
             $(this).html('<input type="text" class="round-border" style="border-color:#053f89; border-radius:5px; width:100%" placeholder="Search" />');
@@ -804,6 +826,13 @@ else if (User.IsInRole("Receptionist"))
                     });
                 });
             },
+            'columnDefs': [
+              
+                {
+                    "targets": 2,
+                    "className": "text-center",
+                }
+            ],
             buttons: [
 
                 {

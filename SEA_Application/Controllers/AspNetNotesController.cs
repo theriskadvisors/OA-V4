@@ -101,6 +101,18 @@ namespace SEA_Application.Controllers
 
                         db.SaveChanges();
 
+                        var NotesToUpdate = db.AspNetNotes.Where(x => x.Id == NotesOrder.NotesID).FirstOrDefault();
+
+                        if (NotesToUpdate.Quantity  == null)
+                        {
+                            NotesToUpdate.Quantity = 0;
+
+                        }
+
+                        NotesToUpdate.Quantity = NotesToUpdate.Quantity - NotesOrder.Quantity;
+                        db.SaveChanges();
+
+
                     }
                     var result = from Notes in db.AspNetNotes
                                  join OrderNotes in db.AspNetNotesOrders on Notes.Id equals OrderNotes.NotesID
@@ -622,6 +634,18 @@ namespace SEA_Application.Controllers
             // return Json("", JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetNotesList()
+        {
+
+            var Notes = db.AspNetNotes.Select(x => new { x.Id, Name = x.Title , x.NotesType, x.NotesNo}).ToList();
+
+            string status = Newtonsoft.Json.JsonConvert.SerializeObject(Notes);
+
+            return Content(status);
+
+
+        }
+
         public ActionResult PendingOrdersDetails(int OrderId)
         {
             var UserId = User.Identity.GetUserId();
@@ -894,7 +918,98 @@ namespace SEA_Application.Controllers
 
             return Json(IsExist, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult NotesStockIndex()
+        {
+           var NotesStockList =  db.NotesStocks.ToList();
 
+            return View(NotesStockList);
+        }
+        public  ActionResult NotesStockCreate()
+        {
+
+            return View();
+        }
+        public ActionResult SaveNotesStock(string Date, string Note, List<NotesStockItems> NotesStockItems )
+        {
+            var dbTransaction = db.Database.BeginTransaction();
+            try {
+
+                NotesStock obj = new NotesStock();
+                obj.Description = Note;
+
+                var Datetime = GetLocalDateTime.GetLocalDateTimeFunction();
+                var Time = Datetime.Value.TimeOfDay;
+
+
+                obj.Date = Convert.ToDateTime(Date);
+                obj.Date = obj.Date.Value.Add(Time);
+                obj.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
+
+                db.NotesStocks.Add(obj);
+                db.SaveChanges();
+
+                List<NotesStockItem> list = new List<NotesStockItem>();
+               
+                foreach(var item in NotesStockItems)
+                {
+                    NotesStockItem i = new NotesStockItem();
+
+                    i.Quantity = item.Quantity;
+                    i.NotesId = item.NotesId;
+                    i.NotesStockId = obj.Id;
+
+                    var NotesToUpdate = db.AspNetNotes.Where(x => x.Id == item.NotesId).FirstOrDefault();
+
+                    if (NotesToUpdate.Quantity == null)
+                    {
+                        NotesToUpdate.Quantity = 0;
+                    }
+
+                    NotesToUpdate.Quantity = NotesToUpdate.Quantity + item.Quantity;
+                    db.SaveChanges();
+                    
+                    list.Add(i);
+
+                }
+                db.NotesStockItems.AddRange(list);
+                db.SaveChanges();
+
+                
+
+
+                dbTransaction.Commit();
+            } //end of try block;
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                dbTransaction.Dispose();
+            }
+
+
+            return Json("Created", JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult StockDetails()
+        {
+
+            return View();
+
+        }
+        public ActionResult GetNotesStockDetails()
+        {
+            //NotesNo
+            var NotesStockItems = db.NotesStockItems.Select(x=> new { x.AspNetNote.NotesNo, Name =  x.AspNetNote.Title, x.NotesStock.Description, x.Quantity, x.NotesStock.Date,  x.Id}).OrderByDescending(x=>x.Id).ToList();
+
+            return Json(NotesStockItems, JsonRequestBehavior.AllowGet);
+        }
+
+        public class NotesStockItems
+        {
+            public int NotesId { get; set; }
+            public int Quantity { get; set; }
+        
+        }
         //public ActionResult SaveReturnOrder(List<PlaceNotes> PlaceNotes, int StudentId )
         //{
 
@@ -1120,6 +1235,14 @@ namespace SEA_Application.Controllers
                 db.SaveChanges();
 
 
+                var NotesToUpdate = db.AspNetNotes.Where(x => x.Id == Order.NotesId).FirstOrDefault();
+
+                NotesToUpdate.Quantity = NotesToUpdate.Quantity + Order.Quantity;
+
+                db.SaveChanges();
+
+
+
                 var TotalPhotoCopierToDelete = Order.PhotoCopierPrice * Order.Quantity;
                 var TotalOAToDelete = Order.OAPrice * Order.Quantity;
 
@@ -1296,6 +1419,17 @@ namespace SEA_Application.Controllers
 
                     db.AspNetNotesOrders.Add(NotesOrder);
                     db.SaveChanges();
+
+                      //var NotesToUpdate =    db.AspNetNotes.Where(x => x.Id == item.NotesId).FirstOrDefault();
+
+                      //  if (NotesToUpdate.Quantity == null)
+                      //  {
+                      //      NotesToUpdate.Quantity = 0;
+
+                      //  }
+
+                      //  NotesToUpdate.Quantity = NotesToUpdate.Quantity - item.Quantity;
+                      //  db.SaveChanges();
 
                 }
                 dbTransaction.Commit();

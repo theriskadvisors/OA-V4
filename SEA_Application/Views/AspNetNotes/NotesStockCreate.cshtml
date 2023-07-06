@@ -1,0 +1,476 @@
+@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+
+else if (User.IsInRole("Receptionist"))
+{
+    Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+
+}
+else
+{
+    Layout = null;
+
+}
+<style>
+    th, td {
+        padding: 5px;
+    }
+
+    .error {
+        color: red !important;
+    }
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link href="~/Content/select2.min.css" rel="stylesheet" />
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        @*@using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()*@
+        <form method="post" id="ProductForm">
+
+            <div class="col-md-5">
+
+
+                @*<div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Order No</label>
+
+                    <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+
+                </div>
+            </div>*@
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label">Date</label>
+
+                        <input type="date" id="Date" name="Date" class="form-control" required />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+
+                        <label class="control-label">Description</label>
+
+                        <textarea class="form-control" name="Note" id="Note" rows="5"></textarea>
+
+
+                    </div>
+                </div>
+
+
+                <br />
+
+
+            </div><!--end of col 8-->
+
+
+            <div class="col-md-12">
+
+                <div class="col-md-12">
+
+                    <table width="80%" id="StockTable" >
+
+                        <thead>
+                            <tr>
+                                <td> <label class="control-label">Select Item</label></td>
+                                @* <td> <label class="control-label"> Vendor </label> </td>*@
+                                @*<td> <label class="control-label">Purchase Unit Price </label> </td>*@
+                                <td> <label class="control-label"> Notes Type </label> </td>
+                                <td> <label class="control-label"> Quantity </label> </td>
+                                @*<td> <label class="control-label"> Total </label> </td>*@
+                                <td style="padding-left:55px;"> <label class="control-label"> Action</label></td>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="TableBody">
+
+                            <tr id="TableRow0">
+
+                                <td style="width:10%">
+
+                                    <select style="width:350px;" class="form-control drop NotesDropDown" id="NotesList0" name="NotesList0" required></select>
+
+                                </td>
+                                @*<td style="width:20%">
+
+            <select style="width:250px;" class="form-control drop" id="Supplier0" name="Supplier0" required></select>
+
+        </td>*@
+
+                                @*<td style="width:15%">
+
+            <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" />
+
+        </td>*@
+
+                                <td style="width:15%">
+
+                                    <input class="form-control NotesType" id="NotesType0"  type="text" name="NotesType0" readonly />
+
+                                </td>
+
+
+                                <td style="width:15%" sty>
+
+                                    <input class="form-control InventoryQuantity" id="StockQuantity0" value="1" min="0" type="number" name="StockQuantity0" />
+
+                                </td>
+
+                                @*<td style="width:15%">
+
+            <input readonly class="form-control InventoryTotal" id="Total0" value="0" min="0" type="number" name="Total0" />
+        </td>*@
+
+                                <td style="width:20%;padding-left:55px;">
+
+                                    <button type="button" style="background:#32CD32" id="" class="btn btn-sm btn-default " onclick="RawStock()"><i class="fa fa-plus" style="font-size:12px"></i></button>
+
+                                </td>
+
+                            </tr>
+
+
+                            @*<tr id="GrandTotalRow">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td align="center" valign="bottom"></td>
+                            <td><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="GrandTotal" name="GrandTotal" required></td>
+                            <td></td>
+
+                        </tr>*@
+
+                        </tbody>
+
+
+
+                    </table>
+
+                    <span id="Error" style="color:red"></span>
+
+
+                </div><!--End of column 12-->
+            </div>
+            <br />
+            <br />
+            <div class="col-md-8">
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+
+
+                        <button  type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                            <i class="material-icons mr-2">cached</i>  Cancel
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+
+            @*}*@
+        </form>
+
+
+    </div>
+</div>
+
+<script>
+
+    count = 1;
+    row = [];
+    row[0] = 0;
+
+    var arr = [];
+    arr[0] = 0;
+
+    NotesList = [];
+
+    var HeadName = "";
+    var ExpenseList = "";
+
+    var RawAndExternalProductsList = "";
+    var AllSuppliersList = "";
+
+    $(document).ready(function () {
+
+        // document.getElementById('Date').valueAsDate = new Date();
+
+
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+
+        //  document.getElementById('Date').valueAsDate = output;
+
+        $("#Date").val(today);
+
+
+        $(".drop").select2();
+
+        $("#PageHeader").html("Add Notes Stock");
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/AspnetNotes/GetNotesList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#NotesList0");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Notes'));
+
+                    var FullName = "";
+
+                    RawAndExternalProductsList = RawAndExternalProductsList + "<option value=''>Select Notes</option>";
+
+                    for (i = 0; i < sch.length; i++) {
+
+
+                        var obj = {};
+
+                        obj['NotesId'] = sch[i].Id;
+                        obj['Name'] = sch[i].Name;
+                        obj['NotesType'] = sch[i].NotesType;
+
+                        NotesList.push(obj);
+
+                        Fullname = sch[i].Name;
+                        if (sch[i].NotesNo != "" && sch[i].NotesNo != null) {
+
+                            Fullname = "(" + sch[i].NotesNo + ")" + sch[i].Name;
+                        }
+
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(Fullname));
+
+
+                        RawAndExternalProductsList = RawAndExternalProductsList + "<option value=" + sch[i].Id + ">" + Fullname + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select Notes'));
+                }
+            }
+        });//end of ajax
+
+
+
+        $("#StockTable").on('change', ".NotesDropDown", function () {
+
+
+            var Id = $(this).attr('id');
+            var ChangedValue = $(this).val();
+            let str = Id;
+
+           // alert(str);
+         //   alert(ChangedValue);
+            const myArr = str.split("NotesList");
+
+            var NotesType = "";
+
+            NotesList.forEach(function (arrayItem) {
+                if (arrayItem.NotesId == ChangedValue) {
+
+                    NotesType = arrayItem.NotesType;
+                }
+
+            });
+
+
+           // alert(NotesType);
+
+            $("#NotesType" + myArr[1]).val(NotesType);
+
+
+        });
+
+        //  $("#ProductForm").validate();
+
+        $('#ProductForm').validate({ // initialize the plugin
+            rules: {
+                Name: {
+                    required: true,
+                },
+
+            },
+            submitHandler: function (form) {
+                debugger;
+                var NewStocksList =
+                {
+                    InventoryId: '',
+                    // UnitPrice: '',
+                    Quantity: '',
+                    SupplierId: '',
+
+                };
+
+                NewStocksList = [
+
+
+                ];
+
+                var selectedInventoryArary = [];
+                let map = {};
+                let result = false;
+
+                for (var i in arr) {
+
+                    var InventorStocks = "NotesList" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    selectedInventoryArary.push(InventorStocks);
+                }
+
+                for (let i = 0; i < selectedInventoryArary.length; i++) {
+                    // check if object contains entry with this element as key
+                    if (map[selectedInventoryArary[i]]) {
+                        result = true;
+                        // terminate the loop
+                        break;
+                    }
+                    map[selectedInventoryArary[i]] = true;
+                }
+
+                if (result) {
+                   
+                    $("#Error").html("Items cannot be repeated");
+                    return false;
+                }
+
+
+                for (var i in arr) {
+
+                    if (arr[i] == null)
+                        continue;
+
+                    var obj = {};
+
+                    var InventorStocks = "NotesList" + arr[i];
+                    InventorStocks = document.getElementById(InventorStocks).value;
+
+                    //var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
+                    //PurchaseUnitPrice = document.getElementById(PurchaseUnitPrice).value;
+
+                    var Quantity = "StockQuantity" + arr[i];
+                    Quantity = document.getElementById(Quantity).value;
+
+
+                    obj['NotesId'] = InventorStocks;
+                    // obj['UnitPrice'] = PurchaseUnitPrice;
+                    obj['Quantity'] = Quantity;
+           
+
+                    NewStocksList.push(obj);
+
+                }//end of for loop
+
+                // console.log(NewStocksList);
+
+                var Date = $("#Date").val();
+              
+                var Note = $("#Note").val();
+
+
+                $.ajax({
+                    type: "post",
+                    url: "/AspnetNotes/SaveNotesStock",
+                    data: { 'Date': Date, 'Note': Note, 'NotesStockItems': NewStocksList },
+                    datatype: "json",
+                    cache: false,
+                    success: function (data) {
+                        debugger
+                        if (data == "Created") {
+
+                            window.location.href = "/AspnetNotes/NotesStockIndex";
+
+                        }
+
+                        else if (data == "Exception") {
+                            //Exception
+                            //alert("Exception");
+                        }
+                        else {
+
+                            $("#Error").html(data);
+                            $("#SaveButton").prop("disabled", false);
+
+                        }
+
+                    }
+                })
+
+
+            }
+
+        })
+
+        $("#btnCancel").click(function () {
+           // alert("Cancelled");
+            window.location.href = "/AspnetNotes/NotesStockIndex";
+        })
+
+
+
+    })//end of document ready
+
+
+
+    function RawStock() {
+
+        $("#TableBody").append('<tr id="TableRow' + count + '"><td style="width:20%"> <select style ="width:350px;" class="form-control drop NotesDropDown" id="NotesList' + count + '" name="NotesList' + count + '" required>' + RawAndExternalProductsList + '</select></td><td style="width:15%" >  <input class="form-control NotesType" id="NotesType' + count + '"  type="text" name="NotesType' + count + '" readonly /> </td> <td style="width:15%"> <input class="form-control InventoryQuantity" id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" /> </td> <td style="width:15%;padding-left:55px;"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
+        $(".drop").select2();
+        row[count] = count;
+
+        //addAllLedger(count);
+        //AddBranch(count);
+        arr[count] = count;
+
+        count = count + 1;
+
+    }
+
+    function Remove(e) {
+
+        var RowToDelete = "TableRow" + e;
+        document.getElementById(RowToDelete).remove();
+
+
+        arr.splice($.inArray(e, arr), 1);
+
+
+    }
+
+
+
+
+</script>
+
+<script src="~/Content/Toaster/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>

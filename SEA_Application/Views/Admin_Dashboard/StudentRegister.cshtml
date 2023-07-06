@@ -775,6 +775,7 @@ else if (User.IsInRole("Staff"))
 
             var RemainingAmount = parseInt(TotalFee) - parseInt(Received) - parseInt(Discount);
             $("#RemainingReadOnly").val(RemainingAmount);
+            CalculateRemainingFee();
 
         }
         else if (FeeType == "PerMonth" && FeeType != "") {
@@ -785,6 +786,7 @@ else if (User.IsInRole("Staff"))
             var RemainingAmount = parseInt(TotalFee) - parseInt(Received) - parseInt(Discount);
             $("#RemainingReadOnly").val(RemainingAmount);
 
+            CalculateRemainingFee();
 
         }
         else if (FeeType == "FullFee" && FeeType != "") {
@@ -795,7 +797,7 @@ else if (User.IsInRole("Staff"))
             var RemainingAmount = parseInt(TotalFee) - parseInt(Received) - parseInt(Discount);
             $("#RemainingReadOnly").val(RemainingAmount);
 
-
+            CalculateRemainingFee();
         }
 
         else {
@@ -803,6 +805,30 @@ else if (User.IsInRole("Staff"))
         }
     }
 
+    function CalculateRemainingFee() {
+        // alert( $(this).val());
+        var FutherDiscount = $("#FutherDiscount").val();
+
+        var TotalFee = $("#TotalFee").val();
+        var ReceivedReadOnly = $("#ReceivedReadOnly").val();
+        var DiscountReadOnly = $("#DiscountReadOnly").val();
+        //var RemainingReadOnly = $("#RemainingReadOnly").val();
+
+        if (FutherDiscount == "") {
+            FutherDiscount = 0;
+        }
+        //if (RemainingReadOnly == "") {
+        //    RemainingReadOnly = 0;
+        //}
+
+        var CalculateRemainingFee = parseFloat(TotalFee) - parseFloat(ReceivedReadOnly) - parseFloat(DiscountReadOnly) - parseFloat(FutherDiscount);
+
+       
+
+        $("#RemainingReadOnly").val(CalculateRemainingFee);
+
+     //   alert(FutherDiscount);
+     }
 
 </script>
 
@@ -977,12 +1003,17 @@ else if (User.IsInRole("Staff"))
                                             <input type="number" class="form-control round-border" name="DiscountReadOnly" value="0" id="DiscountReadOnly" readonly />
                                         </div>
 
+                                        <div class="form-group bmd-form-group my-3">
+                                            <label class="bmd-label-floating">Futher Discount </label>
+                                            <input type="number" class="form-control round-border" onkeyup="CalculateRemainingFee()" name="FutherDiscount" value="0" id="FutherDiscount"  />
+                                        </div>
+
 
                                         <div class="form-group bmd-form-group my-3">
                                             <label class="bmd-label-floating">Remaining </label>
-                                            <input type="number" class="form-control round-border" name="   " value="0" id="RemainingReadOnly" readonly />
+                                            <input type="number" class="form-control round-border"  name="RemainingReadOnly" value="0" id="RemainingReadOnly" readonly />
                                         </div>
-                                        
+
 
                                     </div>
 
