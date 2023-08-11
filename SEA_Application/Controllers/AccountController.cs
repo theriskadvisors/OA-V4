@@ -173,6 +173,11 @@ namespace SEA_Application.Controllers
                         System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
                         return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
                     }
+                    else if (UserManager.IsInRole(userID, "InventoryManager"))
+                    {
+                        System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
+                        return RedirectToAction("Dashboard", "InventoryManager");
+                    }
                     else if (UserManager.IsInRole(userID, "RawAdmin"))
                     {
                         System.Web.HttpContext.Current.Session["RawAdminID"] = userID;
@@ -240,8 +245,6 @@ namespace SEA_Application.Controllers
 
         public ActionResult Dashboard()
         {
-
-
             var userID = User.Identity.GetUserId();
 
             if (UserManager.IsInRole(userID, "Teacher"))
@@ -275,6 +278,11 @@ namespace SEA_Application.Controllers
                 System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
                 return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
             }
+             else if (UserManager.IsInRole(userID, "InventoryManager"))
+                    {
+                        System.Web.HttpContext.Current.Session["InventoryManagerID"] = userID;
+                        return RedirectToAction("Dashboard", "InventoryManager");
+                    }
             else if (UserManager.IsInRole(userID, "RawAdmin"))
             {
                 System.Web.HttpContext.Current.Session["RawAdminID"] = userID;
@@ -396,6 +404,11 @@ namespace SEA_Application.Controllers
                     {
                         System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
                         return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "InventoryManager"))
+                    {
+                        System.Web.HttpContext.Current.Session["InventoryManagerID"] = userID;
+                        return RedirectToAction("Dashboard", "InventoryManager");
                     }
                     else if (UserManager.IsInRole(userID, "RawAdmin"))
                     {
@@ -689,6 +702,11 @@ namespace SEA_Application.Controllers
                     {
                         System.Web.HttpContext.Current.Session["BakeryAdminID"] = userID;
                         return RedirectToAction("Dashboard", "BakeryAdmin_Dashboard");
+                    }
+                    else if (UserManager.IsInRole(userID, "InventoryManager"))
+                    {
+                        System.Web.HttpContext.Current.Session["InventoryManagerID"] = userID;
+                        return RedirectToAction("Dashboard", "InventoryManager");
                     }
                     else if (UserManager.IsInRole(userID, "RawAdmin"))
                     {
@@ -985,6 +1003,14 @@ namespace SEA_Application.Controllers
                         Msg = "Success";
 
                         var user = db.AspNetUsers.Where(x => x.Id == userID).Select(x => new { x.Id, x.Name, x.UserName, x.Email, Role = "BakeryAdmin" }).FirstOrDefault();
+
+                        return Json(new { msg = Msg, user = user }, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (UserManager.IsInRole(userID, "InventoryManager"))
+                    {
+                        Msg = "Success";
+
+                        var user = db.AspNetUsers.Where(x => x.Id == userID).Select(x => new { x.Id, x.Name, x.UserName, x.Email, Role = "InventoryManager" }).FirstOrDefault();
 
                         return Json(new { msg = Msg, user = user }, JsonRequestBehavior.AllowGet);
                     }

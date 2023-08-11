@@ -1,0 +1,137 @@
+﻿@if (User.IsInRole("Admin"))
+{
+    Layout = "~/Views/Shared/_AdminDashboardLayout.cshtml";
+}
+else if (User.IsInRole("BakeryAdmin"))
+{
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+}
+
+
+
+@using System.Linq;
+@using System.Net;
+@using System.Web.Mvc;
+@using SEA_Application.Models;
+@using System.IO;
+@using Microsoft.AspNet.Identity;
+@{
+    SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+    var CurrentUserId = User.Identity.GetUserId();
+
+    string name = db.AspNetUsers.Where(x => x.Id == CurrentUserId).Select(x => x.Name).FirstOrDefault();
+    var dt = DateTime.Now;
+    DateTime Firstday = dt.AddDays(-(int)dt.DayOfWeek);
+    DateTime Endaday = Firstday.AddDays(6);
+    int countLesson = db.Events.Where(x => x.UserId == CurrentUserId && x.Start <= Endaday && x.Start >= Firstday).Count();
+}
+
+
+
+
+<div class="pageHeading">
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+            <div class="d-flex">
+                <div id="dayPart_div" class="mr-4 flex-3 sunSide"><img id="dayPart_img" src="~/Content/assets/img/sun.png" /></div>
+                <div>
+                    <div class="afternoon mt-2">
+                        <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
+                        @*<p>
+                            There are <span id="upcomming_lesson">@countLesson</span> upcoming Lessons this week.
+                        </p>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
+            <button type="button" class="btn btn-primary pull-right rounded rounded-lg createBtn coursesBtn" onclick="">
+                View All Lessons
+            </button>
+        </div>*@
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body p-4">
+
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive-lg" style="padding:20px;">
+                        <center>
+                            <button class="btn btn-primary" onclick="window.location.href ='/Inventory/Create'">Create Inventory</button>
+                        </center>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body p-4">
+
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive-lg" style="padding:20px;">
+                        <center>
+
+                            <center>
+
+
+                                <button class="btn btn-primary" onclick="window.location.href ='/Inventory/AddStockPurchase'">Add Stock</button>
+                            </center>
+
+                        </center>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body p-4">
+
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive-lg" style="padding:20px;">
+                        <center>
+                            <button class="btn btn-primary" onclick="window.location.href ='/Sales/Summary'">Product Order Summary</button>
+                        </center>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body p-4">
+
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive-lg" style="padding:20px;">
+
+                        <center>
+                            <button  onclick="window.location.href ='/Sales/SaleByQuantity'" class="btn btn-primary">Product Sale Summary</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    $(document).ready(function () {
+        localStorage.ElementToActiveAfterPageLoad = "BakeryAdminHome";
+
+    })
+
+
+</script>

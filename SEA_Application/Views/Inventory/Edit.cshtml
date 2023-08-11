@@ -9,6 +9,16 @@ else if (User.IsInRole("Receptionist"))
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("BakeryAdmin"))
+{
+
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("InventoryManager"))
+{
+    Layout = "~/Views/Shared/_InventoryManagerDashboardLayout.cshtml";
+}
 else
 {
     Layout = null;
@@ -22,132 +32,182 @@ else
         {
             @Html.AntiForgeryToken()
 
-            <div class="col-md-8">
+        <div class="col-md-8">
 
-                <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="Id" value="@Model.Id" />
 
-                <input type="hidden" name="Type" value="@Model.Type" />
+            <input type="hidden" name="Type" value="@Model.Type" />
 
-                <input type="hidden" name="CategoryIdHidden" id="CategoryIdHidden" value="@Model.CategoryId" />
+            <input type="hidden" name="CategoryIdHidden" id="CategoryIdHidden" value="@Model.CategoryId" />
+            <input type="hidden" name="CategoryHeadIdHidden" id="CategoryHeadIdHidden" value="@Model.CategoryHeadId" />
 
-                <div class="form-group">
-                    <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-12">
 
-                        <label class="control-label">Product No</label>
+                    <label class="control-label">Product No</label>
 
-                        <input readonly type="number" min="1" name="ItemNo" value="@Model.ItemNo" class="form-control" />
+                    <input readonly type="number" min="1" name="ItemNo" value="@Model.ItemNo" class="form-control" />
 
 
-                        @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
 
-                    </div>
                 </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
-
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
-                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Unit Name</label>
-
-                        @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Unit Sale Price </label>
+            </div>
 
 
-                        <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="@Model.UnitSalePrice" min="0" class="form-control" />
+            @*<div class="form-group">
+            <div class="col-md-12">
 
-                        @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { type = "number", min = "0", @class = "form-control" } })*@
+                <label class="control-label">Category Head</label>
 
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Select Category</label>
-
-                        <select class="form-control" id="CategoryId" name="CategoryId" required></select>
-
-
-                    </div>
-                </div>
-
-                @*<div class="form-group">
-                        <div class="col-md-12">
-                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
-
-                            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-
-                        </div>
-                    </div>*@
-
-
-                <div class="form-group">
-                    <div class="col-md-12">
-                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
-
-                        <textarea class="form-control" name="Description" id="Description" rows="5">@Model.Description</textarea>
-
-
-
-
-                    </div>
-                </div>
-
-
-                @*<div class="form-group">
-                        <div class="col-md-12">
-
-                            <label class="control-label">Unit Purchase Price </label>
-
-                            @Html.EditorFor(model => model.UnitPurchasePrice, new { htmlAttributes = new { type="number", min="0",@class = "form-control", @required = true } })
-
-                        </div>
-                    </div>*@
-
-
-
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Quantity on Hand </label>
-
-                        @Html.EditorFor(model => model.QuantityOnHand, new { htmlAttributes = new { @readonly = "readonly", type = "number", min = "0", @class = "form-control", @required = true } })
-
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <div class=" col-md-12">
-                        <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
-
-                        <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                            <i class="material-icons mr-2">cached</i>  Cancel
-                        </button>
-                    </div>
-                </div>
-
+                <select class="form-control" id="CategoryHeadId" name="CategoryHeadId" required></select>
 
 
             </div>
+        </div>*@
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            @*<div class="form-group">
+            <div class="col-md-12">
+
+                <label class="control-label">Unit Name</label>
+
+                @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label"> Select Unit</label>
+
+                    <input type="hidden" name="UnitNameHidden" id="UnitNameHidden" value="@Model.UnitName" />
+
+                    <select class="form-control" id="UnitName" name="UnitName">
+
+                        <option value="">Select One</option>
+                        <option value="Gram">Gram</option>
+                        <option value="PerPiece">Per Piece</option>
+                        <option value="Liter">Liter</option>
+                    </select>
+
+                    <br />
+
+                    <span style="color:red;">@ViewBag.Error</span>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Unit Sale Price </label>
+
+
+                    <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="@Model.UnitSalePrice" min="0" class="form-control" />
+
+                    @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { type = "number", min = "0", @class = "form-control" } })*@
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Select Category</label>
+
+                    <select class="form-control" id="CategoryId" name="CategoryId" required></select>
+
+
+                </div>
+            </div>
+
+            @*<div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Average Cost</label>
+
+                    @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { @value = "0", type = "number", min = "0", @class = "form-control", @required = true } })*@
+
+
+                    <input readonly type="number" id="" name="" value="@Model.AverageCost" min="0" class="form-control" required />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+
+                    <textarea class="form-control" name="Description" id="Description" rows="5">@Model.Description</textarea>
+
+
+
+
+                </div>
+            </div>
+
+
+            @*<div class="form-group">
+            <div class="col-md-12">
+
+                <label class="control-label">Unit Purchase Price </label>
+
+                @Html.EditorFor(model => model.UnitPurchasePrice, new { htmlAttributes = new { type="number", min="0",@class = "form-control", @required = true } })
+
+            </div>
+        </div>*@
+
+
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Quantity on Hand </label>
+
+                    @Html.EditorFor(model => model.QuantityOnHand, new { htmlAttributes = new { @readonly = "readonly", type = "number", min = "0", @class = "form-control", @required = true } })
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class=" col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
+
+                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                        <i class="material-icons mr-2">cached</i>  Cancel
+                    </button>
+                </div>
+            </div>
+
+
+
+        </div>
 
         }
     </div>
@@ -159,7 +219,12 @@ else
 
         $("#PageHeader").html("Edit Product");
 
+        var UnitNameHidden = $("#UnitNameHidden").val();
+        $("#UnitName").val(UnitNameHidden);
+
+
         var CategoryId = $("#CategoryIdHidden").val();
+        //var CategoryHeadIdHidden = $("#CategoryHeadIdHidden").val();
 
 
         $.ajax({
@@ -195,6 +260,40 @@ else
                 }
             }
         });//end of ajax
+
+
+        //$.ajax({
+        //    type: "POST",
+        //    cache: false,
+        //    url: "/Inventory/GetInventoryCategoryHeadList",
+        //    processData: false,
+        //    contentType: false,
+        //    success: function (data) {
+        //        var sch = JSON.parse(data);
+        //        console.log(sch);
+        //        var $el = $("#CategoryHeadId");
+        //        $el.empty();
+        //        if (sch.length > 0) {
+        //            $el.append($("<option></option>")
+        //                .attr("value", "").text('Select Category Head'));
+
+
+        //            for (i = 0; i < sch.length; i++) {
+
+        //                $el.append($("<option></option>")
+        //                    .attr("value", sch[i].Id).text(sch[i].Name));
+
+
+
+        //            }
+        //            $('#CategoryHeadId option[value="' + CategoryHeadIdHidden + '"]').prop('selected', true);
+        //        }
+        //        else {
+        //            $el.append($("<option></option>")
+        //                .attr("value", '').text('Select'));
+        //        }
+        //    }
+        //});//end of ajax
 
 
     })

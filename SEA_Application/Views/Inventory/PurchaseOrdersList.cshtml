@@ -8,6 +8,16 @@ else if (User.IsInRole("Receptionist"))
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("BakeryAdmin"))
+{
+
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("InventoryManager"))
+{
+    Layout = "~/Views/Shared/_InventoryManagerDashboardLayout.cshtml";
+}
 else
 {
     Layout = null;
@@ -103,12 +113,12 @@ else
                     }
                 },
 
-                {
-                    text: '<span class="datatableButtonsEdit"> Return Order</span>',
-                    action: function (e, dt, button, config) {
-                        window.location.href = "/Inventory/ReturnPurchasedOrder";
-                    }
-                },
+                //{
+                //    text: '<span class="datatableButtonsEdit"> Return Order</span>',
+                //    action: function (e, dt, button, config) {
+                //        window.location.href = "/Inventory/ReturnPurchasedOrder";
+                //    }
+                //},
 
                 {
                     text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Summary</span>',

@@ -10,6 +10,16 @@ else if (User.IsInRole("Receptionist"))
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("BakeryAdmin"))
+{
+
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("InventoryManager"))
+{
+    Layout = "~/Views/Shared/_InventoryManagerDashboardLayout.cshtml";
+}
 else
 {
     Layout = null;
@@ -23,125 +33,182 @@ else
         {
             @Html.AntiForgeryToken()
 
-            <div class="col-md-8">
+        <div class="col-md-8">
 
-                <input type="hidden" id="InventoryType" name="InventoryType" value="@ViewBag.InventoryType" />
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Product No</label>
-
-                        @*@Html.EditorFor(model => model.ProductNo, new { htmlAttributes = new { @class = "form-control", @required = true } })*@
+            <input type="hidden" id="InventoryType" name="InventoryType" value="@ViewBag.InventoryType" />
 
 
-                        <input type="number" min="1" name="ItemNo" value="@ViewBag.ItemNo" class="form-control" />
 
-                        @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
 
-                    </div>
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Product No</label>
+
+                    <input type="number" min="1" name="ItemNo" value="@ViewBag.ItemNo" class="form-control" />
+
+                    @Html.ValidationMessageFor(model => model.ItemNo, "", new { @class = "text-danger" })
+
                 </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
-
-                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
-                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Unit Name</label>
-
-                        @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
-
-                    </div>
-                </div>
+            </div>
 
 
-                <div class="form-group">
-                    <div class="col-md-12">
+            @*<div class="form-group">
+            <div class="col-md-12">
 
-                        <label class="control-label">Unit Sale Price </label>
+                <label class="control-label">Category Head</label>
 
-                        @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { @value = "0", type = "number", min = "0", @class = "form-control", @required = true } })*@
-
-
-                        <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="0" min="0" class="form-control" />
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Select Category</label>
-
-                        <select class="form-control" id="CategoryId" name="CategoryId" required></select>
-
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-12">
-                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
-
-                        <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
-
-
-                    </div>
-                </div>
-
-
-                <div class="form-group" style="display:none">
-                    <div class="col-md-12">
-
-                        <label class="control-label"> Select Type</label>
-
-
-                        <select readonly class="form-control" id="Type" name="Type">
-
-                            <option value="">Select One</option>
-                            <option value="RawProduct">Raw Product</option>
-                            <option value="ExternalProduct">External Product </option>
-                            <option value="ProductProduction">Product Production</option>
-                        </select>
-
-                        <br />
-
-                        <span style="color:red;">@ViewBag.Error</span>
-
-                    </div>
-                </div>
-
-                @*<input type="hidden" name="UnitSalePrice" value="0" />*@
-                <input type="hidden" name="UnitPurchasePrice" value="0" />
-                <input type="hidden" name="QuantityOnHand" value="0" />
-
-
-
-
-                <div class="form-group">
-                    <div class=" col-md-12">
-                        <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
-
-                        <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                            <i class="material-icons mr-2">cached</i>  Cancel
-                        </button>
-                    </div>
-                </div>
-
-
-
+                <select class="form-control" id="CategoryHeadId" name="CategoryHeadId" required></select>
 
 
             </div>
+        </div>*@
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+
+            @*<div class="form-group">
+            <div class="col-md-12">
+
+                <label class="control-label">Unit Name</label>
+
+                @Html.EditorFor(model => model.UnitName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UnitName, "", new { @class = "text-danger" })
+
+            </div>
+        </div>*@
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label"> Select Unit</label>
+
+
+                    <select class="form-control" id="UnitName" name="UnitName">
+
+                        <option value="">Select One</option>
+                        <option value="Gram">Gram</option>
+                        <option value="PerPiece">Per Piece</option>
+                        <option value="Liter">Liter</option>
+                    </select>
+
+                    <br />
+
+                    <span style="color:red;">@ViewBag.Error</span>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Unit Sale Price </label>
+
+                    @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { @value = "0", type = "number", min = "0", @class = "form-control", @required = true } })*@
+
+
+                    <input type="number" id="UnitSalePrice" name="UnitSalePrice" value="0" min="0" class="form-control" />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Select Category</label>
+
+                    <select class="form-control" id="CategoryId" name="CategoryId" required></select>
+
+
+                </div>
+            </div>
+
+            <!--<div class="form-group">
+        <div class="col-md-12">
+
+            <label class="control-label">Opening Stock</label>-->
+            @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { @value = "0", type = "number", min = "0", @class = "form-control", @required = true } })*@
+
+
+            <!--<input type="number" id="StartingBalance" name="StartingBalance" value="0" min="0" class="form-control" required />
+
+        </div>
+    </div>-->
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+
+                    <label class="control-label">Average Cost</label>
+
+                    @*@Html.EditorFor(model => model.UnitSalePrice, new { htmlAttributes = new { @value = "0", type = "number", min = "0", @class = "form-control", @required = true } })*@
+
+
+                    <input readonly type="number" id="" name="" value="0" min="0" class="form-control" required />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label " })
+
+                    <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
+
+
+                </div>
+            </div>
+
+
+            <div class="form-group" style="display:none">
+                <div class="col-md-12">
+
+                    <label class="control-label"> Select Type</label>
+
+
+                    <select readonly class="form-control" id="Type" name="Type">
+
+                        <option value="">Select One</option>
+                        <option value="RawProduct">Raw Product</option>
+                        <option value="ExternalProduct">External Product </option>
+                        <option value="ProductProduction">Product Production</option>
+                    </select>
+
+                    <br />
+
+                    <span style="color:red;">@ViewBag.Error</span>
+
+                </div>
+            </div>
+
+            @*<input type="hidden" name="UnitSalePrice" value="0" />*@
+            <input type="hidden" name="UnitPurchasePrice" value="0" />
+            <input type="hidden" name="QuantityOnHand" value="0" />
+
+
+
+
+            <div class="form-group">
+                <div class=" col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary rounded rounded-lg" />
+
+                    <button type="button" id="cancel" onclick="redirect()" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                        <i class="material-icons mr-2">cached</i>  Cancel
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
 
 
         }
@@ -179,6 +246,39 @@ else
                 if (sch.length > 0) {
                     $el.append($("<option></option>")
                         .attr("value", "").text('Select Category'));
+
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Inventory/GetInventoryCategoryHeadList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#CategoryHeadId");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Category Head'));
 
 
                     for (i = 0; i < sch.length; i++) {

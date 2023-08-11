@@ -9,6 +9,12 @@ else if (User.IsInRole("Cashier"))
     Layout = "~/Views/Shared/_CashierDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("BakeryAdmin"))
+{
+
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+
+}
 
 <style>
 

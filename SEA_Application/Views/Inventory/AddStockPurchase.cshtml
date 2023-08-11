@@ -8,6 +8,16 @@ else if (User.IsInRole("Receptionist"))
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("BakeryAdmin"))
+{
+
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("InventoryManager"))
+{
+    Layout = "~/Views/Shared/_InventoryManagerDashboardLayout.cshtml";
+}
 else
 {
     Layout = null;
@@ -86,8 +96,11 @@ else
                             <tr>
                                 <td> <label class="control-label">Select Item</label></td>
                                 <td> <label class="control-label"> Vendor </label> </td>
+                                <td> <label class="control-label"> Stock Quantity </label> </td>
                                 @*<td> <label class="control-label">Purchase Unit Price </label> </td>*@
                                 <td> <label class="control-label"> Quantity </label> </td>
+                                <td> <label class="control-label"> Unit Price </label> </td>
+                                <td> <label class="control-label"> Total </label> </td>
                                 @*<td> <label class="control-label"> Total </label> </td>*@
                                 <td> <label class="control-label"> Action</label></td>
                             </tr>
@@ -109,23 +122,30 @@ else
 
                                 </td>
 
-                                @*<td style="width:15%">
-
-                                        <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" />
-
-                                    </td>*@
 
 
-                                <td style="width:15%">
+                                <td style="width:10%">
+
+                                    <input class="form-control InventoryAvailableQuantity" id="AvailableQuantity0" value="0" readonly min="0" type="number" name="AvailableQuantity0" />
+
+                                </td>
+
+
+                                <td style="width:10%">
 
                                     <input class="form-control InventoryQuantity" id="StockQuantity0" value="1" min="0" type="number" name="StockQuantity0" />
 
                                 </td>
+                                <td style="width:15%">
 
-                                @*<td style="width:15%">
+                                    <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice0" value="0" min="0" type="number" name="PurchaseUnitPrice0" />
+
+                                </td>
+
+                                <td style="width:15%">
 
                                         <input readonly class="form-control InventoryTotal" id="Total0" value="0" min="0" type="number" name="Total0" />
-                                    </td>*@
+                                    </td>
 
                                 <td style="width:15%">
 
@@ -191,7 +211,7 @@ else
     arr[0] = 0;
     var HeadName = "";
     var ExpenseList = "";
-
+    var AllInventoryList = [];
     var RawAndExternalProductsList = "";
     var AllSuppliersList = "";
 
@@ -234,10 +254,10 @@ else
                     RawAndExternalProductsList = RawAndExternalProductsList + "<option value=''>Select Product</option>";
 
                     for (i = 0; i < sch.length; i++) {
+                        AllInventoryList.push({ InventoryId: sch[i].Id, QuantityOnHand: sch[i].QuantityOnHand })
 
                         $el.append($("<option></option>")
                             .attr("value", sch[i].Id).text(sch[i].Name));
-
 
                         RawAndExternalProductsList = RawAndExternalProductsList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
 
@@ -285,30 +305,71 @@ else
         });//end of ajax
 
 
+    //InventoryQuantity
 
+        $("#StockTable").on('keyup mouseup', ".InventoryQuantity", function () {
 
-        //$("#StockTable").on('keyup mouseup', ".InventoryUnitPrice", function () {
+            var Id = $(this).attr('id');
 
-        //    var Id = $(this).attr('id');
+            let str = Id;
+            const myArr = str.split("Quantity");
+            console.log(myArr[1]);
+               Total(myArr[1]);
 
-        //    let str = Id;
-        //    const myArr = str.split("Price");
+        })
 
-        //    Total(myArr[1]);
+        $("#StockTable").on('keyup mouseup', ".InventoryUnitPrice", function () {
 
-        //})
+            var Id = $(this).attr('id');
+
+            let str = Id;
+            const myArr = str.split("Price");
+            console.log(myArr[1]);
+             Total(myArr[1]);
+
+        })
 
 
         $("#StockTable").on('change', ".InventoryDropDown", function () {
 
+            debugger
+
+               
+            var value = $(this).val();
 
             var Id = $(this).attr('id');
 
             let str = Id;
             const myArr = str.split("Stocks");
 
+            if (value != "") {
 
-            $("#StockQuantity" + myArr[1]).val(1);
+
+              
+
+                $("#StockQuantity" + myArr[1]).val(1);
+
+                AllInventoryList.forEach(function (item) {
+                    if (value == item.InventoryId) {
+
+                        $("#AvailableQuantity" + myArr[1]).val(item.QuantityOnHand);
+                    }
+                });
+
+
+            } else {
+                $("#StockQuantity" + myArr[1]).val(1);
+                $("#AvailableQuantity" + myArr[1]).val(0);
+                $("#PurchaseUnitPrice" + myArr[1]).val(0);
+
+                $("#Total" + myArr[1]).val(0);
+
+              //  $(this).val(0);
+            }
+          
+
+
+           // $("#AvailableQuantity" + myArr[1]).val(1);
 
 
         })
@@ -327,7 +388,7 @@ else
                 var NewStocksList =
                 {
                     InventoryId: '',
-                    // UnitPrice: '',
+                     UnitPrice: '',
                     Quantity: '',
                     SupplierId: '',
 
@@ -379,17 +440,19 @@ else
                     var InventorStocks = "InventoryStocks" + arr[i];
                     InventorStocks = document.getElementById(InventorStocks).value;
 
-                    //var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
-                    //PurchaseUnitPrice = document.getElementById(PurchaseUnitPrice).value;
+                    var PurchaseUnitPrice = "PurchaseUnitPrice" + arr[i];
+                    PurchaseUnitPrice = document.getElementById(PurchaseUnitPrice).value;
 
                     var Quantity = "StockQuantity" + arr[i];
                     Quantity = document.getElementById(Quantity).value;
+
+                   
 
                     var VendorId = "Supplier" + arr[i];
                     VendorId = document.getElementById(VendorId).value;
 
                     obj['InventoryId'] = InventorStocks;
-                    // obj['UnitPrice'] = PurchaseUnitPrice;
+                    obj['UnitPrice'] = PurchaseUnitPrice;
                     obj['Quantity'] = Quantity;
                     obj['VendorId'] = VendorId;
 
@@ -445,7 +508,7 @@ else
 
     function RawStock() {
 
-        $("#TableBody").append('<tr id="TableRow' + count + '"><td style="width:20%"> <select style ="width:250px;" class="form-control drop InventoryDropDown" id="InventoryStocks' + count + '" name="InventoryStocks' + count + '" required>' + RawAndExternalProductsList + '</select></td><td style="width:20%"><select style="width:250px;" class="form-control drop" id="Supplier' + count + '" name="Supplier' + count + '" required>' + AllSuppliersList + '</select>  </td> <td style="width:15%"> <input class="form-control InventoryQuantity" id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" /> </td> <td style="width:15%"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
+        $("#TableBody").append('<tr id="TableRow' + count + '"><td style="width:20%"> <select style ="width:250px;" class="form-control drop InventoryDropDown" id="InventoryStocks' + count + '" name="InventoryStocks' + count + '" required>' + RawAndExternalProductsList + '</select></td><td style="width:20%"><select style="width:250px;" class="form-control drop" id="Supplier' + count + '" name="Supplier' + count + '" required>' + AllSuppliersList + '</select>  </td>  <td style="width:10%"><input class="form-control InventoryAvailableQuantity" id="AvailableQuantity' + count + '" value="0" readonly min="0" type="number" name="AvailableQuantity' + count + '" />   </td> <td style="width:15%"> <input class="form-control InventoryQuantity" id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" /> </td>  <td style="width:15%"> <input class="form-control InventoryUnitPrice" id="PurchaseUnitPrice' + count + '" value="0" min="0" type="number" name="PurchaseUnitPrice' + count + '" /> </td>  <td style="width:15%"><input readonly class="form-control InventoryTotal" id="Total' + count + '" value="0" min="0" type="number" name="Total' + count + '" /></td><td style="width:15%"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
         $(".drop").select2();
         row[count] = count;
 
@@ -455,6 +518,20 @@ else
 
         count = count + 1;
 
+    }
+    function Total(index) {
+
+        var Quantity = $("#StockQuantity" + index).val();
+        var UnitPrice = $("#PurchaseUnitPrice" + index).val();
+
+        if (Quantity == "") {
+            Quantity = 0;
+        }
+        if (UnitPrice == "") {
+            UnitPrice = 0;
+        }
+        var Total = Quantity * UnitPrice;
+        $("#Total" + index).val(Total);
     }
 
     function Remove(e) {

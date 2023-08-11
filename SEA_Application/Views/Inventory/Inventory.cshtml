@@ -10,6 +10,16 @@ else if (User.IsInRole("Receptionist"))
     Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
 
 }
+else if (User.IsInRole("BakeryAdmin"))
+{
+
+    Layout = "~/Views/Shared/_BakeryAdminDashboardLayout.cshtml";
+
+}
+else if (User.IsInRole("InventoryManager"))
+{
+    Layout = "~/Views/Shared/_InventoryManagerDashboardLayout.cshtml";
+}
 else
 {
     Layout = null;
@@ -55,31 +65,39 @@ else
                             <th>
                                 Name
                             </th>
+
+                            @*<th>
+                                Category Head
+                            </th>*@
                             <th>
                                 Unit Name
                             </th>
+
                             <th>
                                 Category
                             </th>
-                            <th>
-                                Description
-                            </th>
-                            <th>
-                                Unit Sale Price
-                            </th>
                             @*<th>
-                                    Unit Purchase Price
-                                </th>*@
+                                Category Head
+                            </th>*@
+                            @*<th>
+                                Description
+                            </th>*@
+                            @*<th>
+                                Unit Sale Price
+                            </th>*@
+                            @*<th>
+            Unit Purchase Price
+        </th>*@
                             <th>
                                 Quantity On Hand
                             </th>
 
                             @*<th>
-                                    Average Cost
-                                </th>
-                                <th>
-                                    Total Cost
-                                </th>*@
+            Average Cost
+        </th>
+        <th>
+            Total Cost
+        </th>*@
 
                             <th style="width:50px !important;">
                                 Actions
@@ -188,19 +206,20 @@ else
                 table1.fnClearTable();
                 $.each(data, function (index) {
 
-                    table1.fnAddData([data[index].ItemNo + "<input  type=hidden value=" + data[index].Id + ">", data[index].Name, data[index].UnitName, data[index].Category, data[index].Description, data[index].UnitSalePrice, data[index].QuantityOnHand, "<input onclick='ViewInventoryItemDetails(" + data[index].Id + ")' style='color:white !important'  class='btn btn-sm btn-primary' type ='button'  value ='View Details' />"]);
+                   // table1.fnAddData([data[index].ItemNo + "<input  type=hidden value=" + data[index].Id + ">", data[index].Name, data[index].UnitName, data[index].Category, data[index].CategoryHead, data[index].Description, data[index].UnitSalePrice, data[index].QuantityOnHand, "<input onclick='ViewInventoryItemDetails(" + data[index].Id + ")' style='color:white !important'  class='btn btn-sm btn-primary' type ='button'  value ='View Details' />"]);
+                    table1.fnAddData([data[index].ItemNo + "<input  type=hidden value=" + data[index].Id + ">", data[index].Name, data[index].UnitName, data[index].Category, data[index].QuantityOnHand, "<input onclick='ViewInventoryItemDetails(" + data[index].Id + ")' style='color:white !important'  class='btn btn-sm btn-primary' type ='button'  value ='View Details' />"]);
 
                 });
                 table1.fnDraw();
 
                 var AllTds = $("td:nth-child(6),td:nth-child(7)");
 
-                for (var i = 0; i < AllTds.length; i++) {
+                //for (var i = 0; i < AllTds.length; i++) {
 
-                    var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
+                //    var CommaSeparatedValue = numberWithCommas(AllTds[i].innerHTML);
 
-                    AllTds[i].innerHTML = CommaSeparatedValue;
-                }
+                //    AllTds[i].innerHTML = CommaSeparatedValue;
+                //}
 
 
             }
@@ -210,7 +229,7 @@ else
         $("tr td:nth-child(7)").css('width', '200px');
 
 
-        $('#datatable1').on('click', 'tbody tr td:nth-child(1),td:nth-child(2),td:nth-child(3),td:nth-child(4),td:nth-child(5),td:nth-child(6),td:nth-child(7)', function () {
+        $('#datatable1').on('click', 'tbody tr td:nth-child(1),td:nth-child(2),td:nth-child(3),td:nth-child(4),td:nth-child(5)', function () {
             var td = $(this).parent().children("td");
             var InventoryID = $(td[0]).children("input").val();
 

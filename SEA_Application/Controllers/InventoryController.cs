@@ -38,7 +38,7 @@ namespace SEA_Application.Controllers
         public ActionResult GetExternalProducts()
         {
 
-            var AllExternalProducts = db.Inventories.Where(x => x.Type == "ExternalProduct").Select(x => new { x.Id, x.Name, Category = x.InventoryCategory.Name, x.QuantityOnHand, x.UnitName, x.ItemNo, x.UnitPurchasePrice, x.UnitSalePrice, x.Type, x.Description, x.AverageCost, x.TotalCost }).ToList();
+            var AllExternalProducts = db.Inventories.Where(x => x.Type == "ExternalProduct").Select(x => new { x.Id, x.Name, Category = x.InventoryCategory.Name, x.QuantityOnHand, x.UnitName, x.ItemNo, x.UnitPurchasePrice, x.UnitSalePrice, x.Type, x.Description, x.AverageCost, x.TotalCost, CategoryHead =  x.InventoryCategoryHead.Name }).ToList();
 
             return Json(AllExternalProducts, JsonRequestBehavior.AllowGet);
 
@@ -229,7 +229,7 @@ namespace SEA_Application.Controllers
 
 
                     stockPurchase.InventoryId = item.InventoryId;
-                    stockPurchase.PurchasePrice = 0;
+                    stockPurchase.PurchasePrice = item.UnitPrice;
                     stockPurchase.VendorId = item.VendorId;
                     stockPurchase.Quantity = item.Quantity;
                     stockPurchase.StockOrderId = stockOrder.Id;
@@ -977,11 +977,15 @@ namespace SEA_Application.Controllers
         {
             var ItemNoExist = db.Inventories.Where(x => x.ItemNo == Inventory.ItemNo).FirstOrDefault();
 
+            
+
             if (ItemNoExist == null)
             {
                 Inventory.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
                 Inventory.AverageCost = 0;
                 Inventory.TotalCost = 0;
+
+                Inventory.QuantityOnHand = Inventory.QuantityOnHand; //+ Inventory.StartingBalance;
 
                 db.Inventories.Add(Inventory);
                 db.SaveChanges();
@@ -1016,11 +1020,22 @@ namespace SEA_Application.Controllers
                 db.Entry(Inventory).Property(x => x.UnitPurchasePrice).IsModified = false;
                 db.SaveChanges();
 
-            }
+               }
 
             return RedirectToAction("Inventory", "Inventory");
             //return RedirectToAction("Inventory", new{controller= "Inventory", area=string.Empty});
-        }
+        } //end of Edit
+
+        public ActionResult GetInventoryCategoryHeadList()
+        {
+            var InventoryCategoryList = db.InventoryCategoryHeads.Select(x => new { x.Id, x.Name }).ToList();
+
+            string status = Newtonsoft.Json.JsonConvert.SerializeObject(InventoryCategoryList);
+
+            return Content(status);
+
+        } //end of inventory category list 
+
 
     }
 }

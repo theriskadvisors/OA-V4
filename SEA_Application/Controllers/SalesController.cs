@@ -502,6 +502,7 @@ namespace SEA_Application.Controllers
 
         }
 
+
         public ActionResult ViewSaleOrderDetails(int id)
         {
             ViewBag.SaleOrderID = id;

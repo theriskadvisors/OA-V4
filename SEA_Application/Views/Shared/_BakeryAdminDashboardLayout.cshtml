@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+    //  ViewBag.Title = "View";
+    //  Layout = "~/Views/Shared/_ReceptionistDashboardLayout.cshtml";
+}
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,15 +15,15 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        OA | Best Academy for CSS
+        OA | Best Acadmey for CSS
     </title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/Content/assets/css/vendors.bundle.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- CSS Files -->
     <link href="~/Content/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
@@ -58,6 +66,12 @@
             border: 2px solid #00b8ec;
             border-radius: 0.3rem;
         }
+
+        #Notification_Dropdown_Area {
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+        }
     </style>
 
 </head>
@@ -73,397 +87,99 @@
 
     <div class="wrapper ">
         <!--SIDEBAR-->
-        <div class="sidebar" data-color="azure" data-background-color="azure">
+        <div class="sidebar sidebarCollapsed" data-color="azure" data-background-color="azure">
             <!--
                 Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
                 Tip 2: you can also add an image using data-image tag
             -->
-            <div class="logo d-flex" style="background-color:white !important;">
-                <a class="simple-text logo-normal" href="#" style="flex: 3;">
-                    <img class="transparent" alt="" src="~/Content/assets/assets/img/orignal.png" height="143" width="143">
+            <div class="logo d-flex" style="background:white !important" >
+                <a class="simple-text logo-normal" href="#" style="flex: 3;"  >
+
+                    <center>
+                            
+                        <img class="transparent" alt="" src="/Content/assets/assets/img/Bis.jpg" height="143" width="143">
+                    </center>
+
                 </a>
-                <a class="simple-text collapseSide hidden" onclick="collapseSide(this);" href="#" style="flex: 1;">
-                    <img class="transparent" alt="" src="~/Content/assets/img/sidebar.png">
+                <a class="simple-text collapseSide" onclick="collapseSide(this);" href="#" style="flex: 1;">
+                    <img class="transparent" alt="" src="~/Content/assets/img/sidebar1.png">
                 </a>
             </div>
+
             <div class="sidebar-wrapper">
                 <ul id="layout_navbar_toogle" class="nav">
-
-                    <li id="AdminHome" class="nav-item">
-                        <a href="@Url.Action("Dashboard", "Admin_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="fal fa-home-alt"></i>
+                    <li id="BakeryAdminHome" class="nav-item">
+                        <a href="@Url.Action("Dashboard", "BakeryAdmin_Dashboard" )" class="nav-link nav-toggle">
+                            <i class="sea-dash">
+                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-home.png" alt="">
+                            </i>
                             <p id="">Home </p>
                         </a>
                     </li>
 
-                    <li id="Students" class="nav-item">
-                        <a href="@Url.Action("StudentsIndex", "AspNetUser")" class="nav-link nav-toggle">
-                            <i class="fal fa-users-class"></i>
-                            <p id="">Students </p>
-                        </a>
-                    </li>
-
-                    <li id="InactiveStudents" class="nav-item">
-                        <a href="@Url.Action("DisableStudentIndex", "AspNetUser")" class="nav-link nav-toggle">
-                            <i class="fal fa-ban"></i>
-                            <p id="">Inactive Students </p>
-                        </a>
-                    </li>
-
-                    <li id="Teachers" class="nav-item hidden">
-                        <a href="@Url.Action("TeachersIndex", "AspNetUser")" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Teacher</p>
-                        </a>
-                    </li>
-
-                    <li id="Accountant" class="nav-item hidden">
-                        <a href="@Url.Action("AccountantIndex", "AspNetUser")" class="nav-link nav-toggle">
-
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Accountant</p>
-                        </a>
-                    </li>
-                    <li id="Employees" class="nav-item hidden">
-                        <a href="@Url.Action("Index", "AspNetEmployees" )" class="nav-link nav-toggle">
-
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Employees</p>
-                        </a>
-                    </li>
-                    <li id="CashSummary" class="nav-item">
-                        <a href="@Url.Action("AdminsCashSummary", "FinanceSummary")" class="nav-link nav-toggle">
-                            <i class="fa fa-money"></i>
-                            <p id="">Cash Summary </p>
-                        </a>
-                    </li>
-                    <li id="Receipts" class="nav-item">
-                        <a href="@Url.Action("Index", "Receipts")" class="nav-link nav-toggle">
-                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                            <p id="">Cash Receipts</p>
-                        </a>
-                    </li>
-                    <li id="FeeHistory" class="nav-item">
-                        <a href="@Url.Action("FeeSummary", "Receipts")" class="nav-link nav-toggle">
-                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                            <p id="">Fee Details</p>
-                        </a>
-                    </li>
-                    <li id="StudentFee" class="nav-item">
-                        <a href="@Url.Action("StudentFee", "GrandTotal" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-teacher.png" alt="">
-                            </i>
-                            <p>Student Fee</p>
-                        </a>
-                    </li>
-
-                    <li id="FeeTransactions" class="nav-item">
-                        <a href="@Url.Action("FeeTransactions", "GrandTotal" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-teacher.png" alt="">
-                            </i>
-                            <p>Fee Transactions</p>
-                        </a>
-                    </li>
 
 
-                    <li id="ChartsOfAccounts" class="nav-item">
-
-                        <a href="@Url.Action("ChartsOf_Accounts", "ChartOfAccounts")" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Chart of Accounts</p>
-                        </a>
-                    </li>
-
-                    <li id="FeeStatus" class="nav-item">
-                        <a href="@Url.Action("MonthlyFeeStudent", "Admin_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Vouchers.png" alt="">
-                            </i>
-                            <p>Fee Status</p>
-                        </a>
-                    </li>
-                    @*
-        <li class="nav-item">
-            <a href="@(Url.Action("MonthlyFeeStudent", "Admin_Dashboard" ))">
-
-                <i class="sea-dash">
-                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                </i>
-                <p>Fee Status</p>
-            </a>
-        </li>*@
-
-                    <li id="Expenses" class="nav-item">
-                        <a href="@Url.Action("ExpenseList", "Expense" )" class="nav-link nav-toggle">
-
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-student-assignments.png" alt="">
-                            </i>
-                            <p>Expense</p>
-                        </a>
-                    </li>
-                    <li id="DailyAccountSheet" class="nav-item">
-                        <a href="@Url.Action("Report", "Expense" )" class="nav-link nav-toggle">
-
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Daily Account Sheet</p>
-                        </a>
-                    </li>
-
-
-                    <li id="Subjects" class="nav-item">
-
-                        <a href="@Url.Action("ClassIndex", "AspNetSubject" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-subjects.png" alt="">
-                            </i>
-                            <p>Subject</p>
-                        </a>
-                    </li>
-
-                    <li id="TopicsAndLessons" class="nav-item">
-                        <a href="@Url.Action("ViewTopicsAndLessons", "AspnetSubjectTopics" )" class="nav-link nav-toggle">
-
-                            <i class="fal fa-chalkboard-teacher"></i>
-                            <p>Topics & Lessons</p>
-                        </a>
-                    </li>
-                    <li id="QuestionsAndQuizs" class="nav-item">
-                        <a href="@Url.Action("ViewQuestionAndQuiz", "AspnetQuestions" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
-                            </i>
-                            <p>Questions & Quizs</p>
-                        </a>
-                    </li>
-
-                    <li id="ScheduleByLesson" class="nav-item">
-                        <a href="@Url.Action("LessonSessionView", "AspnetLessons" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
-                            </i>
-                            <p>Schedule By Lesson</p>
-                        </a>
-                    </li>
-
-                    <li id="ScheduleByTopic" class="nav-item">
-                        <a href="@Url.Action("ScheduleTopic", "AspnetLessons" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
-                            </i>
-                            <p>Schedule By Topic </p>
-                        </a>
-                    </li>
-
-
-                    <li id="SessionPrePlan" class="nav-item">
-                        <a href="@Url.Action("SessionPrePlan", "AspnetLessons" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-questions.png" alt="">
-                            </i>
-                            <p>Session Pre-Plan </p>
-                        </a>
-                    </li>
-
-
-                    <li id="NotesStock" class="nav-item">
-
-                        <a href="@Url.Action("NotesStockIndex", "AspNetNotes" )" class="nav-link nav-toggle">
-                            <i class="fal fa-box"></i>
-                            <p>Notes Stock</p>
-                        </a>
-                    </li>
-
-
-                    <li id="Notes" class="nav-item">
-
-                        <a href="@Url.Action("Index", "AspNetNotes" )" class="nav-link nav-toggle">
-                            <i class="fal fa-books"></i>
-                            <p>Notes</p>
-                        </a>
-                    </li>
-
-                    <li id="PhotoCopierSummary" class="nav-item">
-
-                        <a href="@Url.Action("Dashboard", "PhotoCopier_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="fal fa-books"></i>
-                            <p>PhotoCopier Summary</p>
-                        </a>
-                    </li>
-
-
-                    <li id="DiscussionReport" class="nav-item">
-
-                        <a href="@Url.Action("DiscussionReport", "AspNetNotification" )" class="nav-link nav-toggle">
-                            <i class="fa fa-comments"></i>
-                            <p>Discussion Report</p>
-                        </a>
-                    </li>
-
-                    <li id="TimeTable" class="nav-item hidden">
-                        <a href="@Url.Action("Index", "AspNetTimeTable" )" class="nav-link nav-toggle">
-                            <i class="fal fa-calendar-alt"></i>
-                            <p>Time Table</p>
-                        </a>
-                    </li>
-
-                    <li id="Session" class="nav-item">
-                        <a href="@Url.Action("Index", "AspNetSession" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Session</p>
-                        </a>
-                    </li>
-
-                    @*<li id="Suppliers" class="nav-item">
+                    <li id="Suppliers" class="nav-item">
                         <a href="@Url.Action("Index", "Suppliers" )" class="nav-link nav-toggle">
                             <i class="fal fa-users">
 
                             </i>
                             <p>Suppliers</p>
                         </a>
-                    </li>*@
-                    @*<li id="RawStock" class="nav-item">
-            <a href="@Url.Action("Index", "RawStocks" )" class="nav-link nav-toggle">
-                <i class="sea-dash">
-                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                </i>
-                <p>Raw Stock</p>
-            </a>
-        </li>*@
-
-                    @*<li id="Products" class="nav-item">
-            <a href="@Url.Action("Create", "Products" )" class="nav-link nav-toggle">
-                <i class="sea-dash">
-                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                </i>
-                <p>Products</p>
-            </a>
-        </li>*@
-                    @*<li id="InventoryCategory" class="nav-item">
+                    </li>
+                    <li id="InventoryCategory" class="nav-item">
                         <a href="@Url.Action("Index", "InventoryCategories" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
+                            <i class="fal fa-solid fa-list">
+                                @*<img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">*@
                             </i>
                             <p>Inventory Category</p>
                         </a>
-                    </li>*@
+                    </li>
 
 
-                    <!--<li id="Inventory" class="nav-item">
+                    <li id="Inventory" class="nav-item">
                         <a href="@Url.Action("Inventory", "Inventory" )" class="nav-link nav-toggle">
-                            <i class=" fal  fas fa-inventory">-->
+                            <i class=" fal  fas fa-inventory">
                                 @*<img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">*@
 
-                            <!--</i>
+                            </i>
                             <p>Inventory</p>
                         </a>
-                    </li>-->
+                    </li>
 
-
-                    <!--<li id="PurchaseOrders" class="nav-item">
+                    <li id="PurchaseOrders" class="nav-item">
                         <a href="@Url.Action("PurchaseOrdersList", "Inventory" )" class="nav-link nav-toggle">
-                            <i class="fal fa-shopping-cart">-->
+                            <i class="fal fa-shopping-cart">
                                 @*<img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">*@
 
-                            <!--</i>
+                            </i>
                             <p>Purchase Orders</p>
                         </a>
-                    </li>-->
+                    </li>
 
 
-                    @*<li id="ProdcutionOrders" class="nav-item">
-            <a href="@Url.Action("ListProductionOrders", "Inventory" )" class="nav-link nav-toggle">
-                <i class="sea-dash">
-                    <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                </i>
-                <p> Production Orders</p>
-            </a>
-        </li>*@
-
-                    <!--<li id="SalesSummaryAdmin" class="nav-item">
+                    <li id="SalesSummaryAdmin" class="nav-item">
                         <a href="@Url.Action("Summary", "Sales" )" class="nav-link nav-toggle">
-                            <i class="fal fa-abacus">-->
+                            <i class="fal fa-abacus">
                                 @*<img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">*@
 
-                            <!--</i>
+                            </i>
                             <p>Product Order Summary </p>
                         </a>
-                    </li>-->
-
-                    <!--<li id="SaleByQuantitySummaryAdmin" class="nav-item">
+                    </li>
+                    <li id="SaleByQuantitySummaryAdmin" class="nav-item">
                         <a href="@Url.Action("SaleByQuantity", "Sales" )" class="nav-link nav-toggle">
-                            <i class="fal fa-abacus">-->
+                            <i class="fal fa-list-alt">
                                 @*<img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">*@
-                            <!--</i>
+                            </i>
                             <p>Product Sale Summary </p>
                         </a>
-                    </li>-->
-
-                    <li id="BlogsPanel" class="nav-item">
-                        <a href="@Url.Action("Blogs", "Admin_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Blogs Panel</p>
-                        </a>
-                    </li>
-                    <li id="AdvertisePanel" class="nav-item">
-                        <a href="@Url.Action("Advertise", "Admin_Dashboard" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Advertise Panel</p>
-                        </a>
-                    </li>
-                    <li id="StudentPasswords" class="nav-item">
-                        <a href="@Url.Action("Password", "AspNetSession" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Student Passwords</p>
-                        </a>
-                    </li>
-                    <li id="Slot" class="nav-item">
-                        <a href="@Url.Action("Index", "AspNetTimeslots" )" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Slot</p>
-                        </a>
                     </li>
 
-                    <li id="MailBox" class="nav-item hidden">
-                        <a href="@(Url.Action("Inbox", "AspNetMessages" ))" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/icon-mailpay.png" alt="">
-                            </i>
-                            <p>Mail Box</p>
-                        </a>
-                    </li>
 
-                    <li id="Support" class="nav-item hidden">
-                        <a href="https://smartereduanalytics.on.spiceworks.com/portal/tickets" class="nav-link nav-toggle">
-                            <i class="sea-dash">
-                                <img style="width: 18px;line-height: 30px;font-size: 24px;vertical-align: -1px;" src="~/Content/assets/assets/icons/Icon-Students.png" alt="">
-                            </i>
-                            <p>Support</p>
-                        </a>
-                    </li>
+
+
 
                 </ul>
             </div>
@@ -506,28 +222,6 @@
                         </div>
 
                         <ul class="navbar-nav">
-                            @*<li class="dropdown notifications-menu hidden">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-bell-o"></i>
-                                        <span class="label label-warning">10</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li class="header">You have 10 notifications</li>
-                                        <li>
-                                             inner menu: contains the actual data
-                                            <ul class="menu">
-                                                <li>
-                                                    <a href="#">
-                                                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-                                        <li class="footer"><a href="#">View all</a></li>
-                                    </ul>
-                                </li>*@
-
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
@@ -539,12 +233,12 @@
 
                                     <li>
                                         <!-- inner menu: contains the actual data -->
-                                        <ul class="menu" id="Notification_Dropdown_Area"></ul>
+                                        <ul class="menu" id="Notification_Dropdown_Area">
+                                        </ul>
                                     </li>
                                     <li class="footer"><a href="#">View all</a></li>
                                 </ul>
                             </li>
-
 
                             @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "form_padding_20" }))
                             {
@@ -610,9 +304,34 @@
                                         <h1 id="PageHeader" class="float-left"></h1>
 
                                     </div>
-                                    <div class="col-sm-12 col-md-7 col-lg-7 hidden" id="generic_div">
-                                        <button type="button" class="btn btn-primary pull-right rounded rounded-lg createBtn hidden" id="GenericCreate">Create</button>
-                                        <input type="text" placeholder="Type Keyword" id="global_filter" class="searchBox pull-right pl-4 p-2 pull-right rounded rounded-lg mr-3">
+                                    <div class="col-sm-12 col-md-9 col-lg-9 text-right hidden" id="GenericDiv">
+                                        <div class="d-inline-block">
+                                            <div class="d-flex text-right">
+                                                <div class="countStuffLeft">
+                                                    <div class="countComplete">
+                                                        <span id="topicCompleted"></span> of <span id="Totaltopic"></span> Complete.<!--<a href="#"> Reset</a>-->
+                                                    </div>
+                                                    <div class="finishCourseText hidden">Finish course to get your certificate</div>
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" value="30" type="number" step="5" min="0" max="100" class="progressVal">
+                                                    <div class="trophyProgressCon" style="position: relative;width: 44px;height: 44px;">
+                                                        <span class="progressGrayRing" style="background: #e2e2ee;position: absolute;width: 40px;height: 40px;left: 0;border-radius: 50%;top: 0px;">
+                                                            <span class="trophyIcon">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                                                    <g id="prefix__Group_503" data-name="Group 503" transform="translate(-591 -244)">
+                                                                        <path id="prefix__Path_530" d="M608.473 245.3h-2.31q.013-.384.013-.772a.528.528 0 0 0-.527-.527h-11.3a.527.527 0 0 0-.527.527q0 .388.013.772h-2.31a.527.527 0 0 0-.527.527 11.429 11.429 0 0 0 1.739 6.277 5.5 5.5 0 0 0 4.18 2.714 5.415 5.415 0 0 0 1.142.959v2.344h-.885a1.942 1.942 0 0 0-1.94 1.939v.885h-.034a.527.527 0 1 0 0 1.055h9.6a.527.527 0 1 0 0-1.055h-.037v-.885a1.942 1.942 0 0 0-1.94-1.939h-.885v-2.344a5.419 5.419 0 0 0 1.142-.959 5.5 5.5 0 0 0 4.18-2.714 11.43 11.43 0 0 0 1.74-6.277.527.527 0 0 0-.527-.527zm-14.856 6.22a10.163 10.163 0 0 1-1.551-5.166h1.83a17.619 17.619 0 0 0 1.638 6.4q.211.422.44.8a5.085 5.085 0 0 1-2.358-2.029zm12.766 0a5.085 5.085 0 0 1-2.358 2.029q.229-.376.44-.8a17.627 17.627 0 0 0 1.638-6.4h1.83a10.164 10.164 0 0 1-1.551 5.166zm0 0" data-name="Path 530" style="fill:#00b8ec"></path>
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                            <svg class="progress-ring" width="44" height="44">
+                                                                <circle class="progress-ring__circle" stroke="#00b8ec" stroke-width="4" fill="transparent" r="18" style="stroke-dasharray: 113.097px, 113.097px; stroke-dashoffset: 100px;" cy="20" cx="24"></circle>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1873,6 +1592,10 @@
         .fc-unthemed .fc-list-empty {
             background-color: #eee;
         }
+
+        .fc-time-grid-event .fc-content .fc-title {
+            word-wrap: normal !important;
+        }
     </style>
 
     <script src='~/Content/assets/packages/core/main.js'></script>
@@ -1883,6 +1606,28 @@
     <script src='~/Content/assets/packages/cal.js'></script>
 
     <script>
+
+        $(document).ready(function () {
+
+
+            $("#layout_navbar_toogle").on("click", "li", function () {
+
+
+
+                localStorage.ElementToActiveAfterPageLoad = $(this).attr('id');
+
+                //  alert(localStorage.ElementToActiveAfterPageLoad);
+            });
+
+
+            $("#" + localStorage.ElementToActiveAfterPageLoad).addClass('active');
+
+
+
+
+        });
+
+
         function filterGlobal() {
 
             $('#datatable').DataTable().search(
@@ -1893,17 +1638,7 @@
         }
         $(document).ready(function () {
 
-            //      $("#PageHeader").html("Students");
-
-            //$("#BreadCrumbs").append(' <li> <a href="#"> Home </a> <span>&gt;</span></li>');
-            //$("#BreadCrumbs").append(' <li class="active"><a id="BreadCrumps1" href="#">Students</a></li>');
-
- 
-
-
-
-
-              $.get('@Url.Action("GetNotifications","AspNetPushNotifications")', function (data) {
+            $.get('@Url.Action("GetNotifications","AspNetPushNotifications")', function (data) {
                 debugger
 
                 if (data.length == 0) {
@@ -2078,11 +1813,6 @@
 
                         background_image = false;
                     }
-                });
-
-                $('.datatableButtonsReset').click(function () {
-                    $('#global_filter').val("");
-                    $('#global_filter').click();
                 });
 
                 $('.switch-sidebar-mini input').change(function () {
@@ -2347,42 +2077,3 @@
 </body>
 
 </html>
-
-
-<script>
-    $(document).ready(function () {
-
-
-        $("#layout_navbar_toogle").on("click", "li", function () {
-
-
-
-            localStorage.ElementToActiveAfterPageLoad = $(this).attr('id');
-
-          //  alert(localStorage.ElementToActiveAfterPageLoad);
-        });
-
-
-        $("#" + localStorage.ElementToActiveAfterPageLoad).addClass('active');
-
-
-
-
-    });
-
-    function showNotification(from, align, msg, type) {
-        //type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];	
-        color = Math.floor((Math.random() * 6) + 1);
-        $.notify({
-            icon: "add_alert",
-            message: msg
-        }, {
-            type: type,
-            timer: 3000,
-            placement: {
-                from: from,
-                align: align
-            }
-        });
-    }
-</script>
