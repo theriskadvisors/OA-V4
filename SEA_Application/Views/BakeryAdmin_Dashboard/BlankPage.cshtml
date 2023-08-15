@@ -38,21 +38,21 @@ else if (User.IsInRole("BakeryAdmin"))
                     <div class="afternoon mt-2">
                         <h1 class=""><small>Good <span>Afternoon</span></small> @name!</h1>
                         @*<p>
-                            There are <span id="upcomming_lesson">@countLesson</span> upcoming Lessons this week.
-                        </p>*@
+                                There are <span id="upcomming_lesson">@countLesson</span> upcoming Lessons this week.
+                            </p>*@
                     </div>
                 </div>
             </div>
         </div>
         @*<div class="col-sm-12 col-md-3 col-lg-3 align-items-center d-flex justify-content-end">
-            <button type="button" class="btn btn-primary pull-right rounded rounded-lg createBtn coursesBtn" onclick="">
-                View All Lessons
-            </button>
-        </div>*@
+                <button type="button" class="btn btn-primary pull-right rounded rounded-lg createBtn coursesBtn" onclick="">
+                    View All Lessons
+                </button>
+            </div>*@
     </div>
 </div>
 
-<div class="row">
+@*<div class="row">
     <div class="col-md-3">
         <div class="card">
             <div class="card-body p-4">
@@ -68,9 +68,9 @@ else if (User.IsInRole("BakeryAdmin"))
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-md-3">
+    </div>*@
+<div class="row">
+    <div class="col-md-4">
         <div class="card">
             <div class="card-body p-4">
 
@@ -92,7 +92,8 @@ else if (User.IsInRole("BakeryAdmin"))
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+
+    <div class="col-md-4">
         <div class="card">
             <div class="card-body p-4">
 
@@ -108,7 +109,7 @@ else if (User.IsInRole("BakeryAdmin"))
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card">
             <div class="card-body p-4">
 
@@ -117,7 +118,7 @@ else if (User.IsInRole("BakeryAdmin"))
                     <div class="col-md-12 table-responsive-lg" style="padding:20px;">
 
                         <center>
-                            <button  onclick="window.location.href ='/Sales/SaleByQuantity'" class="btn btn-primary">Product Sale Summary</button>
+                            <button onclick="window.location.href ='/Sales/SaleByQuantity'" class="btn btn-primary">Product Sale Summary</button>
                         </center>
                     </div>
                 </div>
@@ -125,6 +126,7 @@ else if (User.IsInRole("BakeryAdmin"))
         </div>
     </div>
 </div>
+  </div>
 <script>
 
 
