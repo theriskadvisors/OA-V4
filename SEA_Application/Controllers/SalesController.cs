@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace SEA_Application.Controllers
 {
@@ -176,6 +177,20 @@ namespace SEA_Application.Controllers
             SaleOrder saleorder = new SaleOrder();
             saleorder.Date = Convert.ToDateTime(Date);
             saleorder.Date = saleorder.Date.Value.Add(Time);
+
+
+            var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Value.TimeOfDay;
+            //var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Valu;
+
+            var TimeofDayHour = GetLocalDateTime.GetLocalDateTimeFunction().Value.Hour;
+
+
+            if (TimeofDayHour >= 0 && TimeofDayHour <= 3)
+            {
+                //pervious date
+                saleorder.Date = saleorder.Date.Value.AddDays(-1);
+            }
+
             saleorder.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
             saleorder.StudentId = null;
             saleorder.CustomerName = null;
@@ -256,10 +271,45 @@ namespace SEA_Application.Controllers
                 obj.Id = item.Id;
                 obj.OrderNo = item.OrderNo.Value;
                 obj.Status = item.Status;
-                obj.CustomerName = item.CustomerName;
+
+                if (item.CustomerName != null)
+                {
+                    obj.CustomerName = item.CustomerName;
+
+                } else
+                {
+                    obj.CustomerName = "";
+
+                }
                 obj.Discount = item.Discount.Value;
                 obj.Total = item.Total.Value;
                 obj.DiscountedPrice = item.DiscountedPrice.Value;
+                var DiscountPercentage = item.DiscountPercentage;
+
+                if (DiscountPercentage != null)
+                {
+                    DiscountPercentage = item.DiscountPercentage.Value;
+                }
+                else
+                {
+                    DiscountPercentage = Math.Round((item.Discount.Value * 100) / item.Total.Value, 2);
+                }
+                obj.DiscountPercentage = DiscountPercentage.Value;
+
+                if (item.SaleDiscountId == null)
+                {
+                    obj.DiscountType = "Bismarck Discount";
+                }
+                else
+                {
+                    obj.DiscountType = item.SaleDiscount.Name;
+                }
+
+                if (obj.Status == "Returned")
+                {
+                    obj.DiscountType = "-";
+                }
+
                 obj.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(item.Date.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
 
                 SalesList.Add(obj);
@@ -408,9 +458,11 @@ namespace SEA_Application.Controllers
             }
         }
 
-        public ActionResult SaveSaleOrders(string CustomerName, string CustomerPhoneNo, string Date, string Description, double GrandTotal, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
+        public ActionResult SaveSaleOrders(string CustomerName, string CustomerPhoneNo, string Date, string Description, double GrandTotal, float DiscountPercentage, int DiscountType, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
         {
             // return Json(new { OrderNo = 1000, data = "Created" }, JsonRequestBehavior.AllowGet);
+
+            DateTime? SaleDate = null;
 
             int? MaxId = 1000;
 
@@ -431,6 +483,20 @@ namespace SEA_Application.Controllers
             SaleOrder saleorder = new SaleOrder();
             saleorder.Date = Convert.ToDateTime(Date);
             saleorder.Date = saleorder.Date.Value.Add(Time);
+
+            var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Value.TimeOfDay;
+            //var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Valu;
+
+            var TimeofDayHour = GetLocalDateTime.GetLocalDateTimeFunction().Value.Hour;
+
+
+            if (TimeofDayHour >= 0 && TimeofDayHour <= 3)
+            {
+                //pervious date
+                saleorder.Date = saleorder.Date.Value.AddDays(-1);
+            }
+
+            SaleDate = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(saleorder.Date.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
             saleorder.CreationDate = GetLocalDateTime.GetLocalDateTimeFunction();
             saleorder.StudentId = null;
             saleorder.CustomerName = null;
@@ -439,6 +505,8 @@ namespace SEA_Application.Controllers
             saleorder.DiscountedPrice = DiscountedPrice;
             saleorder.OrderNo = MaxId;
             saleorder.Status = "Paid";
+            saleorder.DiscountPercentage = DiscountPercentage;
+            saleorder.SaleDiscountId = DiscountType;
             saleorder.Description = Description;
             saleorder.CustomerName = CustomerName;
             saleorder.CustomerPhoneNo = CustomerPhoneNo;
@@ -485,7 +553,7 @@ namespace SEA_Application.Controllers
             }
 
 
-            return Json(new { Msg = "Created", OrderNo = MaxId }, JsonRequestBehavior.AllowGet);
+            return Json(new { Msg = "Created", OrderNo = MaxId, SaleDate = SaleDate }, JsonRequestBehavior.AllowGet);
         }
 
         public class SaleDetailByQuantity
@@ -516,6 +584,16 @@ namespace SEA_Application.Controllers
             return View();
         }
 
+        public ActionResult GetDiscountsList()
+        {
+            var SaleDiscountList = db.SaleDiscounts.Where(x => x.IsActive == true).Select(x => new { x.Id, x.Name, x.Percentage, x.Description }).ToList();
+
+            string status = Newtonsoft.Json.JsonConvert.SerializeObject(SaleDiscountList);
+
+            return Content(status);
+
+        }
+
         public ActionResult GetSaleOrderDetails(int id)
         {
             var SaleOrder = db.SaleOrders.Where(x => x.Id == id).FirstOrDefault();
@@ -523,8 +601,31 @@ namespace SEA_Application.Controllers
 
             SaleOrderCustom SaleOrderVM = new SaleOrderCustom();
 
-            SaleOrderVM.DateTime = SaleOrder.Date.Value;
+           // SaleOrderVM.DateTime = SaleOrder.Date.Value;
+            SaleOrderVM.DateTime = TimeZoneInfo.ConvertTimeFromUtc(TimeZoneInfo.ConvertTimeToUtc(SaleOrder.Date.Value, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time")), TimeZoneInfo.Local);
+            //SaleOrder.Date.Value
+
             SaleOrderVM.Discount = SaleOrder.Discount.Value;
+            var DiscountPercentage = SaleOrder.DiscountPercentage;
+
+            if (DiscountPercentage != null)
+            {
+                DiscountPercentage = SaleOrder.DiscountPercentage.Value;
+            }
+            else
+            {
+                DiscountPercentage = Math.Round((SaleOrder.Discount.Value * 100) / SaleOrder.Total.Value, 2);
+            }
+
+            if (SaleOrder.SaleDiscountId == null)
+            {
+                SaleOrderVM.DiscountType = "Bismarck Discount";
+            }
+            else
+            {
+                SaleOrderVM.DiscountType = SaleOrder.SaleDiscount.Name;
+            }
+            SaleOrderVM.DiscountPercentage = DiscountPercentage.Value;
             SaleOrderVM.Status = SaleOrder.Status;
             //SaleOrderVM.StudentName = SaleOrder.AspNetStudent.AspNetUser.Name + "(" + SaleOrder.AspNetStudent.AspNetUser.UserName + ")";
             SaleOrderVM.CustomerName = SaleOrder.CustomerName;
@@ -564,6 +665,8 @@ namespace SEA_Application.Controllers
             public double Discount { get; set; }
             public double DiscountedPrice { get; set; }
             public string Description { get; set; }
+            public double DiscountPercentage { get; set; }
+            public string DiscountType { get; set; }
 
             public List<SaleOrdersList> SaleOrderList = new List<SaleOrdersList>();
         }

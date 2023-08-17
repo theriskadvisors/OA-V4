@@ -117,6 +117,7 @@ else
                 var DiscountedPrice = data.DiscountedPrice;
                 //var OrderNo = data.OrderNo;
                 var OrderNo = "Order#" + data.OrderNo;
+                var DiscountPercentage = data.DiscountPercentage;
                 var SaleOrderId = data.Id;
                 var CustomerName = data.CustomerName;
                 var CustomerPhoneNo = data.CustomerPhoneNo;
@@ -141,6 +142,7 @@ else
                     "-" +
                     value.getFullYear() + " " + value.getHours() + ":" + value.getMinutes() + ":" + value.getSeconds();
 
+                var DiscountPercentageRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount %</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;&nbsp;" + DiscountPercentage + "%</td> </tr>";
 
                 var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + Discount + "</td> </tr>";
                 var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
@@ -196,7 +198,7 @@ else
 
                     '</tr>' +
                     '</thead>' +
-                    '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
+                    '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountPercentageRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
                     '</table><br><br><br><hr>' +
                     '</div></div>');
 

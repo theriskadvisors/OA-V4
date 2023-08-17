@@ -169,7 +169,7 @@
 
 
                                 <td style="width:15%">
-                                    <input type="number" id="TotalCost0" name="TotalCost0" class="form-control" readonly value="0" required />
+                                    <input type="number" style="text-align:right" id="TotalCost0" name="TotalCost0" class="form-control" readonly value="0" required />
                                 </td>
 
                                 <td style="width:15%">
@@ -191,6 +191,35 @@
 
                             </tr>
 
+                            <tr id="DiscountDropDown">
+
+                                <td style="width:20%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"></td>
+                                <td style="width:15%"> <label class="control-label">Discount Type</label></td>
+                                <td style="width:15%">
+
+                                    <select style="width:230px;" class="form-control drop discountType" id="DiscountType" name="DiscountType" required>
+                                        <option value="">Select One</option>
+                                    </select>
+
+                                </td>
+                                <td style="width:15%"></td>
+                            </tr>
+
+
+                            @*<tr id="DiscountRow">
+
+            <td style="width:20%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"> <label class="control-label">Discount Percentage (%)</label></td>
+            <td style="width:15%"><input style="text-align:right" class="form-control" value="0" min="0" type="number" id="Discount" name="Discount" required></td>
+            <td style="width:15%"></td>
+        </tr>*@
+
 
                             <tr id="DiscountRow">
 
@@ -199,9 +228,21 @@
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
                                 <td style="width:15%"> <label class="control-label">Discount Percentage (%)</label></td>
-                                <td style="width:15%"><input style="text-align:right" class="form-control" value="0" min="0" type="number" id="Discount" name="Discount" required></td>
+                                <td style="width:15%"><input style="text-align:right" class="form-control" value="0" min="0" max="100" type="number" id="DiscountPercentage" name="DiscountPercentage" required></td>
                                 <td style="width:15%"></td>
                             </tr>
+
+                            @*<tr id="DiscountRow">
+
+            <td style="width:20%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"> <label class="control-label">Discount Amount</label></td>
+            <td style="width:15%"><input style="text-align:right" class="form-control" value="0" min="0" readonly type="number" id="DiscountAmount" name="DiscountAmount" required></td>
+            <td style="width:15%"></td>
+        </tr>*@
+
 
                             <tr id="DiscountRow">
 
@@ -215,13 +256,26 @@
                             </tr>
 
 
+                            @*<tr id="DiscountedPriceRow">
+
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"></td>
+            <td style="width:15%"> <label class="control-label">Discounted Price</label></td>
+            <td style="width:15%"><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="DiscountedPrice" name="DiscountedPrice" required></td>
+            <td style="width:15%"></td>
+        </tr>*@
+
+
                             <tr id="DiscountedPriceRow">
 
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
-                                <td style="width:15%"> <label class="control-label">Discounted Price</label></td>
+                                @*<td style="width:15%"> <label class="control-label">Discounted Price</label></td>*@
+                                <td style="width:15%"> <label class="control-label">Total</label></td>
                                 <td style="width:15%"><input readonly style="text-align:right" class="form-control" value="0" min="0" type="number" id="DiscountedPrice" name="DiscountedPrice" required></td>
                                 <td style="width:15%"></td>
                             </tr>
@@ -306,11 +360,11 @@
 
     ProductsObj = [
     ];
+    DiscountsObj = [];
 
 
 
     $(document).ready(function () {
-
 
 
 
@@ -428,6 +482,57 @@
             }
         });//end of ajax
 
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Sales/GetDiscountsList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+
+                var sch = JSON.parse(data);
+                var SelectedValue = "";
+
+                var $el = $("#DiscountType");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select One'));
+
+                    for (i = 0; i < sch.length; i++) {
+
+                        var obj = {};
+                        obj['DiscountId'] = sch[i].Id;
+                        obj['Name'] = sch[i].Name;
+                        obj['Percentage'] = sch[i].Percentage;
+
+                        //if (sch[i].Name == "Bismarck Discount") {
+                        //    SelectedValue = sch[i].Id;
+                        //}
+
+                        DiscountsObj.push(obj);
+
+
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name + " " + sch[i].Percentage + "%"));
+
+                    }
+
+                    $('#DiscountType').val(SelectedValue).trigger('change');
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            },
+            error: function (err) {
+                alert(err)
+            }
+
+        });//end of ajax
+
         $("#SaleOrderTable").on('change', ".ItemInventoryDropDown", function () {
             debugger
 
@@ -463,6 +568,44 @@
         })
 
         //ItemSaleUnitPrice
+
+
+        $("#DiscountType").change(function () {
+
+            var Percentage = 0;
+            var discountTypeValue = $(this).val();
+
+            if (discountTypeValue != "") {
+
+
+                DiscountsObj.forEach(function (arrayItem) {
+
+                    if (arrayItem.DiscountId == discountTypeValue) {
+
+                        Percentage = arrayItem.Percentage;
+
+                    }
+
+                });
+
+            } //discount type value.
+
+            // alert(Percentage)
+
+            $("#DiscountPercentage").val(Percentage)
+            CalculateDiscount(Percentage)
+
+
+
+        })
+
+        $("#SaleOrderTable").on('keyup mouseup', "#DiscountPercentage", function () {
+
+            var Discount = $(this).val();
+
+            CalculateDiscount(Discount);
+        })
+
 
         $("#SaleOrderTable").on('keyup mouseup', "#Discount", function () {
 
@@ -604,13 +747,21 @@
 
                 var Date = $("#Date").val();
                 // var CustomerName = $("#CustomerName").val();
-                var Discount = $("#Discount").val();
+              //  var Discount = $("#Discount").val();
+                var DiscountPercentage = $("#DiscountPercentage").val();
                 var DiscountAmount = $("#DiscountAmount").val();
                 var DiscountedPrice = $("#DiscountedPrice").val();
                 var GrandTotal = $("#GrandTotal").val();
                 var Description = $("#Description").val();
                 var CustomerName = $("#CustomerName").val();
                 var CustomerPhoneNo = $("#CustomerPhoneNo").val();
+                var DiscountType = $("#DiscountType").val();
+
+              
+                
+              //  alert(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds())
+
+                //return false;
 
                 var CustomerFields = '';
                 if (CustomerName.trim() != "") {
@@ -623,7 +774,7 @@
                 $.ajax({
                     type: "post",
                     url: "/Sales/SaveSaleOrders",
-                    data: { "CustomerName": CustomerName, "CustomerPhoneNo": CustomerPhoneNo,  'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList },
+                    data: { "CustomerName": CustomerName, "CustomerPhoneNo": CustomerPhoneNo, 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'DiscountPercentage': DiscountPercentage, 'DiscountType': DiscountType, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList},
                     datatype: "json",
                     cache: false,
                     success: function (data) {
@@ -632,12 +783,23 @@
 
 
                             var OrderNo = "Order#" + data.OrderNo;
-                            var d = new window.Date();
-                            var DateAndTime = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+                          //  var d = new window.Date();
+
+                            //var DateAndTime = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+
+                            var value = new window.Date(parseInt(data.SaleDate.replace(/(^.*\()|([+-].*$)/g, '')));
+                            var DateAndTime = value.getDate()
+                                +
+                                "-" +
+                                (value.getMonth() + 1) +
+                                "-" +
+                                value.getFullYear() + " " + value.getHours() + ":" + value.getMinutes() + ":" + value.getSeconds();
+
+
                             // window.location.href = "/Inventory/Inventory";
 
                             // var CustomerName = $("#CustomerName").val();
-
+                            var DiscountPercentageRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount %</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; " + DiscountPercentage + "%</td> </tr>";
                             var DiscountRow = "<tr>  <td style='word-break:break-all;' class='description'>Discount</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp; -" + DiscountAmount + "</td> </tr>";
                             var DiscountedRow = "<tr>  <td style='word-break:break-all;' class='description'>Total</td>  <td class='quantity'>&nbsp; </td> <td class='price'></td> <td class='Amount'>&nbsp;&nbsp;" + DiscountedPrice + "</td> </tr>";
 
@@ -659,7 +821,7 @@
 
                                 '</tr>' +
                                 '</thead>' +
-                                '<tbody id="billbody" style="border: 1px solid black">' + TableRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
+                                '<tbody id="billbody" style="border: 1px solid black">' + TableRow +  '' + DiscountPercentageRow + '' + DiscountRow + ' ' + DiscountedRow + '</tbody>' +
                                 '</table><br><br><br><hr>' +
                                 '</div>');
 
@@ -698,7 +860,7 @@
 
     function RawStock() {
 
-        $("#GrandTotalRow").before('<tr id="TableRow' + count + '"><td style="width:20%"> <select tabindex=' + tabindex1 + '   style ="width:200px;" class="form-control drop ItemInventoryDropDown" id="InventoryStocks' + count + '" name="InventoryStocks' + count + '" required>' + ExternalAndProductionList + '</select></td><td><input readonly class="form-control ItemSaleUnitName"  id="UnitName' + count + '" type="text" name="UnitName' + count + '"  /></td><td style="width:15%"> <input  class="form-control ItemSaleUnitPrice" tabindex=' + tabindex2 + ' id="SaleUnitPrice' + count + '" value="0" min="0" type="number" name="SaleUnitPrice' + count + '" required /></td>   <td style="width:15%"><input readonly class="form-control ItemAvailableQuantity" id="AvailableQuantity' + count + '" value="0" type="number" name="AvailableQuantity' + count + '" required /></td><td style="width:15%" > <input class="form-control ItemSelectionQuantity" tabindex=' + tabindex3 + ' id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" required /></td> <td style="width:15%">  <input readonly type="number" id="TotalCost' + count + '" name="TotalCost' + count + '" class="form-control" value="0" required /></td><td><button tabindex=' + tabindex4 + ' type="button" style="background:#32CD32" id="" class="btn btn-sm btn-default " onclick="RawStock()"><i class="fa fa-plus" style="font-size:12px"></i></button></td><td style="width:15%"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
+        $("#GrandTotalRow").before('<tr id="TableRow' + count + '"><td style="width:20%"> <select tabindex=' + tabindex1 + '   style ="width:200px;" class="form-control drop ItemInventoryDropDown" id="InventoryStocks' + count + '" name="InventoryStocks' + count + '" required>' + ExternalAndProductionList + '</select></td><td><input readonly class="form-control ItemSaleUnitName"  id="UnitName' + count + '" type="text" name="UnitName' + count + '"  /></td><td style="width:15%"> <input  class="form-control ItemSaleUnitPrice" tabindex=' + tabindex2 + ' id="SaleUnitPrice' + count + '" value="0" min="0" type="number" name="SaleUnitPrice' + count + '" required /></td>   <td style="width:15%"><input readonly class="form-control ItemAvailableQuantity" id="AvailableQuantity' + count + '" value="0" type="number" name="AvailableQuantity' + count + '" required /></td><td style="width:15%" > <input class="form-control ItemSelectionQuantity" tabindex=' + tabindex3 + ' id="StockQuantity' + count + '" value="1" min="0" type="number" name="StockQuantity' + count + '" required /></td> <td style="width:15%">  <input readonly style="text-align:right" type="number" id="TotalCost' + count + '" name="TotalCost' + count + '" class="form-control" value="0" required /></td><td><button tabindex=' + tabindex4 + ' type="button" style="background:#32CD32" id="" class="btn btn-sm btn-default " onclick="RawStock()"><i class="fa fa-plus" style="font-size:12px"></i></button></td><td style="width:15%"><button class="btn btn-sm btn-danger  remove_btn" onclick="Remove(' + count + ')"><i style ="font-size:12px;" class="fa fa-remove"></i></button></td></tr>');
 
         $(".drop").select2();
 
@@ -757,7 +919,8 @@
 
         $("#GrandTotal").val(GrandTotal);
 
-        var Discount = $("#Discount").val();
+        var Discount = $("#DiscountPercentage").val();
+
         CalculateDiscount(Discount);
 
     }
@@ -772,26 +935,43 @@
         GrandTotal();
 
     }
+    //function CalculateDiscount(Discount) {
+
+
+    //    var GrandTotal = $("#GrandTotal").val();
+
+    //    var DiscountAmount = parseFloat(GrandTotal) * Discount;
+
+    //    DiscountAmount = DiscountAmount / 100;
+
+    //    //  alert(parseFloat(DiscountAmount.toFixed(2)));
+
+    //    DiscountAmount = parseInt(DiscountAmount);
+
+    //    var DiscountedPrice = parseFloat(GrandTotal) - parseFloat(DiscountAmount);
+    //    $("#DiscountAmount").val(parseFloat(DiscountAmount));
+    //    //  $("#DiscountedPrice").val(parseFloat( DiscountedPrice.toFixed(2)));
+    //    //alert(DiscountAmount.toFixed(2)+" "+DiscountedPrice.toFixed(2));
+    //    $("#DiscountedPrice").val(Math.round(DiscountedPrice));
+
+
+
+    //}
+
     function CalculateDiscount(Discount) {
 
+        debugger
 
         var GrandTotal = $("#GrandTotal").val();
 
         var DiscountAmount = parseFloat(GrandTotal) * Discount;
 
         DiscountAmount = DiscountAmount / 100;
-
-        //  alert(parseFloat(DiscountAmount.toFixed(2)));
-
-        DiscountAmount = parseInt(DiscountAmount);
-
+        DiscountAmount = Math.round(DiscountAmount);
         var DiscountedPrice = parseFloat(GrandTotal) - parseFloat(DiscountAmount);
+
         $("#DiscountAmount").val(parseFloat(DiscountAmount));
-        //  $("#DiscountedPrice").val(parseFloat( DiscountedPrice.toFixed(2)));
-        //alert(DiscountAmount.toFixed(2)+" "+DiscountedPrice.toFixed(2));
         $("#DiscountedPrice").val(Math.round(DiscountedPrice));
-
-
 
     }
 

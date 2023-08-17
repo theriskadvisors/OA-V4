@@ -1,0 +1,152 @@
+@model IEnumerable<SEA_Application.Models.SaleDiscount>
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CashierDashboardLayout.cshtml";
+}
+<style>
+    #datatable_filter {
+        display: block !important;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body p-4">
+        <table class="table hover table-bordered table-striped" id="datatable">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Percentage
+                    </th>
+
+                    <th>
+                        Is Active
+                    </th>
+
+                    @*<th>
+                      Action
+                    </th>*@
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                            <input type="hidden" value="@item.Id" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Percentage)
+                        </td>
+
+                        @if (item.IsActive != null)
+                        {
+                            if (item.IsActive == true)
+                            {
+
+
+                                <td>
+                                    Yes
+                                </td>
+                            }
+
+                            else
+                            {
+                                <td>
+                                    No
+                                </td>
+
+                            }
+                        }
+                        else
+                        {
+                            <td>
+                                No
+                            </td>
+
+                        }
+
+
+
+
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#PageHeader").html("Sale Discount");
+
+
+        var table = $('#datatable').dataTable({
+            buttons: [
+                {
+                    text: '<span class="datatableButtonsReset"> <img src="/Content/assets/assets/icons/Icon-Reset2.png" alt=""> Reset</span>'
+                },
+                {
+                    text: '<span class="datatableButtonsEdit"> <img src="/Content/assets/assets/icons/Icon-edit.png" alt=""> Create</span>',
+                    action: function (e, dt, button, config) {
+                        window.location.href = '/SaleDiscount/Create';
+                    }
+                },
+                {
+                    text: '<span class="datatableButtonsDownload"> <img src="/Content/assets/assets/icons/Icon-download.png" alt=""> Download</span>'
+                }
+            ],
+            "language": {
+                "lengthMenu": "<div class=\"d-flex showEntriesCon\">\n" +
+                    "  <div class=\"p-2\">Show </div> <div class=\"showEntries\"> _MENU_\n" +
+                    "  </div>\n" +
+                    "  </div>",
+                "info": "<div class='showingEntriesOfTotal'>Showing <span class=\"text-info\">_START_ to _END_</span> of _TOTAL_ entries</div>",
+                "paginate": {
+                    "first": "Firstt",
+                    "last": "Lastt",
+                    "next": ' <img src="~/Content/assets/assets/icons/Arrow2.png" alt=""> ',
+                    "previous": ' <img src="~/Content/assets/assets/icons/Arrow1.png" alt=""> '
+                }
+            },
+            "searching": true,
+            // dom: '<"class">Blfrtip',
+            dom: "<'row mb-3'<'col-sm-12 col-md-2 col-lg-2'l><'col-sm-12 col-md-10 col-lg-10 datatableButtonsCon text-right'Bf>>" +
+                "<'row'<'col-sm-12 datatablesData'tr>>" +
+                "<'row mt-4'<'col-sm-12 col-md-4 col-lg-6 infoCon'i><'col-sm-12 col-md-8 col-lg-6 pagCon'p>>",
+        });
+
+
+
+
+        $('.table').on('click', 'tbody tr', function () {
+            var td = $(this).children("td");
+            var Id = $(td[0]).children("input").val();
+            Id = Id.trim();
+
+            window.location.href = "/SaleDiscount/Edit?id=" + Id;
+        });
+
+
+    })
+</script>
