@@ -108,7 +108,7 @@ else
             success: function (data) {
                 //  table.fnClearTable();
                 debugger
-
+                var Cashier = data.Cashier;
                 var Status = data.Status;
                 //  var StudentNameAndRollNo =  data.StudentName;
                 var DateAndTime = data.DateTime;
@@ -185,7 +185,7 @@ else
                     '<p class="centered">' +
                     '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
                     '<b> <span id="DateTime">' + dat + '</span></b> </p>' +
-                     ' <br><b>Cashier:</b><b>Bismarck </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    ' <br><b>Cashier:</b><b>  ' + Cashier +' </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                                 ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
                                 ' </span>' +  CustomerFields +'<table>' +
                     '<table>' +

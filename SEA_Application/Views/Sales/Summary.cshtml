@@ -109,9 +109,12 @@ else if (User.IsInRole("BakeryAdmin"))
                         <th>Date</th>
                         <th>Order No </th>
                         <th>Customer</th>
+                        <th>Cashier</th>
+
                         <th>Status </th>
                         <th>Total</th>
                         <th>Discount Type</th>
+                        <th>Sale Type</th>
                         <th>Discount Percentage %</th>
                         <th>Discount</th>
                         <th>Total Discounted </th>
@@ -207,6 +210,7 @@ else if (User.IsInRole("BakeryAdmin"))
                 var GrandTotal = 0;
                 var DiscountTotal = 0;
                 var GrandTotalDiscounted = 0;
+                
 
 
                 $.each(data, function (index) {
@@ -224,12 +228,17 @@ else if (User.IsInRole("BakeryAdmin"))
                     DiscountTotal = DiscountTotal + data[index].Discount;
                     GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
 
+                    var Cashier = data[index].Cashier;
+                    if (data[index].Cashier == null) {
+                        Cashier = "The_Bismarck";
+                    }
+
                  //   $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td> <td>" + data[index].CustomerName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
                     if (data[index].Status == 'Paid') {
-                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + data[index].DiscountPercentage + "%</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td><td>" + Cashier + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td> <td>" + data[index].SaleType + "</td><td>" + data[index].DiscountPercentage + "%</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
                     }
                     else {
-                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + Math.abs(data[index].DiscountPercentage) + "%</td><td>" + Math.abs(data[index].Discount) + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td> <td>" + Cashier + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + data[index].SaleType + "</td><td>" + Math.abs(data[index].DiscountPercentage) + "%</td><td>" + Math.abs(data[index].Discount) + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
 
                     }
                 })
@@ -237,9 +246,9 @@ else if (User.IsInRole("BakeryAdmin"))
                 //$("#SaleReport").append("<tr> <td >Grand Total</td><td></td>  <td></td>  <td></td> <td>" + GrandTotal + "</td><td>-" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
 
 
-                $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td><td></td>   <td></td><td>" + GrandTotal + "</td><td></td><td></td> <td>-" + Math.abs(DiscountTotal) + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+                $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td><td></td> <td></td>   <td></td><td>" + GrandTotal + "</td><td></td><td></td> <td></td> <td>-" + Math.abs(DiscountTotal) + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
 
-                var AllTds = $("td:nth-child(5),td:nth-child(8),td:nth-child(9)");
+                var AllTds = $("td:nth-child(6),td:nth-child(10),td:nth-child(11)");
 
                 for (var i = 0; i < AllTds.length; i++) {
 
@@ -364,7 +373,7 @@ else if (User.IsInRole("BakeryAdmin"))
                 $("#DateToView").html('<h3><span id="FromDateView">Summary From: ' + FromDateFormat + ' </span> <span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
 
 
-                FromDateGlobal = FromDate;
+                FromDateGlobal = FromDate;  
                 ToDateGlobal = ToDate;
 
                 var CustomerValue = $("#CustomerDD").val();
@@ -429,23 +438,29 @@ else if (User.IsInRole("BakeryAdmin"))
                     DiscountTotal = DiscountTotal + data[index].Discount;
                     GrandTotalDiscounted = GrandTotalDiscounted + data[index].DiscountedPrice;
 
+                    var Cashier = data[index].Cashier;
+                    if (data[index].Cashier == null) {
+                        Cashier = "The_Bismarck";
+                    }
+
+
                   //  $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + data[index].DiscountPercentage + "%</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
 
                     if (data[index].Status == 'Paid') {
-                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + data[index].DiscountPercentage + "%</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td> <td>" + Cashier + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td> <td>" + data[index].SaleType + "</td><td>" + data[index].DiscountPercentage + "%</td><td>-" + data[index].Discount + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
                     }
                     else {
-                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + Math.abs(data[index].DiscountPercentage) + "%</td><td>" + Math.abs(data[index].Discount) + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
+                        $("#SaleReport").append("<tr> <td >" + dat + "</td><td>" + data[index].OrderNo + "</td><td>" + data[index].CustomerName + "</td> <td>" + Cashier + "</td><td>" + data[index].Status + "</td><td>" + data[index].Total + "</td><td>" + data[index].DiscountType + "</td><td>" + data[index].SaleType + "</td><td>" + Math.abs(data[index].DiscountPercentage) + "%</td><td>" + Math.abs(data[index].Discount) + "</td><td>" + data[index].DiscountedPrice + "</td> <td class='detailscolumn'><center> <input onclick='OrderDetails(" + data[index].Id + ")' type='button' style='font-size:12px;' class='btn btn-primary  white' value='Details' id='" + data[index].Id + "' ></center></td></tr>");
 
                     }
                 })
 
               //  $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td><td></td>   <td></td><td></td><td></td> <td>" + GrandTotal + "</td><td>" + DiscountTotal + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
-                $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td><td></td>   <td></td><td>" + GrandTotal + "</td><td></td><td></td> <td> -" + Math.abs(DiscountTotal) + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
+                $("#SaleReport").append("<tr> <td >Grand Total</td> <td></td><td></td> <td></td>   <td></td><td>" + GrandTotal + "</td><td></td><td></td><td></td> <td> -" + Math.abs(DiscountTotal) + "</td><td>" + GrandTotalDiscounted + "</td></tr>")
 
 
 
-                var AllTds = $("td:nth-child(5),td:nth-child(8),td:nth-child(9)");
+                var AllTds = $("td:nth-child(6),td:nth-child(10),td:nth-child(11)");
 
                 for (var i = 0; i < AllTds.length; i++) {
 

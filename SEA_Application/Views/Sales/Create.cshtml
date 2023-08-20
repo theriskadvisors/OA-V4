@@ -74,45 +74,64 @@
 
                 </div>
             </div>
+            <div claas="row">
 
-            <div class="col-md-5">
+                <div class="col-md-5">
 
 
-                @*<div class="form-group">
+                    @*<div class="form-group">
 
+            <div class="col-md-12">
+
+                <label class="control-label">Order No</label>
+
+                <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+
+            </div>
+        </div>*@
+
+
+
+                    <br />
+
+
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+
+                                <label class="control-label">Sale Type</label>
+                                @*<textarea class="form-control" name="Description" id="Description" rows="5"></textarea>*@
+                                <br />
+
+                                <select tabindex="1" style="width:350px;" class="form-control drop SaleTypeDropDown" id="SaleType" name="SaleType" required></select>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                    <div class="form-group">
                         <div class="col-md-12">
 
-                            <label class="control-label">Order No</label>
-
-                            <input type="number" readonly id="OrderNo" name="OrderNo" value="@ViewBag.MaxId" class="form-control" required />
+                            <label class="control-label">Description</label>
+                            <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
 
                         </div>
-                    </div>*@
-
-
-
-                <br />
-
-
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label">Description</label>
-                        <textarea class="form-control" name="Description" id="Description" rows="5"></textarea>
-
                     </div>
+                    <!--<br />
+    <div class="form-group">
+        <div class="col-md-12">
+
+            <label class="control-label"> Customer Name</label>-->
+                    @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
+
+                    <!--<input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
+
+        </div>
+    </div>-->
                 </div>
-                <!--<br />
-                <div class="form-group">
-                    <div class="col-md-12">
-
-                        <label class="control-label"> Customer Name</label>-->
-                @*@Html.DropDownList("StudentID", null, " Select One", htmlAttributes: new { @class = "form-control drop", @id = "StudentID", required = "required" })*@
-
-                <!--<input type="text" name="CustomerName" id="CustomerName" value="Customer" class="form-control" />
-
-                    </div>
-                </div>-->
 
             </div><!--end of column 6-->
 
@@ -270,7 +289,21 @@
 
                             <tr id="DiscountedPriceRow">
 
-                                <td style="width:15%"></td>
+                                <td style="width:15%">
+
+
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+
+                                            <label class="control-label">Cashier</label>
+                                            <input type="text" id="Cashier" name="Cashier" value="@ViewBag.UserName" class="form-control" required readonly />
+
+
+
+                                        </div>
+                                    </div>
+                                </td>
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
                                 <td style="width:15%"></td>
@@ -290,47 +323,49 @@
 
                 </div>
             </div><!--col 12-->
-
+            <br />
 
 
             <div class="col-md-8">
+                <div class="col-md-12">
 
 
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <button tabindex="99" type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button tabindex="99" type="submit" id="SaveButton" class="btn btn-primary rounded rounded-lg"> Save </button>
 
-                        <button tabindex="100" type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
-                            <i class="material-icons mr-2">cached</i>  Cancel
-                        </button>
+                            <button tabindex="100" type="button" id="btnCancel" class="btn btn-primary rounded rounded-lg bg-transparent text-muted shadow-none mr-3">
+                                <i class="material-icons mr-2">cached</i>  Cancel
+                            </button>
 
+                        </div>
                     </div>
                 </div>
 
-            </div><!--end of col 8 -->
+                </div><!--end of col 8 -->
 
-            <br />
-            <div id="ReceiptBlock" style="display:none;">
+                <br />
+                <div id="ReceiptBlock" style="display:none;">
 
-                <div id="bill" style="display: none;">
-                    <div class="ticket" id="ticket">
-                        <center>
-                            <img style="width: 150px;" src="/Content/assets/assets/img/Bis.png" alt="Alternate Text" />
-                        </center>
+                    <div id="bill" style="display: none;">
+                        <div class="ticket" id="ticket">
+                            <center>
+                                <img style="width: 150px;" src="/Content/assets/assets/img/Bis.png" alt="Alternate Text" />
+                            </center>
 
-                        <div id="ReceiptInner">
+                            <div id="ReceiptInner">
+
+
+                            </div>
 
 
                         </div>
-
-
                     </div>
+
                 </div>
 
-            </div>
 
-
-        </form>
+</form>
     </div>
 </div>
 
@@ -472,6 +507,41 @@
                             .attr("value", sch[i].Id).text(sch[i].Name));
 
                         ExternalAndProductionList = ExternalAndProductionList + "<option value=" + sch[i].Id + ">" + sch[i].Name + "</option>";
+
+                    }
+                }
+                else {
+                    $el.append($("<option></option>")
+                        .attr("value", '').text('Select'));
+                }
+            }
+        });//end of ajax
+
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/Sales/GetSaleTypeList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                console.log(sch);
+                var $el = $("#SaleType");
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append($("<option></option>")
+                        .attr("value", "").text('Select Sale Type'));
+                    debugger
+                 
+
+                    for (i = 0; i < sch.length; i++) {
+
+
+                        $el.append($("<option></option>")
+                            .attr("value", sch[i].Id).text(sch[i].Name));
+
+                      
 
                     }
                 }
@@ -756,6 +826,8 @@
                 var CustomerName = $("#CustomerName").val();
                 var CustomerPhoneNo = $("#CustomerPhoneNo").val();
                 var DiscountType = $("#DiscountType").val();
+                var SaleType = $("#SaleType").val();
+                var Cashier = $("#Cashier").val();
 
               
                 
@@ -774,7 +846,7 @@
                 $.ajax({
                     type: "post",
                     url: "/Sales/SaveSaleOrders",
-                    data: { "CustomerName": CustomerName, "CustomerPhoneNo": CustomerPhoneNo, 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'DiscountPercentage': DiscountPercentage, 'DiscountType': DiscountType, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleOrdersList': SalesList},
+                    data: { "CustomerName": CustomerName, "CustomerPhoneNo": CustomerPhoneNo, 'Date': Date, 'Description': Description, 'GrandTotal': GrandTotal, 'DiscountPercentage': DiscountPercentage, 'DiscountType': DiscountType, 'Discount': DiscountAmount, 'DiscountedPrice': DiscountedPrice, 'SaleTypeId': SaleType, 'Cashier': Cashier, 'SaleOrdersList': SalesList },
                     datatype: "json",
                     cache: false,
                     success: function (data) {
@@ -809,7 +881,7 @@
                                 '<p class="centered">' +
                                 '<b> <span id="OrderNo">' + OrderNo + '</span></b><br />' +
                                 '<b> <span id="DateTime">' + DateAndTime + '</span></b> </p>' +
-                                ' <br><b>Cashier:</b><b>Bismarck </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                ' <br><b>Cashier:</b><b> ' + Cashier +' </b> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                                 ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b></b>' +
                                 ' </span>' +  CustomerFields +'<table>' +
                                 '<thead>' +

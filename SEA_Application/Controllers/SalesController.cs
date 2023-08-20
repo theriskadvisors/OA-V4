@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.Office.Interop.Excel;
 using SEA_Application.Models;
 using System;
 using System.Collections.Generic;
@@ -157,11 +158,15 @@ namespace SEA_Application.Controllers
 
             ViewBag.StudentID = new SelectList(StudentList, "StudentId", "StudentName");
 
+            var id = User.Identity.GetUserId();
+            var username = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
+
+            ViewBag.UserName = username;
 
 
             return View();
         }
-        public ActionResult SaveReturnSaleOrder(string Date, double GrandTotal, List<SaleOrdersList> SaleOrdersList)
+        public ActionResult SaveReturnSaleOrder(string Date, double GrandTotal,int SaleTypeId, string Cashier, List<SaleOrdersList> SaleOrdersList)
         {
             int? MaxId = 1000;
             int? GetID = db.SaleOrders.Select(x => x.OrderNo).Max();
@@ -177,7 +182,8 @@ namespace SEA_Application.Controllers
             SaleOrder saleorder = new SaleOrder();
             saleorder.Date = Convert.ToDateTime(Date);
             saleorder.Date = saleorder.Date.Value.Add(Time);
-
+            saleorder.SaleTypeId = SaleTypeId;
+            saleorder.Creator = Cashier;
 
             var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Value.TimeOfDay;
             //var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Valu;
@@ -281,6 +287,18 @@ namespace SEA_Application.Controllers
                     obj.CustomerName = "";
 
                 }
+                if (item.SaleType == null)
+                {
+                    obj.SaleType = "";
+
+                }
+                else
+                {
+                    obj.SaleType = item.SaleType.Name;
+
+                }
+                obj.Cashier = item.Creator;
+                     
                 obj.Discount = item.Discount.Value;
                 obj.Total = item.Total.Value;
                 obj.DiscountedPrice = item.DiscountedPrice.Value;
@@ -403,13 +421,29 @@ namespace SEA_Application.Controllers
                                }).Distinct().ToList();
 
 
+            var id = User.Identity.GetUserId();
+            var username = db.AspNetUsers.Where(x => x.Id == id).Select(x => x.Name).FirstOrDefault();
+
+            ViewBag.UserName = username;
+
             ViewBag.StudentID = new SelectList(StudentList, "StudentId", "StudentName");
 
             return View();
         }
+
+        
         public ActionResult GetExternalAndProductionList()
         {
             var AllExternalAndProdutionList = db.Inventories.Where(x => x.Type == "ExternalProduct" || x.Type == "ProductProduction").Select(x => new { x.Id, Name = x.Name + "  (" + x.ItemNo + ")", x.UnitName, x.UnitPurchasePrice, x.UnitSalePrice, x.QuantityOnHand }).ToList();
+
+            string status = Newtonsoft.Json.JsonConvert.SerializeObject(AllExternalAndProdutionList);
+
+            return Content(status);
+        }
+
+        public ActionResult GetSaleTypeList()
+        {
+            var AllExternalAndProdutionList = db.SaleTypes.Select(x => new { x.Id, Name = x.Name }).ToList();
 
             string status = Newtonsoft.Json.JsonConvert.SerializeObject(AllExternalAndProdutionList);
 
@@ -458,7 +492,7 @@ namespace SEA_Application.Controllers
             }
         }
 
-        public ActionResult SaveSaleOrders(string CustomerName, string CustomerPhoneNo, string Date, string Description, double GrandTotal, float DiscountPercentage, int DiscountType, double Discount, double DiscountedPrice, List<SaleOrdersList> SaleOrdersList)
+        public ActionResult SaveSaleOrders(string CustomerName, string CustomerPhoneNo, string Date, string Description, double GrandTotal, float DiscountPercentage, int DiscountType, double Discount, double DiscountedPrice, int   SaleTypeId , string Cashier, List<SaleOrdersList> SaleOrdersList)
         {
             // return Json(new { OrderNo = 1000, data = "Created" }, JsonRequestBehavior.AllowGet);
 
@@ -483,6 +517,7 @@ namespace SEA_Application.Controllers
             SaleOrder saleorder = new SaleOrder();
             saleorder.Date = Convert.ToDateTime(Date);
             saleorder.Date = saleorder.Date.Value.Add(Time);
+            saleorder.SaleTypeId = SaleTypeId;
 
             var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Value.TimeOfDay;
             //var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Valu;
@@ -510,6 +545,7 @@ namespace SEA_Application.Controllers
             saleorder.Description = Description;
             saleorder.CustomerName = CustomerName;
             saleorder.CustomerPhoneNo = CustomerPhoneNo;
+            saleorder.Creator = Cashier;
 
             db.SaleOrders.Add(saleorder);
             db.SaveChanges();
@@ -625,6 +661,7 @@ namespace SEA_Application.Controllers
             {
                 SaleOrderVM.DiscountType = SaleOrder.SaleDiscount.Name;
             }
+            SaleOrderVM.Cashier = SaleOrder.Creator == null ? SaleOrder.Creator = "The_Bismarck" : SaleOrder.Creator;
             SaleOrderVM.DiscountPercentage = DiscountPercentage.Value;
             SaleOrderVM.Status = SaleOrder.Status;
             //SaleOrderVM.StudentName = SaleOrder.AspNetStudent.AspNetUser.Name + "(" + SaleOrder.AspNetStudent.AspNetUser.UserName + ")";
@@ -658,6 +695,9 @@ namespace SEA_Application.Controllers
             public string Status { get; set; }
             public DateTime DateTime { get; set; }
             public string StudentName { get; set; }
+
+            public string SaleType { get; set; }
+            public string Cashier { get; set; }
 
             public string CustomerName { get; set; }
             public string CustomerPhoneNo { get; set; }
