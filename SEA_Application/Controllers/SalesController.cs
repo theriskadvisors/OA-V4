@@ -180,8 +180,9 @@ namespace SEA_Application.Controllers
             var Time = Datetime.Value.TimeOfDay;
 
             SaleOrder saleorder = new SaleOrder();
-            saleorder.Date = Convert.ToDateTime(Date);
-            saleorder.Date = saleorder.Date.Value.Add(Time);
+            //  saleorder.Date = Convert.ToDateTime(Date);
+            // saleorder.Date = saleorder.Date.Value.Add(Time);
+            saleorder.Date = GetLocalDateTime.GetLocalDateTimeFunction();
             saleorder.SaleTypeId = SaleTypeId;
             saleorder.Creator = Cashier;
 
@@ -246,7 +247,7 @@ namespace SEA_Application.Controllers
             return View();
         }
 
-        public ActionResult GetSaleSummary(string FromDate, string ToDate, string CustomerName)
+        public ActionResult GetSaleSummary(string FromDate, string ToDate, string CustomerName, string SaleType)
         {
 
             DateTime dateTimeFrom = Convert.ToDateTime(FromDate);
@@ -261,13 +262,29 @@ namespace SEA_Application.Controllers
 
             List<SaleOrder> SaleOrdersList = null;
 
+            List<string> saleList = new List<string>();
+
+            if (SaleType == "All")
+            {
+                saleList.Add("Cash");
+                saleList.Add("Credit");
+                saleList.Add("Food Panda");
+            } else
+            {
+
+                saleList.Add(SaleType);
+            }
+
+
             if (CustomerName == "All")
             {
-                SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo).ToList();
+              SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo && ( saleList.Contains(x.SaleType.Name) || x.SaleTypeId == null)).ToList();
+               // SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo ).ToList();
             }
             else
             {
-                SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo && x.CustomerName == CustomerName).ToList();
+                SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo && x.CustomerName == CustomerName && (saleList.Contains(x.SaleType.Name) || x.SaleTypeId == null)).ToList();
+               // SaleOrdersList = db.SaleOrders.Where(x => x.Date >= dateTimeFrom && x.Date <= dateTimeTo && x.CustomerName == CustomerName ).ToList();
 
             }
 
@@ -515,8 +532,11 @@ namespace SEA_Application.Controllers
             var Time = Datetime.Value.TimeOfDay;
 
             SaleOrder saleorder = new SaleOrder();
-            saleorder.Date = Convert.ToDateTime(Date);
-            saleorder.Date = saleorder.Date.Value.Add(Time);
+
+            // saleorder.Date = Convert.ToDateTime(Date);
+            //saleorder.Date = saleorder.Date.Value.Add(Time);
+
+            saleorder.Date = GetLocalDateTime.GetLocalDateTimeFunction();
             saleorder.SaleTypeId = SaleTypeId;
 
             var TimeofDay = GetLocalDateTime.GetLocalDateTimeFunction().Value.TimeOfDay;

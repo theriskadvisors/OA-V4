@@ -80,57 +80,82 @@ else if (User.IsInRole("BakeryAdmin"))
         <br />
         <br />
 
+        <div class="row">
+            <div class="col-md-2">
 
-        <div class="form-group">
+                <div class="form-group">
 
-            <label>Select Customer</label>
+                    <label>Select Customer</label>
+                    <br />
+                    <select style="width:200px;" class="form-control drop" id="CustomerDD" name="CustomerDD">
+                    </select>
 
-            <select style="width:200px;" class="form-control drop" id="CustomerDD" name="CustomerDD" >
-                        
-            </select>
-
-
-
-        </div>
-
-        <div class="table-responsive" id="DivToPrint">
-
-            <h2 style="text-align: center; color: #053f89">Product Order Summary</h2>
-            <div id="DateToView">
+                </div>
 
             </div>
 
-            <table style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
+       
+    <div class="col-md-2" style="margin-left:10px;">
+    
+        <div class="form-group">
+
+                    <label class="">Sale Type</label>
+                    <br />
+                    <select style="width:200px;" class="form-control drop" id="SaleType" name="SaleType">
+
+                        <option value="All">All</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Credit">Credit</option>
+                        <option value="Food Panda">Food Panda</option>
+                    </select>
+
+                </div>
+            </div>
+            </div> 
+
+            <div class="table-responsive" id="DivToPrint">
+
+                <h2 style="text-align: center; color: #053f89">Product Order Summary</h2>
+                <div id="DateToView">
+
+                </div>
+
+                <div id="SaleTypeView">
+                    
+
+                </div>
+
+                <table style="border-collapse:collapse;width:100%;padding:10px;" border="1" class="table  table-bordered table-striped table-hover">
 
 
-                <thead>
+                    <thead>
 
-                    <tr>
-                        <th>Date</th>
-                        <th>Order No </th>
-                        <th>Customer</th>
-                        <th>Cashier</th>
+                        <tr>
+                            <th>Date</th>
+                            <th>Order No </th>
+                            <th>Customer</th>
+                            <th>Cashier</th>
 
-                        <th>Status </th>
-                        <th>Total</th>
-                        <th>Discount Type</th>
-                        <th>Sale Type</th>
-                        <th>Discount Percentage %</th>
-                        <th>Discount</th>
-                        <th>Total Discounted </th>
+                            <th>Status </th>
+                            <th>Total</th>
+                            <th>Discount Type</th>
+                            <th>Sale Type</th>
+                            <th>Discount Percentage %</th>
+                            <th>Discount</th>
+                            <th>Total Discounted </th>
 
-                        <th class="detailscolumn">Action</th>
-                    </tr>
-                </thead>
+                            <th class="detailscolumn">Action</th>
+                        </tr>
+                    </thead>
 
-                <tbody id="SaleReport">
-                </tbody>
+                    <tbody id="SaleReport">
+                    </tbody>
 
-            </table>
+                </table>
+
+            </div>
 
         </div>
-
-    </div>
 </div>
 
 <script>
@@ -158,10 +183,9 @@ else if (User.IsInRole("BakeryAdmin"))
         FromDateGlobal = FullDateInYYYYMMDD;
         ToDateGlobal = FullDateInYYYYMMDD;
 
-        $("#DateToView").html('<h3><span id="FromDateView"> Summary From: ' + FulldateInString + ' </span><span> to</span> <span id="ToDateView">' + FulldateInString + ' </span></h3>');
+        $("#DateToView").html('<p><span id="FromDateView"> Summary From: ' + FulldateInString + ' </span><span> to</span> <span id="ToDateView">' + FulldateInString + ' </span></p>');
 
-
-
+        $("#SaleTypeView").html('<p><span>Sale Type : All</span></p>');
 
         $.ajax({
             type: "POST",
@@ -201,7 +225,7 @@ else if (User.IsInRole("BakeryAdmin"))
         $.ajax({
             type: "POST",
             url: "/Sales/GetSaleSummary",
-            data: { "FromDate": FullDateInYYYYMMDD, "ToDate": FullDateInYYYYMMDD, "CustomerName" : "All"  },
+            data: { "FromDate": FullDateInYYYYMMDD, "ToDate": FullDateInYYYYMMDD, "CustomerName" : "All" , "SaleType" : "All"  },
 
             success: function (data) {
 
@@ -264,12 +288,26 @@ else if (User.IsInRole("BakeryAdmin"))
 
         $("#CustomerDD").change(function () {
 
-          var  CustomerName =   $(this).val();
+            var CustomerName = $(this).val();
+            var SaleType = $("#SaleType").val();
 
-            SaleSummary(FromDateGlobal, ToDateGlobal, CustomerName )
+            SaleSummary(FromDateGlobal, ToDateGlobal, CustomerName, SaleType)
 
 
         })
+
+        $("#SaleType").change(function () {
+
+            var CustomerName = $("#CustomerDD").val();
+
+            var SaleType = $(this).val();
+
+            SaleSummary(FromDateGlobal, ToDateGlobal, CustomerName, SaleType)
+
+            $("#SaleTypeView").html('<p><span>Sale Type : ' + SaleType +'</span></p>');
+
+
+        });
 
 
         $('#FromDate').datepicker({
@@ -330,13 +368,15 @@ else if (User.IsInRole("BakeryAdmin"))
                 var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
 
 
-                $("#DateToView").html('<h3><span id="FromDateView"> Summary From: ' + FromDateFormat + ' </span><span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
+                $("#DateToView").html('<p><span id="FromDateView"> Summary From: ' + FromDateFormat + ' </span><span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></p>');
 
                 FromDateGlobal = FromDate;
                 ToDateGlobal = ToDate;
 
-              var CustomerValue =   $("#CustomerDD").val();
-                SaleSummary(FromDate, ToDate, CustomerValue);
+                var CustomerValue = $("#CustomerDD").val();
+                var SaleType = $("#SaleType").val();
+
+                SaleSummary(FromDate, ToDate, CustomerValue, SaleType);
 
 
 
@@ -370,16 +410,18 @@ else if (User.IsInRole("BakeryAdmin"))
                 var ToDateFormat = day1 + "-" + monthName1 + "-" + year1;
 
 
-                $("#DateToView").html('<h3><span id="FromDateView">Summary From: ' + FromDateFormat + ' </span> <span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></h3>');
+                $("#DateToView").html('<p><span id="FromDateView">Summary From: ' + FromDateFormat + ' </span> <span> to</span> <span id="ToDateView">' + ToDateFormat + ' </span></p>');
 
 
                 FromDateGlobal = FromDate;  
                 ToDateGlobal = ToDate;
 
                 var CustomerValue = $("#CustomerDD").val();
+                var SaleType = $("#SaleType").val();
 
+                SaleSummary(FromDate, ToDate, CustomerValue, SaleType);
 
-                SaleSummary(FromDate, ToDate, CustomerValue);
+                //SaleSummary(FromDate, ToDate, CustomerValue);
 
             }
 
@@ -402,17 +444,20 @@ else if (User.IsInRole("BakeryAdmin"))
 
 
 
-    function SaleSummary(FromDate, ToDate, CustomerName) {
+    function SaleSummary(FromDate, ToDate, CustomerName, SaleType) {
 
         //   alert(FromDate + " " + ToDate);
 
+      //  alert(SaleType);
 
-        $("#SaleReport").html("");
+       // return false;
+
+        //$("#SaleReport").html("");
 
         $.ajax({
             type: "POST",
             url: "/Sales/GetSaleSummary",
-            data: { "FromDate": FromDate, "ToDate": ToDate, "CustomerName": CustomerName },
+            data: { "FromDate": FromDate, "ToDate": ToDate, "CustomerName": CustomerName, "SaleType": SaleType },
 
             success: function (data) {
 
